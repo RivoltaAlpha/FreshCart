@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Sidebar } from '@/components/Sidebar'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 function DriverLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -25,6 +25,31 @@ function DriverLayout() {
   );
 }
 
+const checkDriverAuth = () => {
+  const authData = localStorage.getItem('auth')
+  if (!authData) return { isAuthenticated: false, isDriver: false }
+  try {
+    const auth = JSON.parse(authData)
+    const isAuthenticated = !!auth.isAuthenticated
+    const isDriver = auth?.user?.role === 'Driver'
+    return { isDriver, isAuthenticated }
+  } catch {
+    return { isDriver: false, isAuthenticated: false }
+  }
+}
+
 export const Route = createFileRoute('/driver')({
+    beforeLoad: async ({ location }) => {
+      const { isAuthenticated, isDriver } = checkDriverAuth()
+  
+      if (!isAuthenticated && !isDriver) {
+        throw redirect({
+          to: '/login',
+          search: {
+            redirect: location.href,
+          },
+        })
+      }
+    },
   component: DriverLayout,
 })
