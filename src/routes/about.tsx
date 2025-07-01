@@ -83,9 +83,9 @@ function AboutPage () {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">JM</span>
+                <span className="text-2xl font-bold text-white">JI</span>
               </div>
-              <h3 className="text-xl font-bold text-[#005A61] mb-2">John Mwangi</h3>
+              <h3 className="text-xl font-bold text-[#005A61] mb-2">John Ihugo</h3>
               <p className="text-[#00A7B3] font-semibold mb-3">CEO & Founder</p>
               <p className="text-[#516E89] text-sm">
                 Former agriculture specialist with 10 years of experience connecting farmers to markets.
@@ -94,9 +94,9 @@ function AboutPage () {
             
             <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">AK</span>
+                <span className="text-2xl font-bold text-white">VO</span>
               </div>
-              <h3 className="text-xl font-bold text-[#005A61] mb-2">Anne Kariuki</h3>
+              <h3 className="text-xl font-bold text-[#005A61] mb-2">Valarie Okumu</h3>
               <p className="text-[#00A7B3] font-semibold mb-3">Head of Operations</p>
               <p className="text-[#516E89] text-sm">
                 Supply chain expert ensuring our delivery network runs smoothly across Kenya.
@@ -105,9 +105,9 @@ function AboutPage () {
             
             <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">DO</span>
+                <span className="text-2xl font-bold text-white">TN</span>
               </div>
-              <h3 className="text-xl font-bold text-[#005A61] mb-2">David Ochieng</h3>
+              <h3 className="text-xl font-bold text-[#005A61] mb-2">Mwaniki Tifany</h3>
               <p className="text-[#00A7B3] font-semibold mb-3">Tech Lead</p>
               <p className="text-[#516E89] text-sm">
                 Software engineer passionate about building technology that makes life easier.
