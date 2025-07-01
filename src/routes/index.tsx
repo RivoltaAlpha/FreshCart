@@ -11,8 +11,8 @@ function App() {
       {/* Hero Section */}
       {/* <section className="bg-gradient-to-br from-[#005A61] via-[#00A7B3] to-[#6A89A7] text-black py-20"> */}
       <section className="bg-gradient-to-br from-[#005A61] via-[#00A7B3] to-[#6A89A7] text-black py-64
-        bg-no-repeat bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: 'url(/image.png)' }}
+        bg-no-repeat bg-cover bg-center bg-fixed bg-black backdrop-opacity-90"
+        style={{ backgroundImage: 'url(/image.png)', backgroundColor:'#000000' }}
         id="hero-section"
         aria-label="Hero Section"
       >
@@ -23,7 +23,7 @@ function App() {
                 Fresh Groceries...
                 <span className="block text-[#03a1ad]">Delivered Fast</span>
               </h1>
-              <p className="text-xl mb-8 text-gray-100">
+              <p className="text-xl font-bold mb-8 text-gray-100">
                 Get farm-fresh produce, quality groceries, and daily essentials delivered to your doorstep in under 30 minutes.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">

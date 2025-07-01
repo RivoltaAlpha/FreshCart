@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Users, Package, Warehouse, ShoppingCart, Clock, FileText, Home, Store, Truck, Settings, BarChart3, Bell, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Users, Package, Warehouse, ShoppingCart, Clock, FileText, Bell, Search, Filter } from 'lucide-react'
 import { authStore } from '@/store/auth'
 
 export const Route = createFileRoute('/admin/dashboard')({
@@ -8,21 +8,8 @@ export const Route = createFileRoute('/admin/dashboard')({
 })
 
 function RouteComponent() {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-
-  const sidebarItems = [
-    { icon: Home, label: 'Dashboard', active: true },
-    { icon: Users, label: 'Users Management' },
-    { icon: Store, label: 'Store Management' },
-    { icon: Truck, label: 'Driver Management' },
-    { icon: Package, label: 'Product Management' },
-    { icon: ShoppingCart, label: 'Order Management' },
-    { icon: Warehouse, label: 'Warehouse Management' },
-    { icon: BarChart3, label: 'Analytics & Reports' },
-    { icon: Settings, label: 'Settings' },
-  ]
 
   const stats = [
     { title: 'Total Users', value: '128', color: 'bg-teal-500', icon: Users },
@@ -40,7 +27,7 @@ function RouteComponent() {
     { id: 4, firstName: 'Sarah', lastName: 'Wilson', email: 'sarah@example.com', role: 'Customer' },
     { id: 5, firstName: 'David', lastName: 'Brown', email: 'david@example.com', role: 'Driver' },
   ]
-  const user = authStore.state.user.first_name
+  const user = authStore.state.user
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -51,7 +38,7 @@ function RouteComponent() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-              <p className="text-gray-600">Welcome back {user}! Here's an overview of your system.</p>
+              <p className="text-gray-600">Welcome back {user.first_name} {user.last_name}! Here's an overview of your system.</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative">
