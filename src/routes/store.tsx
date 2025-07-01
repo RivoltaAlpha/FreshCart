@@ -40,7 +40,7 @@ export const Route = createFileRoute('/store')({
   beforeLoad: async ({ location }) => {
     const { isAuthenticated, isStore } = checkStoreAuth()
 
-    if (!isAuthenticated && !isStore) {
+    if (!isAuthenticated && isStore) {
       throw redirect({
         to: '/login',
         search: {

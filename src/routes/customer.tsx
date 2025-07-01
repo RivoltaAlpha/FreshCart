@@ -41,7 +41,7 @@ export const Route = createFileRoute('/customer')({
   beforeLoad: async ({ location }) => {
       const { isAuthenticated, isCustomer } = checkCustomerAuth()
   
-      if (!isAuthenticated && !isCustomer) {
+      if (isAuthenticated && !isCustomer) {
         throw redirect({
           to: '/login',
           search: {

@@ -57,8 +57,9 @@ function LoginPage() {
           navigate({ to: '/driver/dashboard' });
           break;
         default:
-          console.error("Unknown role:", userRole);
           toast.error("Unknown user role");
+          navigate({ to: '/'})
+          console.error("Unknown role:", userRole);
           break;
       }
     } catch (error: any) {
