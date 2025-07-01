@@ -25,7 +25,7 @@ function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4"
       style={{
-        backgroundImage: "url('register.jpg')",
+        backgroundImage: "url('delivery.png')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
       }}

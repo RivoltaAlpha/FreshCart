@@ -9,13 +9,19 @@ function App() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#005A61] via-[#00A7B3] to-[#6A89A7] text-black py-20">
+      {/* <section className="bg-gradient-to-br from-[#005A61] via-[#00A7B3] to-[#6A89A7] text-black py-20"> */}
+      <section className="bg-gradient-to-br from-[#005A61] via-[#00A7B3] to-[#6A89A7] text-black py-64
+        bg-no-repeat bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: 'url(/image.png)' }}
+        id="hero-section"
+        aria-label="Hero Section"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Fresh Groceries
-                <span className="block text-[#00A7B3]">Delivered Fast</span>
+                Fresh Groceries...
+                <span className="block text-[#03a1ad]">Delivered Fast</span>
               </h1>
               <p className="text-xl mb-8 text-gray-100">
                 Get farm-fresh produce, quality groceries, and daily essentials delivered to your doorstep in under 30 minutes.
