@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { User, Mail, Lock, Phone, Home, Eye, EyeOff } from 'lucide-react';
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner';
+import { useRegister } from '@/hooks/useRegister';
 
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
@@ -8,18 +10,74 @@ export const Route = createFileRoute('/register')({
 
 function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    phone: '',
+    location: '',
+    role: 'Customer' as 'Customer' | 'Store' | 'Driver' | 'Admin',
+  });
+  const navigate = useNavigate();
+  const registerMutation = useRegister();
 
-  interface RegisterFormEvent extends React.FormEvent<HTMLFormElement> { }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-  const onRegister = (event: RegisterFormEvent): void => {
-    event.preventDefault();
-    // Handle registration logic here
-    console.log("Registration form submitted");
+  const onRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const response = await registerMutation.mutateAsync(formData);
+      console.log("Register response:", response);
+      toast.success("Registration successful!");
+
+      let userRole = response.user?.role || response.data?.user?.role;
+      // Normalize role to capitalize first letter
+      if (typeof userRole === 'string') {
+        userRole = userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase();
+      }
+      switch (userRole) {
+        case 'Admin':
+          navigate({ to: '/admin/dashboard' });
+          break;
+        case 'Store':
+          navigate({ to: '/store/dashboard' });
+          break;
+        case 'Customer':
+          navigate({ to: '/customer/dashboard' });
+          break;
+        case 'Driver':
+          navigate({ to: '/driver/dashboard' });
+          break;
+        default:
+          console.error("Unknown role:", userRole);
+          toast.error("Unknown user role");
+          break;
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      if (error.message.includes('401') || error.message.includes('Invalid')) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.error(error.message || "An unexpected error occurred");
+      }
+    }
   };
 
   const onSwitchToLogin = () => {
-    // Handle switch to login logic here
-    console.log("Switching to login form");
+    navigate({ to: '/login' });
   }
 
   return (
@@ -47,9 +105,12 @@ function RegisterPage() {
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="text"
+                  name="first_name"
+                  value={formData.first_name}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                   placeholder="First name"
                   required
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -57,9 +118,12 @@ function RegisterPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
               <input
                 type="text"
+                name="last_name"
+                value={formData.last_name}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 placeholder="Last name"
                 required
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -70,9 +134,12 @@ function RegisterPage() {
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="email"
+                name="email"
+                value={formData.email}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 placeholder="Enter your email"
                 required
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -83,22 +150,28 @@ function RegisterPage() {
               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="tel"
+                name="phone"
+                value={formData.phone || ''}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 placeholder="(555) 123-4567"
                 required
+                onChange={handleInputChange}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Farm Location</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2"> Location</label>
             <div className="relative">
               <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
+                name="location"
+                value={formData.location || ''}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 placeholder="City, State"
                 required
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -109,9 +182,13 @@ function RegisterPage() {
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 placeholder="Create a password"
                 required
+                onChange={handleInputChange}
+
               />
               <button
                 type="button"

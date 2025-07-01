@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Users, Package, Warehouse, ShoppingCart, Clock, FileText, Home, Store, Truck, Settings, BarChart3, Bell, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
+import { authStore } from '@/store/auth'
 
 export const Route = createFileRoute('/admin/dashboard')({
   component: RouteComponent,
@@ -39,6 +40,7 @@ function RouteComponent() {
     { id: 4, firstName: 'Sarah', lastName: 'Wilson', email: 'sarah@example.com', role: 'Customer' },
     { id: 5, firstName: 'David', lastName: 'Brown', email: 'david@example.com', role: 'Driver' },
   ]
+  const user = authStore.state.user.first_name
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -49,7 +51,7 @@ function RouteComponent() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-              <p className="text-gray-600">Welcome back! Here's an overview of your system.</p>
+              <p className="text-gray-600">Welcome back {user}! Here's an overview of your system.</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative">

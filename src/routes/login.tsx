@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, Smartphone } from 'lucide-react';
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner';
+import { useLogin } from '@/hooks/useLogin';
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -8,17 +10,70 @@ export const Route = createFileRoute('/login')({
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const navigate = useNavigate();
+  const loginMutation = useLogin();
 
-  const onLogin = () => {
-    // Handle login logic here
-    console.log("Login form submitted");
-  }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const response = await loginMutation.mutateAsync(formData);
+      console.log("Login response:", response);
+      toast.success("Login successful!");
+
+      let userRole = response.user?.role || response.data?.user?.role;
+      // Normalize role to capitalize first letter
+      if (typeof userRole === 'string') {
+        userRole = userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase();
+      }
+      switch (userRole) {
+        case 'Admin':
+          navigate({ to: '/admin/dashboard' });
+          break;
+        case 'Store':
+          navigate({ to: '/store/dashboard' });
+          break;
+        case 'Customer':
+          navigate({ to: '/customer/dashboard' });
+          break;
+        case 'Driver':
+          navigate({ to: '/driver/dashboard' });
+          break;
+        default:
+          console.error("Unknown role:", userRole);
+          toast.error("Unknown user role");
+          break;
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      if (error.message.includes('401') || error.message.includes('Invalid')) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.error(error.message || "An unexpected error occurred");
+      }
+    }
+  };
 
   const onSwitchToRegister = () => {
-    // Handle switch to register logic here
-    console.log("Switching to register form");
+    navigate({ to: '/register' });
   }
-
 
   return (
     <div className="min-h-screen flex items-center justify-center "
@@ -43,10 +98,13 @@ function LoginPage() {
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
+                name="email"
+                value={formData.email}
                 type="email"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="Enter your email"
                 required
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -56,10 +114,13 @@ function LoginPage() {
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
+                name="password"
                 type={showPassword ? "text" : "password"}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="Enter your password"
                 required
+                value={formData.password}
+                onChange={handleInputChange}
               />
               <button
                 type="button"
