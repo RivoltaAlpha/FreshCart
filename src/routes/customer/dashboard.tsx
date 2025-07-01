@@ -1,47 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { 
-  ShoppingCart, 
-  Package, 
-  Heart, 
-  MapPin, 
-  Star,
-  Home,
-  Search,
-  User,
-  Settings,
-  Bell,
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  Minus,
-  Truck,
-  CreditCard,
-  Gift
-} from 'lucide-react'
+import { ShoppingCart, Package, Heart, MapPin, Star, Search, Bell, Plus, Minus, Truck, CreditCard, Gift } from 'lucide-react'
+
 
 export const Route = createFileRoute('/customer/dashboard')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [cartItems, setCartItems] = useState([
     { id: 1, name: 'Organic Bananas', price: 3.99, quantity: 2, image: '🍌' },
     { id: 2, name: 'Fresh Milk', price: 4.50, quantity: 1, image: '🥛' },
   ])
-
-  const sidebarItems = [
-    { icon: Home, label: 'Dashboard', active: true },
-    { icon: Search, label: 'Browse Products' },
-    { icon: ShoppingCart, label: 'My Cart' },
-    { icon: Package, label: 'Order History' },
-    { icon: Heart, label: 'Favorites' },
-    { icon: MapPin, label: 'Addresses' },
-    { icon: Gift, label: 'Offers & Coupons' },
-    { icon: User, label: 'Profile' },
-    { icon: Settings, label: 'Settings' },
-  ]
 
   const quickStats = [
     { title: 'Orders This Month', value: '12', color: 'bg-blue-500', icon: Package },
@@ -109,10 +79,10 @@ function RouteComponent() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b px-6 py-4">
+        <header className="bg-white shadow-sm border-b px-6 py-4 mb-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Welcome back, John!</h1>
+              <h1 className="text-2xl font-bold text-gray-800">Welcome back, Tiff!</h1>
               <p className="text-gray-600">Discover fresh groceries and great deals</p>
             </div>
             <div className="flex items-center space-x-4">

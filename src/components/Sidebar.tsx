@@ -18,7 +18,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
   sidebarOpen: boolean;
   onClose: () => void;
 }) {
-  const [userStatus, setUserStatus] = useState<'online' | 'offline'>('online');
+  // const [userStatus, setUserStatus] = useState<'online' | 'offline'>('online');
   
   return (
     <aside className={`fixed inset-y-0 left-0 z-50 bg-white shadow-lg transform ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-16'} transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
@@ -43,7 +43,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
               onClick={() => {
                 onPageChange(item.id);
               }}
-              className={`w-full flex items-center px-6 py-3 text-left rounded-lg hover:bg-gray-50 ${currentPage === item.id ? 'bg-[#04b1bd] text-white hover:bg-[#7ec5d5]' : 'text-gray-700'}`}
+              className={`w-full flex items-center px-6 py-8 text-left rounded-lg hover:bg-gray-50 ${currentPage === item.id ? 'bg-[#04b1bd] text-white hover:bg-[#7ec5d5]' : 'text-gray-700'}`}
             >
               <Icon className={`w-5 h-5 ${sidebarOpen ? 'mr-3' : ''}`} />
               {sidebarOpen && <span>{item.label}</span>}
@@ -53,7 +53,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
       </nav>
       
       {/* Status Toggle - only show when sidebar is open */}
-      {sidebarOpen && (
+      {/* {sidebarOpen && (
         <div className="p-4 border-t">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-700">Status</span>
@@ -71,7 +71,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
             Go {userStatus === 'online' ? 'Offline' : 'Online'}
           </button>
         </div>
-      )}
+      )} */}
     </aside>
   );
 }
