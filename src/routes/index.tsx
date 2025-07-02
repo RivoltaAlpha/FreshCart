@@ -7,8 +7,7 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
+    <div className="min-h-screen ">
       {/* <section className="bg-gradient-to-br from-[#005A61] via-[#00A7B3] to-[#6A89A7] text-black py-20"> */}
       <section className="bg-gradient-to-br from-[#005A61] via-[#00A7B3] to-[#6A89A7] text-black py-64
         bg-no-repeat bg-cover bg-center bg-fixed bg-black backdrop-opacity-90"
@@ -62,7 +61,7 @@ function App() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-[#005A61] mb-4">Why Choose FreshCart?</h2>

@@ -7,7 +7,7 @@ export const Route = createFileRoute('/about')({
 
 function AboutPage () {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-background py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -19,7 +19,7 @@ function AboutPage () {
         </div>
 
         {/* Story Section */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-16">
+        <div className="bg-card rounded-3xl shadow-xl p-8 md:p-12 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold text-[#005A61] mb-6">Our Story</h2>
@@ -81,7 +81,7 @@ function AboutPage () {
           <p className="text-[#516E89] text-lg mb-12">The passionate people behind FreshCart</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+            <div className="bg-card rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl font-bold text-white">JI</span>
               </div>
@@ -92,7 +92,7 @@ function AboutPage () {
               </p>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+            <div className="bg-card rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl font-bold text-white">VO</span>
               </div>
@@ -103,7 +103,7 @@ function AboutPage () {
               </p>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+            <div className="bg-card rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl font-bold text-white">TN</span>
               </div>

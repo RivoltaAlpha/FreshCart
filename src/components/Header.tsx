@@ -1,6 +1,8 @@
 import { Link, useLocation } from '@tanstack/react-router'
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { ThemeToggle } from './ui/theme-toggle'; 
+
 
 interface HeaderProps {
   cartItems?: number;
@@ -26,7 +28,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
   };
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
+    <header className="bg-background shadow-lg sticky top-0 z-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -71,6 +73,9 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
                 Register
               </Link>
             </div>
+
+                        {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Cart Button */}
             <Link 

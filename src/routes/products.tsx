@@ -66,7 +66,7 @@ type Cart = Record<string, number>;
   const cartItems = Object.values(cart).reduce((total, quantity) => total + quantity, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-8xl lg:mx-28 md:auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-[#005A61] mb-4">Fresh Products</h1>
@@ -74,7 +74,7 @@ type Cart = Record<string, number>;
         </div>
 
         {/* Search and Filter */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg mb-8">
+        <div className="bg-searchbar p-6 rounded-2xl shadow-lg mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#516E89] h-5 w-5" />
@@ -104,7 +104,7 @@ type Cart = Record<string, number>;
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div key={product.id} className="bg-card rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="relative h-48">
                 <img 
                   src={product.image} 
