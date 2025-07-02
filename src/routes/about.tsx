@@ -11,8 +11,8 @@ function AboutPage () {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-[#005A61] mb-6">About FreshCart</h1>
-          <p className="text-xl text-[#516E89] max-w-3xl mx-auto leading-relaxed">
+          <h1 className="text-5xl font-bold text-fresh-primary mb-6">About FreshCart</h1>
+          <p className="text-xl text-fresh-secondary max-w-3xl mx-auto leading-relaxed">
             We're on a mission to revolutionize grocery shopping by connecting communities with fresh, 
             locally-sourced produce while making healthy eating accessible and convenient for everyone.
           </p>
@@ -22,13 +22,13 @@ function AboutPage () {
         <div className="bg-card rounded-3xl shadow-xl p-8 md:p-12 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-[#005A61] mb-6">Our Story</h2>
-              <p className="text-[#516E89] mb-4 leading-relaxed">
+              <h2 className="text-3xl font-bold text-fresh-primary mb-6">Our Story</h2>
+              <p className="text-fresh-secondary mb-4 leading-relaxed">
                 Founded in 2023, FreshCart began with a simple idea: everyone deserves access to fresh, 
                 quality groceries without the hassle of long shopping trips. We started by partnering with 
                 local farmers and suppliers in Nairobi, creating a platform that benefits both consumers and producers.
               </p>
-              <p className="text-[#516E89] mb-6 leading-relaxed">
+              <p className="text-fresh-secondary mb-6 leading-relaxed">
                 Today, we're proud to serve thousands of families across Kenya, delivering farm-fresh produce 
                 and quality groceries right to their doorsteps. Our commitment to freshness, quality, and 
                 community remains at the heart of everything we do.
@@ -36,11 +36,11 @@ function AboutPage () {
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-[#00A7B3] mb-2">50K+</div>
-                  <div className="text-[#516E89]">Happy Customers</div>
+                  <div className="text-fresh-secondary">Happy Customers</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-[#00A7B3] mb-2">200+</div>
-                  <div className="text-[#516E89]">Local Partners</div>
+                  <div className="text-fresh-secondary">Local Partners</div>
                 </div>
               </div>
             </div>
@@ -77,17 +77,17 @@ function AboutPage () {
 
         {/* Team Section */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#005A61] mb-4">Meet Our Team</h2>
-          <p className="text-[#516E89] text-lg mb-12">The passionate people behind FreshCart</p>
+          <h2 className="text-4xl font-bold text-fresh-primary mb-4">Meet Our Team</h2>
+          <p className="text-fresh-secondary text-lg mb-12">The passionate people behind FreshCart</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-card rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl font-bold text-white">JI</span>
               </div>
-              <h3 className="text-xl font-bold text-[#005A61] mb-2">John Ihugo</h3>
+              <h3 className="text-xl font-bold text-fresh-primary mb-2">John Ihugo</h3>
               <p className="text-[#00A7B3] font-semibold mb-3">CEO & Founder</p>
-              <p className="text-[#516E89] text-sm">
+              <p className="text-fresh-secondary text-sm">
                 Former agriculture specialist with 10 years of experience connecting farmers to markets.
               </p>
             </div>
@@ -96,9 +96,9 @@ function AboutPage () {
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl font-bold text-white">VO</span>
               </div>
-              <h3 className="text-xl font-bold text-[#005A61] mb-2">Valarie Okumu</h3>
+              <h3 className="text-xl font-bold text-fresh-primary mb-2">Valarie Okumu</h3>
               <p className="text-[#00A7B3] font-semibold mb-3">Head of Operations</p>
-              <p className="text-[#516E89] text-sm">
+              <p className="text-fresh-secondary text-sm">
                 Supply chain expert ensuring our delivery network runs smoothly across Kenya.
               </p>
             </div>
@@ -107,9 +107,9 @@ function AboutPage () {
               <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl font-bold text-white">TN</span>
               </div>
-              <h3 className="text-xl font-bold text-[#005A61] mb-2">Mwaniki Tifany</h3>
+              <h3 className="text-xl font-bold text-fresh-primary mb-2">Mwaniki Tifany</h3>
               <p className="text-[#00A7B3] font-semibold mb-3">Tech Lead</p>
-              <p className="text-[#516E89] text-sm">
+              <p className="text-fresh-secondary text-sm">
                 Software engineer passionate about building technology that makes life easier.
               </p>
             </div>

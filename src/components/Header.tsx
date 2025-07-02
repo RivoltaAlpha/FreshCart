@@ -1,7 +1,7 @@
 import { Link, useLocation } from '@tanstack/react-router'
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { ThemeToggle } from './ui/theme-toggle'; 
+import { ThemeToggle } from './ui/theme-toggle';
 
 
 interface HeaderProps {
@@ -11,7 +11,7 @@ interface HeaderProps {
 export default function Header({ cartItems = 0 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  
+
   const navigation = [
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/products' },
@@ -28,7 +28,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
   };
 
   return (
-    <header className="bg-background shadow-lg sticky top-0 z-50 border-b border-gray-200">
+    <header className="bg-navbar shadow-lg sticky top-0 z-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -45,11 +45,10 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 text-sm font-medium transition-colors relative ${
-                  isActiveRoute(item.path)
+                className={`px-3 py-2 text-sm font-medium transition-colors relative ${isActiveRoute(item.path)
                     ? 'text-[#00A7B3] border-b-2 border-[#00A7B3]'
                     : 'text-[#516E89] hover:text-[#005A61]'
-                }`}
+                  }`}
               >
                 {item.name}
               </Link>
@@ -74,11 +73,11 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
               </Link>
             </div>
 
-                        {/* Theme Toggle */}
+            {/* Theme Toggle */}
             <ThemeToggle />
 
             {/* Cart Button */}
-            <Link 
+            <Link
               to="/cart"
               className="relative p-2 text-[#516E89] hover:text-[#005A61] transition-colors"
             >
@@ -89,7 +88,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
                 </span>
               )}
             </Link>
-            
+
             {/* Mobile menu button */}
             <button
               className="md:hidden p-2 text-[#516E89] hover:text-[#005A61]"
@@ -111,16 +110,15 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
                   key={item.path}
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 text-base font-medium w-full text-left transition-colors rounded-md ${
-                    isActiveRoute(item.path)
+                  className={`block px-3 py-2 text-base font-medium w-full text-left transition-colors rounded-md ${isActiveRoute(item.path)
                       ? 'text-[#00A7B3] bg-[#00A7B3]/10'
                       : 'text-[#516E89] hover:text-[#005A61] hover:bg-gray-100'
-                  }`}
+                    }`}
                 >
                   {item.name}
                 </Link>
               ))}
-              
+
               {/* Mobile Auth Buttons */}
               <div className="pt-4 border-t border-gray-200 space-y-2">
                 <Link

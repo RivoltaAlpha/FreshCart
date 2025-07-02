@@ -69,15 +69,15 @@ type Cart = Record<string, number>;
     <div className="min-h-screen bg-background py-8">
       <div className="max-w-8xl lg:mx-28 md:auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#005A61] mb-4">Fresh Products</h1>
-          <p className="text-[#516E89] text-lg">Discover our wide selection of fresh, quality groceries</p>
+          <h1 className="text-4xl font-bold text-fresh-primary  mb-4">Fresh Products</h1>
+          <p className="text-fresh-secondary  text-lg">Discover our wide selection of fresh, quality groceries</p>
         </div>
 
         {/* Search and Filter */}
         <div className="bg-searchbar p-6 rounded-2xl shadow-lg mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#516E89] h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fresh-secondary  h-5 w-5" />
               <input
                 type="text"
                 placeholder="Search products..."
@@ -87,7 +87,7 @@ type Cart = Record<string, number>;
               />
             </div>
             <div className="flex items-center gap-2">
-              <Filter className="text-[#516E89] h-5 w-5" />
+              <Filter className="text-fresh-secondary  h-5 w-5" />
               <select 
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
@@ -118,30 +118,30 @@ type Cart = Record<string, number>;
               
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-[#516E89] bg-gray-100 px-2 py-1 rounded-full">
+                  <span className="text-sm text-fresh-secondary  bg-fresh-accent  px-2 py-1 rounded-full">
                     {product.category}
                   </span>
                   <div className="flex items-center">
                     <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                    <span className="ml-1 text-sm text-[#516E89]">{product.rating}</span>
+                    <span className="ml-1 text-sm text-fresh-secondary ">{product.rating}</span>
                   </div>
                 </div>
                 
-                <h3 className="text-xl font-bold text-[#005A61] mb-1">{product.name}</h3>
-                <p className="text-[#516E89] text-sm mb-2">{product.seller}</p>
-                <p className="text-[#516E89] text-sm mb-3">{product.description}</p>
+                <h3 className="text-xl font-bold text-fresh-primary  mb-1">{product.name}</h3>
+                <p className="text-fresh-secondary  text-sm mb-2">{product.seller}</p>
+                <p className="text-fresh-secondary  text-sm mb-3">{product.description}</p>
                 
                 <div className="flex items-center mb-3">
                   <MapPin className="h-4 w-4 text-[#00A7B3] mr-1" />
-                  <span className="text-sm text-[#516E89]">{product.location}</span>
+                  <span className="text-sm text-fresh-secondary ">{product.location}</span>
                 </div>
                 
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <span className="text-2xl font-bold text-[#005A61]">KSh {product.price}</span>
-                    <span className="text-sm text-[#516E89] ml-1">{product.unit}</span>
+                    <span className="text-2xl font-bold text-fresh-primary ">KSh {product.price}</span>
+                    <span className="text-sm text-fresh-secondary  ml-1">{product.unit}</span>
                   </div>
-                  <span className="text-sm text-[#516E89]">{product.quantity}</span>
+                  <span className="text-sm text-fresh-secondary ">{product.quantity}</span>
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -153,7 +153,7 @@ type Cart = Record<string, number>;
                       >
                         <Minus className="h-4 w-4" />
                       </button>
-                      <span className="font-semibold text-[#005A61]">{cart[product.id]}</span>
+                      <span className="font-semibold text-fresh-primary ">{cart[product.id]}</span>
                       <button
                         onClick={() => addToCart(product.id)}
                         className="w-8 h-8 bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white rounded-full flex items-center justify-center transition-colors"
@@ -178,7 +178,7 @@ type Cart = Record<string, number>;
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-[#516E89] text-lg">No products found matching your criteria.</p>
+            <p className="text-fresh-secondary  text-lg">No products found matching your criteria.</p>
           </div>
         )}
       </div>

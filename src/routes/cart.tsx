@@ -110,12 +110,12 @@ function RouteComponent() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-background py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <ShoppingCart className="h-24 w-24 text-[#516E89] mx-auto mb-6" />
-            <h1 className="text-4xl font-bold text-[#005A61] mb-4">Your Cart is Empty</h1>
-            <p className="text-[#516E89] text-lg mb-8">
+            <ShoppingCart className="h-24 w-24 text-fresh-secondary mx-auto mb-6" />
+            <h1 className="text-4xl font-bold text-fresh-primary mb-4">Your Cart is Empty</h1>
+            <p className="text-fresh-secondary text-lg mb-8">
               Looks like you haven't added any items to your cart yet.
             </p>
             <button className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors">
@@ -128,17 +128,17 @@ function RouteComponent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Link to="/products" className="flex items-center p-2 hover:bg-gray-200 rounded-full transition-colors">
-              <ArrowLeft className="h-6 w-6 text-[#516E89]" />
+              <ArrowLeft className="h-6 w-6 text-fresh-secondary" />
             </Link>
             <div>
-              <h1 className="text-4xl font-bold text-[#005A61]">Shopping Cart</h1>
-              <p className="text-[#516E89]">{cartItems.length} item{cartItems.length !== 1 ? 's' : ''} in your cart</p>
+              <h1 className="text-4xl font-bold text-fresh-primary">Shopping Cart</h1>
+              <p className="text-fresh-secondary">{cartItems.length} item{cartItems.length !== 1 ? 's' : ''} in your cart</p>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ function RouteComponent() {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+              <div key={item.id} className="bg-card rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Product Image */}
                   <div className="flex-shrink-0">
@@ -162,23 +162,23 @@ function RouteComponent() {
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-[#005A61] mb-1">{item.name}</h3>
-                        <p className="text-[#516E89] text-sm mb-2">{item.seller}</p>
+                        <h3 className="text-xl font-bold text-fresh-primary mb-1">{item.name}</h3>
+                        <p className="text-fresh-secondary text-sm mb-2">{item.seller}</p>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs bg-gray-100 text-[#516E89] px-2 py-1 rounded-full">
+                          <span className="text-xs bg-gray-100 text-fresh-secondary px-2 py-1 rounded-full">
                             {item.category}
                           </span>
-                          <div className="flex items-center text-sm text-[#516E89]">
+                          <div className="flex items-center text-sm text-fresh-secondary">
                             <MapPin className="h-3 w-3 mr-1" />
                             {item.location}
                           </div>
                         </div>
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="text-2xl font-bold text-[#005A61]">
+                            <span className="text-2xl font-bold text-fresh-primary">
                               KSh {item.price.toFixed(2)}
                             </span>
-                            <span className="text-sm text-[#516E89] ml-1">{item.unit}</span>
+                            <span className="text-sm text-fresh-secondary ml-1">{item.unit}</span>
                           </div>
                         </div>
                       </div>
@@ -192,7 +192,7 @@ function RouteComponent() {
                           >
                             <Minus className="h-4 w-4" />
                           </button>
-                          <span className="font-semibold text-[#005A61] min-w-[2rem] text-center">
+                          <span className="font-semibold text-fresh-primary min-w-[2rem] text-center">
                             {item.quantity}
                           </span>
                           <button
@@ -215,8 +215,8 @@ function RouteComponent() {
                     {/* Item Total */}
                     <div className="mt-4 pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
-                        <span className="text-[#516E89]">Subtotal:</span>
-                        <span className="text-xl font-bold text-[#005A61]">
+                        <span className="text-fresh-secondary">Subtotal:</span>
+                        <span className="text-xl font-bold text-fresh-primary">
                           KSh {(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
@@ -230,8 +230,8 @@ function RouteComponent() {
           {/* Order Summary */}
           <div className="space-y-6">
             {/* Promo Code */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-[#005A61] mb-4">Promo Code</h3>
+            <div className="bg-card rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-fresh-primary mb-4">Promo Code</h3>
               {appliedPromo ? (
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                   <div className="flex items-center justify-between">
@@ -270,10 +270,10 @@ function RouteComponent() {
             </div>
 
             {/* Delivery Options */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-[#005A61] mb-4">Delivery Options</h3>
+            <div className="bg-card rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-fresh-primary mb-4">Delivery Options</h3>
               <div className="space-y-3">
-                <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer">
+                <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-background cursor-pointer">
                   <input
                     type="radio"
                     name="delivery"
@@ -285,13 +285,13 @@ function RouteComponent() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-[#00A7B3]" />
-                      <span className="font-semibold text-[#005A61]">Store Pickup</span>
+                      <span className="font-semibold text-fresh-primary">Store Pickup</span>
                     </div>
-                    <p className="text-sm text-[#516E89]">Free - Ready in 15 minutes</p>
+                    <p className="text-sm text-fresh-secondary">Free - Ready in 15 minutes</p>
                   </div>
                 </label>
 
-                <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer">
+                <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-background cursor-pointer">
                   <input
                     type="radio"
                     name="delivery"
@@ -303,13 +303,13 @@ function RouteComponent() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <Truck className="h-4 w-4 text-[#00A7B3]" />
-                      <span className="font-semibold text-[#005A61]">Standard Delivery</span>
+                      <span className="font-semibold text-fresh-primary">Standard Delivery</span>
                     </div>
-                    <p className="text-sm text-[#516E89]">KSh 50 - 1-2 hours</p>
+                    <p className="text-sm text-fresh-secondary">KSh 50 - 1-2 hours</p>
                   </div>
                 </label>
 
-                <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer">
+                <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-background cursor-pointer">
                   <input
                     type="radio"
                     name="delivery"
@@ -321,26 +321,26 @@ function RouteComponent() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-[#00A7B3]" />
-                      <span className="font-semibold text-[#005A61]">Express Delivery</span>
+                      <span className="font-semibold text-fresh-primary">Express Delivery</span>
                     </div>
-                    <p className="text-sm text-[#516E89]">KSh 150 - 30 minutes</p>
+                    <p className="text-sm text-fresh-secondary">KSh 150 - 30 minutes</p>
                   </div>
                 </label>
               </div>
             </div>
 
             {/* Order Summary */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-[#005A61] mb-4">Order Summary</h3>
+            <div className="bg-card rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-fresh-primary mb-4">Order Summary</h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-[#516E89]">Subtotal</span>
-                  <span className="font-semibold text-[#005A61]">KSh {subtotal.toFixed(2)}</span>
+                  <span className="text-fresh-secondary">Subtotal</span>
+                  <span className="font-semibold text-fresh-primary">KSh {subtotal.toFixed(2)}</span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-[#516E89]">Delivery Fee</span>
-                  <span className="font-semibold text-[#005A61]">
+                  <span className="text-fresh-secondary">Delivery Fee</span>
+                  <span className="font-semibold text-fresh-primary">
                     {deliveryFee === 0 ? 'Free' : `KSh ${deliveryFee.toFixed(2)}`}
                   </span>
                 </div>
@@ -354,8 +354,8 @@ function RouteComponent() {
 
                 <div className="border-t border-gray-200 pt-3">
                   <div className="flex justify-between text-lg">
-                    <span className="font-bold text-[#005A61]">Total</span>
-                    <span className="font-bold text-[#005A61]">KSh {total.toFixed(2)}</span>
+                    <span className="font-bold text-fresh-primary">Total</span>
+                    <span className="font-bold text-fresh-primary">KSh {total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -365,7 +365,7 @@ function RouteComponent() {
                 Proceed to Checkout
               </button>
 
-              <div className="flex items-center justify-center gap-2 mt-4 text-sm text-[#516E89]">
+              <div className="flex items-center justify-center gap-2 mt-4 text-sm text-fresh-secondary">
                 <Shield className="h-4 w-4" />
                 <span>Secure checkout with SSL encryption</span>
               </div>

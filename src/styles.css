@@ -57,9 +57,11 @@ code {
 .dark {
   --background: oklch(13.884% 0.04561 278.672);
   --foreground: oklch(0.985 0 0);
+  --navbar: oklch(20.506% 0.09035 274.967);
+  --navbar-foreground: oklch(0.985 0 0);
   --card: oklch(18.506% 0.05909 278.946);
   --card-foreground: oklch(0.985 0 0);
-  --searchbar: oklch(88.366% 0.02055 285.908);
+  --searchbar: oklch(20.506% 0.09035 274.967);
   --searchbar-foreground: oklch(85.161% 0.01521 285.986);
   --popover: oklch(0.141 0.005 285.823);
   --popover-foreground: oklch(0.985 0 0);
@@ -89,11 +91,30 @@ code {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.274 0.006 286.033);
   --sidebar-ring: oklch(0.442 0.017 285.786);
+
+  /* FreshCart Brand Colors - Dark Mode (slightly adjusted for better contrast) */
+  --fresh-teal-dark: oklch(96.948% 0.01375 197.373); /* Lighter in dark mode */
+  --fresh-teal-light: oklch(0.75 0.088 197.137); /* Even lighter in dark mode */
+  --fresh-blue-gray: oklch(0.705 0.032 255.405); /* Lighter in dark mode */
+  --fresh-success: oklch(0.68 0.128 142.495);
+  --fresh-warning: oklch(0.8 0.171 70.67);
+  --fresh-error: oklch(0.7 0.258 29.234);
+  --fresh-info: oklch(0.7 0.206 255.32);
+
+  /* Brand Color Variations - Dark Mode */
+  --fresh-primary: var(--fresh-teal-light);
+  --fresh-primary-foreground: oklch(0.141 0.005 285.823);
+  --fresh-secondary: var(--fresh-teal-dark);
+  --fresh-secondary-foreground: oklch(0.141 0.005 285.823);
+  --fresh-accent: var(--fresh-blue-gray);
+  --fresh-accent-foreground: oklch(0.141 0.005 285.823);
 }
 
 .light {
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
+  --navbar: oklch(1 0 0);
+  --navbar-foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
   --searchbar: oklch(0.967 0.001 286.375);
@@ -108,11 +129,33 @@ code {
   --muted-foreground: oklch(0.552 0.016 285.938);
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
+
+  /* FreshCart Brand Colors - Light Mode (explicit) */
+  --fresh-teal-dark: oklch(0.374 0.061 197.137);
+  --fresh-teal-light: oklch(37.493% 0.05548 196.858);
+  --fresh-blue-gray: oklch(71.768% 0.07688 256.777);
+  --fresh-success: oklch(0.588 0.128 142.495);
+  --fresh-warning: oklch(0.768 0.171 70.67);
+  --fresh-error: oklch(0.628 0.258 29.234);
+  --fresh-info: oklch(0.631 0.206 255.32);
+
+  --fresh-primary: var(--fresh-teal-dark);
+  --fresh-primary-foreground: oklch(0.985 0 0);
+  --fresh-secondary: var(--fresh-teal-light);
+  --fresh-secondary-foreground: oklch(0.985 0 0);
+  --fresh-accent: var(--fresh-blue-gray);
+  --fresh-accent-foreground: oklch(0.985 0 0);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-navbar: var(--navbar);
+  --color-navbar-foreground: var(--navbar-foreground);
+  --color-searchbar: var(--searchbar);
+  --color-searchbar-foreground: var(--searchbar-foreground);
+  --color-header: var(--navbar);
+  --color-header-foreground: var(--navbar-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -147,6 +190,21 @@ code {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* FreshCart Brand Colors for Tailwind */
+  --color-fresh-teal-dark: var(--fresh-teal-dark);
+  --color-fresh-teal-light: var(--fresh-teal-light);
+  --color-fresh-blue-gray: var(--fresh-blue-gray);
+  --color-fresh-success: var(--fresh-success);
+  --color-fresh-warning: var(--fresh-warning);
+  --color-fresh-error: var(--fresh-error);
+  --color-fresh-info: var(--fresh-info);
+  --color-fresh-primary: var(--fresh-primary);
+  --color-fresh-primary-foreground: var(--fresh-primary-foreground);
+  --color-fresh-secondary: var(--fresh-secondary);
+  --color-fresh-secondary-foreground: var(--fresh-secondary-foreground);
+  --color-fresh-accent: var(--fresh-accent);
+  --color-fresh-accent-foreground: var(--fresh-accent-foreground);
 }
 
 @layer base {
@@ -156,4 +214,45 @@ code {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+/* Utility classes for FreshCart brand colors */
+@layer utilities {
+  /* Background utilities */
+  .bg-fresh-primary { background-color: var(--fresh-primary); }
+  .bg-fresh-secondary { background-color: var(--fresh-secondary); }
+  .bg-fresh-accent { background-color: var(--fresh-accent); }
+  .bg-fresh-teal-dark { background-color: var(--fresh-teal-dark); }
+  .bg-fresh-teal-light { background-color: var(--fresh-teal-light); }
+  .bg-fresh-blue-gray { background-color: var(--fresh-blue-gray); }
+  .bg-fresh-success { background-color: var(--fresh-success); }
+  .bg-fresh-warning { background-color: var(--fresh-warning); }
+  .bg-fresh-error { background-color: var(--fresh-error); }
+  .bg-fresh-info { background-color: var(--fresh-info); }
+  
+  /* Text utilities */
+  .text-fresh-primary { color: var(--fresh-primary); }
+  .text-fresh-secondary { color: var(--fresh-secondary); }
+  .text-fresh-accent { color: var(--fresh-accent); }
+  .text-fresh-teal-dark { color: var(--fresh-teal-dark); }
+  .text-fresh-teal-light { color: var(--fresh-teal-light); }
+  .text-fresh-blue-gray { color: var(--fresh-blue-gray); }
+  .text-fresh-success { color: var(--fresh-success); }
+  .text-fresh-warning { color: var(--fresh-warning); }
+  .text-fresh-error { color: var(--fresh-error); }
+  .text-fresh-info { color: var(--fresh-info); }
+  
+  /* Border utilities */
+  .border-fresh-primary { border-color: var(--fresh-primary); }
+  .border-fresh-secondary { border-color: var(--fresh-secondary); }
+  .border-fresh-accent { border-color: var(--fresh-accent); }
+  .border-fresh-teal-dark { border-color: var(--fresh-teal-dark); }
+  .border-fresh-teal-light { border-color: var(--fresh-teal-light); }
+  .border-fresh-blue-gray { border-color: var(--fresh-blue-gray); }
+  
+  /* Ring utilities for focus states */
+  .ring-fresh-primary { --tw-ring-color: var(--fresh-primary); }
+  .ring-fresh-secondary { --tw-ring-color: var(--fresh-secondary); }
+  .ring-fresh-accent { --tw-ring-color: var(--fresh-accent); }
 }
