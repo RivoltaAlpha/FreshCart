@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, } from 'react';
 import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, CreditCard, Truck, Shield, Tag, MapPin, Clock } from 'lucide-react';
+import { toast } from 'sonner';
+import type { CartItem } from '@/types/types';
+import { initialCartItems } from '@/data/cart';
 
 export const Route = createFileRoute('/cart')({
   component: RouteComponent,
@@ -9,52 +12,12 @@ export const Route = createFileRoute('/cart')({
 function RouteComponent() {
 
   // Sample cart data - in a real app, this would come from state management
-  const initialCartItems = [
-    {
-      id: 1,
-      name: "Fresh Lettuce",
-      seller: "Organic Fields Co",
-      price: 100.25,
-      unit: "per head",
-      location: "1.8 miles away",
-      image: "https://img.freepik.com/free-psd/fresh-green-lettuce-vibrant-healthy-vegetable_84443-40401.jpg?uid=R154664640&semt=ais_hybrid&w=740",
-      quantity: 2,
-      category: "Leafy Greens"
-    },
-    {
-      id: 2,
-      name: "Organic Tomatoes",
-      seller: "Farm Fresh Ltd",
-      price: 85.50,
-      unit: "per kg",
-      location: "2.1 miles away",
-      image: "https://img.freepik.com/premium-photo/tomato-vegetables-isolated-white-fresh-tomato-fruit-clipping-path-tomato-macro-photo_299651-600.jpg?uid=R154664640&semt=ais_hybrid&w=740",
-      quantity: 1,
-      category: "Vegetables"
-    },
-    {
-      id: 3,
-      name: "Fresh Bananas",
-      seller: "Tropical Fruits Co",
-      price: 65.00,
-      unit: "per dozen",
-      location: "1.5 miles away",
-      image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=300&fit=crop",
-      quantity: 3,
-      category: "Fruits"
-    },
-    {
-      id: 4,
-      name: "Fresh Milk",
-      seller: "Dairy Pure",
-      price: 120.00,
-      unit: "per liter",
-      location: "0.8 miles away",
-      image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&h=300&fit=crop",
-      quantity: 1,
-      category: "Dairy"
-    }
-  ];
+
+
+//   const getCartItems = (): CartItem[] => {
+//   const saved = localStorage.getItem('freshcart-cart-items');
+//   return saved ? JSON.parse(saved) : [];
+// };
 
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [promoCode, setPromoCode] = useState('');
@@ -100,12 +63,16 @@ function RouteComponent() {
       setAppliedPromo({ code: promoCode.toUpperCase(), ...promo });
       setPromoCode('');
     } else {
-      alert('Invalid promo code');
+      toast('Invalid promo code');
     }
   };
 
   const removePromoCode = () => {
     setAppliedPromo(null);
+  };
+
+  const setCartItemsToLocalStorage = (items) => {
+    localStorage.setItem('cartItems', JSON.stringify(items));
   };
 
   if (cartItems.length === 0) {
