@@ -96,36 +96,51 @@ export interface Address {
 }
 
 export interface Product {
-  id: string
-  name: string
-  description: string
-  category: string
-  subcategory?: string
-  price: number
-  unit: string // kg, pieces, liters
-  images: string[]
-  seller: Store
-  inventory: {
-    quantity: number
-    threshold: number // low stock alert
-    harvestDate?: Date
-    expiryDate?: Date
-  }
-  ratings: {
-    average: number
-    count: number
-    reviews: Review[]
-  }
-  tags: string[]
-  isActive: boolean
-  featured: boolean
-  discount?: {
-    type: 'percentage' | 'fixed'
-    value: number
-    startDate: Date
-    endDate: Date
-  }
+    id: number;
+    name: string;
+    seller: string;
+    category: string;
+    image: string;
+    harvestDate: string;
+    rating: number;
+    description: string;
+    location: string;
+    price: number;
+    unit: string;
+    quantity: string;
 }
+
+// export interface Product {
+//   id: string
+//   name: string
+//   description: string
+//   category: string
+//   subcategory?: string
+//   price: number
+//   unit: string // kg, pieces, liters
+//   images: string[]
+//   seller: Store
+//   inventory: {
+//     quantity: number
+//     threshold: number // low stock alert
+//     harvestDate?: Date
+//     expiryDate?: Date
+//   }
+//   ratings: {
+//     average: number
+//     count: number
+//     reviews: Review[]
+//   }
+//   tags: string[]
+//   isActive: boolean
+//   featured: boolean
+//   discount?: {
+//     type: 'percentage' | 'fixed'
+//     value: number
+//     startDate: Date
+//     endDate: Date
+//   }
+// }
 
 export interface Review {
   id: string
