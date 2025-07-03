@@ -56,15 +56,15 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background">
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b px-6 py-4">
+        <header className="bg-navbar shadow-sm border-b px-6 py-4 rounded-2xl">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Store Dashboard</h1>
-              <p className="text-gray-600">Manage your store, products, and orders</p>
+              <h1 className="text-2xl font-bold text-fresh-primary">Store Dashboard</h1>
+              <p className="text-fresh-secondary">Manage your store, products, and orders</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative">
@@ -88,37 +88,37 @@ function RouteComponent() {
         {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-6">
           {/* Quick Actions */}
-          <div className="my-8 bg-white rounded-xl shadow-sm">
+          <div className="my-8 bg-card rounded-xl shadow-sm">
             <div className="px-6 py-4 border-b">
-              <h2 className="text-xl font-semibold text-gray-800">Quick Actions</h2>
+              <h2 className="text-xl font-semibold text-fresh-primary">Quick Actions</h2>
             </div>
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <Plus className="text-indigo-600" size={24} />
                 <div className="text-left">
-                  <p className="font-medium text-gray-800">Add Product</p>
-                  <p className="text-sm text-gray-600">Add new item to store</p>
+                  <p className="font-medium text-fresh-primary">Add Product</p>
+                  <p className="text-sm text-white">Add new item to store</p>
                 </div>
               </button>
               <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <ClipboardCheckIcon className="text-green-600" size={24} />
                 <div className="text-left">
-                  <p className="font-medium text-gray-800">Update Inventory</p>
-                  <p className="text-sm text-gray-600">Manage stock levels</p>
+                  <p className="font-medium text-fresh-primary">Update Inventory</p>
+                  <p className="text-sm text-white">Manage stock levels</p>
                 </div>
               </button>
               <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <TrendingUp className="text-blue-600" size={24} />
                 <div className="text-left">
-                  <p className="font-medium text-gray-800">View Analytics</p>
-                  <p className="text-sm text-gray-600">Sales performance</p>
+                  <p className="font-medium text-fresh-primary">View Analytics</p>
+                  <p className="text-sm text-white">Sales performance</p>
                 </div>
               </button>
               <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <Settings className="text-purple-600" size={24} />
                 <div className="text-left">
-                  <p className="font-medium text-gray-800">Store Settings</p>
-                  <p className="text-sm text-gray-600">Configure store</p>
+                  <p className="font-medium text-fresh-primary">Store Settings</p>
+                  <p className="text-sm text-white">Configure store</p>
                 </div>
               </button>
             </div>
@@ -141,9 +141,9 @@ function RouteComponent() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Recent Orders */}
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-card rounded-xl shadow-sm">
               <div className="px-6 py-4 border-b flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
+                <h2 className="text-xl font-semibold text-fresh-primary">Recent Orders</h2>
                 <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
                   View All
                 </button>
@@ -154,16 +154,16 @@ function RouteComponent() {
                   <div key={order.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <h3 className="font-semibold text-gray-800">#{order.id}</h3>
+                        <h3 className="font-semibold text-fresh-primary">#{order.id}</h3>
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                             order.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
                               order.status === 'ready' ? 'bg-green-100 text-green-800' :
-                                'bg-gray-100 text-gray-800'
+                                'bg-gray-100 text-fresh-primary'
                           }`}>
                           {order.status.toUpperCase()}
                         </span>
                       </div>
-                      <p className="text-gray-600">{order.customer}</p>
+                      <p className="text-white">{order.customer}</p>
                       <p className="text-sm text-gray-500">{order.items} items • {order.time}</p>
                     </div>
                     <div className="text-right">
@@ -183,9 +183,9 @@ function RouteComponent() {
             </div>
 
             {/* Low Stock Alert */}
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-card rounded-xl shadow-sm">
               <div className="px-6 py-4 border-b flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-800">Low Stock Alert</h2>
+                <h2 className="text-xl font-semibold text-fresh-primary">Low Stock Alert</h2>
                 <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
                   Manage Inventory
                 </button>
@@ -193,10 +193,10 @@ function RouteComponent() {
 
               <div className="p-6 space-y-4">
                 {lowStockItems.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-red-200 rounded-lg bg-red-50">
+                  <div key={index} className="flex items-center bg-card justify-between p-4 border border-red-200 rounded-lg">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800">{item.name}</h3>
-                      <p className="text-sm text-gray-600">{item.category}</p>
+                      <h3 className="font-semibold text-fresh-primary">{item.name}</h3>
+                      <p className="text-sm ">{item.category}</p>
                       <div className="flex items-center space-x-2 mt-1">
                         <div className="w-24 bg-gray-200 rounded-full h-2">
                           <div

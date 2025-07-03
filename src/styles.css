@@ -59,7 +59,7 @@ code {
   --foreground: oklch(0.985 0 0);
   --navbar: oklch(20.506% 0.09035 274.967);
   --navbar-foreground: oklch(0.985 0 0);
-  --card: oklch(18.506% 0.05909 278.946);
+  --card: oklch(19.081% 0.1172 267.847);
   --card-foreground: oklch(0.985 0 0);
   --searchbar: oklch(20.506% 0.09035 274.967);
   --searchbar-foreground: oklch(85.161% 0.01521 285.986);
@@ -93,8 +93,8 @@ code {
   --sidebar-ring: oklch(0.442 0.017 285.786);
 
   /* FreshCart Brand Colors - Dark Mode (slightly adjusted for better contrast) */
-  --fresh-teal-dark: oklch(96.948% 0.01375 197.373); /* Lighter in dark mode */
-  --fresh-teal-light: oklch(0.75 0.088 197.137); /* Even lighter in dark mode */
+  --fresh-teal-dark: oklch(67.659% 0.10422 195.014); /* Lighter in dark mode */
+  --fresh-teal-light: oklch(84.866% 0.08576 197.577); /* Even lighter in dark mode */
   --fresh-blue-gray: oklch(0.705 0.032 255.405); /* Lighter in dark mode */
   --fresh-success: oklch(0.68 0.128 142.495);
   --fresh-warning: oklch(0.8 0.171 70.67);
@@ -131,8 +131,8 @@ code {
   --accent-foreground: oklch(0.21 0.006 285.885);
 
   /* FreshCart Brand Colors - Light Mode (explicit) */
-  --fresh-teal-dark: oklch(0.374 0.061 197.137);
-  --fresh-teal-light: oklch(37.493% 0.05548 196.858);
+  --fresh-teal-dark: oklch(63.776% 0.10734 197.239);
+  --fresh-teal-light: oklch(56.575% 0.09593 197.592);
   --fresh-blue-gray: oklch(71.768% 0.07688 256.777);
   --fresh-success: oklch(0.588 0.128 142.495);
   --fresh-warning: oklch(0.768 0.171 70.67);

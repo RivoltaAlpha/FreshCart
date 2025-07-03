@@ -21,9 +21,9 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
   // const [userStatus, setUserStatus] = useState<'online' | 'offline'>('online');
 
   return (
-    <aside className={`fixed inset-y-0 left-0 z-50 bg-background shadow-lg transform ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-16'} transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
+    <aside className={`fixed inset-y-0 left-0 z-50 bg-navbar text-accent-foreground shadow-lg transform ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-16'} transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
       <div className="flex items-center justify-between p-6 border-b border-gray-200">
-        <h1 className={`font-bold text-xl text-gray-800 ${!sidebarOpen && 'hidden'}`}>
+        <h1 className={`font-bold text-xl text-fresh-primary ${!sidebarOpen && 'hidden'}`}>
           FreshCart
         </h1>
         <button

@@ -15,14 +15,16 @@ function RegisterPage() {
     last_name: '',
     email: '',
     password: '',
-    phone: '',
-    location: '',
+    phone_number: '',
+    town: '',
+    county: '',
+    country: '',
     role: 'Customer' as 'Customer' | 'Store' | 'Driver' | 'Admin',
   });
   const navigate = useNavigate();
   const registerMutation = useRegister();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -83,12 +85,12 @@ function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4"
       style={{
-        backgroundImage: "url('delivery.png')",
+        backgroundImage: "url('/delivery.png')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
       }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg transform hover:scale-105 transition-transform duration-300">
+      <div className="bg-white lg:max-w-3xl rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto mb-4">
             <User className="w-8 h-8 text-white" />
@@ -150,8 +152,8 @@ function RegisterPage() {
               <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="tel"
-                name="phone"
-                value={formData.phone || ''}
+                name="phone_number"
+                value={formData.phone_number || ''}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 placeholder="(555) 123-4567"
                 required
@@ -161,18 +163,101 @@ function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2"> Location</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2"> Town</label>
             <div className="relative">
               <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                name="location"
-                value={formData.location || ''}
+                name="town"
+                value={formData.town || ''}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                placeholder="City, State"
+                placeholder="Nearest Town"
                 required
                 onChange={handleInputChange}
               />
+            </div>
+          </div>
+          <div className='flex gap-4'>
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2"> County </label>
+              <div className="relative">
+                <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <select
+                  name="county"
+                  value={formData.county || ''}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  required
+                  onChange={handleInputChange}
+                >
+                    <option value="">Select a county</option>
+                    <option value="Baringo">Baringo</option>
+                    <option value="Bomet">Bomet</option>
+                    <option value="Bungoma">Bungoma</option>
+                    <option value="Busia">Busia</option>
+                    <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
+                    <option value="Embu">Embu</option>
+                    <option value="Garissa">Garissa</option>
+                    <option value="Homa Bay">Homa Bay</option>
+                    <option value="Isiolo">Isiolo</option>
+                    <option value="Kajiado">Kajiado</option>
+                    <option value="Kakamega">Kakamega</option>
+                    <option value="Kericho">Kericho</option>
+                    <option value="Kiambu">Kiambu</option>
+                    <option value="Kilifi">Kilifi</option>
+                    <option value="Kirinyaga">Kirinyaga</option>
+                    <option value="Kisii">Kisii</option>
+                    <option value="Kisumu">Kisumu</option>
+                    <option value="Kitui">Kitui</option>
+                    <option value="Kwale">Kwale</option>
+                    <option value="Laikipia">Laikipia</option>
+                    <option value="Lamu">Lamu</option>
+                    <option value="Machakos">Machakos</option>
+                    <option value="Makueni">Makueni</option>
+                    <option value="Mandera">Mandera</option>
+                    <option value="Marsabit">Marsabit</option>
+                    <option value="Meru">Meru</option>
+                    <option value="Migori">Migori</option>
+                    <option value="Mombasa">Mombasa</option>
+                    <option value="Murang'a">Murang'a</option>
+                    <option value="Nairobi">Nairobi</option>
+                    <option value="Nakuru">Nakuru</option>
+                    <option value="Nandi">Nandi</option>
+                    <option value="Narok">Narok</option>
+                    <option value="Nyamira">Nyamira</option>
+                    <option value="Nyandarua">Nyandarua</option>
+                    <option value="Nyeri">Nyeri</option>
+                    <option value="Samburu">Samburu</option>
+                    <option value="Siaya">Siaya</option>
+                    <option value="Taita Taveta">Taita Taveta</option>
+                    <option value="Tana River">Tana River</option>
+                    <option value="Tharaka Nithi">Tharaka Nithi</option>
+                    <option value="Trans Nzoia">Trans Nzoia</option>
+                    <option value="Turkana">Turkana</option>
+                    <option value="Uasin Gishu">Uasin Gishu</option>
+                    <option value="Vihiga">Vihiga</option>
+                    <option value="Wajir">Wajir</option>
+                    <option value="West Pokot">West Pokot</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2"> Country</label>
+              <div className="relative">
+                <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <select
+                  name="country"
+                  value={formData.country || ''}
+                  onChange={handleInputChange}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  required
+                >
+                  <option value="Kenya">Kenya</option>
+                  <option value="Uganda">Uganda</option>
+                  <option value="Tanzania">Tanzania</option>
+                  <option value="Rwanda">Rwanda</option>
+                  <option value="South Africa">South Africa</option>
+                </select>
+              </div>
             </div>
           </div>
 
