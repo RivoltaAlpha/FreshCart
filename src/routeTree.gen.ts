@@ -24,6 +24,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as StoreDashboardRouteImport } from './routes/store/dashboard'
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
 import { Route as CustomerDashboardRouteImport } from './routes/customer/dashboard'
+import { Route as AdminSuccesRouteImport } from './routes/admin/succes'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 
 const StoreRoute = StoreRouteImport.update({
@@ -101,6 +102,11 @@ const CustomerDashboardRoute = CustomerDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => CustomerRoute,
 } as any)
+const AdminSuccesRoute = AdminSuccesRouteImport.update({
+  id: '/succes',
+  path: '/succes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/succes': typeof AdminSuccesRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/store/dashboard': typeof StoreDashboardRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/succes': typeof AdminSuccesRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/store/dashboard': typeof StoreDashboardRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/succes': typeof AdminSuccesRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/store/dashboard': typeof StoreDashboardRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/store'
     | '/admin/dashboard'
+    | '/admin/succes'
     | '/customer/dashboard'
     | '/driver/dashboard'
     | '/store/dashboard'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/store'
     | '/admin/dashboard'
+    | '/admin/succes'
     | '/customer/dashboard'
     | '/driver/dashboard'
     | '/store/dashboard'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/store'
     | '/admin/dashboard'
+    | '/admin/succes'
     | '/customer/dashboard'
     | '/driver/dashboard'
     | '/store/dashboard'
@@ -341,6 +353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerDashboardRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/admin/succes': {
+      id: '/admin/succes'
+      path: '/succes'
+      fullPath: '/admin/succes'
+      preLoaderRoute: typeof AdminSuccesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/dashboard'
@@ -353,10 +372,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminSuccesRoute: typeof AdminSuccesRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminSuccesRoute: AdminSuccesRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
