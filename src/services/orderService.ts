@@ -1,9 +1,10 @@
-import type { ApproveOrder, Order, OrderInput, ShipOrder } from "@/types/types";
+import type { ApproveOrder, Order, CreateOrder, ShipOrder } from "@/types/types";
 
 const url = 'http://localhost:8000';
 
 const getAuthToken = (): string => {
-  const token = localStorage.getItem('token') || '';
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+  const token = auth.tokens?.accessToken;
   if (!token) {
     throw new Error('No authentication token found');
   }
@@ -57,7 +58,7 @@ export const getOrderById = async (order_id: number): Promise<Order> => {
   return handleApiResponse(response).then(res => res.json()); 
 };
 
-export const createOrder = async (orderData: OrderInput) => {
+export const createOrder = async (orderData: CreateOrder) => {
       const token = getAuthToken();
   const response = await fetch(`${url}/orders/create`, {
     method: 'POST',
@@ -70,7 +71,7 @@ export const createOrder = async (orderData: OrderInput) => {
   return handleApiResponse(response).then(res => res.json());
 };
 
-export const updateOrder = async (order_id: number, orderData: OrderInput) => {
+export const updateOrder = async (order_id: number, orderData: CreateOrder) => {
       const token = getAuthToken();
   const response = await fetch(`${url}/orders/update/${order_id}`, {
     method: 'PATCH',

@@ -8,12 +8,13 @@ import type {
 const API_BASE_URL = 'http://localhost:8000'
 
 const getAuthToken = (): string => {
-  const token = localStorage.getItem('token') || ''
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+  const token = auth.tokens?.accessToken;
   if (!token) {
-    throw new Error('No authentication token found')
+    throw new Error('No authentication token found');
   }
-  return token
-}
+  return token;
+};
 
 const handleApiResponse = async (response: Response) => {
   if (!response.ok) {

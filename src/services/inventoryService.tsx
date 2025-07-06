@@ -1,9 +1,11 @@
+import type { InventoryProducts } from '@/types/store';
 import type { Inventory, CreateInventory } from '../types/types';
 
 const url = 'http://localhost:8000';
 
 const getAuthToken = (): string => {
-  const token = localStorage.getItem('token') || '';
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+  const token = auth.tokens?.accessToken;
   if (!token) {
     throw new Error('No authentication token found');
   }
@@ -118,17 +120,17 @@ export const deleteInventory = async (id: number): Promise<void> => {
   return response.json();
 };
 
-// // view inventory products
-// export const getInventoryProducts = async (inventory_id: number): Promise<InventoryProduct[]> => {
-//   const token = getAuthToken();
-//   const response = await fetch(`${url}/inventories/products/${inventory_id}`, {
-//     headers: {
-//       'Authorization': `Bearer ${token}`,
-//     },
-//   });
-//   await handleApiResponse(response);
-//   return response.json();
-// };
+// view inventory products
+export const getInventoryProducts = async (inventory_id: number): Promise<InventoryProducts[]> => {
+  const token = getAuthToken();
+  const response = await fetch(`${url}/inventories/products/${inventory_id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  await handleApiResponse(response);
+  return response.json();
+};
 
 // // update inventory stock
 // export const updateInventoryStock = async (inventory_id: number, stockData: UpdateStock): Promise<Inventory> => {
