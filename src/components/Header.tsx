@@ -16,7 +16,8 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/products' },
     { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' }
+    { name: 'Contact', path: '/contact' },
+    { name: 'Stores', path: '/stores' }
   ];
 
   // Function to check if current route is active
