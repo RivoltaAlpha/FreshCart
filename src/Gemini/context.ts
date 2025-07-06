@@ -58,7 +58,6 @@ const getApiKey = (): string => {
   }
 
   // Fallback API key for development (should be replaced with environment variable)
-  const fallbackApiKey = 'AIzaSyDvNxPUmA6uA3aQ8suP8529nOZzU_iobC0'
 
   if (!fallbackApiKey) {
     console.warn(
