@@ -1,3 +1,5 @@
+import type { Payment } from "./payments"
+
 export interface User {
   id: string
   email: string
@@ -7,6 +9,13 @@ export interface User {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+}
+
+export interface UserProfile {
+  firstName: string
+  lastName: string
+  phone?: string // optional for some roles
+  addresses?: Address[] // optional for some roles
 }
 
 export enum UserRole {
@@ -64,15 +73,6 @@ export interface backendResponse {
   }
 }
 
-export interface UserProfile {
-  first_name: string
-  last_name: string
-  phone: string
-  avatar?: string
-  addresses: Address[]
-  preferences: UserPreferences
-}
-
 export interface UserPreferences {
   language: string
   currency: string
@@ -82,225 +82,391 @@ export interface UserPreferences {
     push: boolean
   }
 }
+
+// backend Responses interface
+// types/category.types.ts
+
+export interface Category {
+  category_id: number;
+  name: string;
+  description?: string;
+  image_url?: string;
+  created_at: Date;
+  updated_at: Date;
+  products?: Product[];
+}
+
+export interface CreateCategory {
+  name: string;
+  description?: string;
+  image_url?: string;
+}
+
+export interface UpdateCategory {
+  name?: string;
+  description?: string;
+  image_url?: string;
+}
+
+// types/inventory.types.ts
+
+export enum InventoryAction {
+  STOCK_IN = 'stock_in',
+  STOCK_OUT = 'stock_out',
+  ADJUSTMENT = 'adjustment',
+  RESERVED = 'reserved',
+  RELEASED = 'released'
+}
+
+export interface Inventory {
+  inventory_id: number;
+  store_id: number;
+  product_id: number;
+  stock_qty: number;
+  reserved_qty: number;
+  reorder_level: number;
+  cost_price: number;
+  last_restocked?: Date;
+  created_at: Date;
+  updated_at: Date;
+  store?: Store;
+  products?: Product[];
+}
+
+export interface CreateInventory {
+  store_id: number;
+  product_id: number;
+  stock_qty: number;
+  reserved_qty?: number;
+  reorder_level?: number;
+  cost_price?: number;
+}
+
+export interface UpdateInventory {
+  stock_qty?: number;
+  reserved_qty?: number;
+  reorder_level?: number;
+  cost_price?: number;
+  last_restocked?: Date;
+}
+
+// types/profile.types.ts
+
+export interface Profile {
+  profile_id: number;
+  user_id: number;
+  first_name?: string;
+  last_name?: string;
+  phone_number?: string;
+  date_of_birth?: Date;
+  gender?: string;
+  avatar_url?: string;
+  bio?: string;
+  created_at: Date;
+  updated_at: Date;
+  user?: User;
+  addresses?: Address[];
+}
+
+export interface CreateProfile {
+  user_id: number;
+  first_name?: string;
+  last_name?: string;
+  phone_number?: string;
+  date_of_birth?: Date;
+  gender?: string;
+  avatar_url?: string;
+  bio?: string;
+}
+
+export interface UpdateProfile {
+  first_name?: string;
+  last_name?: string;
+  phone_number?: string;
+  date_of_birth?: Date;
+  gender?: string;
+  avatar_url?: string;
+  bio?: string;
+}
+
+// types/address.types.ts
+
 export interface Address {
-  id: string
-  userId: string // reference to User
-  street: string
-  city: string
-  state: string
-  country: string
-  zipCode: string
-  latitude?: number // for geolocation
-  longitude?: number // for geolocation
-  isDefault: boolean
+  address_id: number;
+  profile_id: number;
+  street: string;
+  city: string;
+  state?: string;
+  postal_code?: string;
+  country: string;
+  isDefault: boolean;
+  created_at: Date;
+  updated_at: Date;
+  profile?: Profile;
 }
 
-export interface Product {
-    id: number;
-    name: string;
-    seller: string;
-    category: string;
-    image: string;
-    harvestDate: string;
-    rating: number;
-    description: string;
-    location: string;
-    price: number;
-    unit: string;
-    quantity: string;
+export interface CreateAddress {
+  profile_id: number;
+  street: string;
+  city: string;
+  state?: string;
+  postal_code?: string;
+  country: string;
+  isDefault?: boolean;
 }
 
-// export interface Product {
-//   id: string
-//   name: string
-//   description: string
-//   category: string
-//   subcategory?: string
-//   price: number
-//   unit: string // kg, pieces, liters
-//   images: string[]
-//   seller: Store
-//   inventory: {
-//     quantity: number
-//     threshold: number // low stock alert
-//     harvestDate?: Date
-//     expiryDate?: Date
-//   }
-//   ratings: {
-//     average: number
-//     count: number
-//     reviews: Review[]
-//   }
-//   tags: string[]
-//   isActive: boolean
-//   featured: boolean
-//   discount?: {
-//     type: 'percentage' | 'fixed'
-//     value: number
-//     startDate: Date
-//     endDate: Date
-//   }
-// }
-
-export interface Review {
-  id: string
-  productId: string // reference to Product
-  userId: string // reference to User
-  rating: number // 1 to 5
-  comment: string
-  createdAt: Date
+export interface UpdateAddress {
+  street?: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  country?: string;
+  isDefault?: boolean;
 }
+
+// types/store.types.ts
 
 export interface Store {
-  id: string
-  name: string
-  description: string
-  owner: User
-  address: Address
-  contact: {
-    phone: string
-    email: string
-    website?: string
-  }
-  settings: {
-    deliveryRadius: number
-    minimumOrder: number
-    deliveryFee: number
-    processingTime: number // minutes
-  }
-  verification: {
-    isVerified: boolean
-    documents: string[]
-    verifiedAt?: Date
-  }
-  isActive: boolean
+  store_id: number;
+  owner_id: number;
+  name: string;
+  description: string;
+  contact_info: string;
+  country?: string;
+  town?: string;
+  city?: string;
+  image_url?: string;
+  rating?: number;
+  total_reviews?: string;
+  store_code: string;
+  delivery_fee: number;
+  created_at: Date;
+  updated_at: Date;
+  owner?: User;
+  orders?: Order[];
+  inventories?: Inventory[];
+}
+
+export interface CreateStore {
+  store_id?: number;
+  owner_id: number;
+  name: string;
+  description: string;
+  contact_info: string;
+  country?: string;
+  town?: string;
+  city?: string;
+  image_url?: string;
+  rating?: number;
+  total_reviews?: string;
+  delivery_fee?: number;
+  store_code?: string;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface UpdateStore {
+  name?: string;
+  description?: string;
+  contact_info?: string;
+  country?: string;
+  town?: string;
+  city?: string;
+  image_url?: string;
+  rating?: number;
+  total_reviews?: string;
+  delivery_fee?: number;
+}
+
+// types/product.types.ts
+
+export interface Product {
+  product_id: number;
+  category_id: number;
+  name: string;
+  description: string;
+  price: number;
+  stock_quantity: number;
+  image_url?: string;
+  weight?: number;
+  unit?: string;
+  rating: number;
+  review_count: number;
+  discount: number;
+  expiry_date?: Date;
+  created_at: Date;
+  updatedAt: Date;
+  category?: Category;
+  orders?: Order[];
+  inventory?: Inventory[];
+}
+
+export interface CreateProduct {
+  product_id?: number;
+  name: string;
+  store_id: number;
+  description: string;
+  price: number;
+  stock_quantity: number;
+  category_id: number;
+  image_url?: string;
+  weight?: number;
+  unit?: string;
+  rating?: number;
+  review_count?: number;
+  discount?: number;
+  initial_quantity?: number;
+  reorder_level?: number;
+  cost_price?: number;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface UpdateProduct {
+  name?: string;
+  description?: string;
+  price?: number;
+  stock_quantity?: number;
+  category_id?: number;
+  image_url?: string;
+  weight?: number;
+  unit?: string;
+  rating?: number;
+  review_count?: number;
+  discount?: number;
+}
+
+// types/order.types.ts
+
+export enum OrderStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  PREPARING = 'preparing',
+  READY_FOR_PICKUP = 'ready_for_pickup',
+  IN_TRANSIT = 'in_transit',
+  DELIVERED = 'delivered',
+  CANCELLED = 'cancelled',
+  REFUNDED = 'refunded'
+}
+
+export enum DeliveryMethod {
+  PICKUP = 'pickup',
+  STANDARD_DELIVERY = 'standard_delivery',
+  EXPRESS_DELIVERY = 'express_delivery'
 }
 
 export interface OrderItem {
-  product: Product
-  quantity: number
-  price: number // price at time of order
-  notes?: string // special instructions
+  item_id: number;
+  order_id: number;
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  product?: Product;
 }
 
 export interface Order {
-  id: string
-  customer: User
-  store: Store
-  items: OrderItem[]
-  status:
-    | 'pending'
-    | 'confirmed'
-    | 'preparing'
-    | 'ready_pickup'
-    | 'picked_up'
-    | 'delivered'
-    | 'cancelled'
-  pricing: {
-    subtotal: number
-    deliveryFee: number
-    tax: number
-    discount: number
-    total: number
-  }
-  delivery: {
-    address: Address
-    instructions?: string
-    scheduledTime?: Date
-    driver?: User
-    estimatedTime: number
-  }
-  payment: {
-    method: 'card' | 'mobile' | 'cash'
-    status: 'pending' | 'paid' | 'failed' | 'refunded'
-    transactionId?: string
-  }
-  timestamps: {
-    createdAt: Date
-    confirmedAt?: Date
-    preparedAt?: Date
-    pickedUpAt?: Date
-    deliveredAt?: Date
-  }
+  order_id: number;
+  order_number: string;
+  user_id: number;
+  store_id: number;
+  status: OrderStatus;
+  delivery_method: DeliveryMethod;
+  delivery_fee: number;
+  tax_amount: number;
+  total_amount: number;
+  delivery_address: string;
+  delivery_instructions?: string;
+  delivery_latitude?: number;
+  delivery_longitude?: number;
+  delivery_phone?: string;
+  estimated_delivery_time?: Date;
+  actual_delivery_time?: Date;
+  driver_id?: number;
+  rating?: number;
+  created_at: Date;
+  updated_at: Date;
+  user?: User;
+  store?: Store;
+  products?: Product[];
+  payments?: Payment[];
+  driver?: User;
+  items?: OrderItem[];
 }
 
-export interface Driver {
-  id: string
-  user: User
-  vehicle: {
-    type: 'bicycle' | 'motorcycle' | 'car' | 'van'
-    licensePlate: string
-    model: string
-  }
-  documents: {
-    license: string
-    insurance: string
-    registration: string
-  }
-  verification: {
-    isVerified: boolean
-    backgroundCheck: boolean
-    verifiedAt?: Date
-  }
-  status: 'online' | 'offline' | 'busy' | 'break'
-  location: {
-    latitude: number
-    longitude: number
-    lastUpdated: Date
-  }
+export interface OrderItem {
+  product_id: number;
+  quantity: number;
 }
 
-export interface Cart {
-  id: string
-  user: User
-  items: CartItem[]
-  updatedAt: Date
-  expiresAt: Date
+export interface CreateOrder {
+  user_id: number;
+  store_id: number;
+  items: OrderItem[];
+  delivery_address: string;
+  delivery_instructions?: string;
+  delivery_latitude?: number;
+  delivery_longitude?: number;
+  delivery_phone?: string;
+  delivery_method?: DeliveryMethod;
+  estimated_delivery_time?: Date;
 }
 
-export interface CartItem {
-  product: Product
-  quantity: number
-  price: number // price at time of adding
-  notes?: string
+export interface UpdateOrderStatus {
+  status: OrderStatus;
+  driver_id?: number;
+  actual_delivery_time?: Date;
 }
 
-export interface Wishlist {
-  id: string
-  user: User
-  products: Product[]
-  createdAt: Date
+export interface RateOrder {
+  rating: number;
+  review?: string;
 }
 
-export interface Payment {
-  id: string
-  order: Order
-  amount: number
-  currency: string
-  method: PaymentMethod
-  status: 'pending' | 'processing' | 'completed' | 'failed' | 'refunded'
-  gateway: 'stripe' | 'mpesa' | 'paypal'
-  transactionId: string
-  metadata: Record<string, any>
-  createdAt: Date
-}
-export interface PaymentMethod {
-  type: 'card' | 'mobile' | 'bank_transfer'
-  details: {
-    cardNumber?: string // masked
-    mobileNumber?: string
-    bankAccount?: string
-  }
+// Response s
+export interface OrderItemResponse {
+  item_id: number;
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  product_name?: string;
 }
 
-export interface Notification {
-  id: string
-  recipient: User
-  type: 'order_update' | 'promotion' | 'system' | 'reminder'
-  title: string
-  message: string
-  data?: Record<string, any>
-  channels: ('push' | 'email' | 'sms')[]
-  isRead: boolean
-  createdAt: Date
+export interface CustomerResponse {
+  user_id: number;
+  username: string;
+  email: string;
+}
+
+export interface StoreResponse {
+  store_id: number;
+  name: string;
+  contact_info: string;
+}
+// 
+export interface OrderResponse {
+  order_id: number;
+  order_number: string;
+  status: OrderStatus;
+  total_amount: number;
+  delivery_method: DeliveryMethod;
+  delivery_address: string;
+  created_at: Date;
+  customer: CustomerResponse;
+  store: StoreResponse;
+  items: OrderItemResponse[];
+}
+
+
+export interface ApproveOrder {
+  order_id: number;
+  status: OrderStatus;
+}
+
+export interface ShipOrder {
+  order_id: number;
+  driver_id: number;
+  status: OrderStatus;
+  estimated_delivery_time?: Date;
 }
