@@ -147,7 +147,7 @@ function getUserPreferredCategories(): string[] {
 
   return Object.entries(categoryCount)
     .sort(([, a], [, b]) => b - a)
-    .slice(0, 5)
+    .slice(0, 4)
     .map(([category]) => category)
 }
 
@@ -183,8 +183,8 @@ const getAIRecommendations = async (
     Current Page: ${userContext.currentPage}
     
     Available Products: ${JSON.stringify(userContext.appData.products)}
-    
-    Please analyze the user's preferences and suggest 5 products they might like to purchase.
+
+    Please analyze the user's preferences and suggest 4 products from different categories they are likely to purchase.
     Return the response as a JSON array with product IDs and brief explanations.
     Format: [{"productId": 123, "reason": "why recommended"}]
     
