@@ -21,22 +21,40 @@ export interface StoreProduct {
   discount: number
   expiry_date: string | null
   created_at: string
-  updatedAt: string
+  updated_at: string
   category: Category
 }
 
 export interface Store {
-  store_id: number
-  name: string
-  description: string
-  location: string
-  phone: string
-  email: string
-  image_url: string
-  rating: string
-  is_active: boolean
-  created_at: string
-  updatedAt: string
+  store_id: number;
+  owner_id: number;
+  name: string;
+  description: string;
+  city: string;
+  town: string;
+  country: string;
+  contact_info: string;
+  image_url: string;
+  rating: string;
+  total_reviews: number;
+  store_code: string;
+  delivery_fee: number;
+  created_at: string;
+  updated_at: string;
+  owner: {
+    user_id: number;
+    email: string;
+    profile: {
+      first_name: string;
+      last_name: string;
+      phone_number: string;
+    };
+  };
+  // Add computed properties for compatibility
+  location?: string;
+  phone?: string;
+  email?: string;
+  is_active?: boolean;
 }
 
 export interface StoreProductsResponse {
@@ -48,7 +66,6 @@ export interface StoreProductsResponse {
 
 export interface StoresResponse {
   stores: Store[]
-  total: number
 }
 
 export interface InventoryProducts {
