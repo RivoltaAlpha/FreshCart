@@ -1,69 +1,87 @@
-import type { Store, StoreProduct, StoreProductsResponse, StoresResponse } from '../types/store';
+import type {
+  Store,
+  StoreProduct,
+  StoreProductsResponse,
+  StoresResponse,
+} from '../types/store'
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const API_BASE_URL = 'http://localhost:8000'
 
-class StoreService {
-  private async fetchWithErrorHandling<T>(url: string): Promise<T> {
-    try {
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Store API Error:', error);
-      throw error;
-    }
+const getAuthToken = (): string => {
+  const token = localStorage.getItem('token') || ''
+  if (!token) {
+    throw new Error('No authentication token found')
   }
-
-  /**
-   * Get all stores
-   */
-  async getAllStores(): Promise<StoresResponse> {
-    return this.fetchWithErrorHandling<StoresResponse>(`${API_BASE_URL}/stores/all`);
-  }
-
-  /**
-   * Get all products for a specific store
-   */
-  async getStoreProducts(storeId: number, page = 1, limit = 20): Promise<StoreProductsResponse> {
-    const url = `${API_BASE_URL}/products/store/${storeId}?page=${page}&limit=${limit}`;
-    return this.fetchWithErrorHandling<StoreProductsResponse>(url);
-  }
-
-  /**
-   * Get store by ID
-   */
-  async getStoreById(storeId: number): Promise<Store> {
-    return this.fetchWithErrorHandling<Store>(`${API_BASE_URL}/stores/${storeId}`);
-  }
-
-  /**
-   * Search products within a store
-   */
-  async searchStoreProducts(
-    storeId: number, 
-    query: string, 
-    categoryId?: number,
-    page = 1,
-    limit = 20
-  ): Promise<StoreProductsResponse> {
-    const params = new URLSearchParams({
-      q: query,
-      page: page.toString(),
-      limit: limit.toString(),
-    });
-    
-    if (categoryId) {
-      params.append('category_id', categoryId.toString());
-    }
-    
-    const url = `${API_BASE_URL}/products/store/${storeId}/search?${params}`;
-    return this.fetchWithErrorHandling<StoreProductsResponse>(url);
-  }
+  return token
 }
 
-export const storeService = new StoreService();
-export default storeService;
+const handleApiResponse = async (response: Response) => {
+  if (!response.ok) {
+    let errorMessage = `Request failed with status ${response.status}: ${response.statusText}`
+
+    try {
+      // Try to parse as JSON first
+      const contentType = response.headers.get('content-type')
+      if (contentType && contentType.includes('application/json')) {
+        const errorData = await response.json()
+        errorMessage = errorData.message || errorData.error || errorMessage
+      } else {
+        // If not JSON, try to read as text
+        const errorText = await response.text()
+        if (errorText) {
+          errorMessage = errorText
+        }
+      }
+    } catch (parseError) {
+      // If parsing fails, use the default error message
+      console.warn('Failed to parse error response:', parseError)
+    }
+
+    throw new Error(errorMessage)
+  }
+  return response
+}
+
+// Fetch all stores
+export const getAllStores = async (): Promise<StoresResponse> => {
+  const response = await fetch(`${API_BASE_URL}/stores/all`)
+  await handleApiResponse(response)
+  return response.json()
+}
+
+// Fetch products for a specific store
+export const getStoreProducts = async (
+  storeId: number,
+): Promise<StoreProductsResponse> => {
+  const token = getAuthToken()
+  const response = await fetch(`${API_BASE_URL}/stores/${storeId}/products`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  })
+  await handleApiResponse(response)
+  return response.json()
+}
+
+// Search products in a specific store
+export const searchStoreProducts = async (
+  storeId: number,
+  query: string,
+  categoryId?: number,
+): Promise<StoreProductsResponse> => {
+  const token = getAuthToken()
+  const response = await fetch(
+    `${API_BASE_URL}/stores/${storeId}/products/search`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, categoryId }),
+    },
+  )
+  await handleApiResponse(response)
+  return response.json()
+}

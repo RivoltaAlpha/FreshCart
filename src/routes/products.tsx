@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Star, MapPin, Search, Filter, Plus, Minus } from 'lucide-react';
 import sampleProducts from "../../public/marketplaceItems.json"
 import { createFileRoute } from '@tanstack/react-router'
+import type { Product } from '@/Gemini/context';
+import RecommendationsSection from '@/components/recommendations';
 
 export const Route = createFileRoute('/products')({
   component: ProductsPage,
@@ -21,11 +23,12 @@ type CartItem = {
 };
 
 function ProductsPage() {
-  const [products] = useState(sampleProducts);
+  const [products] = useState<Product[]>(sampleProducts as Product[]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [cart, setCart] = useState<Cart>({});
   const isInitialMount = useRef(true);
+
 
   const categories = ['All', ...new Set(products.map(p => p.category))];
 
@@ -49,6 +52,10 @@ function ProductsPage() {
         localStorage.removeItem('freshcart-cart');
       }
     }
+
+    // Store product data for AI recommendations
+    localStorage.setItem('appData', JSON.stringify({ products }));
+
     isInitialMount.current = false;
   }, []);
 
@@ -142,7 +149,7 @@ function ProductsPage() {
   }, 0);
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="home-page min-h-screen bg-background py-8">
       <div className="max-w-8xl lg:mx-28 md:auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <div className="flex justify-between items-center">
@@ -278,6 +285,18 @@ function ProductsPage() {
             <p className="text-muted-foreground text-lg">No products found matching your criteria.</p>
           </div>
         )}
+
+        {/* AI Recommendations Section */}
+        <RecommendationsSection
+          products={products}
+          onProductClick={(product) => {
+            // Track interaction and potentially scroll to product or show details
+            console.log('Product clicked:', product.name);
+          }}
+          onAddToCart={(product) => {
+            addToCart(product.id);
+          }}
+        />
       </div>
     </div>
   );
