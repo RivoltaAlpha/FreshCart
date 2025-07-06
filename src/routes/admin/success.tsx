@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react';
 import { CheckCircle } from 'lucide-react';
 
-export const Route = createFileRoute('/admin/succes')({
+export const Route = createFileRoute('/admin/success')({
   component: RouteComponent,
 })
 
@@ -11,7 +11,7 @@ function RouteComponent() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-        navigate({ to: '/admin/succes' });
+        navigate({ to: '/admin/success' });
     }, 4000); // 4 seconds
 
     return () => clearTimeout(timer);
