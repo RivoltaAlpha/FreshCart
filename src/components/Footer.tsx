@@ -2,7 +2,7 @@ import { Facebook, Instagram, Mail, MapIcon, Phone, ShoppingCart, Twitter } from
 
 export const Footer = () => {
   return (
-    <footer className="bg-[#005A61] text-white border-t border-[#516E89]">
+    <footer className="bg-[#017294] text-white border-t border-t-[#dae3eb]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}

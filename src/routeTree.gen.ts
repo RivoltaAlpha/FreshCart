@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StoresRouteImport } from './routes/stores'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -21,12 +22,35 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoreSuccessRouteImport } from './routes/store/success'
+import { Route as StoreProductsRouteImport } from './routes/store/products'
+import { Route as StoreMyproductsRouteImport } from './routes/store/myproducts'
+import { Route as StoreManageProductsRouteImport } from './routes/store/manageProducts'
+import { Route as StoreInventoriesRouteImport } from './routes/store/inventories'
 import { Route as StoreDashboardRouteImport } from './routes/store/dashboard'
+import { Route as StoreCreateProductRouteImport } from './routes/store/create-product'
+import { Route as StoreCreateInventoryRouteImport } from './routes/store/create-inventory'
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
+import { Route as CustomerPaymentSuccessfulRouteImport } from './routes/customer/payment-successful'
+import { Route as CustomerMyOrdersRouteImport } from './routes/customer/my-orders'
 import { Route as CustomerDashboardRouteImport } from './routes/customer/dashboard'
-import { Route as AdminSuccesRouteImport } from './routes/admin/succes'
+import { Route as CustomerCreateOrderRouteImport } from './routes/customer/create-order'
+import { Route as CustomerCheckoutOrderRouteImport } from './routes/customer/checkout-order'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminSuccessRouteImport } from './routes/admin/success'
+import { Route as AdminStoresRouteImport } from './routes/admin/stores'
+import { Route as AdminProductsRouteImport } from './routes/admin/products'
+import { Route as AdminPaymentsRouteImport } from './routes/admin/payments'
+import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
+import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
 
+const StoresRoute = StoresRouteImport.update({
+  id: '/stores',
+  path: '/stores',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
@@ -87,9 +111,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoreSuccessRoute = StoreSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreProductsRoute = StoreProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreMyproductsRoute = StoreMyproductsRouteImport.update({
+  id: '/myproducts',
+  path: '/myproducts',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreManageProductsRoute = StoreManageProductsRouteImport.update({
+  id: '/manageProducts',
+  path: '/manageProducts',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreInventoriesRoute = StoreInventoriesRouteImport.update({
+  id: '/inventories',
+  path: '/inventories',
+  getParentRoute: () => StoreRoute,
+} as any)
 const StoreDashboardRoute = StoreDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreCreateProductRoute = StoreCreateProductRouteImport.update({
+  id: '/create-product',
+  path: '/create-product',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreCreateInventoryRoute = StoreCreateInventoryRouteImport.update({
+  id: '/create-inventory',
+  path: '/create-inventory',
   getParentRoute: () => StoreRoute,
 } as any)
 const DriverDashboardRoute = DriverDashboardRouteImport.update({
@@ -97,19 +156,75 @@ const DriverDashboardRoute = DriverDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => DriverRoute,
 } as any)
+const CustomerPaymentSuccessfulRoute =
+  CustomerPaymentSuccessfulRouteImport.update({
+    id: '/payment-successful',
+    path: '/payment-successful',
+    getParentRoute: () => CustomerRoute,
+  } as any)
+const CustomerMyOrdersRoute = CustomerMyOrdersRouteImport.update({
+  id: '/my-orders',
+  path: '/my-orders',
+  getParentRoute: () => CustomerRoute,
+} as any)
 const CustomerDashboardRoute = CustomerDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => CustomerRoute,
 } as any)
-const AdminSuccesRoute = AdminSuccesRouteImport.update({
-  id: '/succes',
-  path: '/succes',
+const CustomerCreateOrderRoute = CustomerCreateOrderRouteImport.update({
+  id: '/create-order',
+  path: '/create-order',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerCheckoutOrderRoute = CustomerCheckoutOrderRouteImport.update({
+  id: '/checkout-order',
+  path: '/checkout-order',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSuccessRoute = AdminSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStoresRoute = AdminStoresRouteImport.update({
+  id: '/stores',
+  path: '/stores',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDriversRoute = AdminDriversRouteImport.update({
+  id: '/drivers',
+  path: '/drivers',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -126,11 +241,30 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
+  '/stores': typeof StoresRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/succes': typeof AdminSuccesRoute
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/stores': typeof AdminStoresRoute
+  '/admin/success': typeof AdminSuccessRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
+  '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/my-orders': typeof CustomerMyOrdersRoute
+  '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/driver/dashboard': typeof DriverDashboardRoute
+  '/store/create-inventory': typeof StoreCreateInventoryRoute
+  '/store/create-product': typeof StoreCreateProductRoute
   '/store/dashboard': typeof StoreDashboardRoute
+  '/store/inventories': typeof StoreInventoriesRoute
+  '/store/manageProducts': typeof StoreManageProductsRoute
+  '/store/myproducts': typeof StoreMyproductsRoute
+  '/store/products': typeof StoreProductsRoute
+  '/store/success': typeof StoreSuccessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -145,11 +279,30 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
+  '/stores': typeof StoresRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/succes': typeof AdminSuccesRoute
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/stores': typeof AdminStoresRoute
+  '/admin/success': typeof AdminSuccessRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
+  '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/my-orders': typeof CustomerMyOrdersRoute
+  '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/driver/dashboard': typeof DriverDashboardRoute
+  '/store/create-inventory': typeof StoreCreateInventoryRoute
+  '/store/create-product': typeof StoreCreateProductRoute
   '/store/dashboard': typeof StoreDashboardRoute
+  '/store/inventories': typeof StoreInventoriesRoute
+  '/store/manageProducts': typeof StoreManageProductsRoute
+  '/store/myproducts': typeof StoreMyproductsRoute
+  '/store/products': typeof StoreProductsRoute
+  '/store/success': typeof StoreSuccessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -165,11 +318,30 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
+  '/stores': typeof StoresRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/succes': typeof AdminSuccesRoute
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/stores': typeof AdminStoresRoute
+  '/admin/success': typeof AdminSuccessRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
+  '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/my-orders': typeof CustomerMyOrdersRoute
+  '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/driver/dashboard': typeof DriverDashboardRoute
+  '/store/create-inventory': typeof StoreCreateInventoryRoute
+  '/store/create-product': typeof StoreCreateProductRoute
   '/store/dashboard': typeof StoreDashboardRoute
+  '/store/inventories': typeof StoreInventoriesRoute
+  '/store/manageProducts': typeof StoreManageProductsRoute
+  '/store/myproducts': typeof StoreMyproductsRoute
+  '/store/products': typeof StoreProductsRoute
+  '/store/success': typeof StoreSuccessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -186,11 +358,30 @@ export interface FileRouteTypes {
     | '/products'
     | '/register'
     | '/store'
+    | '/stores'
+    | '/admin/analytics'
     | '/admin/dashboard'
-    | '/admin/succes'
+    | '/admin/drivers'
+    | '/admin/orders'
+    | '/admin/payments'
+    | '/admin/products'
+    | '/admin/stores'
+    | '/admin/success'
+    | '/admin/users'
+    | '/customer/checkout-order'
+    | '/customer/create-order'
     | '/customer/dashboard'
+    | '/customer/my-orders'
+    | '/customer/payment-successful'
     | '/driver/dashboard'
+    | '/store/create-inventory'
+    | '/store/create-product'
     | '/store/dashboard'
+    | '/store/inventories'
+    | '/store/manageProducts'
+    | '/store/myproducts'
+    | '/store/products'
+    | '/store/success'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -205,11 +396,30 @@ export interface FileRouteTypes {
     | '/products'
     | '/register'
     | '/store'
+    | '/stores'
+    | '/admin/analytics'
     | '/admin/dashboard'
-    | '/admin/succes'
+    | '/admin/drivers'
+    | '/admin/orders'
+    | '/admin/payments'
+    | '/admin/products'
+    | '/admin/stores'
+    | '/admin/success'
+    | '/admin/users'
+    | '/customer/checkout-order'
+    | '/customer/create-order'
     | '/customer/dashboard'
+    | '/customer/my-orders'
+    | '/customer/payment-successful'
     | '/driver/dashboard'
+    | '/store/create-inventory'
+    | '/store/create-product'
     | '/store/dashboard'
+    | '/store/inventories'
+    | '/store/manageProducts'
+    | '/store/myproducts'
+    | '/store/products'
+    | '/store/success'
   id:
     | '__root__'
     | '/'
@@ -224,11 +434,30 @@ export interface FileRouteTypes {
     | '/products'
     | '/register'
     | '/store'
+    | '/stores'
+    | '/admin/analytics'
     | '/admin/dashboard'
-    | '/admin/succes'
+    | '/admin/drivers'
+    | '/admin/orders'
+    | '/admin/payments'
+    | '/admin/products'
+    | '/admin/stores'
+    | '/admin/success'
+    | '/admin/users'
+    | '/customer/checkout-order'
+    | '/customer/create-order'
     | '/customer/dashboard'
+    | '/customer/my-orders'
+    | '/customer/payment-successful'
     | '/driver/dashboard'
+    | '/store/create-inventory'
+    | '/store/create-product'
     | '/store/dashboard'
+    | '/store/inventories'
+    | '/store/manageProducts'
+    | '/store/myproducts'
+    | '/store/products'
+    | '/store/success'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,10 +473,18 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   RegisterRoute: typeof RegisterRoute
   StoreRoute: typeof StoreRouteWithChildren
+  StoresRoute: typeof StoresRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stores': {
+      id: '/stores'
+      path: '/stores'
+      fullPath: '/stores'
+      preLoaderRoute: typeof StoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/store': {
       id: '/store'
       path: '/store'
@@ -332,11 +569,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/store/success': {
+      id: '/store/success'
+      path: '/success'
+      fullPath: '/store/success'
+      preLoaderRoute: typeof StoreSuccessRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/products': {
+      id: '/store/products'
+      path: '/products'
+      fullPath: '/store/products'
+      preLoaderRoute: typeof StoreProductsRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/myproducts': {
+      id: '/store/myproducts'
+      path: '/myproducts'
+      fullPath: '/store/myproducts'
+      preLoaderRoute: typeof StoreMyproductsRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/manageProducts': {
+      id: '/store/manageProducts'
+      path: '/manageProducts'
+      fullPath: '/store/manageProducts'
+      preLoaderRoute: typeof StoreManageProductsRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/inventories': {
+      id: '/store/inventories'
+      path: '/inventories'
+      fullPath: '/store/inventories'
+      preLoaderRoute: typeof StoreInventoriesRouteImport
+      parentRoute: typeof StoreRoute
+    }
     '/store/dashboard': {
       id: '/store/dashboard'
       path: '/dashboard'
       fullPath: '/store/dashboard'
       preLoaderRoute: typeof StoreDashboardRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/create-product': {
+      id: '/store/create-product'
+      path: '/create-product'
+      fullPath: '/store/create-product'
+      preLoaderRoute: typeof StoreCreateProductRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/create-inventory': {
+      id: '/store/create-inventory'
+      path: '/create-inventory'
+      fullPath: '/store/create-inventory'
+      preLoaderRoute: typeof StoreCreateInventoryRouteImport
       parentRoute: typeof StoreRoute
     }
     '/driver/dashboard': {
@@ -346,6 +632,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverDashboardRouteImport
       parentRoute: typeof DriverRoute
     }
+    '/customer/payment-successful': {
+      id: '/customer/payment-successful'
+      path: '/payment-successful'
+      fullPath: '/customer/payment-successful'
+      preLoaderRoute: typeof CustomerPaymentSuccessfulRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/my-orders': {
+      id: '/customer/my-orders'
+      path: '/my-orders'
+      fullPath: '/customer/my-orders'
+      preLoaderRoute: typeof CustomerMyOrdersRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/customer/dashboard': {
       id: '/customer/dashboard'
       path: '/dashboard'
@@ -353,11 +653,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerDashboardRouteImport
       parentRoute: typeof CustomerRoute
     }
-    '/admin/succes': {
-      id: '/admin/succes'
-      path: '/succes'
-      fullPath: '/admin/succes'
-      preLoaderRoute: typeof AdminSuccesRouteImport
+    '/customer/create-order': {
+      id: '/customer/create-order'
+      path: '/create-order'
+      fullPath: '/customer/create-order'
+      preLoaderRoute: typeof CustomerCreateOrderRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/checkout-order': {
+      id: '/customer/checkout-order'
+      path: '/checkout-order'
+      fullPath: '/customer/checkout-order'
+      preLoaderRoute: typeof CustomerCheckoutOrderRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/success': {
+      id: '/admin/success'
+      path: '/success'
+      fullPath: '/admin/success'
+      preLoaderRoute: typeof AdminSuccessRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/stores': {
+      id: '/admin/stores'
+      path: '/stores'
+      fullPath: '/admin/stores'
+      preLoaderRoute: typeof AdminStoresRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/drivers': {
+      id: '/admin/drivers'
+      path: '/drivers'
+      fullPath: '/admin/drivers'
+      preLoaderRoute: typeof AdminDriversRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/dashboard': {
@@ -367,27 +723,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminSuccesRoute: typeof AdminSuccesRoute
+  AdminDriversRoute: typeof AdminDriversRoute
+  AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
+  AdminProductsRoute: typeof AdminProductsRoute
+  AdminStoresRoute: typeof AdminStoresRoute
+  AdminSuccessRoute: typeof AdminSuccessRoute
+  AdminUsersRoute: typeof AdminUsersRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
-  AdminSuccesRoute: AdminSuccesRoute,
+  AdminDriversRoute: AdminDriversRoute,
+  AdminOrdersRoute: AdminOrdersRoute,
+  AdminPaymentsRoute: AdminPaymentsRoute,
+  AdminProductsRoute: AdminProductsRoute,
+  AdminStoresRoute: AdminStoresRoute,
+  AdminSuccessRoute: AdminSuccessRoute,
+  AdminUsersRoute: AdminUsersRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface CustomerRouteChildren {
+  CustomerCheckoutOrderRoute: typeof CustomerCheckoutOrderRoute
+  CustomerCreateOrderRoute: typeof CustomerCreateOrderRoute
   CustomerDashboardRoute: typeof CustomerDashboardRoute
+  CustomerMyOrdersRoute: typeof CustomerMyOrdersRoute
+  CustomerPaymentSuccessfulRoute: typeof CustomerPaymentSuccessfulRoute
 }
 
 const CustomerRouteChildren: CustomerRouteChildren = {
+  CustomerCheckoutOrderRoute: CustomerCheckoutOrderRoute,
+  CustomerCreateOrderRoute: CustomerCreateOrderRoute,
   CustomerDashboardRoute: CustomerDashboardRoute,
+  CustomerMyOrdersRoute: CustomerMyOrdersRoute,
+  CustomerPaymentSuccessfulRoute: CustomerPaymentSuccessfulRoute,
 }
 
 const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
@@ -406,11 +791,25 @@ const DriverRouteWithChildren =
   DriverRoute._addFileChildren(DriverRouteChildren)
 
 interface StoreRouteChildren {
+  StoreCreateInventoryRoute: typeof StoreCreateInventoryRoute
+  StoreCreateProductRoute: typeof StoreCreateProductRoute
   StoreDashboardRoute: typeof StoreDashboardRoute
+  StoreInventoriesRoute: typeof StoreInventoriesRoute
+  StoreManageProductsRoute: typeof StoreManageProductsRoute
+  StoreMyproductsRoute: typeof StoreMyproductsRoute
+  StoreProductsRoute: typeof StoreProductsRoute
+  StoreSuccessRoute: typeof StoreSuccessRoute
 }
 
 const StoreRouteChildren: StoreRouteChildren = {
+  StoreCreateInventoryRoute: StoreCreateInventoryRoute,
+  StoreCreateProductRoute: StoreCreateProductRoute,
   StoreDashboardRoute: StoreDashboardRoute,
+  StoreInventoriesRoute: StoreInventoriesRoute,
+  StoreManageProductsRoute: StoreManageProductsRoute,
+  StoreMyproductsRoute: StoreMyproductsRoute,
+  StoreProductsRoute: StoreProductsRoute,
+  StoreSuccessRoute: StoreSuccessRoute,
 }
 
 const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
@@ -428,6 +827,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   RegisterRoute: RegisterRoute,
   StoreRoute: StoreRouteWithChildren,
+  StoresRoute: StoresRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
