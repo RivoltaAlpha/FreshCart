@@ -1,6 +1,6 @@
 import type { Inventory, CreateInventory } from '../types/types';
-import { getAllInventories, getInventoryById, createInventory, updateInventory, deleteInventory } from '@/services/inventoryService';
-import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
+import { getAllInventories, getInventoryById, createInventory, updateInventory, deleteInventory, getInventoryProducts } from '@/services/inventoryService';
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery, type UseQueryResult } from '@tanstack/react-query';
 
 export const useInventories = (): UseQueryResult<Inventory[], Error> => {
     return useQuery({
@@ -61,10 +61,16 @@ export const useDeleteInventory = (id: number) => {
 //     });
 // };
 
-// export const useInventoryProducts = (inventory_id: number) => {
-//     return useQuery({
-//         queryKey: ["inventoryProducts", inventory_id],
-//         queryFn: () => getInventoryProducts(inventory_id),
-//         enabled: !!inventory_id,
-//     });
-// };
+export const useInventoryProducts = (inventory_id: number) => {
+    const query = useSuspenseQuery({
+        queryKey: ["inventoryProducts", inventory_id],
+        queryFn: () => getInventoryProducts(inventory_id),
+    });
+    
+    return {
+        data: query.data, 
+        isLoading: query.isLoading,
+        isError: query.isError,
+        error: query.error
+    };
+};

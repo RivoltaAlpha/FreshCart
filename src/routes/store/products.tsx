@@ -15,14 +15,26 @@ import {
 import type { Product } from '@/types/types';
 import { ClipLoader } from 'react-spinners';
 import { useInventoryProducts } from '@/hooks/useInventory';
+import type { ProductItem } from '@/types/store';
 
 export const Route = createFileRoute('/store/products')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const storeId = 1;
-  const { data: products, isLoading, isError } = useInventoryProducts(storeId);
+  const storeId = 3;
+  const { data: inventoryData, isLoading, isError } = useInventoryProducts(storeId);
+
+  const products = React.useMemo(() => {
+    if (!inventoryData?.products) return [];
+
+    return inventoryData.products.map((product: ProductItem) => ({
+      ...product,
+    }));
+  }, [inventoryData]);
+
+  console.log('Inventory Data:', inventoryData);
+  console.log('Processed Products:', products);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -46,7 +58,7 @@ function RouteComponent() {
     columnHelper.accessor('description', {
       header: 'Description',
       cell: info => (
-        <div className="max-w-xs truncate" title={info.getValue()}>
+        <div className="max-w-xs truncate" title={String(info.getValue())}>
           {info.getValue()}
         </div>
       ),
