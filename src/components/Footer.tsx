@@ -11,14 +11,14 @@ export const Footer = () => {
               <ShoppingCart className="h-8 w-8 text-[#00A7B3]" />
               <span className="ml-2 text-2xl font-bold">FreshCart</span>
             </div>
-            <p className="text-[#6A89A7] mb-4 max-w-md">
+            <p className=" mb-4 max-w-md">
               Your trusted partner for fresh, quality groceries delivered right to your doorstep. 
               We connect you with local farmers and stores for the freshest produce.
             </p>
             <div className="flex space-x-4">
-              <Facebook className="h-6 w-6 text-[#6A89A7] hover:text-[#00A7B3] cursor-pointer transition-colors" />
-              <Twitter className="h-6 w-6 text-[#6A89A7] hover:text-[#00A7B3] cursor-pointer transition-colors" />
-              <Instagram className="h-6 w-6 text-[#6A89A7] hover:text-[#00A7B3] cursor-pointer transition-colors" />
+              <Facebook className="h-6 w-6  hover:text-[#00A7B3] cursor-pointer transition-colors" />
+              <Twitter className="h-6 w-6  hover:text-[#00A7B3] cursor-pointer transition-colors" />
+              <Instagram className="h-6 w-6  hover:text-[#00A7B3] cursor-pointer transition-colors" />
             </div>
           </div>
 
@@ -26,10 +26,10 @@ export const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-[#6A89A7] hover:text-[#00A7B3] transition-colors">About Us</a></li>
-              <li><a href="#" className="text-[#6A89A7] hover:text-[#00A7B3] transition-colors">Products</a></li>
-              <li><a href="#" className="text-[#6A89A7] hover:text-[#00A7B3] transition-colors">Delivery Areas</a></li>
-              <li><a href="#" className="text-[#6A89A7] hover:text-[#00A7B3] transition-colors">FAQ</a></li>
+              <li><a href="#" className=" hover:text-[#00A7B3] transition-colors">About Us</a></li>
+              <li><a href="#" className=" hover:text-[#00A7B3] transition-colors">Products</a></li>
+              <li><a href="#" className=" hover:text-[#00A7B3] transition-colors">Delivery Areas</a></li>
+              <li><a href="#" className=" hover:text-[#00A7B3] transition-colors">FAQ</a></li>
             </ul>
           </div>
 
@@ -39,15 +39,15 @@ export const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center">
                 <Phone className="h-4 w-4 text-[#00A7B3] mr-2" />
-                <span className="text-[#6A89A7]">+254 700 123 456</span>
+                <span className="">+254 700 123 456</span>
               </div>
               <div className="flex items-center">
                 <Mail className="h-4 w-4 text-[#00A7B3] mr-2" />
-                <span className="text-[#6A89A7]">hello@freshcart.co.ke</span>
+                <span className="">hello@freshcart.co.ke</span>
               </div>
               <div className="flex items-center">
                 <MapIcon className="h-4 w-4 text-[#00A7B3] mr-2" />
-                <span className="text-[#6A89A7]">Nairobi, Kenya</span>
+                <span className="">Nairobi, Kenya</span>
               </div>
             </div>
           </div>
@@ -55,12 +55,12 @@ export const Footer = () => {
 
         <div className="border-t border-[#516E89] mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-[#6A89A7] text-sm">
+            <p className=" text-sm">
               © 2025 FreshCart. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-[#6A89A7] hover:text-[#00A7B3] text-sm transition-colors">Privacy Policy</a>
-              <a href="#" className="text-[#6A89A7] hover:text-[#00A7B3] text-sm transition-colors">Terms of Service</a>
+              <a href="#" className=" hover:text-[#00A7B3] text-sm transition-colors">Privacy Policy</a>
+              <a href="#" className=" hover:text-[#00A7B3] text-sm transition-colors">Terms of Service</a>
             </div>
           </div>
         </div>

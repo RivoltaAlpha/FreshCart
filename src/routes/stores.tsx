@@ -82,7 +82,7 @@ function StoresPage() {
 
   const StoreCard: React.FC<{ store: Store }> = ({ store }) => {
     return (
-      <div className="bg-background rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+      <div className="bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
         onClick={() => setSelectedStore(store)}>
         <div className="relative">
           <img
@@ -103,12 +103,12 @@ function StoresPage() {
 
         <div className="p-6">
           <div className="flex items-start justify-between mb-3">
-            <h3 className="text-xl font-bold text-[#005A61] line-clamp-1">
+            <h3 className="text-xl font-bold text-fresh-primary line-clamp-1">
               {store.name}
             </h3>
             <div className="flex items-center bg-[#E8F8FA] px-2 py-1 rounded-full">
               <Star className="w-4 h-4 text-yellow-400 fill-current" />
-              <span className="text-sm font-semibold text-[#005A61] ml-1">
+              <span className="text-sm font-semibold text-fresh-primary ml-1">
                 {store.rating}
               </span>
             </div>
@@ -119,15 +119,15 @@ function StoresPage() {
           </p>
 
           <div className="space-y-2 mb-4">
-            <div className="flex items-center text-[#516E89] text-sm">
+            <div className="flex items-center text-fresh-secondary text-sm">
               <MapPin className="w-4 h-4 mr-2 text-[#00A7B3]" />
               {store.city}
             </div>
-            <div className="flex items-center text-[#516E89] text-sm">
+            <div className="flex items-center text-fresh-secondary text-sm">
               <MapPin className="w-4 h-4 mr-2 text-[#00A7B3]" />
               {store.town}
             </div>
-            <div className="flex items-center text-[#516E89] text-sm">
+            <div className="flex items-center text-fresh-secondary text-sm">
               <Phone className="w-4 h-4 mr-2 text-[#00A7B3]" />
               {store.contact_info}
             </div>
@@ -387,15 +387,15 @@ function StoresPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FBFC]">
+    <div className="bg-background  min-h-screen">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-[#E1EAF2]">
+      <div className="shadow-sm border-b border-[#E1EAF2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-[#005A61] mb-4">
+            <h1 className="text-4xl font-bold text-fresh-primary mb-4">
               Discover Local Stores
             </h1>
-            <p className="text-xl text-[#516E89] max-w-3xl mx-auto">
+            <p className="text-xl text-fresh-secondary max-w-3xl mx-auto">
               Browse through our network of trusted local stores and find fresh, quality products
               delivered straight to your doorstep.
             </p>
@@ -441,7 +441,7 @@ function StoresPage() {
 
       {/* Search and Filters */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-searchbar rounded-lg shadow-md p-6 mb-8">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#6A89A7] w-5 h-5" />

@@ -52,26 +52,12 @@ interface RecommendationResult {
 const getApiKey = (): string => {
   // Try to get API key from environment variables first
   const envApiKey = import.meta.env?.VITE_GEMINI_API_KEY
+  console.log(`Gemini API Key from env: ${envApiKey ? 'Yes' : 'No'}`)
 
-  if (envApiKey) {
-    return envApiKey
-  }
-
-  // Fallback API key for development (should be replaced with environment variable)
-
-  if (!fallbackApiKey) {
-    console.warn(
-      'Gemini API key not found. AI recommendations will use fallback logic.',
-    )
-    return ''
-  }
-
-  return fallbackApiKey
+  return envApiKey
 }
 
 const apiKey = getApiKey()
-console.log(`Gemini API Key loaded: ${apiKey ? 'Yes' : 'No'}`)
-
 // Only initialize AI if we have an API key
 let genAI: GoogleGenerativeAI | null = null
 let model: any = null
