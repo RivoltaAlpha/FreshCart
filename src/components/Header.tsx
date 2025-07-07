@@ -15,6 +15,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
   const navigation = [
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/products' },
+    { name: 'Recipes', path: '/recipes' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
     { name: 'Stores', path: '/stores' }
@@ -47,8 +48,8 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
                 key={item.path}
                 to={item.path}
                 className={`px-3 py-2 text-sm font-medium transition-colors relative ${isActiveRoute(item.path)
-                    ? 'text-[#00A7B3] border-b-2 border-[#00A7B3]'
-                    : 'text-[#516E89] hover:text-[#005A61]'
+                  ? 'text-[#00A7B3] border-b-2 border-[#00A7B3]'
+                  : 'text-[#516E89] hover:text-[#005A61]'
                   }`}
               >
                 {item.name}
@@ -112,8 +113,8 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`block px-3 py-2 text-base font-medium w-full text-left transition-colors rounded-md ${isActiveRoute(item.path)
-                      ? 'text-[#00A7B3] bg-[#00A7B3]/10'
-                      : 'text-[#516E89] hover:text-[#005A61] hover:bg-gray-100'
+                    ? 'text-[#00A7B3] bg-[#00A7B3]/10'
+                    : 'text-[#516E89] hover:text-[#005A61] hover:bg-gray-100'
                     }`}
                 >
                   {item.name}

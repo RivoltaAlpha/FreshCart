@@ -123,6 +123,106 @@ function App() {
           </div>
         </div>
       </section>
+      {/* What's for Dinner Section */}
+      <section className="py-20 bg-gradient-to-br from-[#00A7B3]/5 to-[#0b10a4]/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-[#0b10a4] mb-4">What's for Dinner? 🍽️</h2>
+            <p className="text-xl max-w-3xl mx-auto text-[#516E89]">
+              Let AI suggest perfect recipes based on your preferences and instantly add all ingredients to your cart!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-[#00A7B3] text-white rounded-full p-3 flex-shrink-0">
+                    <span className="font-bold">✨</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-[#0b10a4] mb-2">AI Recipe Suggestions</h3>
+                    <p className="text-[#516E89]">
+                      Get personalized recipe recommendations based on your preferences, dietary needs, and cooking time.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="bg-[#00A7B3] text-white rounded-full p-3 flex-shrink-0">
+                    <span className="font-bold">🛒</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-[#0b10a4] mb-2">Instant Cart Addition</h3>
+                    <p className="text-[#516E89]">
+                      Love a recipe? Add all ingredients to your cart with one click and get cooking!
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="bg-[#00A7B3] text-white rounded-full p-3 flex-shrink-0">
+                    <span className="font-bold">🏪</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-[#0b10a4] mb-2">Local Sourcing</h3>
+                    <p className="text-[#516E89]">
+                      Ingredients are sourced from nearby kiosks and stores, ensuring freshness and supporting local businesses.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <button
+                  onClick={() => navigate({ to: '/recipes' })}
+                  className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
+                >
+                  Discover Recipes 🔍
+                </button>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-xl p-6">
+                <div className="text-center mb-6">
+                  <h4 className="text-xl font-bold text-[#0b10a4] mb-2">Recipe of the Day</h4>
+                  <p className="text-[#516E89]">Beef Pilau - Traditional Kenyan Delight</p>
+                </div>
+
+                <img
+                  src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop&q=80"
+                  alt="Beef Pilau"
+                  className="w-full h-48 object-cover rounded-lg mb-4"
+                />
+
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-[#516E89]">Cooking Time:</span>
+                    <span className="font-semibold">60 minutes</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-[#516E89]">Servings:</span>
+                    <span className="font-semibold">6 people</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-[#516E89]">Difficulty:</span>
+                    <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Medium</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => navigate({ to: '/recipes' })}
+                  className="w-full mt-4 bg-[#0b10a4] hover:bg-[#0b10a4]/90 text-white py-2 rounded-lg transition-colors"
+                >
+                  Try This Recipe
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Recommendations Section */}
       <RecommendationsSection
         products={products}

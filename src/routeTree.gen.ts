@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as RecipesRouteImport } from './routes/recipes'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DriverRouteImport } from './routes/driver'
@@ -59,6 +60,11 @@ const StoreRoute = StoreRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecipesRoute = RecipesRouteImport.update({
+  id: '/recipes',
+  path: '/recipes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -239,6 +245,7 @@ export interface FileRoutesByFullPath {
   '/driver': typeof DriverRouteWithChildren
   '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
+  '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/driver': typeof DriverRouteWithChildren
   '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
+  '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/driver': typeof DriverRouteWithChildren
   '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
+  '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -356,6 +365,7 @@ export interface FileRouteTypes {
     | '/driver'
     | '/login'
     | '/products'
+    | '/recipes'
     | '/register'
     | '/store'
     | '/stores'
@@ -394,6 +404,7 @@ export interface FileRouteTypes {
     | '/driver'
     | '/login'
     | '/products'
+    | '/recipes'
     | '/register'
     | '/store'
     | '/stores'
@@ -432,6 +443,7 @@ export interface FileRouteTypes {
     | '/driver'
     | '/login'
     | '/products'
+    | '/recipes'
     | '/register'
     | '/store'
     | '/stores'
@@ -471,6 +483,7 @@ export interface RootRouteChildren {
   DriverRoute: typeof DriverRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRoute
+  RecipesRoute: typeof RecipesRoute
   RegisterRoute: typeof RegisterRoute
   StoreRoute: typeof StoreRouteWithChildren
   StoresRoute: typeof StoresRoute
@@ -497,6 +510,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recipes': {
+      id: '/recipes'
+      path: '/recipes'
+      fullPath: '/recipes'
+      preLoaderRoute: typeof RecipesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -825,6 +845,7 @@ const rootRouteChildren: RootRouteChildren = {
   DriverRoute: DriverRouteWithChildren,
   LoginRoute: LoginRoute,
   ProductsRoute: ProductsRoute,
+  RecipesRoute: RecipesRoute,
   RegisterRoute: RegisterRoute,
   StoreRoute: StoreRouteWithChildren,
   StoresRoute: StoresRoute,
