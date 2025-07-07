@@ -96,7 +96,7 @@ function RegisterPage() {
             <User className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Join FreshCart</h1>
-          <p className="text-gray-600">Create your farmer account</p>
+          <p className="text-gray-600">Your new Shopping Experience</p>
         </div>
 
         <form onSubmit={onRegister} className="space-y-6">
