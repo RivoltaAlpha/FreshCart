@@ -1,3 +1,12 @@
+# Adding Gemini:
+You need a Gemini API key. If you don't already have one, you can get it for free in Google AI Studio.
+https://aistudio.google.com/apikey
+
+Install the Google GenAI SDK
+``` javascript
+pnpm install @google/genai
+```
+
 Welcome to your new TanStack app! 
 
 # Getting Started
