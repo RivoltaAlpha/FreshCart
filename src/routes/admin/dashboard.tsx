@@ -12,12 +12,12 @@ function RouteComponent() {
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
   const stats = [
-    { title: 'Total Users', value: '128', color: 'bg-teal-500', icon: Users },
-    { title: 'Products Listed', value: '342', color: 'bg-teal-600', icon: Package },
-    { title: 'Warehouses', value: '5', color: 'bg-slate-500', icon: Warehouse },
-    { title: 'Orders Today', value: '76', color: 'bg-teal-500', icon: ShoppingCart },
-    { title: 'Pending Approvals', value: '14', color: 'bg-teal-600', icon: Clock },
-    { title: 'Reports Generated', value: '22', color: 'bg-slate-500', icon: FileText },
+    { title: 'Total Users', value: '128', color: 'bg-[#30739C]', icon: Users },
+    { title: 'Products Listed', value: '342', color: 'bg-[#670787]', icon: Package },
+    { title: 'Warehouses', value: '5', color: 'bg-[#0C0166]', icon: Warehouse },
+    { title: 'Orders Today', value: '76', color: 'bg-[#1A74B9]', icon: ShoppingCart },
+    { title: 'Pending Approvals', value: '14', color: 'bg-[#015A6B]', icon: Clock },
+    { title: 'Reports Generated', value: '22', color: 'bg-[#731CDE]', icon: FileText },
   ]
 
   const recentUsers = [
@@ -46,7 +46,7 @@ function RouteComponent() {
                 <input
                   type="text"
                   placeholder="Search..."
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#015A6B]"
                 />
               </div>
               <button className="p-2 rounded-lg hover:bg-gray-100 relative">
