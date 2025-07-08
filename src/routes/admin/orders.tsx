@@ -2,7 +2,7 @@ import { useOrders } from '@/hooks/useOrders'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { ClipLoader } from 'react-spinners'
-import type { Order } from '@/types/types'
+import type { OrderResponse } from '@/types/types'
 import React, { useEffect } from 'react';
 import {
   createColumnHelper,
@@ -24,12 +24,12 @@ export const Route = createFileRoute('/admin/orders')({
 
 function RouteComponent() {
   const { data, isError, isLoading, error, isSuccess } = useOrders()
-  const [orders, setOrders] = React.useState<Order[]>([]);
+  const [orders, setOrders] = React.useState<OrderResponse[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const navigate = useNavigate();
-  const columnHelper = createColumnHelper<Order>();
+  const columnHelper = createColumnHelper<OrderResponse>();
 
   const columns = [
     columnHelper.accessor('order_id', {
@@ -37,50 +37,96 @@ function RouteComponent() {
       cell: info => info.getValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('products', {
-      header: 'Products',
-      cell: info => {
-        const products = info.getValue();
-        const productNames = Array.isArray(products)
-          ? products.map((p: any) => p.name ?? '').join(', ')
-          : '';
-        return (
-          <div className="max-w-xs truncate" title={productNames}>
-            {productNames}
-          </div>
-        );
-      },
+    columnHelper.accessor('order_number', {
+      header: 'Order Number',
+      cell: info => (
+        <div className="max-w-xs truncate" title={info.getValue()}>
+          {info.getValue()}
+        </div>
+      ),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('user', {
+    columnHelper.accessor(row => `${row.user?.profile?.first_name || ''} ${row.user?.profile?.last_name || ''}`, {
       header: 'User',
       cell: info => {
         const user = info.getValue();
-        const userName = user && typeof user === 'object' ? user.first_name ?? '' : '';
+        const userName = user ? user.first_name : '';
         return (
           <div className="max-w-xs truncate" title={userName}>
-            {userName}
+            {info.getValue() || 'N/A'}
           </div>
         );
       },
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('total_price', {
-      header: 'Total Price',
+    columnHelper.accessor(row => `${row.store?.name || ''}`, {
+      header: 'Store',
+      cell: info => {
+        const store = info.getValue();
+        const storeName = store ? store.name : '';
+        return (
+          <div className="max-w-xs truncate" title={storeName}>
+            {info.getValue() || 'N/A'}
+          </div>
+        );
+      },
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('items', {
+      header: 'Items',
+      cell: info => {
+        const items = info.getValue();
+        const itemCount = Array.isArray(items) ? items.length : 0;
+        const totalQuantity = Array.isArray(items)
+          ? items.reduce((sum, item) => sum + (item.quantity || 0), 0)
+          : 0;
+        return (
+          <div className="max-w-xs truncate" title={`${itemCount} products, ${totalQuantity} total items`}>
+            {itemCount} products ({totalQuantity} items)
+          </div>
+        );
+      },
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('total_amount', {
+      header: 'Total Amount',
       cell: info => (
-        <div className="max-w-xs truncate" title={String(info.getValue())}>
-          {info.getValue()}
+        <div className="max-w-xs truncate" title={`KSh ${info.getValue()}`}>
+          KSh {info.getValue()?.toLocaleString() || '0'}
         </div>
       ),
       footer: info => info.column.id,
     }),
     columnHelper.accessor('status', {
       header: 'Status',
-      cell: info => (
-        <div className="max-w-xs truncate" title={info.getValue()}>
-          {info.getValue()}
-        </div>
-      ),
+      cell: info => {
+        const status = info.getValue();
+        const statusColors = {
+          pending: 'bg-yellow-100 text-yellow-800',
+          confirmed: 'bg-blue-100 text-blue-800',
+          preparing: 'bg-orange-100 text-orange-800',
+          ready: 'bg-green-100 text-green-800',
+          delivered: 'bg-gray-100 text-gray-800',
+          cancelled: 'bg-red-100 text-red-800'
+        };
+        return (
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'}`}>
+            {status}
+          </span>
+        );
+      },
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('created_at', {
+      header: 'Created',
+      cell: info => {
+        const date = new Date(info.getValue());
+        return (
+          <div className="max-w-xs truncate" title={date.toLocaleString()}>
+            {date.toLocaleDateString()}
+          </div>
+        );
+      },
       footer: info => info.column.id,
     }),
     columnHelper.display({
@@ -142,7 +188,7 @@ function RouteComponent() {
           <h2 className="text-lg font-semibold">New Order</h2>
           <PlusCircleIcon
             className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-            onClick={() => navigate({ to: '' })}
+            onClick={() => navigate({ to: '/customer/checkout-order' })}
           />
         </div>
         <div className="mb-6">
@@ -150,7 +196,7 @@ function RouteComponent() {
             <h2 className="text-lg font-semibold">Approve Order</h2>
             <TicketCheckIcon
               className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-              onClick={() => navigate({ to: '/admin/layout/approve-order' })}
+              onClick={() => navigate({ to: '/admin/categories' })}
             />
           </div>
         </div>
@@ -159,7 +205,7 @@ function RouteComponent() {
             <h2 className="text-lg font-semibold">Ship Order</h2>
             <ShoppingBag
               className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-              onClick={() => navigate({ to: '/admin/layout/approve-order' })}
+              onClick={() => navigate({ to: '/admin/products' })}
             />
           </div>
         </div>
