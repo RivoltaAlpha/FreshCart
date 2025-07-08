@@ -14,7 +14,7 @@ import {
   type SortingState,
   type ColumnFiltersState,
 } from '@tanstack/react-table';
-import { ClipboardCheckIcon, PackageCheckIcon, PackagePlusIcon, PlusCircleIcon, User2, Users2Icon } from 'lucide-react';
+import { ClipboardCheckIcon, User2, Users2Icon } from 'lucide-react';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -24,20 +24,29 @@ const columns = [
     cell: info => info.getValue(),
     footer: info => info.column.id,
   }),
-  columnHelper.accessor('first_name', {
+  columnHelper.accessor('profile.first_name', {
     header: 'First Name',
     cell: info => (
-      <div className="max-w-xs truncate" title={info.getValue()}>
-        {info.getValue()}
+      <div className="max-w-xs truncate" title={info.getValue() || ''}>
+        {info.getValue() || 'N/A'}
       </div>
     ),
     footer: info => info.column.id,
   }),
-  columnHelper.accessor('last_name', {
+  columnHelper.accessor('profile.last_name', {
     header: 'Last Name',
     cell: info => (
-      <div className="max-w-xs truncate" title={info.getValue()}>
-        {info.getValue()}
+      <div className="max-w-xs truncate" title={info.getValue() || ''}>
+        {info.getValue() || 'N/A'}
+      </div>
+    ),
+    footer: info => info.column.id,
+  }),
+  columnHelper.accessor('profile.phone_number', {
+    header: 'Phone',
+    cell: info => (
+      <div className="max-w-xs truncate" title={info.getValue() || ''}>
+        {info.getValue() || 'N/A'}
       </div>
     ),
     footer: info => info.column.id,
@@ -68,6 +77,8 @@ export const Route = createFileRoute('/admin/users')({
 
 function RouteComponent() {
   const [data, setData] = React.useState<User[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<string | null>(null);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -76,18 +87,23 @@ function RouteComponent() {
   useEffect(() => {
     const loadData = async () => {
       try {
+        setLoading(true);
+        setError(null);
         console.log('Fetching users...');
         const users = await getAllUsers();
         setData(users);
       } catch (error) {
         console.error('Error fetching users:', error);
+        setError(error instanceof Error ? error.message : 'Failed to fetch users');
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
   }, []);
 
   const table = useReactTable({
-    data,
+    data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -103,6 +119,22 @@ function RouteComponent() {
     onColumnFiltersChange: setColumnFilters,
   });
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-lg text-[#005A61]">Loading users...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-lg text-red-600">Error loading users: {error}</div>
+      </div>
+    );
+  }
+
   return (
     <>
       <h1 className="flex justify-center text-2xl font-bold text-[#005A61]">Quick Actions</h1>
@@ -111,15 +143,15 @@ function RouteComponent() {
           <h2 className="text-lg font-semibold">Add User</h2>
           <User2
             className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-            onClick={() => navigate({ to: '/admin/layout/createUser' })}
+            onClick={() => navigate({ to: '/admin/create-user' })}
           />
         </div>
         <div className="mb-6">
           <div className="mt-2 flex items-center justify-center gap-4">
-            <h2 className="text-lg font-semibold">Manage Users</h2>
+            <h2 className="text-lg font-semibold">View Orders</h2>
             <Users2Icon
               className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-              onClick={() => navigate({ to: '/admin/layout/manageUsers' })}
+              onClick={() => navigate({ to: '/admin/orders' })}
             />
           </div>
         </div>
@@ -128,7 +160,7 @@ function RouteComponent() {
             <h2 className="text-lg font-semibold">Assign Roles to users</h2>
             <ClipboardCheckIcon
               className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-              onClick={() => navigate({ to: '/admin/layout/assign-role' })}
+              onClick={() => navigate({ to: '/admin/users' })}
             />
           </div>
         </div>
