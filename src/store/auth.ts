@@ -24,6 +24,20 @@ export const localStorageJson = () => {
   if (localData) jsonData = JSON.parse(localData)
   return jsonData
 }
+
+export const isAuthenticated = () => {
+  const localData = localStorageJson()
+  if (!localData) return false
+  return localData.isAuthenticated
+}
+
+export const loggedInUser = () => {
+  const localData = localStorageJson()
+  if (!localData) return null
+  // console.log('local data user', localData.user)
+  return localData.user
+}
+
 export const authActions = {
   saveUser: (data:backendResponse) => {
     authStore.setState({
