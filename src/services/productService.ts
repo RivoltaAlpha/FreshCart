@@ -52,6 +52,7 @@ export const getAllProducts = async () => {
     })
     await handleApiResponse(response)
     return response.json()
+
   } catch (error) {
     console.error('Error in getAllUsers:', error)
     throw error
@@ -68,6 +69,29 @@ export const getProductById = async (
 
   try {
     const response = await fetch(`${url}/products/${product_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error in getAllUsers:', error)
+    throw error
+  }
+}
+
+export const getStoreProducts = async (
+  storeId: number,
+): Promise<Product[]> => {
+  const token = getAuthToken()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${url}/products/store/${storeId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

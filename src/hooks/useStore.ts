@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
-import type { Store, StoreProduct } from '../types/store'
-import { getAllStores, getStoreProducts, searchStoreProducts } from '@/services/storeService'
+import type { Store } from '../types/store'
+import type { Product } from '../types/types'
+import { getAllStores, getStoreProducts } from '@/services/storeService'
 import { useQuery } from '@tanstack/react-query'
 
 interface UseStoreProductsParams {
@@ -11,7 +12,7 @@ interface UseStoreProductsParams {
 }
 
 interface UseStoreProductsReturn {
-  products: StoreProduct[]
+  products: Product[]
   loading: boolean
   error: string | null
   total: number
@@ -29,7 +30,7 @@ export const useStoreProducts = ({
   limit = 20,
   autoFetch = true,
 }: UseStoreProductsParams): UseStoreProductsReturn => {
-  const [products, setProducts] = useState<StoreProduct[]>([])
+  const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [total, setTotal] = useState<number>(0)
@@ -43,17 +44,15 @@ export const useStoreProducts = ({
       setError(null)
 
       try {
-        const response = await getStoreProducts(
-          storeId,
-        )
+        const response = await getStoreProducts(storeId)
 
         if (append) {
-          setProducts((prev) => [...prev, ...response.products])
+          setProducts((prev) => [...prev, ...response])
         } else {
-          setProducts(response.products)
+          setProducts(response)
         }
 
-        setTotal(response.total)
+        setTotal(response.length)
         setCurrentPage(pageToFetch)
       } catch (err) {
         const errorMessage =
@@ -68,20 +67,20 @@ export const useStoreProducts = ({
   )
 
   const searchProducts = useCallback(
-    async (query: string, categoryId?: number) => {
+    async (query: string, _categoryId?: number) => {
       if (!storeId || !query.trim()) return
 
       setLoading(true)
       setError(null)
 
       try {
-        const response = await searchStoreProducts(
-          storeId,
-          query,
-          categoryId,
+        // For now, just filter existing products instead of making a new API call
+        // This can be enhanced later with a proper search endpoint
+        const filtered = products.filter((product) =>
+          product.name.toLowerCase().includes(query.toLowerCase()),
         )
-        setProducts(response.products)
-        setTotal(response.total)
+        setProducts(filtered)
+        setTotal(filtered.length)
         setCurrentPage(1)
       } catch (err) {
         const errorMessage =
@@ -92,13 +91,13 @@ export const useStoreProducts = ({
         setLoading(false)
       }
     },
-    [storeId],
+    [storeId, products],
   )
 
   const loadMore = useCallback(async () => {
-    if (loading || products.length >= total) return
+    if (loading || (products?.length || 0) >= total) return
     await fetchProducts(currentPage + 1, true)
-  }, [loading, products.length, total, currentPage, fetchProducts])
+  }, [loading, products?.length, total, currentPage, fetchProducts])
 
   const refresh = useCallback(async () => {
     await fetchProducts(1, false)
@@ -116,7 +115,7 @@ export const useStoreProducts = ({
     error,
     total,
     currentPage,
-    hasMore: products.length < total,
+    hasMore: (products?.length || 0) < total,
     fetchProducts: () => fetchProducts(),
     searchProducts,
     loadMore,
@@ -143,7 +142,7 @@ export const useStore = (): UseStoresReturn => {
     queryKey: ['stores'],
     queryFn: getAllStores,
   })
-  console.log("useStores data:", data)
+  console.log('useStores data:', data)
 
   const fetchStores = useCallback(async () => {
     try {
@@ -163,17 +162,21 @@ export const useStore = (): UseStoresReturn => {
   // Extract stores array from the response
   const stores: Store[] = (() => {
     if (!data) return []
-    
+
     // If data is directly an array (your actual API response)
     if (Array.isArray(data)) {
       return data
     }
-    
+
     // If data is StoresResponse object with stores property
-    if (typeof data === 'object' && 'stores' in data && Array.isArray(data.stores)) {
+    if (
+      typeof data === 'object' &&
+      'stores' in data &&
+      Array.isArray(data.stores)
+    ) {
       return data.stores
     }
-    
+
     // Fallback to empty array
     return []
   })()
@@ -181,7 +184,11 @@ export const useStore = (): UseStoresReturn => {
   return {
     stores,
     loading: isLoading,
-    error: isError ? (queryError instanceof Error ? queryError.message : 'Failed to fetch stores') : null,
+    error: isError
+      ? queryError instanceof Error
+        ? queryError.message
+        : 'Failed to fetch stores'
+      : null,
     fetchStores,
     refresh,
   }

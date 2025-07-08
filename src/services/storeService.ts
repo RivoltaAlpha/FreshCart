@@ -1,6 +1,5 @@
+import type { Product } from '@/types/types';
 import type {
-  Store,
-  StoreProduct,
   StoreProductsResponse,
   StoresResponse,
 } from '../types/store'
@@ -53,16 +52,25 @@ export const getAllStores = async (): Promise<StoresResponse> => {
 // Fetch products for a specific store
 export const getStoreProducts = async (
   storeId: number,
-): Promise<StoreProductsResponse> => {
+): Promise<Product[]> => {
   const token = getAuthToken()
-  const response = await fetch(`${API_BASE_URL}/stores/${storeId}/products`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  })
-  await handleApiResponse(response)
-  return response.json()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error in getAllUsers:', error)
+    throw error
+  }
 }
 
 // Search products in a specific store
