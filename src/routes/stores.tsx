@@ -41,7 +41,7 @@ function StoresPage() {
   const { stores, loading: storesLoading, error: storesError, refresh } = useStore();
   console.log('stores:', stores);
   const {
-    products: selectedStoreProducts,
+    products: selectedStoreProducts = [],
     loading: productsLoading
   } = useStoreProducts({
     storeId: selectedStore?.store_id || 0,
@@ -54,11 +54,11 @@ function StoresPage() {
     if (!stores || stores.length === 0) {
       return [];
     }
-    
+
     let filtered = stores.filter(store =>
       store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        store.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        store.description.toLowerCase().includes(searchQuery.toLowerCase())
+      store.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      store.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Sort stores
