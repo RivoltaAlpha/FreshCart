@@ -202,6 +202,12 @@ export const adminMenu: MenuItem[] = [
     path: '/admin/products',
   },
   {
+    id: 'categories',
+    label: 'Category Management',
+    icon: Database,
+    path: '/admin/categories',
+  },
+  {
     id: 'orders',
     label: 'Order Management',
     icon: ShoppingCart,
