@@ -5,5 +5,8 @@ export const Route = createFileRoute('/customer/checkout-order')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/customer/checkout-order"!</div>
+  return <div>
+    <div>My Orders</div>
+    
+  </div>
 }
