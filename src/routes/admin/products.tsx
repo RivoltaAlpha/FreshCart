@@ -1,20 +1,20 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import React, { useEffect } from 'react';
-import { getAllProducts } from '../../services/productService';
+import React from 'react';
 import type { Product } from '../../types/types';
 import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-    type PaginationState,
-    type SortingState,
-    type ColumnFiltersState,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type PaginationState,
+  type SortingState,
+  type ColumnFiltersState,
 } from '@tanstack/react-table';
 import { ClipboardCheckIcon, PackageCheckIcon, PackagePlusIcon } from 'lucide-react';
+import { useProducts } from '@/hooks/useProducts';
 
 
 export const Route = createFileRoute('/admin/products')({
@@ -22,14 +22,14 @@ export const Route = createFileRoute('/admin/products')({
 })
 
 function RouteComponent() {
-  const [products, setProducts] = React.useState<Product[]>([]);
+  const { data: products = [], isLoading, error } = useProducts();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const navigate = useNavigate();
-  
+
   const columnHelper = createColumnHelper<Product>();
-  
+
   const columns = [
     columnHelper.accessor('product_id', {
       header: 'ID',
@@ -57,68 +57,76 @@ function RouteComponent() {
     columnHelper.accessor('price', {
       header: 'Price',
       cell: info => (
-        <div className="max-w-xs truncate" title={"$${info.getValue()}"}>
-          ${info.getValue()}
+        <div className="max-w-xs truncate" title={`KSh ${info.getValue()}`}>
+          KSh {info.getValue()}
         </div>
       ),
       footer: info => info.column.id,
     }),
   ];
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const allProducts = await getAllProducts();
-      setProducts(allProducts);
-    };
-    fetchProducts();
-  }, []);
+  const table = useReactTable({
+    data: products || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      pagination: pagination,
+      sorting: sorting,
+      columnFilters: columnFilters,
+    },
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+  });
 
-    const table = useReactTable({
-        data: products,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        state: {
-            pagination: pagination,
-            sorting: sorting,
-            columnFilters: columnFilters,
-        },
-        onPaginationChange: setPagination,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-    });
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-lg text-[#005A61]">Loading products...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-lg text-red-600">Error loading products: {error.message}</div>
+      </div>
+    );
+  }
 
   return (
-     <>
+    <>
       <h1 className="flex justify-center text-2xl font-bold text-[#005A61]">Quick Actions</h1>
       <div className="flex justify-around items-center mb-4 bg-gray-300 shadow-2xl rounded py-10 mt-10">
-              <div className="mt-2 flex items-center justify-center gap-4">
-              <h2 className="text-lg font-semibold">New Product</h2>
-                <PackagePlusIcon
-                  className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-                  onClick={() => navigate({ to: '/admin/create-category' })}
-                />
-            </div>
-            <div className="mb-6">
-              <div className="mt-2 flex items-center justify-center gap-4">
-                <h2 className="text-lg font-semibold">Update Product</h2>
-                <PackageCheckIcon
-                  className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-                  onClick={() => navigate({ to: '/admin/create-product' })}
-                />
-              </div>
-            </div>
-            <div className="mb-6">
-              <div className="mt-2 flex items-center justify-center gap-4">
-                <h2 className="text-lg font-semibold">Product Inventory</h2>
-                <ClipboardCheckIcon
-                  className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-                  onClick={() => navigate({ to: '/store/products' })}
-                />
-              </div>
-            </div>
+        <div className="mt-2 flex items-center justify-center gap-4">
+          <h2 className="text-lg font-semibold">New Product</h2>
+          <PackagePlusIcon
+            className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
+            onClick={() => navigate({ to: '/admin/create-category' })}
+          />
+        </div>
+        <div className="mb-6">
+          <div className="mt-2 flex items-center justify-center gap-4">
+            <h2 className="text-lg font-semibold">Update Product</h2>
+            <PackageCheckIcon
+              className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
+              onClick={() => navigate({ to: '/admin/create-product' })}
+            />
+          </div>
+        </div>
+        <div className="mb-6">
+          <div className="mt-2 flex items-center justify-center gap-4">
+            <h2 className="text-lg font-semibold">Product Inventory</h2>
+            <ClipboardCheckIcon
+              className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
+              onClick={() => navigate({ to: '/store/products' })}
+            />
+          </div>
+        </div>
       </div>
       <div className="flex min-h-screen">
         <div className="flex flex-col lg:w-7xl md:w-auto mx-auto py-12 px-4">
