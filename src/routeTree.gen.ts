@@ -24,9 +24,13 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StoreSuccessRouteImport } from './routes/store/success'
+import { Route as StoreStockManagementRouteImport } from './routes/store/stock-management'
+import { Route as StoreShipmentsRouteImport } from './routes/store/shipments'
+import { Route as StoreShipOrderRouteImport } from './routes/store/ship-order'
 import { Route as StoreProductsRouteImport } from './routes/store/products'
 import { Route as StoreMyproductsRouteImport } from './routes/store/myproducts'
 import { Route as StoreManageProductsRouteImport } from './routes/store/manageProducts'
+import { Route as StoreManageOrdersRouteImport } from './routes/store/manage-orders'
 import { Route as StoreInventoriesRouteImport } from './routes/store/inventories'
 import { Route as StoreDashboardRouteImport } from './routes/store/dashboard'
 import { Route as StoreCreateProductRouteImport } from './routes/store/create-product'
@@ -40,11 +44,17 @@ import { Route as CustomerCheckoutOrderRouteImport } from './routes/customer/che
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminSuccessRouteImport } from './routes/admin/success'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminProductsRouteImport } from './routes/admin/products'
 import { Route as AdminPaymentsRouteImport } from './routes/admin/payments'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
+import { Route as AdminInventoriesRouteImport } from './routes/admin/inventories'
 import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminCreateUserRouteImport } from './routes/admin/create-user'
+import { Route as AdminCreateProductRouteImport } from './routes/admin/create-product'
+import { Route as AdminCreateCategoryRouteImport } from './routes/admin/create-category'
+import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
 
 const StoresRoute = StoresRouteImport.update({
@@ -122,6 +132,21 @@ const StoreSuccessRoute = StoreSuccessRouteImport.update({
   path: '/success',
   getParentRoute: () => StoreRoute,
 } as any)
+const StoreStockManagementRoute = StoreStockManagementRouteImport.update({
+  id: '/stock-management',
+  path: '/stock-management',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreShipmentsRoute = StoreShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreShipOrderRoute = StoreShipOrderRouteImport.update({
+  id: '/ship-order',
+  path: '/ship-order',
+  getParentRoute: () => StoreRoute,
+} as any)
 const StoreProductsRoute = StoreProductsRouteImport.update({
   id: '/products',
   path: '/products',
@@ -135,6 +160,11 @@ const StoreMyproductsRoute = StoreMyproductsRouteImport.update({
 const StoreManageProductsRoute = StoreManageProductsRouteImport.update({
   id: '/manageProducts',
   path: '/manageProducts',
+  getParentRoute: () => StoreRoute,
+} as any)
+const StoreManageOrdersRoute = StoreManageOrdersRouteImport.update({
+  id: '/manage-orders',
+  path: '/manage-orders',
   getParentRoute: () => StoreRoute,
 } as any)
 const StoreInventoriesRoute = StoreInventoriesRouteImport.update({
@@ -203,6 +233,11 @@ const AdminStoresRoute = AdminStoresRouteImport.update({
   path: '/stores',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
@@ -218,6 +253,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInventoriesRoute = AdminInventoriesRouteImport.update({
+  id: '/inventories',
+  path: '/inventories',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDriversRoute = AdminDriversRouteImport.update({
   id: '/drivers',
   path: '/drivers',
@@ -226,6 +266,26 @@ const AdminDriversRoute = AdminDriversRouteImport.update({
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCreateUserRoute = AdminCreateUserRouteImport.update({
+  id: '/create-user',
+  path: '/create-user',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCreateProductRoute = AdminCreateProductRouteImport.update({
+  id: '/create-product',
+  path: '/create-product',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCreateCategoryRoute = AdminCreateCategoryRouteImport.update({
+  id: '/create-category',
+  path: '/create-category',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
@@ -250,11 +310,17 @@ export interface FileRoutesByFullPath {
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/create-category': typeof AdminCreateCategoryRoute
+  '/admin/create-product': typeof AdminCreateProductRoute
+  '/admin/create-user': typeof AdminCreateUserRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventories': typeof AdminInventoriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
@@ -268,9 +334,13 @@ export interface FileRoutesByFullPath {
   '/store/create-product': typeof StoreCreateProductRoute
   '/store/dashboard': typeof StoreDashboardRoute
   '/store/inventories': typeof StoreInventoriesRoute
+  '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
   '/store/products': typeof StoreProductsRoute
+  '/store/ship-order': typeof StoreShipOrderRoute
+  '/store/shipments': typeof StoreShipmentsRoute
+  '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
 }
 export interface FileRoutesByTo {
@@ -289,11 +359,17 @@ export interface FileRoutesByTo {
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/create-category': typeof AdminCreateCategoryRoute
+  '/admin/create-product': typeof AdminCreateProductRoute
+  '/admin/create-user': typeof AdminCreateUserRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventories': typeof AdminInventoriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
@@ -307,9 +383,13 @@ export interface FileRoutesByTo {
   '/store/create-product': typeof StoreCreateProductRoute
   '/store/dashboard': typeof StoreDashboardRoute
   '/store/inventories': typeof StoreInventoriesRoute
+  '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
   '/store/products': typeof StoreProductsRoute
+  '/store/ship-order': typeof StoreShipOrderRoute
+  '/store/shipments': typeof StoreShipmentsRoute
+  '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
 }
 export interface FileRoutesById {
@@ -329,11 +409,17 @@ export interface FileRoutesById {
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/create-category': typeof AdminCreateCategoryRoute
+  '/admin/create-product': typeof AdminCreateProductRoute
+  '/admin/create-user': typeof AdminCreateUserRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventories': typeof AdminInventoriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
@@ -347,9 +433,13 @@ export interface FileRoutesById {
   '/store/create-product': typeof StoreCreateProductRoute
   '/store/dashboard': typeof StoreDashboardRoute
   '/store/inventories': typeof StoreInventoriesRoute
+  '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
   '/store/products': typeof StoreProductsRoute
+  '/store/ship-order': typeof StoreShipOrderRoute
+  '/store/shipments': typeof StoreShipmentsRoute
+  '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
 }
 export interface FileRouteTypes {
@@ -370,11 +460,17 @@ export interface FileRouteTypes {
     | '/store'
     | '/stores'
     | '/admin/analytics'
+    | '/admin/categories'
+    | '/admin/create-category'
+    | '/admin/create-product'
+    | '/admin/create-user'
     | '/admin/dashboard'
     | '/admin/drivers'
+    | '/admin/inventories'
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/products'
+    | '/admin/settings'
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
@@ -388,9 +484,13 @@ export interface FileRouteTypes {
     | '/store/create-product'
     | '/store/dashboard'
     | '/store/inventories'
+    | '/store/manage-orders'
     | '/store/manageProducts'
     | '/store/myproducts'
     | '/store/products'
+    | '/store/ship-order'
+    | '/store/shipments'
+    | '/store/stock-management'
     | '/store/success'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -409,11 +509,17 @@ export interface FileRouteTypes {
     | '/store'
     | '/stores'
     | '/admin/analytics'
+    | '/admin/categories'
+    | '/admin/create-category'
+    | '/admin/create-product'
+    | '/admin/create-user'
     | '/admin/dashboard'
     | '/admin/drivers'
+    | '/admin/inventories'
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/products'
+    | '/admin/settings'
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
@@ -427,9 +533,13 @@ export interface FileRouteTypes {
     | '/store/create-product'
     | '/store/dashboard'
     | '/store/inventories'
+    | '/store/manage-orders'
     | '/store/manageProducts'
     | '/store/myproducts'
     | '/store/products'
+    | '/store/ship-order'
+    | '/store/shipments'
+    | '/store/stock-management'
     | '/store/success'
   id:
     | '__root__'
@@ -448,11 +558,17 @@ export interface FileRouteTypes {
     | '/store'
     | '/stores'
     | '/admin/analytics'
+    | '/admin/categories'
+    | '/admin/create-category'
+    | '/admin/create-product'
+    | '/admin/create-user'
     | '/admin/dashboard'
     | '/admin/drivers'
+    | '/admin/inventories'
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/products'
+    | '/admin/settings'
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
@@ -466,9 +582,13 @@ export interface FileRouteTypes {
     | '/store/create-product'
     | '/store/dashboard'
     | '/store/inventories'
+    | '/store/manage-orders'
     | '/store/manageProducts'
     | '/store/myproducts'
     | '/store/products'
+    | '/store/ship-order'
+    | '/store/shipments'
+    | '/store/stock-management'
     | '/store/success'
   fileRoutesById: FileRoutesById
 }
@@ -596,6 +716,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreSuccessRouteImport
       parentRoute: typeof StoreRoute
     }
+    '/store/stock-management': {
+      id: '/store/stock-management'
+      path: '/stock-management'
+      fullPath: '/store/stock-management'
+      preLoaderRoute: typeof StoreStockManagementRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/shipments': {
+      id: '/store/shipments'
+      path: '/shipments'
+      fullPath: '/store/shipments'
+      preLoaderRoute: typeof StoreShipmentsRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/ship-order': {
+      id: '/store/ship-order'
+      path: '/ship-order'
+      fullPath: '/store/ship-order'
+      preLoaderRoute: typeof StoreShipOrderRouteImport
+      parentRoute: typeof StoreRoute
+    }
     '/store/products': {
       id: '/store/products'
       path: '/products'
@@ -615,6 +756,13 @@ declare module '@tanstack/react-router' {
       path: '/manageProducts'
       fullPath: '/store/manageProducts'
       preLoaderRoute: typeof StoreManageProductsRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/store/manage-orders': {
+      id: '/store/manage-orders'
+      path: '/manage-orders'
+      fullPath: '/store/manage-orders'
+      preLoaderRoute: typeof StoreManageOrdersRouteImport
       parentRoute: typeof StoreRoute
     }
     '/store/inventories': {
@@ -708,6 +856,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStoresRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/products': {
       id: '/admin/products'
       path: '/products'
@@ -729,6 +884,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/inventories': {
+      id: '/admin/inventories'
+      path: '/inventories'
+      fullPath: '/admin/inventories'
+      preLoaderRoute: typeof AdminInventoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/drivers': {
       id: '/admin/drivers'
       path: '/drivers'
@@ -743,6 +905,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/create-user': {
+      id: '/admin/create-user'
+      path: '/create-user'
+      fullPath: '/admin/create-user'
+      preLoaderRoute: typeof AdminCreateUserRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/create-product': {
+      id: '/admin/create-product'
+      path: '/create-product'
+      fullPath: '/admin/create-product'
+      preLoaderRoute: typeof AdminCreateProductRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/create-category': {
+      id: '/admin/create-category'
+      path: '/create-category'
+      fullPath: '/admin/create-category'
+      preLoaderRoute: typeof AdminCreateCategoryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/analytics': {
       id: '/admin/analytics'
       path: '/analytics'
@@ -755,11 +945,17 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCreateCategoryRoute: typeof AdminCreateCategoryRoute
+  AdminCreateProductRoute: typeof AdminCreateProductRoute
+  AdminCreateUserRoute: typeof AdminCreateUserRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminDriversRoute: typeof AdminDriversRoute
+  AdminInventoriesRoute: typeof AdminInventoriesRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminProductsRoute: typeof AdminProductsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStoresRoute: typeof AdminStoresRoute
   AdminSuccessRoute: typeof AdminSuccessRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -767,11 +963,17 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCreateCategoryRoute: AdminCreateCategoryRoute,
+  AdminCreateProductRoute: AdminCreateProductRoute,
+  AdminCreateUserRoute: AdminCreateUserRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminDriversRoute: AdminDriversRoute,
+  AdminInventoriesRoute: AdminInventoriesRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminProductsRoute: AdminProductsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminStoresRoute: AdminStoresRoute,
   AdminSuccessRoute: AdminSuccessRoute,
   AdminUsersRoute: AdminUsersRoute,
@@ -815,9 +1017,13 @@ interface StoreRouteChildren {
   StoreCreateProductRoute: typeof StoreCreateProductRoute
   StoreDashboardRoute: typeof StoreDashboardRoute
   StoreInventoriesRoute: typeof StoreInventoriesRoute
+  StoreManageOrdersRoute: typeof StoreManageOrdersRoute
   StoreManageProductsRoute: typeof StoreManageProductsRoute
   StoreMyproductsRoute: typeof StoreMyproductsRoute
   StoreProductsRoute: typeof StoreProductsRoute
+  StoreShipOrderRoute: typeof StoreShipOrderRoute
+  StoreShipmentsRoute: typeof StoreShipmentsRoute
+  StoreStockManagementRoute: typeof StoreStockManagementRoute
   StoreSuccessRoute: typeof StoreSuccessRoute
 }
 
@@ -826,9 +1032,13 @@ const StoreRouteChildren: StoreRouteChildren = {
   StoreCreateProductRoute: StoreCreateProductRoute,
   StoreDashboardRoute: StoreDashboardRoute,
   StoreInventoriesRoute: StoreInventoriesRoute,
+  StoreManageOrdersRoute: StoreManageOrdersRoute,
   StoreManageProductsRoute: StoreManageProductsRoute,
   StoreMyproductsRoute: StoreMyproductsRoute,
   StoreProductsRoute: StoreProductsRoute,
+  StoreShipOrderRoute: StoreShipOrderRoute,
+  StoreShipmentsRoute: StoreShipmentsRoute,
+  StoreStockManagementRoute: StoreStockManagementRoute,
   StoreSuccessRoute: StoreSuccessRoute,
 }
 

@@ -278,6 +278,33 @@ export interface UpdateStore {
   delivery_fee?: number;
 }
 
+// Backend product type
+export interface BackendProduct {
+  product_id: number;
+  category_id: number;
+  name: string;
+  description: string;
+  price: string;
+  stock_quantity: string;
+  image_url: string;
+  weight: string;
+  unit: string;
+  rating: string;
+  review_count: number;
+  discount: number;
+  expiry_date: string | null;
+  created_at: string;
+  updatedAt: string;
+  category: {
+    category_id: number;
+    name: string;
+    description: string;
+    image_url: string;
+    created_at: string;
+  };
+  inventory: any[];
+}
+
 // types/product.types.ts
 
 export interface Product {
@@ -285,20 +312,30 @@ export interface Product {
   category_id: number;
   name: string;
   description: string;
-  price: number;
-  stock_quantity: number;
-  image_url?: string;
-  weight?: number;
-  unit?: string;
-  rating: number;
+  price: string;
+  stock_quantity: string;
+  image_url: string;
+  weight: string;
+  unit: string;
+  rating: string;
   review_count: number;
   discount: number;
-  expiry_date?: Date;
-  created_at: Date;
-  updatedAt: Date;
-  category?: Category;
-  orders?: Order[];
+  expiry_date: string | null;
+  created_at: string;
+  updatedAt: string;
+  category: {
+    category_id: number;
+    name: string;
+    description: string;
+    image_url: string;
+    created_at: string;
+  };
   inventory?: Inventory[];
+  products?: Product[];
+}
+
+export interface Products {
+  products: Product[];
 }
 
 export interface CreateProduct {
@@ -355,16 +392,6 @@ export enum DeliveryMethod {
   EXPRESS_DELIVERY = 'express_delivery'
 }
 
-export interface OrderItem {
-  item_id: number;
-  order_id: number;
-  product_id: number;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-  product?: Product;
-}
-
 export interface Order {
   order_id: number;
   order_number: string;
@@ -380,7 +407,7 @@ export interface Order {
   delivery_latitude?: number;
   delivery_longitude?: number;
   delivery_phone?: string;
-  estimated_delivery_time?: Date;
+  estimated_delivery_time?: number;
   actual_delivery_time?: Date;
   driver_id?: number;
   rating?: number;
@@ -400,7 +427,6 @@ export interface OrderItem {
 }
 
 export interface CreateOrder {
-  user_id: number;
   store_id: number;
   items: OrderItem[];
   delivery_address: string;
@@ -409,7 +435,7 @@ export interface CreateOrder {
   delivery_longitude?: number;
   delivery_phone?: string;
   delivery_method?: DeliveryMethod;
-  estimated_delivery_time?: Date;
+  estimated_delivery_time?: number;
 }
 
 export interface UpdateOrderStatus {
