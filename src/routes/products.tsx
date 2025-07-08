@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Star, MapPin, Search, Filter, Plus, Minus } from 'lucide-react';
-import sampleProducts from "../../public/marketplaceItems.json"
+import { Star, Search, Filter, Plus, Minus } from 'lucide-react';
 import { createFileRoute } from '@tanstack/react-router'
-import type { Product } from '@/Gemini/context';
-import RecommendationsSection from '@/components/recommendations';
+import { useProducts } from '@/hooks/useProducts';
+import type { BackendProduct } from '@/types/types';
 
 export const Route = createFileRoute('/products')({
   component: ProductsPage,
 })
 
-// Define proper types
+// Updated types to match backend response
 type Cart = Record<number, number>;
 type CartItem = {
   id: number;
@@ -17,25 +16,28 @@ type CartItem = {
   price: number;
   image: string;
   quantity: number;
-  seller: string;
   category: string;
   unit: string;
+  weight: number;
+  discount?: number;
 };
 
 function ProductsPage() {
-  const [products] = useState<Product[]>(sampleProducts as Product[]);
+  const { data: backendResponse } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [cart, setCart] = useState<Cart>({});
   const isInitialMount = useRef(true);
 
+  // Transform backend data to match component expectations
+  const products: BackendProduct[] = backendResponse?.products || [];
 
-  const categories = ['All', ...new Set(products.map(p => p.category))];
+  const categories = ['All', ...new Set(products?.map(p => p.category?.name))];
 
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products?.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.seller.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || product.category?.name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -48,7 +50,6 @@ function ProductsPage() {
         setCart(parsedCart);
       } catch (error) {
         console.error('Error parsing cart from localStorage:', error);
-        // Clear corrupted data
         localStorage.removeItem('freshcart-cart');
       }
     }
@@ -57,7 +58,7 @@ function ProductsPage() {
     localStorage.setItem('appData', JSON.stringify({ products }));
 
     isInitialMount.current = false;
-  }, []);
+  }, [products]);
 
   // Save cart to localStorage whenever it changes (but not on initial mount)
   useEffect(() => {
@@ -69,18 +70,19 @@ function ProductsPage() {
   // Save detailed cart items with product info to localStorage
   const saveCartItemsToLocalStorage = (currentCart: Cart) => {
     const cartItems: CartItem[] = Object.entries(currentCart).map(([productId, quantity]) => {
-      const product = products.find(p => p.id === parseInt(productId));
+      const product = products.find(p => p.product_id === parseInt(productId));
       if (!product) return null;
 
       return {
-        id: product.id,
+        id: product.product_id,
         name: product.name,
-        price: product.price,
-        image: product.image,
+        price: parseFloat(product.price),
+        image: product.image_url,
         quantity: quantity,
-        seller: product.seller,
-        category: product.category,
+        category: product.category?.name || 'Unknown',
         unit: product.unit,
+        weight: parseFloat(product.weight),
+        discount: product.discount,
       };
     }).filter(Boolean) as CartItem[];
 
@@ -144,8 +146,8 @@ function ProductsPage() {
 
   // Calculate total price
   const cartTotal = Object.entries(cart).reduce((total, [productId, quantity]) => {
-    const product = products.find(p => p.id === parseInt(productId));
-    return total + (product ? product.price * quantity : 0);
+    const product = products.find(p => p.product_id === parseInt(productId));
+    return total + (product ? parseFloat(product.price) * quantity : 0);
   }, 0);
 
   return (
@@ -207,59 +209,56 @@ function ProductsPage() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <div key={product.id} className="bg-card border rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+          {filteredProducts?.map((product) => (
+            <div key={product.product_id} className="bg-card border rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="relative h-48">
                 <img
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-4 right-4 bg-fresh-primary text-fresh-primary-foreground px-2 py-1 rounded-full text-sm font-semibold">
-                  {product.harvestDate}
-                </div>
+                {product.discount > 0 && (
+                  <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                    -{product.discount}%
+                  </div>
+                )}
               </div>
 
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                    {product.category}
+                    {product.category?.name}
                   </span>
                   <div className="flex items-center">
                     <Star className="h-4 w-4 text-yellow-400 fill-current" />
                     <span className="ml-1 text-sm text-muted-foreground">{product.rating}</span>
+                    <span className="ml-1 text-xs text-muted-foreground">({product.review_count})</span>
                   </div>
                 </div>
 
                 <h3 className="text-xl font-bold text-foreground mb-1">{product.name}</h3>
-                <p className="text-muted-foreground text-sm mb-2">{product.seller}</p>
                 <p className="text-muted-foreground text-sm mb-3">{product.description}</p>
-
-                <div className="flex items-center mb-3">
-                  <MapPin className="h-4 w-4 text-fresh-primary mr-1" />
-                  <span className="text-sm text-muted-foreground">{product.location}</span>
-                </div>
 
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <span className="text-2xl font-bold text-fresh-primary">KSh {product.price}</span>
+                    <span className="text-2xl font-bold text-fresh-primary">KSh {parseFloat(product.price).toFixed(2)}</span>
                     <span className="text-sm text-muted-foreground ml-1">{product.unit}</span>
                   </div>
-                  <span className="text-sm text-muted-foreground">{product.quantity}</span>
+                  <span className="text-sm text-muted-foreground">{product.stock_quantity} in stock</span>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  {cart[product.id] > 0 ? (
+                  {cart[product.product_id] > 0 ? (
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={() => removeFromCart(product.id)}
+                        onClick={() => removeFromCart(product.product_id)}
                         className="w-8 h-8 bg-muted hover:bg-muted/80 rounded-full flex items-center justify-center transition-colors"
                       >
                         <Minus className="h-4 w-4" />
                       </button>
-                      <span className="font-semibold text-fresh-primary">{cart[product.id]}</span>
+                      <span className="font-semibold text-fresh-primary">{cart[product.product_id]}</span>
                       <button
-                        onClick={() => addToCart(product.id)}
+                        onClick={() => addToCart(product.product_id)}
                         className="w-8 h-8 bg-fresh-primary hover:bg-fresh-primary/90 text-fresh-primary-foreground rounded-full flex items-center justify-center transition-colors"
                       >
                         <Plus className="h-4 w-4" />
@@ -267,7 +266,7 @@ function ProductsPage() {
                     </div>
                   ) : (
                     <button
-                      onClick={() => addToCart(product.id)}
+                      onClick={() => addToCart(product.product_id)}
                       className="bg-fresh-secondary hover:bg-fresh-secondary/90 text-fresh-primary-foreground px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
                     >
                       <Plus className="h-4 w-4" />
@@ -280,23 +279,11 @@ function ProductsPage() {
           ))}
         </div>
 
-        {filteredProducts.length === 0 && (
+        {filteredProducts?.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg">No products found matching your criteria.</p>
           </div>
         )}
-
-        {/* AI Recommendations Section */}
-        <RecommendationsSection
-          products={products}
-          onProductClick={(product) => {
-            // Track interaction and potentially scroll to product or show details
-            console.log('Product clicked:', product.name);
-          }}
-          onAddToCart={(product) => {
-            addToCart(product.id);
-          }}
-        />
       </div>
     </div>
   );
