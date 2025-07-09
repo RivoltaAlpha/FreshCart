@@ -142,7 +142,6 @@ export const useStore = (): UseStoresReturn => {
     queryKey: ['stores'],
     queryFn: getAllStores,
   })
-  console.log('useStores data:', data)
 
   const fetchStores = useCallback(async () => {
     try {
