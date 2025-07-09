@@ -14,6 +14,7 @@ import {
   DollarSign,
   Database,
   Bell,
+  ShoppingBag,
 } from 'lucide-react'
 
 export interface MenuItem {
@@ -31,40 +32,46 @@ export const customerMenu: MenuItem[] = [
     path: '/',
   },
   {
-    id: 'products',
-    label: 'Products',
-    icon: Package,
-    path: '/products',
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: Home,
+    path: '/customer/dashboard',
+  },
+  {
+    id: 'shop',
+    label: 'Shop',
+    icon: ShoppingBag,
+    path: '/stores',
   },
   {
     id: 'cart',
     label: 'My Cart',
     icon: ShoppingCart,
-    path: '/cart',
+    path: '/customer/cart',
   },
   {
     id: 'orders',
     label: 'My Orders',
-    icon: Clock,
-    path: '/orders',
+    icon: Package,
+    path: '/customer/orders',
   },
   {
     id: 'wishlist',
     label: 'Wishlist',
     icon: Heart,
-    path: '/wishlist',
+    path: '/customer/wishlist',
   },
   {
     id: 'profile',
     label: 'Profile',
     icon: User,
-    path: '/profile',
+    path: '/customer/profile',
   },
   {
     id: 'settings',
     label: 'Settings',
     icon: Settings,
-    path: '/settings',
+    path: '/customer/settings',
   },
 ]
 
