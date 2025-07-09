@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useVerifyPayment } from '@/hooks/usePayments';
 import { orderActions } from '@/store/order';
 import { cartActions } from '@/store/cart';
+import { storeActions } from '@/store/store';
 
 type PaymentVerifySearch = {
     reference?: string
@@ -61,6 +62,8 @@ function RouteComponent() {
 
                     orderActions.clearCurrentOrder();
 
+                    storeActions.deleteStore();
+
                     // Clean up localStorage
                     localStorage.removeItem('payment_reference');
                     localStorage.removeItem('payment_order_id');
@@ -70,7 +73,7 @@ function RouteComponent() {
                     // Redirect to orders page after 3 seconds
                     setTimeout(() => {
                         navigate({ to: '/customer/my-orders' });
-                    }, 5000);
+                    }, 8000);
                 } else {
                     setVerificationStatus('failed');
                     toast.error('Payment verification failed. Please contact support.');
