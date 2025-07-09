@@ -22,6 +22,7 @@ import {
   Heart,
   Share2
 } from 'lucide-react';
+import { storeActions } from '@/store/store';
 
 export const Route = createFileRoute('/stores')({
   component: StoresPage,
@@ -35,7 +36,7 @@ function StoresPage() {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [sortBy, setSortBy] = useState<'name' | 'rating' | 'city' | 'town'>('rating');
+  const [sortBy, setSortBy] = useState<'name' | 'rating' | 'county' | 'town'>('rating');
 
   // Hooks
   const { stores, loading: storesLoading, error: storesError, refresh } = useStore();
@@ -57,7 +58,7 @@ function StoresPage() {
 
     let filtered = stores.filter(store =>
       store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      store.county.toLowerCase().includes(searchQuery.toLowerCase()) ||
       store.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -68,8 +69,8 @@ function StoresPage() {
           return a.name.localeCompare(b.name);
         case 'rating':
           return parseFloat(b.rating) - parseFloat(a.rating);
-        case 'city':
-          return a.city.localeCompare(b.city);
+        case 'county':
+          return a.county.localeCompare(b.county);
         case 'town':
           return a.town.localeCompare(b.town);
         default:
@@ -96,7 +97,7 @@ function StoresPage() {
           <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md">
             <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" />
           </div>
-          <div className="absolute bottom-4 left-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-sm">
+          <div className="absolute bottom-4 left-4 bg-black bg-opacounty-70 text-white px-3 py-1 rounded-full text-sm">
             {store.is_active ? 'Open' : 'Closed'}
           </div>
         </div>
@@ -121,7 +122,7 @@ function StoresPage() {
           <div className="space-y-2 mb-4">
             <div className="flex items-center text-fresh-secondary text-sm">
               <MapPin className="w-4 h-4 mr-2 text-[#00A7B3]" />
-              {store.city}
+              {store.county}
             </div>
             <div className="flex items-center text-fresh-secondary text-sm">
               <MapPin className="w-4 h-4 mr-2 text-[#00A7B3]" />
@@ -200,7 +201,7 @@ function StoresPage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center text-[#516E89] text-sm">
                 <MapPin className="w-4 h-4 mr-1 text-[#00A7B3]" />
-                {store.city}
+                {store.county}
               </div>
               <div className="flex items-center text-[#516E89] text-sm">
                 <Phone className="w-4 h-4 mr-1 text-[#00A7B3]" />
@@ -249,7 +250,7 @@ function StoresPage() {
             >
               ×
             </button>
-            <div className="absolute bottom-4 left-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-full">
+            <div className="absolute bottom-4 left-4 bg-black bg-opacounty-70 text-white px-4 py-2 rounded-full">
               {store.is_active ? 'Currently Open' : 'Currently Closed'}
             </div>
           </div>
@@ -284,8 +285,8 @@ function StoresPage() {
                   <MapPin className="w-6 h-6 text-[#00A7B3]" />
                 </div>
                 <div>
-                  <p className="font-semibold text-[#005A61]">city</p>
-                  <p className="text-[#516E89]">{store.city}</p>
+                  <p className="font-semibold text-[#005A61]">county</p>
+                  <p className="text-[#516E89]">{store.county}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -365,7 +366,8 @@ function StoresPage() {
               <button
                 onClick={() => {
                   onClose();
-                  navigate({ to: '/products', search: { store_id: store.store_id } });
+                  navigate({ to: '/store'});
+                  storeActions.saveStore(store);
                 }}
                 className="flex-1 bg-[#00A7B3] hover:bg-[#0096a2] text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
               >
@@ -408,28 +410,28 @@ function StoresPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <StoreIcon className="w-8 h-8" />
               </div>
               <div className="text-3xl font-bold mb-2">{stores?.length || 0}</div>
               <div className="text-blue-100">Partner Stores</div>
             </div>
             <div className="text-center">
-              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <TrendingUp className="w-8 h-8" />
               </div>
               <div className="text-3xl font-bold mb-2">4.7</div>
               <div className="text-blue-100">Average Rating</div>
             </div>
             <div className="text-center">
-              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Package className="w-8 h-8" />
               </div>
               <div className="text-3xl font-bold mb-2">1000+</div>
               <div className="text-blue-100">Products Available</div>
             </div>
             <div className="text-center">
-              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Users className="w-8 h-8" />
               </div>
               <div className="text-3xl font-bold mb-2">50K+</div>
@@ -447,7 +449,7 @@ function StoresPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#6A89A7] w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search stores by name, city, or type..."
+                placeholder="Search stores by name, county, or type..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent text-lg"
@@ -497,12 +499,12 @@ function StoresPage() {
                   </label>
                   <select
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as 'name' | 'rating' | 'city')}
+                    onChange={(e) => setSortBy(e.target.value as 'name' | 'rating' | 'county')}
                     className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                   >
                     <option value="rating">Highest Rated</option>
                     <option value="name">Name (A-Z)</option>
-                    <option value="city">city</option>
+                    <option value="county">county</option>
                   </select>
                 </div>
 
