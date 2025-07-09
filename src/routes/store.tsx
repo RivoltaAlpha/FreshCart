@@ -243,8 +243,16 @@ function StoreLayout() {
         <img
           src="./market-concept-with-vegetables.jpg"
           alt="Store Banner"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="w-full h-full object-cover"
         />
+        <div className="flex-col absolute inset-0 bg-black/50 w-full h-full object-cover">
+          <div className='flex items-center justify-center my-20 flex-col'>
+            <h1 className="text-5xl font-bold text-white">
+              {currentStore?.name} 🌱
+            </h1>
+            {/* <p className="text-fresh-primary">{currentStore?.county} County</p> */}
+          </div>
+        </div>
       </div>
 
       {/* Store Header */}
@@ -268,7 +276,7 @@ function StoreLayout() {
           <div className="flex items-center gap-4">
             <div className="relative">
               <ShoppingCart className="w-8 h-8 text-fresh-primary"
-              onClick={() => navigate({ to: '/customer/cart' })} />
+                onClick={() => navigate({ to: '/customer/cart' })} />
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {cartCount}
