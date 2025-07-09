@@ -39,9 +39,13 @@ const handleApiResponse = async (response: Response) => {
 };
 
 export const getAllCategories = async () => {
-  const token = getAuthToken();
-  if (!token) {
-    throw new Error('No token available in localStorage');
+  let token;
+  try {
+    token = getAuthToken();
+  } catch (error) {
+    // If no token, return empty array instead of throwing
+    console.warn('No authentication token found, returning empty categories array');
+    return [];
   }
 
   try {
@@ -55,7 +59,8 @@ export const getAllCategories = async () => {
     return response.json();
   } catch (error) {
     console.error('Error in getAllCategories:', error);
-    throw error;
+    // Return empty array instead of throwing to prevent UI crash
+    return [];
   }
 };
 
