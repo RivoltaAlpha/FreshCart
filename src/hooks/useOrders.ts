@@ -12,6 +12,7 @@ import {
   deleteOrder,
   approveOrder,
   shipOrder,
+  getUserOrders,
 } from '@/services/orderService'
 import {
   useMutation,
@@ -35,6 +36,14 @@ export const useOrder = (id: number) => {
     queryKey: ['orders', id],
     queryFn: () => getOrderById(id),
     enabled: !!id,
+  })
+}
+
+export const useCustomerOrders = (customerId: number) => {
+  return useQuery({
+    queryKey: ['customerOrders', customerId],
+    queryFn: () => getUserOrders(customerId),
+    enabled: !!customerId,
   })
 }
 
