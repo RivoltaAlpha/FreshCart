@@ -3,13 +3,21 @@ import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { ThemeToggle } from './ui/theme-toggle';
 
-
 interface HeaderProps {
   cartItems?: number;
 }
 
 export default function Header({ cartItems = 0 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const user = localStorage.getItem('auth')
+  const loggedIn = JSON.parse(user || '{}')?.isAuthenticated
+  const role = JSON.parse(user || '{}')?.user?.role || 'Customer';
+
+  const buttonStatus = {
+    login: !loggedIn,
+    logout: loggedIn
+  }
+
   const location = useLocation();
 
   const navigation = [
@@ -28,6 +36,21 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
     }
     return location.pathname.startsWith(path);
   };
+
+const dashboardRedirect = (role: string) => {
+  switch (role) {
+    case 'Admin':
+      return '/admin/dashboard';
+    case 'Customer':
+      return '/customer/dashboard';
+    case 'Store':
+      return '/store/dashboard';
+    case 'Driver':
+      return '/driver/dashboard';
+    default:
+      return '/login';
+  }
+};
 
   return (
     <header className="bg-navbar shadow-lg sticky top-0 z-50 border-b border-gray-200">
@@ -65,13 +88,19 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
                 to="/login"
                 className="bg-[#00A7B3] hover:bg-[#00939e] text-white px-4 py-2 rounded-full font-medium transition duration-300"
               >
-                Login
+                {buttonStatus.login ? 'Login' : 'Logout'}
               </Link>
               <Link
                 to="/register"
                 className="border border-[#00A7B3] hover:border-[#005A61] text-[#00A7B3] hover:text-[#005A61] px-4 py-2 rounded-full font-medium transition duration-300"
               >
                 Register
+              </Link>
+              <Link
+                to={dashboardRedirect(role)}
+                className="border border-[#00A7B3] hover:border-[#005A61] text-[#00A7B3] hover:text-[#005A61] px-4 py-2 rounded-full font-medium transition duration-300"
+              >
+                Dashboard
               </Link>
             </div>
 
@@ -128,7 +157,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
                   onClick={() => setIsMenuOpen(false)}
                   className="block w-full text-center bg-[#00A7B3] hover:bg-[#00939e] text-white px-4 py-2 rounded-full font-medium transition duration-300"
                 >
-                  Login
+                  {buttonStatus.login ? 'Login' : 'Logout'}
                 </Link>
                 <Link
                   to="/register"

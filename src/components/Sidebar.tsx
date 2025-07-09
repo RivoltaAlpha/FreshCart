@@ -1,15 +1,12 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { customerMenu, storeMenu, driverMenu, adminMenu } from '@/data/menus';
-import { ThemeToggle } from './ui/theme-toggle';
 import { useNavigate } from '@tanstack/react-router';
-
 const menus = {
   customer: customerMenu,
   store: storeMenu,
   driver: driverMenu,
   admin: adminMenu,
 };
-
 type UserType = 'customer' | 'store' | 'driver' | 'admin';
 
 export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onClose }: {
@@ -19,11 +16,8 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
   sidebarOpen: boolean;
   onClose: () => void;
 }) {
-  // const [userStatus, setUserStatus] = useState<'online' | 'offline'>('online');
-
 
   const navigation = useNavigate();
-
   const onClickNavigation = (path: string) => {
     navigation({ to: path });
     onPageChange(path);
@@ -44,7 +38,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
       </div>
 
 
-      <nav className="mt-6 text-white">
+      <nav className="text-white">
         {menus[userType]?.map((item) => {
           const Icon = item.icon;
           return (
@@ -53,7 +47,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
               onClick={() => {
                 onClickNavigation(item.path || item.id);
               }}
-              className={`w-full flex items-center px-6 py-8 text-left rounded-lg hover:bg-gray-900 ${currentPage === item.id ? 'bg-[#04b1bd] text-white hover:bg-[#7ec5d5]' : ''}`}
+              className={`w-full flex items-center px-6 py-4 text-left hover:bg-[#41729F] ${currentPage === item.id ? ' text-white hover:bg-[#6464DC]' : ''}`}
             >
               <Icon className={`w-5 h-5 ${sidebarOpen ? 'mr-3' : ''}`} />
               {sidebarOpen && <span>{item.label}</span>}
@@ -65,29 +59,18 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
       {/* Status Toggle - only show when sidebar is open */}
       {sidebarOpen && (
         <div className="p-4 border-t border-border">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium">Theme</span>
-            <ThemeToggle />
-          </div>
           <div className='flex items-center justify-between mb-4'>
             <button
               onClick={() => {
                 localStorage.removeItem('auth');
                 navigation({ to: '/login' });
               }}
-              className="w-full flex items-center py-2 text-left rounded-lg hover:bg-gray-900 "
+              className="w-full flex items-center py-2 text-left rounded-lg hover:bg-[#41729F] "
             >
               <span className=""> Logout</span>
             </button>
                 <ChevronLeft size={20} className="mr-2" />
           </div>
-          {/* Existing status toggle code */}
-          {/* <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Status</span>
-              <span className={`text-xs px-2 py-1 rounded-full ${userStatus === 'online' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100'}`}>
-                {userStatus === 'online' ? 'Online' : 'Offline'}
-              </span>
-            </div> */}
         </div>
       )}
     </aside>

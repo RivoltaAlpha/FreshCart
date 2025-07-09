@@ -53,7 +53,7 @@ export const customerMenu: MenuItem[] = [
     id: 'orders',
     label: 'My Orders',
     icon: Package,
-    path: '/customer/orders',
+    path: '/customer/my-orders',
   },
   {
     id: 'wishlist',
