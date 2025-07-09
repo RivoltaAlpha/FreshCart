@@ -2,13 +2,13 @@ import type { CreateProduct, Product } from '../types/types'
 const url = 'http://localhost:8000'
 
 const getAuthToken = (): string => {
-  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
-  const token = auth.tokens?.accessToken;
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}')
+  const token = auth.tokens?.accessToken
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error('No authentication token found')
   }
-  return token;
-};
+  return token
+}
 
 const handleApiResponse = async (response: Response) => {
   if (!response.ok) {
@@ -38,9 +38,15 @@ const handleApiResponse = async (response: Response) => {
 }
 
 export const getAllProducts = async () => {
-  const token = getAuthToken()
-  if (!token) {
-    throw new Error('No token available in localStorage')
+  let token
+  try {
+    token = getAuthToken()
+  } catch (error) {
+    // If no token, return empty array instead of throwing
+    console.warn(
+      'No authentication token found, returning empty products array',
+    )
+    return []
   }
 
   try {
@@ -52,10 +58,9 @@ export const getAllProducts = async () => {
     })
     await handleApiResponse(response)
     return response.json()
-
   } catch (error) {
-    console.error('Error in getAllUsers:', error)
-    throw error
+    console.error('Error in getAllProducts:', error)
+    return []
   }
 }
 
@@ -82,9 +87,7 @@ export const getProductById = async (
   }
 }
 
-export const getStoreProducts = async (
-  storeId: number,
-): Promise<Product[]> => {
+export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
   const token = getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')

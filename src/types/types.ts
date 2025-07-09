@@ -310,7 +310,11 @@ export interface BackendProduct {
   inventory: any[]
 }
 
-// types/product.types.ts
+export interface allProductsResponse {
+  products: BackendProduct[]
+  error: number
+  isLoading: number
+}
 
 export interface Product {
   product_id: number
