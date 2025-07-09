@@ -36,7 +36,9 @@ import { Route as StoreDashboardRouteImport } from './routes/store/dashboard'
 import { Route as StoreCreateProductRouteImport } from './routes/store/create-product'
 import { Route as StoreCreateInventoryRouteImport } from './routes/store/create-inventory'
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
+import { Route as CustomerWishlistRouteImport } from './routes/customer/wishlist'
 import { Route as CustomerSuccessRouteImport } from './routes/customer/success'
+import { Route as CustomerProfileRouteImport } from './routes/customer/profile'
 import { Route as CustomerPaymentVerifyRouteImport } from './routes/customer/payment-verify'
 import { Route as CustomerPaymentSuccessfulRouteImport } from './routes/customer/payment-successful'
 import { Route as CustomerOrderDetailsRouteImport } from './routes/customer/order-details'
@@ -196,9 +198,19 @@ const DriverDashboardRoute = DriverDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => DriverRoute,
 } as any)
+const CustomerWishlistRoute = CustomerWishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => CustomerRoute,
+} as any)
 const CustomerSuccessRoute = CustomerSuccessRouteImport.update({
   id: '/success',
   path: '/success',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerProfileRoute = CustomerProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => CustomerRoute,
 } as any)
 const CustomerPaymentVerifyRoute = CustomerPaymentVerifyRouteImport.update({
@@ -356,7 +368,9 @@ export interface FileRoutesByFullPath {
   '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
+  '/customer/profile': typeof CustomerProfileRoute
   '/customer/success': typeof CustomerSuccessRoute
+  '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -409,7 +423,9 @@ export interface FileRoutesByTo {
   '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
+  '/customer/profile': typeof CustomerProfileRoute
   '/customer/success': typeof CustomerSuccessRoute
+  '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -463,7 +479,9 @@ export interface FileRoutesById {
   '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
+  '/customer/profile': typeof CustomerProfileRoute
   '/customer/success': typeof CustomerSuccessRoute
+  '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -518,7 +536,9 @@ export interface FileRouteTypes {
     | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
+    | '/customer/profile'
     | '/customer/success'
+    | '/customer/wishlist'
     | '/driver/dashboard'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -571,7 +591,9 @@ export interface FileRouteTypes {
     | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
+    | '/customer/profile'
     | '/customer/success'
+    | '/customer/wishlist'
     | '/driver/dashboard'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -624,7 +646,9 @@ export interface FileRouteTypes {
     | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
+    | '/customer/profile'
     | '/customer/success'
+    | '/customer/wishlist'
     | '/driver/dashboard'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -848,11 +872,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverDashboardRouteImport
       parentRoute: typeof DriverRoute
     }
+    '/customer/wishlist': {
+      id: '/customer/wishlist'
+      path: '/wishlist'
+      fullPath: '/customer/wishlist'
+      preLoaderRoute: typeof CustomerWishlistRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/customer/success': {
       id: '/customer/success'
       path: '/success'
       fullPath: '/customer/success'
       preLoaderRoute: typeof CustomerSuccessRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/profile': {
+      id: '/customer/profile'
+      path: '/profile'
+      fullPath: '/customer/profile'
+      preLoaderRoute: typeof CustomerProfileRouteImport
       parentRoute: typeof CustomerRoute
     }
     '/customer/payment-verify': {
@@ -1066,7 +1104,9 @@ interface CustomerRouteChildren {
   CustomerOrderDetailsRoute: typeof CustomerOrderDetailsRoute
   CustomerPaymentSuccessfulRoute: typeof CustomerPaymentSuccessfulRoute
   CustomerPaymentVerifyRoute: typeof CustomerPaymentVerifyRoute
+  CustomerProfileRoute: typeof CustomerProfileRoute
   CustomerSuccessRoute: typeof CustomerSuccessRoute
+  CustomerWishlistRoute: typeof CustomerWishlistRoute
 }
 
 const CustomerRouteChildren: CustomerRouteChildren = {
@@ -1078,7 +1118,9 @@ const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerOrderDetailsRoute: CustomerOrderDetailsRoute,
   CustomerPaymentSuccessfulRoute: CustomerPaymentSuccessfulRoute,
   CustomerPaymentVerifyRoute: CustomerPaymentVerifyRoute,
+  CustomerProfileRoute: CustomerProfileRoute,
   CustomerSuccessRoute: CustomerSuccessRoute,
+  CustomerWishlistRoute: CustomerWishlistRoute,
 }
 
 const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
