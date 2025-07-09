@@ -1,4 +1,4 @@
-import type { ApproveOrder, Order, CreateOrder, ShipOrder } from "@/types/types";
+import type { ApproveOrder, Order, CreateOrder, ShipOrder, CustomerOrder } from "@/types/types";
 
 const url = 'http://localhost:8000';
 
@@ -139,4 +139,25 @@ export const shipOrder = async (order_id: number, shippingDetails: ShipOrder): P
     throw error;
   }
 }
+
+// user orders
+export const getUserOrders = async (userId: number): Promise<CustomerOrder[]> => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No token available in localStorage');
+  }
+
+  try {
+    const response = await fetch(`${url}/orders/user/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    await handleApiResponse(response);
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    throw error;
+  }
+};
 
