@@ -3,7 +3,7 @@ import type { Payment } from './payments'
 export interface User {
   user_id: string
   email: string
-  password: string 
+  password: string
   role: 'customer' | 'store' | 'driver' | 'admin'
   profile: {
     profile_id: string
@@ -500,4 +500,102 @@ export interface ShipOrder {
   driver_id: number
   status: OrderStatus
   estimated_delivery_time?: Date
+}
+
+export interface CustomerOrder {
+  order_id: number
+  order_number: string
+  user_id: number
+  store_id: number
+  delivery_fee: string
+  discount_amount: string
+  status: string
+  delivery_method: string
+  total_amount: string
+  estimated_delivery_time: number
+  created_at: string
+  delivery_address: string
+  tax_amount: string
+  driver_id: number | null
+  confirmed_at: string | null
+  prepared_at: string | null
+  picked_up_at: string | null
+  delivered_at: string | null
+  cancelled_at: string | null
+  cancellation_reason: string | null
+  review: string | null
+  rating: number | null
+  store: {
+    store_id: number
+    owner_id: number
+    name: string
+    description: string
+    city: string
+    town: string
+    country: string
+    contact_info: string
+    image_url: string
+    rating: string
+    total_reviews: number
+    store_code: string
+    delivery_fee: number
+    created_at: string
+    updated_at: string
+  }
+  payments: {
+    payment_id: number
+    payment_number: string
+    order_id: number
+    email: string
+    authorization_url: string
+    user_id: number
+    amount: string
+    currency: string
+    payment_method: string
+    gateway: string
+    payment_reference: string
+    status: string
+    transaction_id: string
+    gateway_reference: string | null
+    gateway_response: {
+      status: string
+      gateway_response: string
+      channel: string
+      fees: number
+      paid_at: string
+      receipt_number: string
+    }
+    failure_reason: string | null
+    refunded_amount: string
+    processed_at: string
+    failed_at: string | null
+    updated_at: string
+  }[]
+  driver: any
+  items: {
+    item_id: number
+    order_id: number
+    product_id: number
+    quantity: number
+    unit_price: string
+    total_price: string
+    created_at: string
+    product: {
+      product_id: number
+      category_id: number
+      name: string
+      description: string
+      price: string
+      stock_quantity: string
+      image_url: string
+      weight: string
+      unit: string
+      rating: string
+      review_count: number
+      discount: number
+      expiry_date: string | null
+      created_at: string
+      updatedAt: string
+    }
+  }[]
 }
