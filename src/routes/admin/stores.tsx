@@ -61,7 +61,7 @@ const columns = [
     ),
     footer: info => info.column.id,
   }),
-  columnHelper.accessor(row => `${row.city}, ${row.town}`, {
+  columnHelper.accessor(row => `${row.county}, ${row.town}`, {
     id: 'location',
     header: 'Location',
     cell: info => (
