@@ -49,11 +49,10 @@ function RouteComponent() {
     columnHelper.accessor(row => `${row.user?.profile?.first_name || ''} ${row.user?.profile?.last_name || ''}`, {
       header: 'User',
       cell: info => {
-        const user = info.getValue();
-        const userName = user ? user.first_name : '';
+        const userName = info.getValue() || 'N/A';
         return (
           <div className="max-w-xs truncate" title={userName}>
-            {info.getValue() || 'N/A'}
+            {userName}
           </div>
         );
       },
@@ -62,11 +61,10 @@ function RouteComponent() {
     columnHelper.accessor(row => `${row.store?.name || ''}`, {
       header: 'Store',
       cell: info => {
-        const store = info.getValue();
-        const storeName = store ? store.name : '';
+        const storeName = info.getValue() || '';
         return (
           <div className="max-w-xs truncate" title={storeName}>
-            {info.getValue() || 'N/A'}
+            {storeName || 'N/A'}
           </div>
         );
       },

@@ -8,7 +8,6 @@ export const Route = createFileRoute('/admin/dashboard')({
 })
 
 function RouteComponent() {
-  const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
   const stats = [
@@ -140,9 +139,6 @@ function RouteComponent() {
                 <button className="px-3 py-1 text-sm bg-teal-100 text-teal-600 rounded hover:bg-teal-200">
                   &lt;&lt;
                 </button>
-                <span className="text-sm text-gray-600">
-                  {currentPage} of 0
-                </span>
                 <button className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200">
                   &gt;&gt;
                 </button>
