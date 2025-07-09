@@ -68,4 +68,6 @@ export const authActions = {
     // authStore.setState(authStore.state);
     // localStorage.setItem('auth', JSON.stringify(authStore.state));
   }
+
 }
+

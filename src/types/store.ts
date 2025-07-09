@@ -56,6 +56,7 @@ export interface Store {
   email?: string;
   is_active?: boolean;
 }
+export type StoreDetails = Partial<Store>;
 
 export interface StoreProductsResponse {
   products: StoreProduct[]
