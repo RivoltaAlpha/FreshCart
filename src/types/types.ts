@@ -487,6 +487,7 @@ export interface OrderResponse {
   customer: CustomerResponse
   store: StoreResponse
   items: OrderItemResponse[]
+  user: User
 }
 
 export interface ApproveOrder {

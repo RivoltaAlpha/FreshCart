@@ -30,7 +30,7 @@ export interface Store {
   owner_id: number;
   name: string;
   description: string;
-  city: string;
+  county: string;
   town: string;
   country: string;
   contact_info: string;
@@ -92,4 +92,31 @@ export interface InventoryProducts {
   inventory_id: number
   stock_qty: number
   products: ProductItem[]
+}
+
+
+export interface CartItem{
+  product: {
+    product_id: number,
+    category_id: number,
+    name: string,
+    description: string,
+    price: number,
+    stock_quantity: number,
+    image_url: string,
+    weight: number,
+    unit: string,
+    rating: number,
+    review_count: number,
+    discount: number,
+    expiry_date: null,
+    category: {
+      category_id: number,
+      name: string,
+      description: string,
+      image_url: string,
+      created_at: string
+    }
+  },
+  quantity: 1
 }

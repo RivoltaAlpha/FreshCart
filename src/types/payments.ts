@@ -46,14 +46,12 @@ export interface CreatePayment {
   order_id: number;
   email: string;
   amount: number;
-  payment_method: PaymentMethod;
   callback_url?: string;
 }
 
 export interface UpdatePayment {
   amount?: number;
   status?: PaymentStatus;
-  payment_method?: PaymentMethod;
   gateway_response?: any;
   failed_at?: Date;
   failure_reason?: string;
