@@ -3,10 +3,18 @@ import { Store } from '@tanstack/store'
 
 const store: StoreDetails = {
   store_id: 0,
-  owner_id: 0,
+  owner: {
+    user_id: 0,
+    profile: {
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+    },
+    email: '',
+  },
   name: '',
-  city: '',
   town: '',
+  county: '',
   contact_info: '',
   store_code: '',
   delivery_fee: 0,
@@ -27,7 +35,7 @@ export const storeActions = {
       store_id: data.store_id,
       owner_id: data.owner_id,
       name: data.name,
-      city: data.city || '',
+      county: data.county || '',
       town: data.town || '',
       contact_info: data.contact_info,
       store_code: data.store_code || '',
