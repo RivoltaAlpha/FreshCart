@@ -86,7 +86,7 @@ function ProductsPage() {
       };
     }).filter(Boolean) as CartItem[];
 
-    localStorage.setItem('freshcart-cart-items', JSON.stringify(cartItems));
+    localStorage.setItem('wishlist', JSON.stringify(cartItems));
 
     // Also save cart totals for quick access
     const cartSummary = {
@@ -270,7 +270,7 @@ function ProductsPage() {
                       className="bg-fresh-secondary hover:bg-fresh-secondary/90 text-fresh-primary-foreground px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
                     >
                       <Plus className="h-4 w-4" />
-                      Add to Cart
+                      Wish List
                     </button>
                   )}
                 </div>
