@@ -366,7 +366,7 @@ function StoresPage() {
               <button
                 onClick={() => {
                   onClose();
-                  navigate({ to: '/store'});
+                  navigate({ to: '/shop-store'});
                   storeActions.saveStore(store);
                 }}
                 className="flex-1 bg-[#00A7B3] hover:bg-[#0096a2] text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"

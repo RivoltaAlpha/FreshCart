@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as StoreRouteImport } from './routes/store'
+import { Route as ShopStoreRouteImport } from './routes/shop-store'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RecipesRouteImport } from './routes/recipes'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -71,6 +72,11 @@ const StoresRoute = StoresRouteImport.update({
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopStoreRoute = ShopStoreRouteImport.update({
+  id: '/shop-store',
+  path: '/shop-store',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -343,6 +349,7 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
+  '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -398,6 +405,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
+  '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -454,6 +462,7 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
+  '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -511,6 +520,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
+    | '/shop-store'
     | '/store'
     | '/stores'
     | '/admin/analytics'
@@ -566,6 +576,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
+    | '/shop-store'
     | '/store'
     | '/stores'
     | '/admin/analytics'
@@ -621,6 +632,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
+    | '/shop-store'
     | '/store'
     | '/stores'
     | '/admin/analytics'
@@ -677,6 +689,7 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   RecipesRoute: typeof RecipesRoute
   RegisterRoute: typeof RegisterRoute
+  ShopStoreRoute: typeof ShopStoreRoute
   StoreRoute: typeof StoreRouteWithChildren
   StoresRoute: typeof StoresRoute
 }
@@ -695,6 +708,13 @@ declare module '@tanstack/react-router' {
       path: '/store'
       fullPath: '/store'
       preLoaderRoute: typeof StoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop-store': {
+      id: '/shop-store'
+      path: '/shop-store'
+      fullPath: '/shop-store'
+      preLoaderRoute: typeof ShopStoreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1183,6 +1203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   RecipesRoute: RecipesRoute,
   RegisterRoute: RegisterRoute,
+  ShopStoreRoute: ShopStoreRoute,
   StoreRoute: StoreRouteWithChildren,
   StoresRoute: StoresRoute,
 }
