@@ -188,7 +188,7 @@ export default function Categories({
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className={`grid ${gridCols} gap-4 ${className}`}>
                 {/* All option if enabled */}
                 {showAllOption && renderCategoryCard({
