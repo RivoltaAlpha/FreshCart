@@ -161,3 +161,24 @@ export const getUserOrders = async (userId: number): Promise<CustomerOrder[]> =>
   }
 };
 
+// get store orders
+export const getStoreOrders = async (storeId: number): Promise<CustomerOrder[]> => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No token available in localStorage');
+  }
+
+  try {
+    const response = await fetch(`${url}/orders/store/${storeId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    await handleApiResponse(response);
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching store orders:', error);
+    throw error;
+  }
+};
+
