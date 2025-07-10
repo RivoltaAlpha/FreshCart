@@ -424,6 +424,8 @@ function RouteComponent() {
                 className="w-full bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white py-4 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-2 mt-6"
               >
                 <CreditCard className="h-5 w-5" />
+                <span> </span>
+                
                 Proceed to Checkout
               </button>
 
