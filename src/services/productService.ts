@@ -82,7 +82,7 @@ export const getProductById = async (
     await handleApiResponse(response)
     return response.json()
   } catch (error) {
-    console.error('Error in getAllUsers:', error)
+    console.error('Error in getAllproducts:', error)
     throw error
   }
 }
@@ -103,14 +103,14 @@ export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
     await handleApiResponse(response)
     return response.json()
   } catch (error) {
-    console.error('Error in getAllUsers:', error)
+    console.error('Error in getAllproducts:', error)
     throw error
   }
 }
 
 export const createProduct = async (productData: CreateProduct) => {
   const token = getAuthToken()
-  const response = await fetch(`${url}/users/create`, {
+  const response = await fetch(`${url}/products/create`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
@@ -127,7 +127,7 @@ export const updateProduct = async (
   productData: CreateProduct,
 ) => {
   const token = getAuthToken()
-  const response = await fetch(`{url}/users/${product_id}`, {
+  const response = await fetch(`{url}/products/${product_id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ export const updateProduct = async (
 
 export const deleteProduct = async (product_id: number) => {
   const token = getAuthToken()
-  const response = await fetch(`{url}/users/delete/${product_id}`, {
+  const response = await fetch(`{url}/products/delete/${product_id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,
