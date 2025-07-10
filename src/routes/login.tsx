@@ -35,7 +35,6 @@ function LoginPage() {
 
     try {
       const response = await loginMutation.mutateAsync(formData);
-      console.log("Login response:", response);
       toast.success("Login successful!");
 
       let userRole = response.user?.role || response.data?.user?.role;
