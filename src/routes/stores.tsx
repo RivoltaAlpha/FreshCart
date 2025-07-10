@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useStore, useStoreProducts } from '../hooks/useStore';
+import { useStoreProducts, useStores } from '../hooks/useStore';
 import type { Store } from '../types/store';
 import {
   MapPin,
@@ -39,8 +39,8 @@ function StoresPage() {
   const [sortBy, setSortBy] = useState<'name' | 'rating' | 'county' | 'town'>('rating');
 
   // Hooks
-  const { stores, loading: storesLoading, error: storesError, refresh } = useStore();
-  console.log('stores:', stores);
+  const { stores, loading: storesLoading, error: storesError, refresh } = useStores();
+  // console.log('stores:', stores);
   const {
     products: selectedStoreProducts = [],
     loading: productsLoading
@@ -83,7 +83,7 @@ function StoresPage() {
 
   const StoreCard: React.FC<{ store: Store }> = ({ store }) => {
     return (
-      <div className="bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+      <div className="bg-card rounded-lg shadow-md hover:shadow-2xl transition-all duration-200 overflow-hidden cursor-pointer"
         onClick={() => setSelectedStore(store)}>
         <div className="relative">
           <img

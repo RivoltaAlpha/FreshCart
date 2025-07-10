@@ -66,9 +66,19 @@ export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
       },
     })
     await handleApiResponse(response)
-    return response.json()
+    const data = await response.json()
+
+    // Ensure we always return an array
+    if (Array.isArray(data)) {
+      return data
+    } else if (data && data.products && Array.isArray(data.products)) {
+      return data.products
+    } else {
+      console.warn('API returned non-array data for store products:', data)
+      return []
+    }
   } catch (error) {
-    console.error('Error in getAllUsers:', error)
+    console.error('Error in getStoreProducts:', error)
     throw error
   }
 }

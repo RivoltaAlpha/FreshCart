@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Search, Heart, ChevronDown, ShoppingCart, LocateFixedIcon } from 'lucide-react'
 import { useStoreProducts } from '@/hooks/useProducts'
-import { useStore } from '@/hooks/useStore'
+import { useStores } from '@/hooks/useStore'
 import type { Product } from '@/types/types'
 import { storesStore, storeActions } from '@/store/store'
 import { cartActions, cartStore } from '@/store/cart'
@@ -22,7 +22,7 @@ function StoreLayout() {
   const store_id = storesStore.state.store_id
   const [dietaryOpen, setDietaryOpen] = useState(true)
 
-  const { stores } = useStore()
+  const { stores } = useStores()
   const {
     data: products,
     isLoading,
@@ -89,14 +89,22 @@ function StoreLayout() {
   }
 
   // Filter and sort products
-  const filteredProducts =
-    products
-      ?.filter((product) => {
+  const filteredProducts = useMemo(() => {
+    // Ensure products is always an array
+    const productsArray = Array.isArray(products) ? products : []
+
+    return productsArray
+      .filter((product) => {
+        // Add null safety checks for product properties
+        if (!product || !product.name || !product.category?.name) {
+          return false
+        }
+
         const matchesSearch =
           product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.description
+          (product.description && product.description
             .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
+            .includes(searchQuery.toLowerCase())) ||
           product.category.name
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
@@ -109,7 +117,7 @@ function StoreLayout() {
 
         return matchesSearch && matchesCategory
       })
-      ?.sort((a, b) => {
+      .sort((a, b) => {
         switch (sortBy) {
           case 'price':
             const priceA =
@@ -133,7 +141,8 @@ function StoreLayout() {
           default:
             return a.name.localeCompare(b.name)
         }
-      }) || []
+      })
+  }, [products, searchQuery, selectedCategories, sortBy])
 
   // Add to cart function
   const handleAddToCart = (product: Product) => {
@@ -154,7 +163,7 @@ function StoreLayout() {
         <button className="absolute top-2 right-2 p-2 bg-card rounded-full shadow hover:bg-gray-100">
           <Heart size={16} className="text-fresh-primary" />
         </button>
-        {product.stock_quantity && parseInt(product.stock_quantity) < 10 && (
+        {product.stock_quantity && parseInt(String(product.stock_quantity)) < 10 && (
           <div className="absolute bottom-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
             Low Stock
           </div>
@@ -177,7 +186,7 @@ function StoreLayout() {
         </div>
         <div className="font-bold text-fresh-secondary">
           {typeof product.price === 'string' &&
-            (product.price.includes('Box') || product.price.includes('Pack')) ? (
+            ((product.price as string)?.includes('Box') || (product.price as string)?.includes('Pack')) ? (
             product.price
           ) : (
             <>KSh {product.price}</>
@@ -187,7 +196,7 @@ function StoreLayout() {
           onClick={() => handleAddToCart(product)}
           className="bg-fresh-primary hover:bg-fresh-secondary/90 text-fresh-primary-foreground px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
           disabled={
-            !product.stock_quantity || parseInt(product.stock_quantity) === 0
+            !product.stock_quantity || parseInt(String(product.stock_quantity)) === 0
           }
         >
           <ShoppingCart size={16} />
@@ -313,7 +322,7 @@ function StoreLayout() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-8xl px-4 py-6">
+      <div className="max-w-8xl mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6 bg-search justify-center">
           {/* Sidebar */}
           <div className="hidden lg:block w-64 space-y-6">
@@ -455,7 +464,7 @@ function StoreLayout() {
                 </div>
               ) : error ? (
                 <div className="col-span-full text-center py-8 text-red-500">
-                  Error loading products: {error.message}
+                  Error loading products: {error?.message || 'Unknown error occurred'}
                 </div>
               ) : filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (

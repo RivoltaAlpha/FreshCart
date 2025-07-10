@@ -1,7 +1,8 @@
+import type { UseQueryResult } from '@tanstack/react-query'
 import { useState, useEffect, useCallback } from 'react'
-import type { Store } from '../types/store'
+import type { allStoreProductsResponse, Store } from '../types/store'
 import type { Product } from '../types/types'
-import { getAllStores, getStoreProducts } from '@/services/storeService'
+import { getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreProducts } from '@/services/storeService'
 import { useQuery } from '@tanstack/react-query'
 
 interface UseStoreProductsParams {
@@ -131,7 +132,7 @@ interface UseStoresReturn {
   refresh: () => Promise<void>
 }
 
-export const useStore = (): UseStoresReturn => {
+export const useStores = (): UseStoresReturn => {
   const {
     data,
     isLoading,
@@ -191,4 +192,22 @@ export const useStore = (): UseStoresReturn => {
     fetchStores,
     refresh,
   }
+}
+
+export const useStore = (owner_id: number): UseQueryResult<Store, Error> => {
+  return useQuery<Store, Error>({
+    queryKey: ['store', owner_id],
+    queryFn: () => {
+      return getStoreByOwnerId(owner_id)
+    },
+  })
+}
+
+export const useAllStoreProducts = (storeId: number): UseQueryResult<allStoreProductsResponse> => {
+  return useQuery<allStoreProductsResponse>({
+    queryKey: ['storeProducts', storeId],
+    queryFn: () => {
+      return getallStoreProducts(storeId)
+    },
+  })
 }
