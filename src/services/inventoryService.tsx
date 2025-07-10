@@ -146,3 +146,28 @@ export const getInventoryProducts = async (inventory_id: number): Promise<Invent
 //   await handleApiResponse(response);
 //   return response.json();
 // };
+
+export const getStoreInventories = async (store_id: number): Promise<InventoryProducts[]> => {
+  const token = getAuthToken();
+  const response = await fetch(`${url}/inventories/store/${store_id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  await handleApiResponse(response);
+  return response.json();
+};
+
+// Add product to inventory
+export const addProductToInventory = async (inventory_id: number, product_id: number): Promise<any> => {
+  const token = getAuthToken();
+  const response = await fetch(`${url}/inventories/${inventory_id}/products/${product_id}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  await handleApiResponse(response);
+  return response.json();
+};
