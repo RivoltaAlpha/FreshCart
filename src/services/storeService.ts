@@ -1,5 +1,7 @@
-import type { Product } from '@/types/types';
+import type { Product } from '@/types/types'
 import type {
+  allStoreProductsResponse,
+  Store,
   StoreProductsResponse,
   StoresResponse,
 } from '../types/store'
@@ -7,13 +9,13 @@ import type {
 const API_BASE_URL = 'http://localhost:8000'
 
 const getAuthToken = (): string => {
-  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
-  const token = auth.tokens?.accessToken;
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}')
+  const token = auth.tokens?.accessToken
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error('No authentication token found')
   }
-  return token;
-};
+  return token
+}
 
 const handleApiResponse = async (response: Response) => {
   if (!response.ok) {
@@ -50,9 +52,7 @@ export const getAllStores = async (): Promise<StoresResponse> => {
 }
 
 // Fetch products for a specific store
-export const getStoreProducts = async (
-  storeId: number,
-): Promise<Product[]> => {
+export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
   const token = getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
@@ -69,6 +69,32 @@ export const getStoreProducts = async (
     return response.json()
   } catch (error) {
     console.error('Error in getAllUsers:', error)
+    throw error
+  }
+}
+
+export const getallStoreProducts = async (
+  storeId: number,
+): Promise<allStoreProductsResponse> => {
+  const token = getAuthToken()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    await handleApiResponse(response)
+    const data = await response.json()
+
+    // Normalize the response to match the expected type
+    return { products: data }
+  } catch (error) {
+    console.error('Error in getallStoreProducts:', error)
     throw error
   }
 }
@@ -93,4 +119,26 @@ export const searchStoreProducts = async (
   )
   await handleApiResponse(response)
   return response.json()
+}
+
+// Fetch products for a specific store
+export const getStoreByOwnerId = async (owner_id: number): Promise<Store> => {
+  const token = getAuthToken()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/stores/owner/${owner_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error in getAllUsers:', error)
+    throw error
+  }
 }
