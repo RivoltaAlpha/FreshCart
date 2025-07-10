@@ -1,4 +1,4 @@
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { ThemeToggle } from './ui/theme-toggle';
@@ -16,6 +16,11 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
   const buttonStatus = {
     login: !loggedIn,
     logout: loggedIn
+  }
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem('auth');
+    navigate({ to: '/login' });
   }
 
   const location = useLocation();
@@ -87,6 +92,7 @@ const dashboardRedirect = (role: string) => {
               <Link
                 to="/login"
                 className="bg-[#00A7B3] hover:bg-[#00939e] text-white px-4 py-2 rounded-full font-medium transition duration-300"
+                onClick={buttonStatus.logout ? logout : undefined}
               >
                 {buttonStatus.login ? 'Login' : 'Logout'}
               </Link>
