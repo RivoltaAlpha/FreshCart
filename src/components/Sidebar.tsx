@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, HomeIcon } from 'lucide-react';
 import { customerMenu, storeMenu, driverMenu, adminMenu } from '@/data/menus';
 import { useNavigate } from '@tanstack/react-router';
 const menus = {
@@ -31,7 +31,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
         </h1>
         <button
           onClick={onClose}
-          className="p-1 rounded-lg hover:bg-gray-100"
+          className="p-1 hover:bg-gray-100"
         >
           {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
         </button>
@@ -59,17 +59,30 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
       {/* Status Toggle - only show when sidebar is open */}
       {sidebarOpen && (
         <div className="p-4 border-t border-border">
-          <div className='flex items-center justify-between mb-4'>
+          <div className='px-2 flex items-center justify-between mb-4 hover:bg-[#41729F]'>
             <button
               onClick={() => {
                 localStorage.removeItem('auth');
                 navigation({ to: '/login' });
               }}
-              className="w-full flex items-center py-2 text-left rounded-lg hover:bg-[#41729F] "
+              className="w-full flex items-center py-2 text-left  "
             >
               <span className=""> Logout</span>
             </button>
-                <ChevronLeft size={20} className="mr-2" />
+            <ChevronLeft size={20} className="mr-2" />
+          </div>
+          <div className="">
+            <div className=' px-4 flex items-center justify-between mb-4 align-top hover:bg-[#41729F]'>
+              <button
+                onClick={() => {
+                  navigation({ to: '/' });
+                }}
+                className="w-full flex items-center py-2 text-left "
+              >
+                <span className=""> Home</span>
+              </button>
+              <HomeIcon className="w-5 h-5 mr-3" />
+            </div>
           </div>
         </div>
       )}

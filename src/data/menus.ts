@@ -26,12 +26,6 @@ export interface MenuItem {
 
 export const customerMenu: MenuItem[] = [
   {
-    id: 'home',
-    label: 'Home',
-    icon: Home,
-    path: '/',
-  },
-  {
     id: 'dashboard',
     label: 'Dashboard',
     icon: Home,
@@ -39,7 +33,7 @@ export const customerMenu: MenuItem[] = [
   },
   {
     id: 'shop',
-    label: 'Shop',
+    label: 'Shop Products',
     icon: ShoppingBag,
     path: '/stores',
   },
@@ -66,13 +60,7 @@ export const customerMenu: MenuItem[] = [
     label: 'Profile',
     icon: User,
     path: '/customer/profile',
-  },
-  {
-    id: 'settings',
-    label: 'Settings',
-    icon: Settings,
-    path: '/customer/settings',
-  },
+  }
 ]
 
 export const storeMenu: MenuItem[] = [
@@ -92,25 +80,19 @@ export const storeMenu: MenuItem[] = [
     id: 'orders',
     label: 'Orders',
     icon: ShoppingCart,
-    path: '/store/orders',
+    path: '/store/manage-orders',
+  },
+  {
+    id: 'inventory',
+    label: 'Inventory',
+    icon: Database,
+    path: '/store/inventories',
   },
   {
     id: 'analytics',
     label: 'Analytics',
     icon: BarChart3,
     path: '/store/analytics',
-  },
-  {
-    id: 'customers',
-    label: 'Customers',
-    icon: Users,
-    path: '/store/customers',
-  },
-  {
-    id: 'inventory',
-    label: 'Inventory',
-    icon: Database,
-    path: '/store/inventory',
   },
   {
     id: 'store-settings',
