@@ -1,3 +1,5 @@
+import type { Part } from '@google/generative-ai'
+
 export interface Category {
   category_id: number
   name: string
@@ -26,37 +28,37 @@ export interface StoreProduct {
 }
 
 export interface Store {
-  store_id: number;
-  owner_id: number;
-  name: string;
-  description: string;
-  county: string;
-  town: string;
-  country: string;
-  contact_info: string;
-  image_url: string;
-  rating: string;
-  total_reviews: number;
-  store_code: string;
-  delivery_fee: number;
-  created_at: string;
-  updated_at: string;
+  store_id: number
+  owner_id: number
+  name: string
+  description: string
+  county: string
+  town: string
+  country: string
+  contact_info: string
+  image_url: string
+  rating: string
+  total_reviews: number
+  store_code: string
+  delivery_fee: number
+  created_at: string
+  updated_at: string
   owner: {
-    user_id: number;
-    email: string;
+    user_id: number
+    email: string
     profile: {
-      first_name: string;
-      last_name: string;
-      phone_number: string;
-    };
-  };
+      first_name: string
+      last_name: string
+      phone_number: string
+    }
+  }
   // Add computed properties for compatibility
-  location?: string;
-  phone?: string;
-  email?: string;
-  is_active?: boolean;
+  location?: string
+  phone?: string
+  email?: string
+  is_active?: boolean
 }
-export type StoreDetails = Partial<Store>;
+export type StoreDetails = Partial<Store>
 
 export interface StoreProductsResponse {
   products: StoreProduct[]
@@ -85,38 +87,66 @@ export interface ProductItem {
   expiry_date: string | null
   created_at: string
   updated_at: string
-  category: Category
+  category?: Partial<Category>
 }
 
 export interface InventoryProducts {
+  store_id: number
   inventory_id: number
   stock_qty: number
-  products: ProductItem[]
+  reorder_level: number
+  max_stock_level: number
+  cost_price: string | number
+  last_restocked: string
+  created_at?: string
+  updated_at?: string
+  products: Partial<ProductItem>[]
 }
 
-
-export interface CartItem{
+export interface CartItem {
   product: {
-    product_id: number,
-    category_id: number,
-    name: string,
-    description: string,
-    price: number,
-    stock_quantity: number,
-    image_url: string,
-    weight: number,
-    unit: string,
-    rating: number,
-    review_count: number,
-    discount: number,
-    expiry_date: null,
+    product_id: number
+    category_id: number
+    name: string
+    description: string
+    price: number
+    stock_quantity: number
+    image_url: string
+    weight: number
+    unit: string
+    rating: number
+    review_count: number
+    discount: number
+    expiry_date: null
     category: {
-      category_id: number,
-      name: string,
-      description: string,
-      image_url: string,
+      category_id: number
+      name: string
+      description: string
+      image_url: string
       created_at: string
     }
-  },
+  }
   quantity: 1
+}
+
+export interface ProductInStore {
+  product_id: number
+  category_id: number
+  name: string
+  description: string
+  price: number
+  stock_quantity: number
+  image_url: string
+  weight: number
+  unit: string
+  rating: number
+  review_count: number
+  discount: number
+  expiry_date: string | null
+  created_at: string
+  updatedAt: string
+}
+
+export interface allStoreProductsResponse {
+  products: ProductInStore[]
 }

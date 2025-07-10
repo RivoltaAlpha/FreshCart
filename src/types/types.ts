@@ -30,15 +30,9 @@ export enum UserRole {
   Admin = 'Admin',
 }
 
-export interface CreateUser {
-  email: string
-  password: string // hashed
-  role: 'Customer' | 'Store' | 'Driver' | 'Admin'
-  first_name: string
-  last_name: string
-  phone?: string // optional for some roles
-  addresses?: Address[] // optional for some roles
-}
+export type StoreDetails = Partial<Store>
+
+export type CreateUser = Partial<User>
 
 export interface LoginType {
   email: string
@@ -289,8 +283,8 @@ export interface BackendProduct {
   category_id: number
   name: string
   description: string
-  price: string
-  stock_quantity: string
+  price: number
+  stock_quantity:  number  
   image_url: string
   weight: string
   unit: string
@@ -321,8 +315,8 @@ export interface Product {
   category_id: number
   name: string
   description: string
-  price: string
-  stock_quantity: string
+  price: number
+  stock_quantity:  number  
   image_url: string
   weight: string
   unit: string
@@ -331,7 +325,7 @@ export interface Product {
   discount: number
   expiry_date: string | null
   created_at: string
-  updatedAt: string
+  updated_at: string
   category: {
     category_id: number
     name: string
@@ -353,8 +347,8 @@ export interface CreateProduct {
   store_id: number
   description: string
   price: number
-  stock_quantity: number
-  category_id: number
+  stock_quantity:  number
+    category_id: number
   image_url?: string
   weight?: number
   unit?: string
@@ -363,9 +357,6 @@ export interface CreateProduct {
   discount?: number
   initial_quantity?: number
   reorder_level?: number
-  cost_price?: number
-  created_at?: Date
-  updated_at?: Date
 }
 
 export interface UpdateProduct {
@@ -437,6 +428,7 @@ export interface OrderItem {
 
 export interface CreateOrder {
   store_id: number
+  status: OrderStatus
   items: OrderItem[]
   delivery_address: string
   delivery_instructions?: string
@@ -445,13 +437,11 @@ export interface CreateOrder {
   delivery_phone?: string
   delivery_method?: DeliveryMethod
   estimated_delivery_time?: number
-}
-
-export interface UpdateOrderStatus {
-  status: OrderStatus
   driver_id?: number
   actual_delivery_time?: Date
 }
+
+export type UpdateOrderStatus = Partial<CreateOrder>;
 
 export interface RateOrder {
   rating: number
@@ -589,8 +579,8 @@ export interface CustomerOrder {
       category_id: number
       name: string
       description: string
-      price: string
-      stock_quantity: string
+      price: number
+      stock_quantity:  number      
       image_url: string
       weight: string
       unit: string
