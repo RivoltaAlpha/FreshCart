@@ -10,8 +10,6 @@ export const Route = createFileRoute('/products')({
   component: ProductsPage,
 })
 
-
-
 // Updated types to match backend response
 type Cart = Record<number, number>;
 type CartItem = {
@@ -28,7 +26,6 @@ type CartItem = {
 
 function ProductsPage() {
   const { data: productsData, isLoading, error } = useProducts();
-  console.log('Products hook data:', { productsData, isLoading, error });
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
