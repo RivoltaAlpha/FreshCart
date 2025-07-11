@@ -84,7 +84,6 @@ function RouteComponent() {
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-    // Add folder for organization
     formData.append('folder', 'freshcart/products');
 
     try {
