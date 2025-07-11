@@ -47,7 +47,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, onCl
               onClick={() => {
                 onClickNavigation(item.path || item.id);
               }}
-              className={`w-full flex items-center px-6 py-4 text-left hover:bg-[#41729F] ${currentPage === item.id ? ' text-white hover:bg-[#6464DC]' : ''}`}
+              className={`w-full flex items-center px-6 py-4 text-left hover:bg-[#41729F] ${currentPage === item.id ? ' text-white border-l-4 border-[#189AB4]' : ''}`}
             >
               <Icon className={`w-5 h-5 ${sidebarOpen ? 'mr-3' : ''}`} />
               {sidebarOpen && <span>{item.label}</span>}

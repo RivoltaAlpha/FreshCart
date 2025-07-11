@@ -42,30 +42,30 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
     return location.pathname.startsWith(path);
   };
 
-const dashboardRedirect = (role: string) => {
-  switch (role) {
-    case 'Admin':
-      return '/admin/dashboard';
-    case 'Customer':
-      return '/customer/dashboard';
-    case 'Store':
-      return '/store/dashboard';
-    case 'Driver':
-      return '/driver/dashboard';
-    default:
-      return '/login';
-  }
-};
+  const dashboardRedirect = (role: string) => {
+    switch (role) {
+      case 'Admin':
+        return '/admin/dashboard';
+      case 'Customer':
+        return '/customer/dashboard';
+      case 'Store':
+        return '/store/dashboard';
+      case 'Driver':
+        return '/driver/dashboard';
+      default:
+        return '/login';
+    }
+  };
 
   return (
-    <header className="bg-navbar shadow-lg sticky top-0 z-50 border-b border-gray-200">
+    <header className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center hover:opacity-80 transition-opacity">
-              <ShoppingCart className="h-8 w-8 text-[#005A61]" />
-              <span className="ml-2 text-2xl font-bold text-[#005A61]">FreshCart</span>
+              <ShoppingCart className="h-8 w-8 text-[#05445E]" />
+              <span className="ml-2 text-2xl font-bold text-[#05445E]">FreshCart</span>
             </Link>
           </div>
 
@@ -76,8 +76,8 @@ const dashboardRedirect = (role: string) => {
                 key={item.path}
                 to={item.path}
                 className={`px-3 py-2 text-sm font-medium transition-colors relative ${isActiveRoute(item.path)
-                  ? 'text-[#00A7B3] border-b-2 border-[#00A7B3]'
-                  : 'text-[#516E89] hover:text-[#005A61]'
+                  ? 'text-[#189AB4] border-b-2 border-[#189AB4]'
+                  : 'text-gray-600 hover:text-[#05445E]'
                   }`}
               >
                 {item.name}
@@ -91,20 +91,20 @@ const dashboardRedirect = (role: string) => {
             <div className="hidden md:flex items-center space-x-3">
               <Link
                 to="/login"
-                className="bg-[#00A7B3] hover:bg-[#00939e] text-white px-4 py-2 rounded-full font-medium transition duration-300"
+                className="bg-[#189AB4] hover:bg-[#05445E] text-white px-4 py-2 rounded-full font-medium transition duration-300"
                 onClick={buttonStatus.logout ? logout : undefined}
               >
                 {buttonStatus.login ? 'Login' : 'Logout'}
               </Link>
               <Link
                 to="/register"
-                className="border border-[#00A7B3] hover:border-[#005A61] text-[#00A7B3] hover:text-[#005A61] px-4 py-2 rounded-full font-medium transition duration-300"
+                className="border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition duration-300"
               >
                 Register
               </Link>
               <Link
                 to={dashboardRedirect(role)}
-                className="border border-[#00A7B3] hover:border-[#005A61] text-[#00A7B3] hover:text-[#005A61] px-4 py-2 rounded-full font-medium transition duration-300"
+                className="border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition duration-300"
               >
                 Dashboard
               </Link>
@@ -116,11 +116,11 @@ const dashboardRedirect = (role: string) => {
             {/* Cart Button */}
             <Link
               to="/cart"
-              className="relative p-2 text-[#516E89] hover:text-[#005A61] transition-colors"
+              className="relative p-2 text-gray-600 hover:text-[#05445E] transition-colors"
             >
               <ShoppingCart className="h-6 w-6" />
               {cartItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#00A7B3] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-[#189AB4] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartItems}
                 </span>
               )}
@@ -128,7 +128,7 @@ const dashboardRedirect = (role: string) => {
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2 text-[#516E89] hover:text-[#005A61]"
+              className="md:hidden p-2 text-gray-600 hover:text-[#05445E]"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle mobile menu"
             >
@@ -148,8 +148,8 @@ const dashboardRedirect = (role: string) => {
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`block px-3 py-2 text-base font-medium w-full text-left transition-colors rounded-md ${isActiveRoute(item.path)
-                    ? 'text-[#00A7B3] bg-[#00A7B3]/10'
-                    : 'text-[#516E89] hover:text-[#005A61] hover:bg-gray-100'
+                    ? 'text-[#189AB4] bg-[#75E6DA]/10'
+                    : 'text-gray-600 hover:text-[#05445E] hover:bg-gray-100'
                     }`}
                 >
                   {item.name}
@@ -161,14 +161,14 @@ const dashboardRedirect = (role: string) => {
                 <Link
                   to="/login"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-center bg-[#00A7B3] hover:bg-[#00939e] text-white px-4 py-2 rounded-full font-medium transition duration-300"
+                  className="block w-full text-center bg-[#189AB4] hover:bg-[#05445E] text-white px-4 py-2 rounded-full font-medium transition duration-300"
                 >
                   {buttonStatus.login ? 'Login' : 'Logout'}
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-center border border-[#00A7B3] hover:border-[#005A61] text-[#00A7B3] hover:text-[#005A61] px-4 py-2 rounded-full font-medium transition duration-300"
+                  className="block w-full text-center border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition duration-300"
                 >
                   Register
                 </Link>
