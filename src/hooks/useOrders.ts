@@ -3,6 +3,7 @@ import type {
   OrderResponse,
   CreateOrder,
   ShipOrder,
+  CustomerOrder,
 } from '../types/types'
 import {
   getAllOrders,
@@ -31,7 +32,7 @@ export const useOrders = (): UseQueryResult<OrderResponse[], Error> => {
     },
   })
 }
-export const useStoreOrders = (store_id: number): UseQueryResult<OrderResponse[], Error> => {
+export const useStoreOrders = (store_id: number): UseQueryResult<CustomerOrder[], Error> => {
   return useQuery({
     queryKey: ['storeOrders'],
     queryFn: async () => {
