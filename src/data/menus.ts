@@ -15,6 +15,7 @@ import {
   Database,
   Bell,
   ShoppingBag,
+  ClipboardCheck,
 } from 'lucide-react'
 
 export interface MenuItem {
@@ -87,6 +88,12 @@ export const storeMenu: MenuItem[] = [
     label: 'Inventory',
     icon: Database,
     path: '/store/inventories',
+  },
+  {
+    id: 'stock-management',
+    label: 'Stock Management',
+    icon: ClipboardCheck,
+    path: '/store/stock-management',
   },
   {
     id: 'analytics',
