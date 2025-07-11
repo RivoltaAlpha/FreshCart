@@ -7,6 +7,8 @@ import type { Product } from '@/types/types'
 import { storesStore, storeActions } from '@/store/store'
 import { cartActions, cartStore } from '@/store/cart'
 import { toast } from 'sonner'
+import Header from '@/components/Header'
+import { Footer } from '@/components/Footer'
 
 export const Route = createFileRoute('/shop-store')({
   component: StoreLayout,
@@ -246,167 +248,88 @@ function StoreLayout() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Banner */}
-      <div className="h-64 w-full relative overflow-hidden">
-        <img
-          src="./market-concept-with-vegetables.jpg"
-          alt="Store Banner"
-          className="w-full h-full object-cover"
-        />
-        <div className="flex-col absolute inset-0 bg-black/50 w-full h-full object-cover">
-          <div className='flex items-center justify-center my-20 flex-col'>
-            <h1 className="text-5xl font-bold text-white">
-              {currentStore?.name} 🌱
-            </h1>
-            {/* <p className="text-fresh-primary">{currentStore?.county} County</p> */}
+    <>
+      <Header />
+      <div className="min-h-screen bg-background">
+        {/* Banner */}
+        <div className="h-64 w-full relative overflow-hidden">
+          <img
+            src="./market-concept-with-vegetables.jpg"
+            alt="Store Banner"
+            className="w-full h-full object-cover"
+          />
+          <div className="flex-col absolute inset-0 bg-black/50 w-full h-full object-cover">
+            <div className='flex items-center justify-center my-20 flex-col'>
+              <h1 className="text-5xl font-bold text-white">
+                {currentStore?.name} 🌱
+              </h1>
+              {/* <p className="text-fresh-primary">{currentStore?.county} County</p> */}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Store Header */}
-      <div className="bg-card shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
-          <img
-            src="/market-concept-with-vegetables.jpg"
-            alt="Store Logo"
-            className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
-          />
-          <div className="text-center md:text-left flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">
-              {currentStore?.name} 🌱
-            </h1>
-            <p className="text-fresh-primary">{currentStore?.county} County</p>
-            <div className="mt-2 flex flex-col sm:flex-row gap-2 text-sm text-fresh-primary">
-              <span><LocateFixedIcon className="inline-block w-4 h-4 mr-1" /> {currentStore?.town}</span>
-              <span>Owned by {currentStore?.owner?.profile?.first_name} {currentStore?.owner?.profile?.last_name}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <ShoppingCart className="w-8 h-8 text-fresh-primary"
-                onClick={() => navigate({ to: '/customer/cart' })} />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </div>
+        {/* Store Header */}
+        <div className="bg-card shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
             <img
               src="/market-concept-with-vegetables.jpg"
-              alt="Owner Avatar"
-              className="w-12 h-12 rounded-full object-cover"
+              alt="Store Logo"
+              className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
             />
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Tabs */}
-      <div className="bg-card border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex gap-8">
-            {['Products', 'About Store'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`py-4 px-2 border-b-2 font-medium ${activeTab === tab
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-8xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6 bg-search justify-center">
-          {/* Sidebar */}
-          <div className="hidden lg:block w-64 space-y-6">
-            <div className="bg-card rounded-lg p-4 shadow-sm">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+            <div className="text-center md:text-left flex-1">
+              <h1 className="text-2xl font-bold text-gray-900">
+                {currentStore?.name} 🌱
+              </h1>
+              <p className="text-fresh-primary">{currentStore?.county} County</p>
+              <div className="mt-2 flex flex-col sm:flex-row gap-2 text-sm text-fresh-primary">
+                <span><LocateFixedIcon className="inline-block w-4 h-4 mr-1" /> {currentStore?.town}</span>
+                <span>Owned by {currentStore?.owner?.profile?.first_name} {currentStore?.owner?.profile?.last_name}</span>
               </div>
-              <button
-                onClick={() => setSearchQuery('')}
-                className="text-blue-500 mt-2 hover:underline"
-              >
-                Clear all
-              </button>
             </div>
-
-            <div className="bg-card rounded-lg p-4 shadow-sm">
-              <h3 className="font-medium mb-2">Select Store</h3>
-              <select
-                value={store_id ?? ''}
-                onChange={(e) => handleStoreChange(Number(e.target.value))}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">Select a store...</option>
-                {stores?.map((store) => (
-                  <option key={store.store_id} value={store.store_id}>
-                    {store.name} - {store.county}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="bg-card rounded-lg p-4 shadow-sm">
-              <button
-                onClick={() => setDietaryOpen(!dietaryOpen)}
-                className="flex items-center justify-between w-full text-left font-medium"
-              >
-                Product Categories
-                <ChevronDown
-                  size={16}
-                  className={`transform transition-transform ${dietaryOpen ? 'rotate-180' : ''}`}
-                />
-              </button>
-              {dietaryOpen && (
-                <div className="mt-4 space-y-2">
-                  {filterOptions.map((option) => (
-                    <label
-                      key={option.id}
-                      className="flex items-center gap-2 cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(option.id)}
-                        onChange={() => handleCategoryFilter(option.id)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span>
-                        {option.name} ({option.count})
-                      </span>
-                    </label>
-                  ))}
-                  {selectedCategories.length > 0 && (
-                    <button
-                      onClick={() => setSelectedCategories([])}
-                      className="text-blue-500 text-sm hover:underline mt-2"
-                    >
-                      Clear filters
-                    </button>
-                  )}
-                </div>
-              )}
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <ShoppingCart className="w-8 h-8 text-fresh-primary"
+                  onClick={() => navigate({ to: '/customer/cart' })} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+              <img
+                src="/market-concept-with-vegetables.jpg"
+                alt="Owner Avatar"
+                className="w-12 h-12 rounded-full object-cover"
+              />
             </div>
           </div>
+        </div>
 
-          {/* Products Grid */}
-          <div className="flex-1 max-w-7xl">
-            {/* Mobile Search */}
-            <div className="lg:hidden mb-4">
+        {/* Navigation Tabs */}
+        <div className="bg-card border-b">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex gap-8">
+              {['Products', 'About Store'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`py-4 px-2 border-b-2 font-medium ${activeTab === tab
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="max-w-8xl mx-20 px-4 py-6">
+          <div className="flex flex-col lg:flex-row gap-6 bg-search justify-center">
+            {/* Sidebar */}
+            <div className="hidden lg:block w-64 space-y-6">
               <div className="bg-card rounded-lg p-4 shadow-sm">
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
@@ -418,81 +341,164 @@ function StoreLayout() {
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="text-blue-500 mt-2 hover:underline"
+                >
+                  Clear all
+                </button>
               </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-              <span className="text-fresh-primary">
-                Show all products ({filteredProducts.length})
-                {selectedCategories.length > 0 && (
-                  <span className="ml-2 text-blue-600">
-                    • {selectedCategories.length} filter
-                    {selectedCategories.length > 1 ? 's' : ''} applied
-                  </span>
-                )}
-              </span>
-              <div className="flex items-center gap-4 flex-wrap">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={showImageOnly}
-                    onChange={(e) => setShowImageOnly(e.target.checked)}
-                    className="rounded border-gray-300"
+              <div className="bg-card rounded-lg p-4 shadow-sm">
+                <h3 className="font-medium mb-2">Select Store</h3>
+                <select
+                  value={store_id ?? ''}
+                  onChange={(e) => handleStoreChange(Number(e.target.value))}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select a store...</option>
+                  {stores?.map((store) => (
+                    <option key={store.store_id} value={store.store_id}>
+                      {store.name} - {store.county}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="bg-card rounded-lg p-4 shadow-sm">
+                <button
+                  onClick={() => setDietaryOpen(!dietaryOpen)}
+                  className="flex items-center justify-between w-full text-left font-medium"
+                >
+                  Product Categories
+                  <ChevronDown
+                    size={16}
+                    className={`transform transition-transform ${dietaryOpen ? 'rotate-180' : ''}`}
                   />
-                  <span>Show image only</span>
-                </label>
-                <div className="flex items-center gap-2">
-                  <span className="text-fresh-primary">Sort by:</span>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="border border-gray-300 rounded px-3 py-1"
-                  >
-                    <option value="name">Name A-Z</option>
-                    <option value="price">Price Low to High</option>
-                    <option value="rating">Highest Rated</option>
-                    <option value="category">Category</option>
-                  </select>
-                </div>
+                </button>
+                {dietaryOpen && (
+                  <div className="mt-4 space-y-2">
+                    {filterOptions.map((option) => (
+                      <label
+                        key={option.id}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(option.id)}
+                          onChange={() => handleCategoryFilter(option.id)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span>
+                          {option.name} ({option.count})
+                        </span>
+                      </label>
+                    ))}
+                    {selectedCategories.length > 0 && (
+                      <button
+                        onClick={() => setSelectedCategories([])}
+                        className="text-blue-500 text-sm hover:underline mt-2"
+                      >
+                        Clear filters
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {isLoading ? (
-                <div className="col-span-full text-center py-8">
-                  Loading products...
+            {/* Products Grid */}
+            <div className="flex-1 max-w-7xl">
+              {/* Mobile Search */}
+              <div className="lg:hidden mb-4">
+                <div className="bg-card rounded-lg p-4 shadow-sm">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
                 </div>
-              ) : error ? (
-                <div className="col-span-full text-center py-8 text-red-500">
-                  Error loading products: {error?.message || 'Unknown error occurred'}
-                </div>
-              ) : filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
-                  <ProductCard key={product.product_id} product={product} />
-                ))
-              ) : (
-                <div className="col-span-full text-center py-8 text-gray-500">
-                  No products found
-                </div>
-              )}
-            </div>
-          </div>
+              </div>
 
-          {/* Cart Summary */}
-          <div className="hidden lg:block w-64">
-            <div className="sticky top-6">
-              {cartCount > 0 ? (
-                cartCard
-              ) : (
-                <div className="bg-card rounded-lg shadow-sm p-4 text-center">
-                  <p className="text-gray-500">Your cart is empty</p>
+              <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                <span className="text-fresh-primary">
+                  Show all products ({filteredProducts.length})
+                  {selectedCategories.length > 0 && (
+                    <span className="ml-2 text-blue-600">
+                      • {selectedCategories.length} filter
+                      {selectedCategories.length > 1 ? 's' : ''} applied
+                    </span>
+                  )}
+                </span>
+                <div className="flex items-center gap-4 flex-wrap">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={showImageOnly}
+                      onChange={(e) => setShowImageOnly(e.target.checked)}
+                      className="rounded border-gray-300"
+                    />
+                    <span>Show image only</span>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-fresh-primary">Sort by:</span>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="border border-gray-300 rounded px-3 py-1"
+                    >
+                      <option value="name">Name A-Z</option>
+                      <option value="price">Price Low to High</option>
+                      <option value="rating">Highest Rated</option>
+                      <option value="category">Category</option>
+                    </select>
+                  </div>
                 </div>
-              )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {isLoading ? (
+                  <div className="col-span-full text-center py-8">
+                    Loading products...
+                  </div>
+                ) : error ? (
+                  <div className="col-span-full text-center py-8 text-red-500">
+                    Error loading products: {error?.message || 'Unknown error occurred'}
+                  </div>
+                ) : filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <ProductCard key={product.product_id} product={product} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-8 text-gray-500">
+                    No products found
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Cart Summary */}
+            <div className="hidden lg:block w-64">
+              <div className="sticky top-6">
+                {cartCount > 0 ? (
+                  cartCard
+                ) : (
+                  <div className="bg-card rounded-lg shadow-sm p-4 text-center">
+                    <p className="text-gray-500">Your cart is empty</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   )
 }
 
