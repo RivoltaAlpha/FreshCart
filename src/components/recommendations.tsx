@@ -22,7 +22,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   const handleProductClick = (product: Product): void => {
     trackUserInteraction('click', {
-      id: product.id,
+      id: product.product_id,
       name: product.name,
       category: product.category,
     });
@@ -31,7 +31,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   const handleAddToCart = (product: Product): void => {
     trackUserInteraction('addToCart', {
-      id: product.id,
+      id: product.product_id,
       name: product.name,
       category: product.category,
     });
@@ -42,106 +42,128 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   if (loading) {
     return (
-      <div className="p-8 bg-[#F9FBFC] border border-[#6A89A7]/20 rounded-xl my-8 text-center">
-        <h2 className="text-2xl font-bold text-[#005A61] mb-2">Loading AI Recommendations...</h2>
-        <p className="text-[#516E89]">🤖 Analyzing your preferences...</p>
-      </div>
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-[#05445E] mb-4">Loading AI Recommendations...</h2>
+          <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-8"></div>
+          <p className="text-xl text-[#189AB4]">🤖 Analyzing your preferences...</p>
+        </div>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <div className="p-8 bg-[#F9FBFC] border border-[#6A89A7]/20 rounded-xl my-8 text-center">
-        <h2 className="text-2xl font-bold text-[#005A61] mb-2">Recommendations</h2>
-        <p className="text-red-600 mb-4">❌ Error loading recommendations: {String(error)}</p>
-        <button
-          onClick={refetch}
-          className="bg-[#005A61] hover:bg-[#00414d] text-white px-6 py-2 rounded-md font-medium transition"
-        >
-          Retry
-        </button>
-      </div>
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommendations</h2>
+          <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-8"></div>
+          <p className="text-red-600 mb-4">❌ Error loading recommendations: {String(error)}</p>
+          <button
+            onClick={refetch}
+            className="bg-[#189AB4] hover:bg-[#05445E] text-white px-8 py-3 rounded-full font-semibold transition-all"
+          >
+            Retry
+          </button>
+        </div>
+      </section>
     );
   }
 
   if (!recommendations.length) {
     return (
-      <div className="p-8 bg-[#F9FBFC] border border-[#6A89A7]/20 rounded-xl my-8 text-center">
-        <h2 className="text-2xl font-bold text-[#005A61] mb-2">🤖 AI Recommendations</h2>
-        <p className="text-[#516E89]">
-          Start browsing products to get personalized recommendations!
-        </p>
-      </div>
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-[#05445E] mb-4">🤖 AI Recommendations</h2>
+          <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-8"></div>
+          <p className="text-xl text-[#189AB4]">
+            Start browsing products to get personalized recommendations!
+          </p>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div className="p-8 bg-card shadow-2xl border-[#6A89A7]/30 rounded-xl my-8 mx-20">
-      <div className="flex justify-between items-center mb-6 bg-gradient-to-br from-[#784ef5] to-[#0b0089fa] p-4 rounded-lg shadow-sm">
-        <h2 className="text-2xl font-bold text-[#f4fafa]"> AI Recommendations For You ✨✨</h2>
-        <button
-          onClick={refetch}
-          className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-5 py-2 rounded-md transition font-semibold"
-        >
-          Refresh
-        </button>
-      </div>
+    <section className="py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommended Products</h2>
+          <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600">Personalized recommendations just for you</p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {recommendations
-          .map((rec) => {
-            const product = products.find((p) => p.id === rec.productId);
-            return product ? { rec, product } : null;
-          })
-          .filter((item): item is { rec: any; product: Product } => item !== null)
-          .map(({ rec, product }) => (
-            <div
-              key={product.id}
-              className="bg-card rounded-lg shadow-sm hover:shadow-md border border-[#E1EAF2] transition-all duration-200"
-            >
-              <div className="mb-3">
-                <img
-                  src={imageErrors.has(product.id) ? getFallbackImage() : product.image}
-                  alt={product.name}
-                  className="w-full h-96 object-cover"
-                  onError={() => handleImageError(product.id)}
-                  onLoad={() =>
-                    setImageErrors((prev) => {
-                      const newSet = new Set(prev);
-                      newSet.delete(product.id);
-                      return newSet;
-                    })
-                  }
-                />
-              </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 mb-12">
+          {recommendations
+            .map((rec) => {
+              const product = products.find((p) => p.product_id === rec.productId);
+              return product ? { rec, product } : null;
+            })
+            .filter((item): item is { rec: any; product: Product } => item !== null)
+            .map(({ rec, product }) => (
+              <div
+                key={product.product_id}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 group"
+              >
+                <div className="relative mb-4">
+                  <img
+                    src={imageErrors.has(product.product_id) ? getFallbackImage() : product.image}
+                    alt={product.name}
+                    className="w-full h-32 object-cover"
+                    onError={() => handleImageError(product.product_id)}
+                    onLoad={() =>
+                      setImageErrors((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(product.product_id);
+                        return newSet;
+                      })
+                    }
+                  />
+                  <button className="absolute top-2 right-2 bg-white text-[#189AB4] rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-sm">♡</span>
+                  </button>
+                  <div className="absolute top-2 left-2 bg-[#189AB4] text-white px-2 py-1 rounded-full text-xs font-semibold">
+                    AI
+                  </div>
+                </div>
 
-              <div className="mb-4 p-4">
-                <h3 className="text-lg font-bold mb-1">{product.name}</h3>
-                <p className="font-semibold text-lg mb-2">KSh {product.price}</p>
-                <div className="flex items-center gap-2 bg-[#d1dff6] px-3 py-2 rounded-md">
-                  <span className="bg-[#015094] text-white text-xs px-2 py-1 rounded-full">AI</span>
-                  <span className="text-sm text-[#516E89]">{rec.reason}</span>
+                <div className="mb-4">
+                  <h3 className="font-semibold text-[#05445E] mb-1">{product.name}</h3>
+                  <p className="text-[#189AB4] font-bold mb-2">KSh {product.price}</p>
+                  <div className="bg-[#75E6DA]/20 px-2 py-1 rounded-md">
+                    <span className="text-xs text-[#05445E]">{rec.reason}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    onClick={() => handleProductClick(product)}
+                    className="w-full border border-[#189AB4] text-[#189AB4] hover:bg-[#189AB4] hover:text-white py-2 rounded-lg transition-colors font-medium"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="w-full bg-[#75E6DA] hover:bg-[#189AB4] text-[#05445E] hover:text-white py-2 rounded-lg transition-colors font-medium"
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
+            ))}
+        </div>
 
-              <div className="flex gap-2 p-4">
-                <button
-                  onClick={() => handleProductClick(product)}
-                  className="flex-1 border border-[#005A61] hover:bg-[#005A61] hover:text-white px-4 py-2 rounded-md transition font-medium"
-                >
-                  View
-                </button>
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  className="flex-1 bg-[#015094] hover:bg-[#008c97] text-white px-4 py-2 rounded-md transition font-medium"
-                >
-                  Add
-                </button>
-              </div>
-            </div>
-          ))}
+        <div className="text-center">
+          <button
+            onClick={refetch}
+            className="bg-[#189AB4] hover:bg-[#05445E] text-white px-8 py-3 rounded-full font-semibold transition-all inline-flex items-center gap-2 mr-4"
+          >
+            Refresh Recommendations
+            <span>↻</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
