@@ -428,7 +428,6 @@ export interface OrderItem {
 
 export interface CreateOrder {
   store_id: number
-  status: OrderStatus
   items: OrderItem[]
   delivery_address: string
   delivery_instructions?: string
