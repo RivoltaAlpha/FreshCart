@@ -132,20 +132,25 @@ export const getInventoryProducts = async (inventory_id: number): Promise<Invent
   return response.json();
 };
 
-// // update inventory stock
-// export const updateInventoryStock = async (inventory_id: number, stockData: UpdateStock): Promise<Inventory> => {
-//   const token = getAuthToken();
-//   const response = await fetch(`${url}/inventories/update-stock/${inventory_id}`, {
-//     method: 'PATCH',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': `Bearer ${token}`,
-//     },
-//     body: JSON.stringify(stockData),
-//   });
-//   await handleApiResponse(response);
-//   return response.json();
-// };
+// Update stock interface
+export interface UpdateStock {
+  stock_qty: number;
+}
+
+// update inventory stock
+export const updateInventoryStock = async (inventory_id: number, stockData: UpdateStock): Promise<Inventory> => {
+  const token = getAuthToken();
+  const response = await fetch(`${url}/inventories/update-stock/${inventory_id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(stockData),
+  });
+  await handleApiResponse(response);
+  return response.json();
+};
 
 export const getStoreInventories = async (store_id: number): Promise<InventoryProducts[]> => {
   const token = getAuthToken();
