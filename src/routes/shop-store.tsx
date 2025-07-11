@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect, useMemo } from 'react'
-import { Search, Heart, ChevronDown, ShoppingCart, LocateFixedIcon } from 'lucide-react'
+import { Search, Heart, ChevronDown, ShoppingCart, LocateFixedIcon, Eye } from 'lucide-react'
 import { useStoreProducts } from '@/hooks/useProducts'
 import { useStores } from '@/hooks/useStore'
 import type { Product } from '@/types/types'
@@ -9,6 +9,14 @@ import { cartActions, cartStore } from '@/store/cart'
 import { toast } from 'sonner'
 import Header from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from '@/components/ui/dialog'
 
 export const Route = createFileRoute('/shop-store')({
   component: StoreLayout,
@@ -23,6 +31,9 @@ function StoreLayout() {
   const [cartCount, setCartCount] = useState(0)
   const store_id = storesStore.state.store_id
   const [dietaryOpen, setDietaryOpen] = useState(true)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const navigate = useNavigate()
 
   const { stores } = useStores()
   const {
@@ -152,18 +163,59 @@ function StoreLayout() {
     toast.success(`${product.name} added to cart!`)
   }
 
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product)
+    setIsModalOpen(true)
+  }
+
+  const handleViewDetails = () => {
+    if (selectedProduct) {
+      navigate({
+        to: '/product-details',
+        search: {
+          productId: selectedProduct.product_id.toString(),
+          name: selectedProduct.name,
+          price: selectedProduct.price.toString(),
+          image: selectedProduct.image_url,
+          description: selectedProduct.description || 'Fresh, high-quality product from our local store.',
+          category: selectedProduct.category?.name || 'Uncategorized',
+          stock: selectedProduct.stock_quantity?.toString() || '0',
+          rating: selectedProduct.rating?.toString() || '4.5',
+          reviews: selectedProduct.review_count?.toString() || '0',
+        },
+      })
+    }
+    setIsModalOpen(false)
+  }
+
+  const handleAddToCartFromModal = () => {
+    if (selectedProduct) {
+      handleAddToCart(selectedProduct)
+      setIsModalOpen(false)
+    }
+  }
+
   const ProductCard = ({ product }: { product: Product }) => (
     <div className="bg-card rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
       <div className="relative">
-        <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
+        <div
+          className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer"
+          onClick={() => handleProductClick(product)}
+        >
           <img
             src={product.image_url || './market-concept-with-vegetables.jpg'}
             alt={product.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
           />
         </div>
         <button className="absolute top-2 right-2 p-2 bg-card rounded-full shadow hover:bg-gray-100">
           <Heart size={16} className="text-fresh-primary" />
+        </button>
+        <button
+          onClick={() => handleProductClick(product)}
+          className="absolute top-2 left-2 p-2 bg-[#189AB4] text-white rounded-full shadow hover:bg-[#05445E] transition-colors"
+        >
+          <Eye size={16} />
         </button>
         {product.stock_quantity && parseInt(String(product.stock_quantity)) < 10 && (
           <div className="absolute bottom-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
@@ -173,7 +225,12 @@ function StoreLayout() {
       </div>
       <div className="p-4 space-y-2 flex flex-col">
         <div className="text-sm text-fresh-primary flex justify-between items-center">
-          <h3 className="text-lg font-semibold text-fresh-primary">{product.name}</h3>
+          <h3
+            className="text-lg font-semibold text-fresh-primary cursor-pointer hover:text-[#189AB4] transition-colors"
+            onClick={() => handleProductClick(product)}
+          >
+            {product.name}
+          </h3>
           <p>{product.category?.name}</p>
         </div>
         <div className="flex items-center justify-between gap-1 text-sm">
@@ -245,7 +302,6 @@ function StoreLayout() {
       </div>
     </div>
   )
-  const navigate = useNavigate()
 
   return (
     <>
@@ -497,6 +553,111 @@ function StoreLayout() {
           </div>
         </div>
       </div>
+
+      {/* Product Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogClose onClick={() => setIsModalOpen(false)} />
+          {selectedProduct && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-[#05445E]">
+                  {selectedProduct.name}
+                </DialogTitle>
+                <DialogDescription className="text-[#189AB4] text-lg">
+                  {selectedProduct.category?.name}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                {/* Product Image */}
+                <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                  <img
+                    src={selectedProduct.image_url || './market-concept-with-vegetables.jpg'}
+                    alt={selectedProduct.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Product Details */}
+                <div className="space-y-4">
+                  <div className="text-3xl font-bold text-[#189AB4]">
+                    {typeof selectedProduct.price === 'string' &&
+                      ((selectedProduct.price as string)?.includes('Box') ||
+                        (selectedProduct.price as string)?.includes('Pack')) ? (
+                      selectedProduct.price
+                    ) : (
+                      <>KSh {selectedProduct.price}</>
+                    )}
+                  </div>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                      <span className="text-yellow-400">⭐</span>
+                      <span className="text-[#05445E] ml-1">{selectedProduct.rating}</span>
+                    </div>
+                    <span className="text-gray-500">({selectedProduct.review_count} reviews)</span>
+                  </div>
+
+                  {/* Stock Status */}
+                  <div className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 10
+                        ? 'bg-green-500'
+                        : selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 0
+                          ? 'bg-yellow-500'
+                          : 'bg-red-500'
+                      }`} />
+                    <span className="text-[#05445E]">
+                      {selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 10
+                        ? 'In Stock'
+                        : selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 0
+                          ? 'Low Stock'
+                          : 'Out of Stock'}
+                    </span>
+                    <span className="text-gray-500">({selectedProduct.stock_quantity} available)</span>
+                  </div>
+
+                  {/* Description */}
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-[#05445E]">Description</h4>
+                    <p className="text-gray-600 text-sm">
+                      {selectedProduct.description || 'Fresh, high-quality product from our local store.'}
+                    </p>
+                  </div>
+
+                  {/* Store Info */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h4 className="font-semibold text-[#05445E] mb-2">Store Information</h4>
+                    <p className="text-sm text-gray-600">
+                      Available at {currentStore?.name || 'Store'} in {currentStore?.county}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 mt-6">
+                <button
+                  onClick={handleAddToCartFromModal}
+                  disabled={!selectedProduct.stock_quantity || parseInt(String(selectedProduct.stock_quantity)) === 0}
+                  className="flex-1 bg-[#189AB4] hover:bg-[#75E6DA] text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ShoppingCart size={20} />
+                  Add to Cart
+                </button>
+                <button
+                  onClick={handleViewDetails}
+                  className="flex-1 bg-[#05445E] hover:bg-[#189AB4] text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  <Eye size={20} />
+                  View Full Details
+                </button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
       <Footer />
     </>
   )
