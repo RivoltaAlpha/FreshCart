@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 interface Product {
-  id: number
+  product_id: number
   name: string
   category: string
   price: number
@@ -204,7 +204,7 @@ const getAIRecommendations = async (
           // Check if productId is a valid number and exists in products
           const isValidId = !isNaN(rec.productId) && rec.productId > 0
           const productExists = userContext.appData.products.some(
-            (p) => p.id === rec.productId,
+            (p) => p.product_id === rec.productId,
           )
 
           if (!isValidId) {
@@ -263,21 +263,21 @@ const getFallbackRecommendations = (
   // If user has interacted with products, recommend from preferred categories
   if (userContext.categories.length > 0) {
     return allProducts
-      .filter((product) => !userInteractedProducts.has(product.id))
+      .filter((product) => !userInteractedProducts.has(product.product_id))
       .filter((product) => userContext.categories.includes(product.category))
       .slice(0, 5)
       .map((product) => ({
-        productId: product.id,
+        productId: product.product_id,
         reason: `Recommended based on your interest in ${product.category}`,
       }))
   }
 
   // If no categories, just recommend popular items
   return allProducts
-    .filter((product) => !userInteractedProducts.has(product.id))
+    .filter((product) => !userInteractedProducts.has(product.product_id))
     .slice(0, 5)
     .map((product) => ({
-      productId: product.id,
+      productId: product.product_id,
       reason: `Popular ${product.category.toLowerCase()} item`,
     }))
 }
@@ -293,7 +293,7 @@ const getAppContextWithFallbacks = (): AppContext => {
       ? appData.products
       : [
           {
-            id: 1,
+            product_id: 1,
             name: 'Fresh Apples',
             category: 'Fruits',
             price: 3.99,
@@ -308,7 +308,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             rating: 4.5,
           },
           {
-            id: 2,
+            product_id: 2,
             name: 'Organic Bananas',
             category: 'Fruits',
             price: 2.49,
@@ -323,7 +323,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             rating: 4.2,
           },
           {
-            id: 3,
+            product_id: 3,
             name: 'Fresh Spinach',
             category: 'Vegetables',
             price: 1.99,
@@ -338,7 +338,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             rating: 4.0,
           },
           {
-            id: 4,
+            product_id: 4,
             name: 'Whole Milk',
             category: 'Dairy',
             price: 4.29,
@@ -353,7 +353,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             rating: 4.8,
           },
           {
-            id: 5,
+            product_id: 5,
             name: 'Chicken Breast',
             category: 'Meat',
             price: 8.99,
@@ -404,7 +404,7 @@ const getRecommendations = async (
     ) {
       const sampleRecommendations: Recommendation[] =
         contextWithFallbacks.appData.products.slice(0, 5).map((product) => ({
-          productId: product.id,
+          productId: product.product_id,
           reason: `Popular ${product.category.toLowerCase()} item - great for new customers!`,
         }))
 
