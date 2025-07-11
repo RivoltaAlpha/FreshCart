@@ -15,6 +15,7 @@ import { Route as ShopStoreRouteImport } from './routes/shop-store'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RecipesRouteImport } from './routes/recipes'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as ProductDetailsRouteImport } from './routes/product-details'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DriverRouteImport } from './routes/driver'
 import { Route as DraftRouteImport } from './routes/draft'
@@ -31,7 +32,6 @@ import { Route as StoreShipOrderRouteImport } from './routes/store/ship-order'
 import { Route as StoreSettingsRouteImport } from './routes/store/settings'
 import { Route as StoreProfileRouteImport } from './routes/store/profile'
 import { Route as StoreProductsRouteImport } from './routes/store/products'
-import { Route as StoreProductAddRouteImport } from './routes/store/product-add'
 import { Route as StoreMyproductsRouteImport } from './routes/store/myproducts'
 import { Route as StoreManageProductsRouteImport } from './routes/store/manageProducts'
 import { Route as StoreManageOrdersRouteImport } from './routes/store/manage-orders'
@@ -97,6 +97,11 @@ const RecipesRoute = RecipesRouteImport.update({
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductDetailsRoute = ProductDetailsRouteImport.update({
+  id: '/product-details',
+  path: '/product-details',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -177,11 +182,6 @@ const StoreProfileRoute = StoreProfileRouteImport.update({
 const StoreProductsRoute = StoreProductsRouteImport.update({
   id: '/products',
   path: '/products',
-  getParentRoute: () => StoreRoute,
-} as any)
-const StoreProductAddRoute = StoreProductAddRouteImport.update({
-  id: '/product-add',
-  path: '/product-add',
   getParentRoute: () => StoreRoute,
 } as any)
 const StoreMyproductsRoute = StoreMyproductsRouteImport.update({
@@ -376,6 +376,7 @@ export interface FileRoutesByFullPath {
   '/draft': typeof DraftRoute
   '/driver': typeof DriverRouteWithChildren
   '/login': typeof LoginRoute
+  '/product-details': typeof ProductDetailsRoute
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
@@ -418,7 +419,6 @@ export interface FileRoutesByFullPath {
   '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
-  '/store/product-add': typeof StoreProductAddRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
@@ -437,6 +437,7 @@ export interface FileRoutesByTo {
   '/draft': typeof DraftRoute
   '/driver': typeof DriverRouteWithChildren
   '/login': typeof LoginRoute
+  '/product-details': typeof ProductDetailsRoute
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
@@ -479,7 +480,6 @@ export interface FileRoutesByTo {
   '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
-  '/store/product-add': typeof StoreProductAddRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
@@ -499,6 +499,7 @@ export interface FileRoutesById {
   '/draft': typeof DraftRoute
   '/driver': typeof DriverRouteWithChildren
   '/login': typeof LoginRoute
+  '/product-details': typeof ProductDetailsRoute
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
@@ -541,7 +542,6 @@ export interface FileRoutesById {
   '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
-  '/store/product-add': typeof StoreProductAddRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
@@ -562,6 +562,7 @@ export interface FileRouteTypes {
     | '/draft'
     | '/driver'
     | '/login'
+    | '/product-details'
     | '/products'
     | '/recipes'
     | '/register'
@@ -604,7 +605,6 @@ export interface FileRouteTypes {
     | '/store/manage-orders'
     | '/store/manageProducts'
     | '/store/myproducts'
-    | '/store/product-add'
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
@@ -623,6 +623,7 @@ export interface FileRouteTypes {
     | '/draft'
     | '/driver'
     | '/login'
+    | '/product-details'
     | '/products'
     | '/recipes'
     | '/register'
@@ -665,7 +666,6 @@ export interface FileRouteTypes {
     | '/store/manage-orders'
     | '/store/manageProducts'
     | '/store/myproducts'
-    | '/store/product-add'
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
@@ -684,6 +684,7 @@ export interface FileRouteTypes {
     | '/draft'
     | '/driver'
     | '/login'
+    | '/product-details'
     | '/products'
     | '/recipes'
     | '/register'
@@ -726,7 +727,6 @@ export interface FileRouteTypes {
     | '/store/manage-orders'
     | '/store/manageProducts'
     | '/store/myproducts'
-    | '/store/product-add'
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
@@ -746,6 +746,7 @@ export interface RootRouteChildren {
   DraftRoute: typeof DraftRoute
   DriverRoute: typeof DriverRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ProductDetailsRoute: typeof ProductDetailsRoute
   ProductsRoute: typeof ProductsRoute
   RecipesRoute: typeof RecipesRoute
   RegisterRoute: typeof RegisterRoute
@@ -796,6 +797,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/product-details': {
+      id: '/product-details'
+      path: '/product-details'
+      fullPath: '/product-details'
+      preLoaderRoute: typeof ProductDetailsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -908,13 +916,6 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/store/products'
       preLoaderRoute: typeof StoreProductsRouteImport
-      parentRoute: typeof StoreRoute
-    }
-    '/store/product-add': {
-      id: '/store/product-add'
-      path: '/product-add'
-      fullPath: '/store/product-add'
-      preLoaderRoute: typeof StoreProductAddRouteImport
       parentRoute: typeof StoreRoute
     }
     '/store/myproducts': {
@@ -1264,7 +1265,6 @@ interface StoreRouteChildren {
   StoreManageOrdersRoute: typeof StoreManageOrdersRoute
   StoreManageProductsRoute: typeof StoreManageProductsRoute
   StoreMyproductsRoute: typeof StoreMyproductsRoute
-  StoreProductAddRoute: typeof StoreProductAddRoute
   StoreProductsRoute: typeof StoreProductsRoute
   StoreProfileRoute: typeof StoreProfileRoute
   StoreSettingsRoute: typeof StoreSettingsRoute
@@ -1283,7 +1283,6 @@ const StoreRouteChildren: StoreRouteChildren = {
   StoreManageOrdersRoute: StoreManageOrdersRoute,
   StoreManageProductsRoute: StoreManageProductsRoute,
   StoreMyproductsRoute: StoreMyproductsRoute,
-  StoreProductAddRoute: StoreProductAddRoute,
   StoreProductsRoute: StoreProductsRoute,
   StoreProfileRoute: StoreProfileRoute,
   StoreSettingsRoute: StoreSettingsRoute,
@@ -1305,6 +1304,7 @@ const rootRouteChildren: RootRouteChildren = {
   DraftRoute: DraftRoute,
   DriverRoute: DriverRouteWithChildren,
   LoginRoute: LoginRoute,
+  ProductDetailsRoute: ProductDetailsRoute,
   ProductsRoute: ProductsRoute,
   RecipesRoute: RecipesRoute,
   RegisterRoute: RegisterRoute,
