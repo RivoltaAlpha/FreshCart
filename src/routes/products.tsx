@@ -1,12 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { Star, Search, Filter, Plus, Minus } from 'lucide-react';
-import { createFileRoute } from '@tanstack/react-router'
+import { Star, Search, Filter, Plus, Minus, ShoppingCart, Eye } from 'lucide-react';
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useProducts } from '@/hooks/useProducts';
 import Categories from '@/components/categories';
 import type { BackendProduct } from '@/types/types';
 import { sampleProducts } from '@/data/sample-products';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from '@/components/ui/dialog'
 
 export const Route = createFileRoute('/products')({
   component: ProductsPage,
@@ -32,7 +40,10 @@ function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [cart, setCart] = useState<Cart>({});
+  const [selectedProduct, setSelectedProduct] = useState<BackendProduct | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isInitialMount = useRef(true);
+  const navigate = useNavigate();
   const products: BackendProduct[] = productsData?.products || [];
 
   const shouldUseSampleData = products.length === 0 && !!error;
@@ -145,6 +156,39 @@ function ProductsPage() {
 
       return newCart;
     });
+  };
+
+  // Modal and navigation handlers
+  const handleProductClick = (product: BackendProduct | any) => {
+    setSelectedProduct(product as BackendProduct);
+    setIsModalOpen(true);
+  };
+
+  const handleViewDetails = () => {
+    if (selectedProduct) {
+      navigate({
+        to: '/product-details',
+        search: {
+          productId: selectedProduct.product_id.toString(),
+          name: selectedProduct.name,
+          price: selectedProduct.price.toString(),
+          image: selectedProduct.image_url,
+          description: selectedProduct.description || 'Fresh, high-quality product.',
+          category: selectedProduct.category?.name || 'Uncategorized',
+          stock: selectedProduct.stock_quantity?.toString() || '0',
+          rating: selectedProduct.rating?.toString() || '4.5',
+          reviews: selectedProduct.review_count?.toString() || '0',
+        },
+      });
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleAddToCartFromModal = () => {
+    if (selectedProduct) {
+      addToCart(selectedProduct.product_id);
+      setIsModalOpen(false);
+    }
   };
 
   return (
@@ -260,8 +304,15 @@ function ProductsPage() {
                         <img
                           src={product.image_url}
                           alt={product.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-200"
+                          onClick={() => handleProductClick(product)}
                         />
+                        <button
+                          onClick={() => handleProductClick(product)}
+                          className="absolute top-2 left-2 p-2 bg-[#189AB4] text-white rounded-full shadow hover:bg-[#05445E] transition-colors"
+                        >
+                          <Eye size={16} />
+                        </button>
                         {product.discount > 0 && (
                           <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-semibold">
                             -{product.discount}%
@@ -281,7 +332,12 @@ function ProductsPage() {
                           </div>
                         </div>
 
-                        <h3 className="text-xl font-bold text-foreground mb-1">{product.name}</h3>
+                        <h3
+                          className="text-xl font-bold text-foreground mb-1 cursor-pointer hover:text-[#189AB4] transition-colors"
+                          onClick={() => handleProductClick(product)}
+                        >
+                          {product.name}
+                        </h3>
                         <p className="text-muted-foreground text-sm mb-3">{product.description}</p>
 
                         <div className="flex items-center justify-between mb-4">
@@ -315,7 +371,7 @@ function ProductsPage() {
                               className="bg-fresh-secondary hover:bg-fresh-secondary/90 text-fresh-primary-foreground px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
                             >
                               <Plus className="h-4 w-4" />
-                              Add to Cart
+                              <ShoppingCart size={18} />
                             </button>
                           )}
                         </div>
@@ -355,6 +411,110 @@ function ProductsPage() {
           )}
         </div>
       </div>
+
+      {/* Product Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogClose onClick={() => setIsModalOpen(false)} />
+          {selectedProduct && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-[#05445E]">
+                  {selectedProduct.name}
+                </DialogTitle>
+                <DialogDescription className="text-[#189AB4] text-lg">
+                  {selectedProduct.category?.name}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                {/* Product Image */}
+                <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                  <img
+                    src={selectedProduct.image_url || './market-concept-with-vegetables.jpg'}
+                    alt={selectedProduct.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Product Details */}
+                <div className="space-y-4">
+                  <div className="text-3xl font-bold text-[#189AB4]">
+                    KSh {selectedProduct.price}
+                    <span className="text-sm text-gray-500 ml-2">{selectedProduct.unit}</span>
+                  </div>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span className="text-[#05445E] ml-1">{selectedProduct.rating}</span>
+                    </div>
+                    <span className="text-gray-500">({selectedProduct.review_count} reviews)</span>
+                  </div>
+
+                  {/* Stock Status */}
+                  <div className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${selectedProduct.stock_quantity > 10
+                        ? 'bg-green-500'
+                        : selectedProduct.stock_quantity > 0
+                          ? 'bg-yellow-500'
+                          : 'bg-red-500'
+                      }`} />
+                    <span className="text-[#05445E]">
+                      {selectedProduct.stock_quantity > 10
+                        ? 'In Stock'
+                        : selectedProduct.stock_quantity > 0
+                          ? 'Low Stock'
+                          : 'Out of Stock'}
+                    </span>
+                    <span className="text-gray-500">({selectedProduct.stock_quantity} available)</span>
+                  </div>
+
+                  {/* Description */}
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-[#05445E]">Description</h4>
+                    <p className="text-gray-600 text-sm">
+                      {selectedProduct.description || 'Fresh, high-quality product.'}
+                    </p>
+                  </div>
+
+                  {/* Weight/Unit Info */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h4 className="font-semibold text-[#05445E] mb-2">Product Details</h4>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p>Weight: {selectedProduct.weight}</p>
+                      <p>Unit: {selectedProduct.unit}</p>
+                      {selectedProduct.discount > 0 && (
+                        <p className="text-red-600 font-medium">Discount: {selectedProduct.discount}%</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 mt-6">
+                <button
+                  onClick={handleAddToCartFromModal}
+                  disabled={selectedProduct.stock_quantity === 0}
+                  className="flex-1 bg-[#189AB4] hover:bg-[#75E6DA] text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ShoppingCart size={20} />
+                  Add to Cart
+                </button>
+                <button
+                  onClick={handleViewDetails}
+                  className="flex-1 bg-[#05445E] hover:bg-[#189AB4] text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  <Eye size={20} />
+                  View Full Details
+                </button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
       <Footer />
     </>
   );

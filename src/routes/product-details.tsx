@@ -1,5 +1,5 @@
 import { createFileRoute, useSearch } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { ArrowLeft, ShoppingCart, Heart, Star, Truck, Shield, RotateCcw } from 'lucide-react'
 import { useNavigate } from '@tanstack/react-router'
 import { cartActions } from '@/store/cart'
@@ -7,6 +7,8 @@ import { toast } from 'sonner'
 import Header from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import type { Product } from '@/types/types'
+import { useStoreProducts } from '@/hooks/useProducts'
+import { storesStore } from '@/store/store'
 
 type ProductDetailsSearch = {
   productId?: string
@@ -42,6 +44,13 @@ function RouteComponent() {
   const search = useSearch({ from: '/product-details' })
   const [quantity, setQuantity] = useState(1)
   const [selectedTab, setSelectedTab] = useState('description')
+  const store_id = storesStore.state.store_id
+
+  // Fetch store products for related products
+  const {
+    data: storeProducts,
+    isLoading: isLoadingProducts,
+  } = useStoreProducts(store_id ?? 0)
 
   const product: Product = {
     product_id: parseInt(search.productId || '0'),
@@ -76,6 +85,99 @@ function RouteComponent() {
   const handleGoBack = () => {
     navigate({ to: '/shop-store' })
   }
+
+  // Get related products from the same category
+  const relatedProducts = useMemo(() => {
+    if (!storeProducts || !product.category?.name) return []
+
+    return (Array.isArray(storeProducts) ? storeProducts : [])
+      .filter((p) =>
+        p.category?.name === product.category?.name &&
+        p.product_id !== product.product_id
+      )
+      .slice(0, 4) // Limit to 4 related products
+  }, [storeProducts, product.category?.name, product.product_id])
+
+  const handleRelatedProductClick = (relatedProduct: Product) => {
+    navigate({
+      to: '/product-details',
+      search: {
+        productId: relatedProduct.product_id.toString(),
+        name: relatedProduct.name,
+        price: relatedProduct.price.toString(),
+        image: relatedProduct.image_url,
+        description: relatedProduct.description || 'Fresh, high-quality product from our local store.',
+        category: relatedProduct.category?.name || 'Uncategorized',
+        stock: relatedProduct.stock_quantity?.toString() || '0',
+        rating: relatedProduct.rating?.toString() || '4.5',
+        reviews: relatedProduct.review_count?.toString() || '0',
+      },
+    })
+  }
+
+  const handleAddRelatedToCart = (relatedProduct: Product, e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent navigation when clicking add to cart
+    cartActions.addToCart(relatedProduct, 1)
+    toast.success(`${relatedProduct.name} added to cart!`)
+  }
+
+  const RelatedProductCard = ({ product: relatedProduct }: { product: Product }) => (
+    <div
+      className="bg-card rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer"
+      onClick={() => handleRelatedProductClick(relatedProduct)}
+    >
+      <div className="relative">
+        <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
+          <img
+            src={relatedProduct.image_url || './market-concept-with-vegetables.jpg'}
+            alt={relatedProduct.name}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+          />
+        </div>
+        {relatedProduct.stock_quantity && parseInt(String(relatedProduct.stock_quantity)) < 10 && (
+          <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+            Low Stock
+          </div>
+        )}
+      </div>
+      <div className="p-4 space-y-2">
+        <h3 className="font-semibold text-[#05445E] line-clamp-2">{relatedProduct.name}</h3>
+        <div className="flex items-center gap-1 text-sm">
+          <Star className="w-3 h-3 text-yellow-400 fill-current" />
+          <span className="text-[#05445E]">{relatedProduct.rating}</span>
+          <span className="text-gray-500">({relatedProduct.review_count})</span>
+        </div>
+        <div className="font-bold text-[#189AB4] text-lg">
+          {typeof relatedProduct.price === 'string' &&
+            ((relatedProduct.price as string)?.includes('Box') ||
+              (relatedProduct.price as string)?.includes('Pack')) ? (
+            relatedProduct.price
+          ) : (
+            <>KSh {relatedProduct.price}</>
+          )}
+        </div>
+        <div className="font-bold text-[#189AB4] text-lg">
+          {typeof relatedProduct.price === 'string' &&
+            ((relatedProduct.price as string)?.includes('Box') ||
+              (relatedProduct.price as string)?.includes('Pack')) ? (
+            relatedProduct.price
+          ) : (
+            <>KSh {relatedProduct.price}</>
+          )}
+        </div>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={(e) => handleAddRelatedToCart(relatedProduct, e)}
+            disabled={!relatedProduct.stock_quantity || parseInt(String(relatedProduct.stock_quantity)) === 0}
+            className="p-2 bg-[#189AB4] hover:bg-[#75E6DA] text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+            title="Add to Cart"
+          >
+            <ShoppingCart size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
 
   const tabs = [
     { id: 'description', label: 'Description' },
@@ -120,8 +222,8 @@ function RouteComponent() {
                       <Star
                         key={i}
                         className={`w-4 h-4 ${i < Math.floor(parseFloat(product.rating))
-                            ? 'text-yellow-400 fill-current'
-                            : 'text-gray-300'
+                          ? 'text-yellow-400 fill-current'
+                          : 'text-gray-300'
                           }`}
                       />
                     ))}
@@ -138,7 +240,7 @@ function RouteComponent() {
               {/* Stock Status */}
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${product.stock_quantity > 10 ? 'bg-green-500' :
-                    product.stock_quantity > 0 ? 'bg-yellow-500' : 'bg-red-500'
+                  product.stock_quantity > 0 ? 'bg-yellow-500' : 'bg-red-500'
                   }`} />
                 <span className="text-[#05445E]">
                   {product.stock_quantity > 10 ? 'In Stock' :
@@ -213,8 +315,8 @@ function RouteComponent() {
                     key={tab.id}
                     onClick={() => setSelectedTab(tab.id)}
                     className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${selectedTab === tab.id
-                        ? 'border-[#189AB4] text-[#189AB4]'
-                        : 'border-transparent text-gray-500 hover:text-[#05445E] hover:border-gray-300'
+                      ? 'border-[#189AB4] text-[#189AB4]'
+                      : 'border-transparent text-gray-500 hover:text-[#05445E] hover:border-gray-300'
                       }`}
                   >
                     {tab.label}
@@ -249,6 +351,44 @@ function RouteComponent() {
               )}
             </div>
           </div>
+
+          {/* Related Products Section */}
+          {relatedProducts.length > 0 && (
+            <div className="mt-16">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-bold text-[#05445E]">Related Products</h2>
+                <p className="text-[#189AB4]">More from {product.category?.name}</p>
+              </div>
+
+              {isLoadingProducts ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[...Array(4)].map((_, index) => (
+                    <div key={index} className="bg-gray-200 rounded-lg h-80 animate-pulse"></div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {relatedProducts.map((relatedProduct) => (
+                    <RelatedProductCard
+                      key={relatedProduct.product_id}
+                      product={relatedProduct}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {relatedProducts.length === 4 && (
+                <div className="text-center mt-8">
+                  <button
+                    onClick={() => navigate({ to: '/shop-store' })}
+                    className="bg-[#05445E] hover:bg-[#189AB4] text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                  >
+                    View All Products
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <Footer />

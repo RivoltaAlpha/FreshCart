@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRecommendations } from '../hooks/recommendation';
 import { trackUserInteraction, type Product } from '../Gemini/context';
+import { ShoppingCart } from 'lucide-react';
 
 interface RecommendationsSectionProps {
   products: Product[];
@@ -135,18 +136,19 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() => handleProductClick(product)}
-                    className="w-full border border-[#189AB4] text-[#189AB4] hover:bg-[#189AB4] hover:text-white py-2 rounded-lg transition-colors font-medium"
+                    className="flex-1 border-2 border-[#189AB4] text-[#189AB4] hover:bg-[#189AB4] hover:text-white py-3 rounded-xl transition-all duration-300 font-semibold text-sm shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                   >
                     View Details
                   </button>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="w-full bg-[#75E6DA] hover:bg-[#189AB4] text-[#05445E] hover:text-white py-2 rounded-lg transition-colors font-medium"
+                    className="bg-gradient-to-r from-[#75E6DA] to-[#189AB4] hover:from-[#189AB4] hover:to-[#05445E] text-white p-3 rounded-full transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    title="Add to Cart"
                   >
-                    Add to Cart
+                    <ShoppingCart size={16} />
                   </button>
                 </div>
               </div>
