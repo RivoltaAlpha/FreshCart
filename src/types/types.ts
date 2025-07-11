@@ -4,7 +4,7 @@ export interface User {
   user_id: string
   email: string
   password: string
-  role: 'customer' | 'store' | 'driver' | 'admin'
+  role: 'Customer' | 'Store' | 'Driver' | 'Admin'
   profile: {
     profile_id: string
     first_name: string
