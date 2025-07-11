@@ -75,5 +75,7 @@ export const useStoreProducts = (storeId: number) => {
     queryKey: ['storeProducts', storeId],
     queryFn: () => getStoreProducts(storeId),
     enabled: !!storeId,
+    initialData: [], // Provide a default empty array
+    retry: 2, // Retry failed requests
   })
 }
