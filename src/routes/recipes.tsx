@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import RecipeRecommendation from '@/components/RecipeRecommendation'
 import { type RecipeWithIngredients } from '@/services/recipeService'
+import Header from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
 export const Route = createFileRoute('/recipes')({
     component: RecipesPage,
@@ -21,14 +23,18 @@ function RecipesPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <RecipeRecommendation
-                    onAddToCart={handleAddToCart}
-                    userPreferences={userPreferences}
-                />
+        <>
+            <Header />
+            <div className="min-h-screen bg-gray-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <RecipeRecommendation
+                        onAddToCart={handleAddToCart}
+                        userPreferences={userPreferences}
+                    />
+                </div>
             </div>
-        </div>
+            <Footer />
+        </>
     );
 }
 
