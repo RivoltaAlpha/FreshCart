@@ -8,6 +8,7 @@ import {
   getInventoryProducts,
   getStoreInventories,
   addProductToInventory,
+  updateInventoryStock,
 } from '@/services/inventoryService'
 import {
   useMutation,
@@ -65,17 +66,23 @@ export const useDeleteInventory = (id: number) => {
   })
 }
 
-// export const useUpdateInventoryStock = (id: number) => {
-//     const queryClient = useQueryClient();
-//     return useMutation({
-//         mutationKey: ["updateInventoryStock", id],
-//         mutationFn: (stockData: UpdateStock) => updateInventoryStock(id, stockData),
-
-//         onSuccess: () => {
-//             queryClient.invalidateQueries({ queryKey: ["inventories"] });
-//         },
-//     });
-// };
+export const useUpdateInventoryStock = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ['updateInventoryStock'],
+    mutationFn: ({
+      inventory_id,
+      stock_qty,
+    }: {
+      inventory_id: number
+      stock_qty: number
+    }) => updateInventoryStock(inventory_id, { stock_qty }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['inventories'] })
+      queryClient.invalidateQueries({ queryKey: ['storeInventoryProducts'] })
+    },
+  })
+}
 
 export const useInventoryProducts = (inventory_id: number) => {
   const query = useSuspenseQuery({
