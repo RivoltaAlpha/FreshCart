@@ -54,7 +54,6 @@ function RouteComponent() {
       discount: form.discount,
       initial_quantity: form.initial_quantity,
       reorder_level: form.reorder_level,
-      cost_price: form.cost_price,
     });
   };
 
