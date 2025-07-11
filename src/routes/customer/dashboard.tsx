@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { ShoppingCart, Package, Heart, MapPin, Star, Search, Bell, Plus, Minus, Truck, CreditCard, Gift } from 'lucide-react'
+import { ShoppingCart, Package, Heart, MapPin, Star, Plus, Minus, Truck, CreditCard, Gift } from 'lucide-react'
 
 
 export const Route = createFileRoute('/customer/dashboard')({
@@ -78,32 +78,6 @@ function RouteComponent() {
     <div className="flex h-screen bg-gray-50">
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b px-6 py-4 mb-10">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">Welcome back, Tiff!</h1>
-              <p className="text-gray-600">Discover fresh groceries and great deals</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-80"
-                />
-              </div>
-              <button className="p-2 rounded-lg hover:bg-gray-100 relative">
-                <Bell size={20} />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  1
-                </span>
-              </button>
-            </div>
-          </div>
-        </header>
-
         {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-6">
           {/* Quick Stats */}

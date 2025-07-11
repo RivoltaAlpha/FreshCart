@@ -1,11 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Package, ShoppingCart, TrendingUp, DollarSign, AlertCircle, ClipboardCheckIcon, Settings, Bell, Search, Plus, Edit, Eye, } from 'lucide-react'
+import { loggedInUser } from '@/store/auth'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { Package, ShoppingCart, TrendingUp, DollarSign, AlertCircle, ClipboardCheckIcon, Settings, Plus, Edit, Eye, } from 'lucide-react'
 
 export const Route = createFileRoute('/store/dashboard')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const authUser = loggedInUser()
   const stats = [
     { title: 'Total Products', value: '156', color: '#00A7B3', icon: Package },
     { title: 'Pending Orders', value: '8', color: '#005A61', icon: ShoppingCart },
@@ -56,35 +58,13 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background rounded-2xl">
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-navbar shadow-sm border-b px-6 py-4 rounded-2xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-fresh-primary">Store Dashboard</h1>
-              <p className="text-fresh-secondary">Manage your store, products, and orders</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-              <button className="p-2 rounded-lg hover:bg-gray-100 relative">
-                <Bell size={20} />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  5
-                </span>
-              </button>
-            </div>
-          </div>
-        </header>
-
+      <div className="flex-1 flex flex-col overflow-hidden ">
+        <div className="bg-navbar shadow-sm border-b px-6 py-4 ">
+          <h1 className="text-2xl font-bold text-fresh-primary">Welcome back to your Store Management Platform {authUser?.profile.first_name}!</h1>
+          <p className="text-fresh-secondary">Manage your store, products, and orders</p>
+        </div>
         {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-6">
           {/* Quick Actions */}
@@ -93,34 +73,34 @@ function RouteComponent() {
               <h2 className="text-xl font-semibold text-fresh-primary">Quick Actions</h2>
             </div>
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <Link to="/store/create-product" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <Plus className="text-indigo-600" size={24} />
                 <div className="text-left">
                   <p className="font-medium text-fresh-primary">Add Product</p>
                   <p className="text-sm text-white">Add new item to store</p>
                 </div>
-              </button>
-              <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              </Link >
+              <Link to="/store/inventories" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <ClipboardCheckIcon className="text-green-600" size={24} />
                 <div className="text-left">
                   <p className="font-medium text-fresh-primary">Update Inventory</p>
                   <p className="text-sm text-white">Manage stock levels</p>
                 </div>
-              </button>
-              <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              </Link >
+              <Link to="/store/analytics" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <TrendingUp className="text-blue-600" size={24} />
                 <div className="text-left">
                   <p className="font-medium text-fresh-primary">View Analytics</p>
                   <p className="text-sm text-white">Sales performance</p>
                 </div>
-              </button>
-              <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              </Link >
+              <Link to="/store/settings" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                 <Settings className="text-purple-600" size={24} />
                 <div className="text-left">
                   <p className="font-medium text-fresh-primary">Store Settings</p>
                   <p className="text-sm text-white">Configure store</p>
                 </div>
-              </button>
+              </Link >
             </div>
           </div>
 
@@ -156,9 +136,9 @@ function RouteComponent() {
                       <div className="flex items-center space-x-2 mb-1">
                         <h3 className="font-semibold text-fresh-primary">#{order.id}</h3>
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                            order.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
-                              order.status === 'ready' ? 'bg-green-100 text-green-800' :
-                                'bg-gray-100 text-fresh-primary'
+                          order.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
+                            order.status === 'ready' ? 'bg-green-100 text-green-800' :
+                              'bg-gray-100 text-fresh-primary'
                           }`}>
                           {order.status.toUpperCase()}
                         </span>
