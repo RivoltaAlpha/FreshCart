@@ -189,22 +189,31 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen bg-background py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Link to="/products" className="flex items-center p-2 hover:bg-gray-200 rounded-full transition-colors">
-              <ArrowLeft className="h-6 w-6 text-fresh-secondary" />
-            </Link>
-            <div>
-              <h1 className="text-4xl font-bold text-fresh-primary">Shopping Cart</h1>
-              <p className="text-fresh-secondary">{cartItems.length} item{cartItems.length !== 1 ? "s" : ""} in your cart</p>
+      {/* Banner */}
+      <div className="h-72 w-full relative overflow-hidden">
+        <img
+          src="../delivery.png"
+          alt="Banner"
+          className="w-full h-full object-cover"
+        />
+        <div className="flex-col absolute inset-0 bg-black/50 w-full h-full object-cover">
+          <div className="flex items-center justify-center mb-8 my-20">
+            <div className="flex items-center gap-4">
+              <Link to="/products" className="flex items-center p-2 hover:bg-gray-200 rounded-full transition-colors">
+                <ArrowLeft className="h-6 w-6 text-fresh-secondary" />
+              </Link>
+              <div>
+                <h1 className="text-4xl font-bold text-white">Shopping Cart</h1>
+                <p className="text-white">{cartItems.length} item{cartItems.length !== 1 ? "s" : ""} in your cart</p>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
               <div key={item.product.product_id} className="bg-card rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
@@ -425,7 +434,7 @@ function RouteComponent() {
               >
                 <CreditCard className="h-5 w-5" />
                 <span> </span>
-                
+
                 Proceed to Checkout
               </button>
 
