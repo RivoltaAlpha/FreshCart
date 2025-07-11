@@ -13,6 +13,7 @@ import {
   approveOrder,
   shipOrder,
   getUserOrders,
+  getStoreOrders,
 } from '@/services/orderService'
 import {
   useMutation,
@@ -27,6 +28,15 @@ export const useOrders = (): UseQueryResult<OrderResponse[], Error> => {
     queryFn: async () => {
       const response = await getAllOrders()
       return response.json()
+    },
+  })
+}
+export const useStoreOrders = (store_id: number): UseQueryResult<OrderResponse[], Error> => {
+  return useQuery({
+    queryKey: ['storeOrders'],
+    queryFn: async () => {
+      const response = await getStoreOrders(store_id)
+      return response
     },
   })
 }
@@ -81,7 +91,7 @@ export function useOrderMutation({
     ],
     mutationFn,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['orders','storeOrders'] })
       onSuccess?.()
     },
   })
