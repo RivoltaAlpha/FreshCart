@@ -10,10 +10,11 @@ export interface User {
     first_name: string
     last_name: string
     phone_number: string
+    addresses: Partial<Address>[]
   }
   isActive: boolean
-  createdAt: Date
-  updatedAt: Date
+  created_at: Date
+  updated_at: Date
 }
 
 export interface UserProfile {
@@ -194,9 +195,9 @@ export interface Address {
   address_id: number
   profile_id: number
   street: string
-  city: string
-  state?: string
-  postal_code?: string
+  town: string
+  area?: string
+  county?: string
   country: string
   isDefault: boolean
   created_at: Date
@@ -207,18 +208,18 @@ export interface Address {
 export interface CreateAddress {
   profile_id: number
   street: string
-  city: string
-  state?: string
-  postal_code?: string
+  town: string
+  area?: string
+  county?: string
   country: string
   isDefault?: boolean
 }
 
 export interface UpdateAddress {
   street?: string
-  city?: string
-  state?: string
-  postal_code?: string
+  town?: string
+  area?: string
+  county?: string
   country?: string
   isDefault?: boolean
 }
@@ -293,7 +294,7 @@ export interface BackendProduct {
   discount: number
   expiry_date: string | null
   created_at: string
-  updatedAt: string
+  updated_at: string
   category: {
     category_id: number
     name: string
