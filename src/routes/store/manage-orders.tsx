@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react";
-import { useOrderMutation, useStoreOrders } from "@/hooks/useOrders";
+import { useStoreOrders, useUpdateOrderStatusMutation } from "@/hooks/useOrders";
 import type { CustomerOrder, OrderStatus } from "@/types/types";
 import {
   Package,
@@ -21,13 +21,13 @@ export const Route = createFileRoute('/store/manage-orders')({
 })
 
 function RouteComponent() {
-  const storeId = 8; // Replace with actual store ID or fetch dynamically
+  const storeId = 10; // Replace with actual store ID or fetch dynamically
   const { data: orders, isLoading, isError } = useStoreOrders(storeId);
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(null);
   const [newStatus, setNewStatus] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string | 'all'>('all');
 
-  const updateMutation = useOrderMutation({ type: "update", id: selectedOrder?.order_id });
+  const updateMutation = useUpdateOrderStatusMutation(selectedOrder?.order_id ?? 0);
 
   // Filter orders based on status
   const filteredOrders = (() => {
@@ -101,11 +101,7 @@ function RouteComponent() {
 
   const handleStatusChange = () => {
     if (selectedOrder) {
-      // Create a simplified update object with just the necessary fields
-      updateMutation.mutate({
-        order_id: selectedOrder.order_id,
-        status: newStatus as OrderStatus,
-      } as any);
+      updateMutation.mutate(newStatus as OrderStatus);
       closeModal();
     }
   };
