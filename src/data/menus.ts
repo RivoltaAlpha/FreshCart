@@ -9,7 +9,6 @@ import {
   BarChart3,
   Users,
   Truck,
-  MapPin,
   Clock,
   DollarSign,
   Database,
@@ -128,17 +127,17 @@ export const driverMenu: MenuItem[] = [
     icon: Truck,
     path: '/driver/deliveries',
   },
-  {
-    id: 'route',
-    label: 'Route Planning',
-    icon: MapPin,
-    path: '/driver/route-navigation',
-  },
+  // {
+  //   id: 'route',
+  //   label: 'Route Planning',
+  //   icon: MapPin,
+  //   path: '/driver/route-navigation',
+  // },
   {
     id: 'history',
     label: 'Delivery History',
     icon: Clock,
-    path: '/driver/deliveries',
+    path: '/driver/delivery-history',
   },
   {
     id: 'earnings',
@@ -158,12 +157,12 @@ export const driverMenu: MenuItem[] = [
     icon: User,
     path: '/driver/profile',
   },
-  {
-    id: 'settings',
-    label: 'Settings',
-    icon: Settings,
-    path: '/driver/settings',
-  },
+  // {
+  //   id: 'settings',
+  //   label: 'Settings',
+  //   icon: Settings,
+  //   path: '/driver/settings',
+  // },
 ]
 
 export const adminMenu: MenuItem[] = [
