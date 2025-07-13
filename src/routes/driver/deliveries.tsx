@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { MapPin, Phone, Navigation } from 'lucide-react';
 import { useState } from 'react';
 import RouteMap from '@/components/RouteMap';
+import type { Delivery } from '@/types/delivery';
 
 export const Route = createFileRoute('/driver/deliveries')({
   component: RouteComponent,
@@ -11,8 +12,11 @@ export const Route = createFileRoute('/driver/deliveries')({
 
 function RouteComponent() {
   const user = loggedInUser();
-  const { data: deliveries } = useDeliveriesForDriver(user?.user_id ? parseInt(user.user_id) : 0);
-  // update delivery mutation
+  const { data: alldeliveries } = useDeliveriesForDriver(user?.user_id ? parseInt(user.user_id) : 0);
+
+  const deliveries: Delivery[] | undefined = alldeliveries?.filter(
+    (delivery: Delivery) => delivery.delivery_status === 'assigned' || delivery.delivery_status === 'picked_up' || delivery.delivery_status === 'in_transit'
+  );  
   const updateDeliveryMutation = useUpdateDeliveryStatus();
   const [mapModalOpen, setMapModalOpen] = useState(false);
   const [modalCoords, setModalCoords] = useState<any[]>([]);
@@ -28,7 +32,7 @@ function RouteComponent() {
         <main className="flex-1 overflow-auto p-6">
           <div className="bg-white rounded-xl shadow-sm">
             <div className="px-6 py-4 border-b">
-              <h2 className="text-xl font-semibold text-gray-800">Active Deliveries</h2>
+              <h2 className="text-xl font-semibold text-gray-800">Active Delivery</h2>
             </div>
             <div className="p-6 space-y-4">
               {(deliveries && deliveries.length > 0) ? (
@@ -40,7 +44,7 @@ function RouteComponent() {
                   // Get order info
                   const order = delivery.order;
                   return (
-                    <div key={delivery.delivery_id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div key={delivery.delivery_id} className="bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
@@ -83,15 +87,23 @@ function RouteComponent() {
                           <p className="text-sm text-gray-600">Duration: {delivery.route_duration ? `${Math.round(parseFloat(delivery.route_duration) / 60)} min` : '-'}</p>
                         </div>
                       </div>
-                      <div className="flex space-x-2 mt-2">
+                      <div className="flex flex-wrap gap-2 mt-2">
                         {delivery.delivery_status === 'assigned' && (
-                          <button className="flex-1 bg-[#516E89] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                          <button
+                            className="flex-1 min-w-[120px] bg-[#516E89] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                            onClick={() => {
+                              updateDeliveryMutation.mutate({
+                                deliveryId: delivery.delivery_id,
+                                status: 'in_transit',
+                              });
+                            }}
+                          >
                             Pick Up Order
                           </button>
                         )}
-                        {delivery.delivery_status === 'picked_up' && (
+                        {(delivery.delivery_status === 'picked_up' || delivery.delivery_status === 'in_transit') && (
                           <button
-                            className="flex-1 bg-[#00A7B3] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                            className="flex-1 min-w-[120px] bg-[#00A7B3] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
                             onClick={() => {
                               updateDeliveryMutation.mutate({
                                 deliveryId: delivery.delivery_id,
@@ -103,7 +115,7 @@ function RouteComponent() {
                           </button>
                         )}
                         <button
-                          className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="px-4 py-2 min-w-[48px] border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
                           onClick={() => {
                             let coords = [];
                             try {
@@ -124,7 +136,7 @@ function RouteComponent() {
                         >
                           <Navigation size={16} />
                         </button>
-                        <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <button className="px-4 py-2 min-w-[48px] border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center">
                           <Phone size={16} />
                         </button>
                       </div>
