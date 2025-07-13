@@ -7,7 +7,7 @@ import { orderActions } from '@/store/order';
 import { storesStore } from '@/store/store';
 import { authStore } from '@/store/auth';
 import { DeliveryMethod } from '@/types/types';
-import { useOrderMutation } from '@/hooks/useOrders';
+import { useCreateOrderMutation } from '@/hooks/useOrders';
 
 export const Route = createFileRoute('/customer/cart')({
   component: RouteComponent,
@@ -23,14 +23,7 @@ function RouteComponent() {
   const selectedStore = localStorage.getItem('selectedStore');
   const store_id = JSON.parse(selectedStore || '{}')?.store_id;
 
-  const { mutate: createNewOrder } = useOrderMutation({
-    type: 'create',
-    onSuccess: () => {
-      console.log('Order mutation successful');
-      toast.success('Order created successfully! Proceeding to checkout...');
-      navigate({ to: '/customer/checkout-order' });
-    }
-  });
+  const { mutate: createNewOrder } = useCreateOrderMutation();
 
   // Load cart from storage and subscribe to changes
   useEffect(() => {
@@ -176,7 +169,7 @@ function RouteComponent() {
               Looks like you haven't added any items to your cart yet.
             </p>
             <Link
-              to="/store"
+              to="/stores"
               className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors inline-block"
             >
               Continue Shopping
