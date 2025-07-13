@@ -32,8 +32,8 @@ function RouteComponent() {
     useEffect(() => {
         const reference = search.reference || search.trxref || localStorage.getItem('payment_reference');
 
-        console.log('Payment verification - URL params:', search);
-        console.log('Payment verification - extracted reference:', reference);
+        // console.log('Payment verification - URL params:', search);
+        // console.log('Payment verification - extracted reference:', reference);
 
         if (!reference) {
             console.error('No payment reference found in URL or localStorage');
@@ -45,7 +45,7 @@ function RouteComponent() {
         // Verify payment
         verifyPayment(reference, {
             onSuccess: (response) => {
-                console.log('Payment verification response:', response);
+                // console.log('Payment verification response:', response);
 
                 if (response.status && response.data.status === 'success') {
                     setVerificationStatus('success');
