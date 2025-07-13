@@ -21,7 +21,7 @@ export const Route = createFileRoute('/store/manage-orders')({
 })
 
 function RouteComponent() {
-  const storeId = 10; // Replace with actual store ID or fetch dynamically
+  const storeId = 12; // Replace with actual store ID or fetch dynamically
   const { data: orders, isLoading, isError } = useStoreOrders(storeId);
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(null);
   const [newStatus, setNewStatus] = useState<string>("");
