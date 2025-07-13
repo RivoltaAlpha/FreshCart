@@ -45,7 +45,7 @@ import { Route as DriverRouteNavigationRouteImport } from './routes/driver/route
 import { Route as DriverProfileRouteImport } from './routes/driver/profile'
 import { Route as DriverNotificationsRouteImport } from './routes/driver/notifications'
 import { Route as DriverEarningsRouteImport } from './routes/driver/earnings'
-import { Route as DriverDeliveryDetailsRouteImport } from './routes/driver/delivery-details'
+import { Route as DriverDeliveryHistoryRouteImport } from './routes/driver/delivery-history'
 import { Route as DriverDeliveriesRouteImport } from './routes/driver/deliveries'
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
 import { Route as CustomerWishlistRouteImport } from './routes/customer/wishlist'
@@ -256,9 +256,9 @@ const DriverEarningsRoute = DriverEarningsRouteImport.update({
   path: '/earnings',
   getParentRoute: () => DriverRoute,
 } as any)
-const DriverDeliveryDetailsRoute = DriverDeliveryDetailsRouteImport.update({
-  id: '/delivery-details',
-  path: '/delivery-details',
+const DriverDeliveryHistoryRoute = DriverDeliveryHistoryRouteImport.update({
+  id: '/delivery-history',
+  path: '/delivery-history',
   getParentRoute: () => DriverRoute,
 } as any)
 const DriverDeliveriesRoute = DriverDeliveriesRouteImport.update({
@@ -454,7 +454,7 @@ export interface FileRoutesByFullPath {
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
-  '/driver/delivery-details': typeof DriverDeliveryDetailsRoute
+  '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/profile': typeof DriverProfileRoute
@@ -522,7 +522,7 @@ export interface FileRoutesByTo {
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
-  '/driver/delivery-details': typeof DriverDeliveryDetailsRoute
+  '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/profile': typeof DriverProfileRoute
@@ -591,7 +591,7 @@ export interface FileRoutesById {
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
-  '/driver/delivery-details': typeof DriverDeliveryDetailsRoute
+  '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
   '/driver/profile': typeof DriverProfileRoute
@@ -661,7 +661,7 @@ export interface FileRouteTypes {
     | '/customer/wishlist'
     | '/driver/dashboard'
     | '/driver/deliveries'
-    | '/driver/delivery-details'
+    | '/driver/delivery-history'
     | '/driver/earnings'
     | '/driver/notifications'
     | '/driver/profile'
@@ -729,7 +729,7 @@ export interface FileRouteTypes {
     | '/customer/wishlist'
     | '/driver/dashboard'
     | '/driver/deliveries'
-    | '/driver/delivery-details'
+    | '/driver/delivery-history'
     | '/driver/earnings'
     | '/driver/notifications'
     | '/driver/profile'
@@ -797,7 +797,7 @@ export interface FileRouteTypes {
     | '/customer/wishlist'
     | '/driver/dashboard'
     | '/driver/deliveries'
-    | '/driver/delivery-details'
+    | '/driver/delivery-history'
     | '/driver/earnings'
     | '/driver/notifications'
     | '/driver/profile'
@@ -1093,11 +1093,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverEarningsRouteImport
       parentRoute: typeof DriverRoute
     }
-    '/driver/delivery-details': {
-      id: '/driver/delivery-details'
-      path: '/delivery-details'
-      fullPath: '/driver/delivery-details'
-      preLoaderRoute: typeof DriverDeliveryDetailsRouteImport
+    '/driver/delivery-history': {
+      id: '/driver/delivery-history'
+      path: '/delivery-history'
+      fullPath: '/driver/delivery-history'
+      preLoaderRoute: typeof DriverDeliveryHistoryRouteImport
       parentRoute: typeof DriverRoute
     }
     '/driver/deliveries': {
@@ -1381,7 +1381,7 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 interface DriverRouteChildren {
   DriverDashboardRoute: typeof DriverDashboardRoute
   DriverDeliveriesRoute: typeof DriverDeliveriesRoute
-  DriverDeliveryDetailsRoute: typeof DriverDeliveryDetailsRoute
+  DriverDeliveryHistoryRoute: typeof DriverDeliveryHistoryRoute
   DriverEarningsRoute: typeof DriverEarningsRoute
   DriverNotificationsRoute: typeof DriverNotificationsRoute
   DriverProfileRoute: typeof DriverProfileRoute
@@ -1392,7 +1392,7 @@ interface DriverRouteChildren {
 const DriverRouteChildren: DriverRouteChildren = {
   DriverDashboardRoute: DriverDashboardRoute,
   DriverDeliveriesRoute: DriverDeliveriesRoute,
-  DriverDeliveryDetailsRoute: DriverDeliveryDetailsRoute,
+  DriverDeliveryHistoryRoute: DriverDeliveryHistoryRoute,
   DriverEarningsRoute: DriverEarningsRoute,
   DriverNotificationsRoute: DriverNotificationsRoute,
   DriverProfileRoute: DriverProfileRoute,
