@@ -8,6 +8,7 @@ export const Route = createFileRoute('/store/dashboard')({
 
 function RouteComponent() {
   const authUser = loggedInUser()
+  const userId = authUser?.user_id ? parseInt(authUser.user_id) : 0;
   const stats = [
     { title: 'Total Products', value: '156', color: '#00A7B3', icon: Package },
     { title: 'Pending Orders', value: '8', color: '#005A61', icon: ShoppingCart },
@@ -59,13 +60,7 @@ function RouteComponent() {
 
   return (
     <div className="flex h-screen bg-background rounded-2xl">
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden ">
-        <div className="bg-navbar shadow-sm border-b px-6 py-4 ">
-          <h1 className="text-2xl font-bold text-fresh-primary">Welcome back to your Store Management Platform {authUser?.profile.first_name}!</h1>
-          <p className="text-fresh-secondary">Manage your store, products, and orders</p>
-        </div>
-        {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-6">
           {/* Quick Actions */}
           <div className="my-8 bg-card rounded-xl shadow-sm">

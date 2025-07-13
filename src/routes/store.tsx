@@ -3,12 +3,14 @@ import { Sidebar } from '@/components/Sidebar'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { Bell, Search } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { loggedInUser } from '@/store/auth';
 
 function StoreLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const authUser = loggedInUser();
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
-  };  
+  };
 
   return (
     <div className="flex bg-[#f4f8fa] min-h-screen">
@@ -22,8 +24,10 @@ function StoreLayout() {
       <div className="flex-1 p-4 flex flex-col overflow-hidden">
         <header className="bg-navbar shadow-sm border-b px-6 py-4 rounded-2xl">
           <div className="flex items-center justify-between">
-            <div></div>
-            <div className="flex items-center space-x-4">
+            <div className=" px-6 py-4 ">
+              <h1 className="text-2xl font-bold text-fresh-primary">Welcome back to your Store Management Platform {authUser?.profile.first_name}!</h1>
+              <p className="text-fresh-secondary">Manage your store, products, and orders</p>
+            </div>            <div className="flex items-center space-x-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
