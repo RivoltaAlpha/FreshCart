@@ -83,6 +83,8 @@ function RouteComponent() {
       day: 'numeric'
     })
   }
+  const defaultAddress = user?.profile?.addresses?.find((addr: any) => addr.isDefault);
+
 
   if (!authUser) {
     return (
@@ -244,7 +246,7 @@ function RouteComponent() {
               {/* Member Since */}
               <div className="text-sm text-gray-500">
                 <Calendar className="h-4 w-4 inline mr-1" />
-                Member since {user?.createdAt ? formatDate(user.createdAt) : 'N/A'}
+                Member since {user?.created_at ? formatDate(user.created_at) : 'N/A'}
               </div>
             </div>
           </div>
@@ -364,26 +366,36 @@ function RouteComponent() {
                         </div>
                       )}
                     </div>
+                    <div className="flex-col items-center rounded-lg">
+                      <h4 className="font-semibold text-gray-800 mb-4">Address</h4>
+                      {defaultAddress && (
+                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                          <span>
+                            {defaultAddress.area}, {defaultAddress.town}, {defaultAddress.county}, {defaultAddress.country}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Account Information */}
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-4">Account Information</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Shield className="h-4 w-4 text-gray-500" />
-                      <div>
-                        <span className="text-sm text-gray-600">Account Type</span>
-                        <p className="font-medium">{user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Customer'}</p>
-                      </div>
+              {/* Account Information */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Account Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                    <Shield className="h-4 w-4 text-gray-500" />
+                    <div>
+                      <span className="text-sm text-gray-600">Account Type</span>
+                      <p className="font-medium">{user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Customer'}</p>
                     </div>
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Calendar className="h-4 w-4 text-gray-500" />
-                      <div>
-                        <span className="text-sm text-gray-600">Member Since</span>
-                        <p className="font-medium">{user?.createdAt ? formatDate(user.createdAt) : 'N/A'}</p>
-                      </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                    <Calendar className="h-4 w-4 text-gray-500" />
+                    <div>
+                      <span className="text-sm text-gray-600">Member Since</span>
+                      <p className="font-medium">{user?.created_at ? formatDate(user.created_at) : 'N/A'}</p>
                     </div>
                   </div>
                 </div>
@@ -391,22 +403,22 @@ function RouteComponent() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Additional Actions */}
-        <div className="mt-8 flex flex-wrap gap-4">
-          <button
-            onClick={() => navigate({ to: '/customer/my-orders' })}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
-          >
-            View Orders
-          </button>
-          <button
-            onClick={() => navigate({ to: '/customer/wishlist' })}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
-          >
-            View Wishlist
-          </button>
-        </div>
+      {/* Additional Actions */}
+      <div className="mt-8 flex flex-wrap gap-4">
+        <button
+          onClick={() => navigate({ to: '/customer/my-orders' })}
+          className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
+        >
+          View Orders
+        </button>
+        <button
+          onClick={() => navigate({ to: '/customer/wishlist' })}
+          className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
+        >
+          View Wishlist
+        </button>
       </div>
     </div>
   )
