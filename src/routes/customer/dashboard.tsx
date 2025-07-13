@@ -1,17 +1,33 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
-import { ShoppingCart, Package, Heart, MapPin, Star, Plus, Minus, Truck, CreditCard, Gift } from 'lucide-react'
-
+import { useEffect, useState } from 'react'
+import { ShoppingCart, Package, Heart, Star, Plus, Minus, Truck, Gift, ShoppingBagIcon, ShoppingBasketIcon } from 'lucide-react'
+import { loggedInUser } from '@/store/auth'
+import { useCustomerOrders } from '@/hooks/useOrders'
+import type { StoreProduct } from '@/types/store'
 
 export const Route = createFileRoute('/customer/dashboard')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Organic Bananas', price: 3.99, quantity: 2, image: '🍌' },
-    { id: 2, name: 'Fresh Milk', price: 4.50, quantity: 1, image: '🥛' },
-  ])
+  const [cartItems, setCartItems] = useState<{ product: StoreProduct; quantity: number }[]>([])
+  const cartTotal = cartItems.reduce((sum: number, item) => {
+    const price = typeof item.product.price === 'string' ? parseFloat(item.product.price) : item.product.price;
+    return sum + price * item.quantity;
+  }, 0);
+
+  useEffect(() => {
+    const cartRaw = localStorage.getItem('cart');
+    if (cartRaw) {
+      try {
+        const cartObj = JSON.parse(cartRaw);
+        if (cartObj.items && Array.isArray(cartObj.items)) {
+          setCartItems(cartObj.items);
+        }
+      } catch (e) {
+      }
+    }
+  }, []);
 
   const quickStats = [
     { title: 'Orders This Month', value: '12', color: 'bg-blue-500', icon: Package },
@@ -20,59 +36,24 @@ function RouteComponent() {
     { title: 'Loyalty Points', value: '1,250', color: 'bg-teal-700', icon: Star },
   ]
 
-  const recentOrders = [
-    { 
-      id: 'ORD001', 
-      date: '2024-12-28', 
-      items: 8, 
-      total: '$67.45',
-      status: 'delivered',
-      store: 'Fresh Mart'
-    },
-    { 
-      id: 'ORD002', 
-      date: '2024-12-25', 
-      items: 5, 
-      total: '$42.30',
-      status: 'delivered',
-      store: 'Organic Plus'
-    },
-    { 
-      id: 'ORD003', 
-      date: '2024-12-22', 
-      items: 12, 
-      total: '$89.50',
-      status: 'delivered',
-      store: 'Fresh Mart'
-    },
-  ]
+  const user = loggedInUser()
+  const { data: orders } = useCustomerOrders(user?.user_id ? parseInt(user.user_id) : 0)
 
-  const featuredProducts = [
-    { id: 1, name: 'Organic Apples', price: 5.99, rating: 4.8, image: '🍎', discount: '20% OFF' },
-    { id: 2, name: 'Free Range Eggs', price: 6.50, rating: 4.9, image: '🥚', discount: null },
-    { id: 3, name: 'Whole Grain Bread', price: 3.25, rating: 4.7, image: '🍞', discount: '15% OFF' },
-    { id: 4, name: 'Greek Yogurt', price: 4.75, rating: 4.6, image: '🥛', discount: null },
-  ]
+  const recentOrders = orders?.slice(0, 3)
 
-  interface CartItem {
-    id: number
-    name: string
-    price: number
-    quantity: number
-    image: string
-  }
+  // Cart item structure: { product: StoreProduct, quantity: number }
 
   const updateQuantity = (id: number, change: number) => {
-    setCartItems((items: CartItem[]) => 
-      items.map((item: CartItem) => 
-        item.id === id 
-          ? { ...item, quantity: Math.max(0, item.quantity + change) }
-          : item
-      ).filter((item: CartItem) => item.quantity > 0)
-    )
-  }
-
-  const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    setCartItems((items) =>
+      items
+        .map((item) =>
+          item.product.product_id === id
+            ? { ...item, quantity: Math.max(0, item.quantity + change) }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -98,44 +79,6 @@ function RouteComponent() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content Area */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Featured Products */}
-              <div className="bg-white rounded-xl shadow-sm">
-                <div className="px-6 py-4 border-b">
-                  <h2 className="text-xl font-semibold text-gray-800">Featured Products</h2>
-                </div>
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {featuredProducts.map((product) => (
-                    <div key={product.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex items-center space-x-4">
-                        <div className="text-4xl">{product.image}</div>
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h3 className="font-semibold text-gray-800">{product.name}</h3>
-                              <div className="flex items-center space-x-1 mt-1">
-                                <Star className="text-yellow-400 fill-current" size={16} />
-                                <span className="text-sm text-gray-600">{product.rating}</span>
-                              </div>
-                            </div>
-                            {product.discount && (
-                              <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
-                                {product.discount}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center justify-between mt-3">
-                            <span className="text-lg font-bold text-gray-900">${product.price}</span>
-                            <button className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors">
-                              Add to Cart
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Recent Orders */}
               <div className="bg-white rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b flex items-center justify-between">
@@ -145,32 +88,86 @@ function RouteComponent() {
                   </button>
                 </div>
                 <div className="p-6 space-y-4">
-                  {recentOrders.map((order) => (
-                    <div key={order.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                      <div className="flex items-center space-x-4">
-                        <div className="bg-green-100 p-2 rounded-lg">
-                          <Package className="text-green-600" size={20} />
+                  {recentOrders?.map((order) => {
+                    const statusSteps = [
+                      'confirmed',
+                      'preparing',
+                      'ready_for_pickup',
+                      'in_transit',
+                      'delivered',
+                    ];
+                    const currentStep = statusSteps.indexOf(order.status);
+                    return (
+                      <div key={order.order_id} className="flex flex-col gap-2 p-4 border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className="bg-blue-100 p-2 rounded-lg">
+                              <Package className="text-blue-600" size={20} />
+                            </div>
+                            <div className='space-y-4'>
+                              <h3 className="font-semibold text-gray-800">#{order.order_id}</h3>
+                              <p className="text-sm">{order.store?.name ?? 'Store'} • {order.items?.length ?? 0} items</p>
+                              <p className="text-xs ">{order.created_at}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-gray-900">{order.total_amount}</p>
+                            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                              {order.status.toUpperCase()}
+                            </span>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-800">#{order.id}</h3>
-                          <p className="text-sm text-gray-600">{order.store} • {order.items} items</p>
-                          <p className="text-xs text-gray-500">{order.date}</p>
+                        {/* Order Progress Circles */}
+                        <div className="flex items-center justify-center mt-2">
+                          {statusSteps.map((step, idx) => {
+                            const isCompleted = idx < currentStep;
+                            const isCurrent = idx === currentStep;
+                            // Colors: current = #41729F, completed = #274472, upcoming = #5885AF
+                            const circleStyle = isCurrent
+                              ? { backgroundColor: '#41729F', borderColor: '#41729F', color: 'white', boxShadow: '0 0 6px #41729F' }
+                              : isCompleted
+                                ? { backgroundColor: '#274472', borderColor: '#274472', color: 'white' }
+                                : { backgroundColor: '#EAF0F6', borderColor: '#5885AF', color: '#5885AF' };
+                            const labelStyle = isCurrent
+                              ? { color: '#41729F', fontWeight: 600 }
+                              : isCompleted
+                                ? { color: '#274472' }
+                                : { color: '#5885AF' };
+                            // Connector color
+                            const connectorColor = isCompleted ? '#274472' : isCurrent ? '#41729F' : '#5885AF';
+                            return (
+                              <div key={step} className="flex flex-col items-center">
+                                <div className="flex items-center">
+                                  <div
+                                    className="w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all"
+                                    style={circleStyle}
+                                    title={step.replace(/_/g, ' ')}
+                                  >
+                                    {isCompleted ? '✓' : isCurrent ? idx + 1 : ''}
+                                  </div>
+                                  {/* Connector line (except after last circle) */}
+                                  {idx < statusSteps.length - 1 && (
+                                    <div
+                                      className="h-1 w-8 mx-1"
+                                      style={{ backgroundColor: connectorColor, borderRadius: 2 }}
+                                    />
+                                  )}
+                                </div>
+                                <span className="text-[10px] mt-1" style={labelStyle}>{step.replace(/_/g, ' ')}</span>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-bold text-gray-900">{order.total}</p>
-                        <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                          {order.status.toUpperCase()}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
 
             {/* Sidebar Content */}
             <div className="space-y-6">
+
               {/* Current Cart */}
               <div className="bg-white rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b">
@@ -179,25 +176,25 @@ function RouteComponent() {
                 <div className="p-6">
                   {cartItems.length > 0 ? (
                     <div className="space-y-4">
-                      {cartItems.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between">
+                      {cartItems.map((item: any) => (
+                        <div key={item.product.product_id} className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
-                            <span className="text-2xl">{item.image}</span>
+                            <img src={item.product.image_url} alt={item.product.name} className="w-12 h-12 rounded-lg object-cover" />
                             <div>
-                              <p className="font-medium text-gray-800">{item.name}</p>
-                              <p className="text-sm text-gray-600">${item.price}</p>
+                              <p className="font-medium text-gray-800">{item.product.name}</p>
+                              <p className="text-sm">KSh {item.product.price}</p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <button 
-                              onClick={() => updateQuantity(item.id, -1)}
+                            <button
+                              onClick={() => updateQuantity(item.product.product_id, -1)}
                               className="p-1 rounded-full hover:bg-gray-100"
                             >
                               <Minus size={16} />
                             </button>
                             <span className="w-8 text-center">{item.quantity}</span>
-                            <button 
-                              onClick={() => updateQuantity(item.id, 1)}
+                            <button
+                              onClick={() => updateQuantity(item.product.product_id, 1)}
                               className="p-1 rounded-full hover:bg-gray-100"
                             >
                               <Plus size={16} />
@@ -208,7 +205,7 @@ function RouteComponent() {
                       <div className="border-t pt-4">
                         <div className="flex justify-between items-center font-bold">
                           <span>Total:</span>
-                          <span>${cartTotal.toFixed(2)}</span>
+                          <span>KSh {cartTotal.toFixed(2)}</span>
                         </div>
                         <button className="w-full mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
                           Proceed to Checkout
@@ -233,22 +230,22 @@ function RouteComponent() {
                   <h2 className="text-lg font-semibold text-gray-800">Quick Actions</h2>
                 </div>
                 <div className="p-6 space-y-3">
-                  <button className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <a href="/customer/payments" className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <ShoppingBagIcon className="text-green-600" size={20} />
+                    <span>Continue Shopping</span>
+                  </a>
+                  <a href="/customer/cart" className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <ShoppingBasketIcon className="text-purple-600" size={20} />
+                    <span>My Cart</span>
+                  </a>
+                  <a href="/customer/my-orders" className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                     <Truck className="text-blue-600" size={20} />
                     <span>Track Order</span>
-                  </button>
-                  <button className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  </a>
+                  <a href="/customer/wishlist" className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                     <Heart className="text-pink-600" size={20} />
                     <span>View Favorites</span>
-                  </button>
-                  <button className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    <CreditCard className="text-green-600" size={20} />
-                    <span>Payment Methods</span>
-                  </button>
-                  <button className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    <MapPin className="text-purple-600" size={20} />
-                    <span>Delivery Address</span>
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -256,5 +253,5 @@ function RouteComponent() {
         </main>
       </div>
     </div>
-  )
+  );
 }
