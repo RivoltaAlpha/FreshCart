@@ -40,6 +40,12 @@ import { Route as StoreDashboardRouteImport } from './routes/store/dashboard'
 import { Route as StoreCreateProductRouteImport } from './routes/store/create-product'
 import { Route as StoreCreateInventoryRouteImport } from './routes/store/create-inventory'
 import { Route as StoreAnalyticsRouteImport } from './routes/store/analytics'
+import { Route as DriverSettingsRouteImport } from './routes/driver/settings'
+import { Route as DriverRouteNavigationRouteImport } from './routes/driver/route-navigation'
+import { Route as DriverProfileRouteImport } from './routes/driver/profile'
+import { Route as DriverNotificationsRouteImport } from './routes/driver/notifications'
+import { Route as DriverEarningsRouteImport } from './routes/driver/earnings'
+import { Route as DriverDeliveriesRouteImport } from './routes/driver/deliveries'
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
 import { Route as CustomerWishlistRouteImport } from './routes/customer/wishlist'
 import { Route as CustomerSuccessRouteImport } from './routes/customer/success'
@@ -223,6 +229,36 @@ const StoreAnalyticsRoute = StoreAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => StoreRoute,
+} as any)
+const DriverSettingsRoute = DriverSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverRouteNavigationRoute = DriverRouteNavigationRouteImport.update({
+  id: '/route-navigation',
+  path: '/route-navigation',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverProfileRoute = DriverProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverNotificationsRoute = DriverNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverEarningsRoute = DriverEarningsRouteImport.update({
+  id: '/earnings',
+  path: '/earnings',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverDeliveriesRoute = DriverDeliveriesRouteImport.update({
+  id: '/deliveries',
+  path: '/deliveries',
+  getParentRoute: () => DriverRoute,
 } as any)
 const DriverDashboardRoute = DriverDashboardRouteImport.update({
   id: '/dashboard',
@@ -411,6 +447,12 @@ export interface FileRoutesByFullPath {
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
+  '/driver/deliveries': typeof DriverDeliveriesRoute
+  '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/profile': typeof DriverProfileRoute
+  '/driver/route-navigation': typeof DriverRouteNavigationRoute
+  '/driver/settings': typeof DriverSettingsRoute
   '/store/analytics': typeof StoreAnalyticsRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -472,6 +514,12 @@ export interface FileRoutesByTo {
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
+  '/driver/deliveries': typeof DriverDeliveriesRoute
+  '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/profile': typeof DriverProfileRoute
+  '/driver/route-navigation': typeof DriverRouteNavigationRoute
+  '/driver/settings': typeof DriverSettingsRoute
   '/store/analytics': typeof StoreAnalyticsRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -534,6 +582,12 @@ export interface FileRoutesById {
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
+  '/driver/deliveries': typeof DriverDeliveriesRoute
+  '/driver/earnings': typeof DriverEarningsRoute
+  '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/profile': typeof DriverProfileRoute
+  '/driver/route-navigation': typeof DriverRouteNavigationRoute
+  '/driver/settings': typeof DriverSettingsRoute
   '/store/analytics': typeof StoreAnalyticsRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -597,6 +651,12 @@ export interface FileRouteTypes {
     | '/customer/success'
     | '/customer/wishlist'
     | '/driver/dashboard'
+    | '/driver/deliveries'
+    | '/driver/earnings'
+    | '/driver/notifications'
+    | '/driver/profile'
+    | '/driver/route-navigation'
+    | '/driver/settings'
     | '/store/analytics'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -658,6 +718,12 @@ export interface FileRouteTypes {
     | '/customer/success'
     | '/customer/wishlist'
     | '/driver/dashboard'
+    | '/driver/deliveries'
+    | '/driver/earnings'
+    | '/driver/notifications'
+    | '/driver/profile'
+    | '/driver/route-navigation'
+    | '/driver/settings'
     | '/store/analytics'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -719,6 +785,12 @@ export interface FileRouteTypes {
     | '/customer/success'
     | '/customer/wishlist'
     | '/driver/dashboard'
+    | '/driver/deliveries'
+    | '/driver/earnings'
+    | '/driver/notifications'
+    | '/driver/profile'
+    | '/driver/route-navigation'
+    | '/driver/settings'
     | '/store/analytics'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -973,6 +1045,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/store/analytics'
       preLoaderRoute: typeof StoreAnalyticsRouteImport
       parentRoute: typeof StoreRoute
+    }
+    '/driver/settings': {
+      id: '/driver/settings'
+      path: '/settings'
+      fullPath: '/driver/settings'
+      preLoaderRoute: typeof DriverSettingsRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/route-navigation': {
+      id: '/driver/route-navigation'
+      path: '/route-navigation'
+      fullPath: '/driver/route-navigation'
+      preLoaderRoute: typeof DriverRouteNavigationRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/profile': {
+      id: '/driver/profile'
+      path: '/profile'
+      fullPath: '/driver/profile'
+      preLoaderRoute: typeof DriverProfileRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/notifications': {
+      id: '/driver/notifications'
+      path: '/notifications'
+      fullPath: '/driver/notifications'
+      preLoaderRoute: typeof DriverNotificationsRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/earnings': {
+      id: '/driver/earnings'
+      path: '/earnings'
+      fullPath: '/driver/earnings'
+      preLoaderRoute: typeof DriverEarningsRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/deliveries': {
+      id: '/driver/deliveries'
+      path: '/deliveries'
+      fullPath: '/driver/deliveries'
+      preLoaderRoute: typeof DriverDeliveriesRouteImport
+      parentRoute: typeof DriverRoute
     }
     '/driver/dashboard': {
       id: '/driver/dashboard'
@@ -1247,10 +1361,22 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 
 interface DriverRouteChildren {
   DriverDashboardRoute: typeof DriverDashboardRoute
+  DriverDeliveriesRoute: typeof DriverDeliveriesRoute
+  DriverEarningsRoute: typeof DriverEarningsRoute
+  DriverNotificationsRoute: typeof DriverNotificationsRoute
+  DriverProfileRoute: typeof DriverProfileRoute
+  DriverRouteNavigationRoute: typeof DriverRouteNavigationRoute
+  DriverSettingsRoute: typeof DriverSettingsRoute
 }
 
 const DriverRouteChildren: DriverRouteChildren = {
   DriverDashboardRoute: DriverDashboardRoute,
+  DriverDeliveriesRoute: DriverDeliveriesRoute,
+  DriverEarningsRoute: DriverEarningsRoute,
+  DriverNotificationsRoute: DriverNotificationsRoute,
+  DriverProfileRoute: DriverProfileRoute,
+  DriverRouteNavigationRoute: DriverRouteNavigationRoute,
+  DriverSettingsRoute: DriverSettingsRoute,
 }
 
 const DriverRouteWithChildren =

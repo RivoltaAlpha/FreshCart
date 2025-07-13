@@ -132,13 +132,13 @@ export const driverMenu: MenuItem[] = [
     id: 'route',
     label: 'Route Planning',
     icon: MapPin,
-    path: '/driver/route',
+    path: '/driver/route-navigation',
   },
   {
     id: 'history',
     label: 'Delivery History',
     icon: Clock,
-    path: '/driver/history',
+    path: '/driver/deliveries',
   },
   {
     id: 'earnings',
