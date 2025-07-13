@@ -4,6 +4,7 @@ import type {
   CreateOrder,
   ShipOrder,
   CustomerOrder,
+  OrderStatus,
 } from '../types/types'
 import {
   getAllOrders,
@@ -15,6 +16,7 @@ import {
   shipOrder,
   getUserOrders,
   getStoreOrders,
+  updateOrderStatus,
 } from '@/services/orderService'
 import {
   useMutation,
@@ -58,41 +60,53 @@ export const useCustomerOrders = (customerId: number) => {
   })
 }
 
-type MutationType = 'create' | 'update' | 'delete'
-
-interface UseOrderMutationOptions {
-  type: MutationType
-  id?: number
-  onSuccess?: () => void
+// Create Order Mutation
+export function useCreateOrderMutation(onSuccess?: () => void) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ['createOrder'],
+    mutationFn: (data: CreateOrder) => createOrder(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders', 'storeOrders'] })
+      onSuccess?.()
+    },
+  })
 }
 
-export function useOrderMutation({
-  type,
-  id,
-  onSuccess,
-}: UseOrderMutationOptions) {
+// Update Order Mutation
+export function useUpdateOrderMutation(id: number, onSuccess?: () => void) {
   const queryClient = useQueryClient()
-
-  const mutationFn = {
-    create: createOrder,
-    update: (data: CreateOrder) => {
-      if (!id) throw new Error('ID is required for update')
-      return updateOrder(id, data)
-    },
-    delete: () => {
-      if (!id) throw new Error('ID is required for delete')
-      return deleteOrder(id)
-    },
-  }[type]
-
   return useMutation({
-    mutationKey: [
-      type === 'update' || type === 'delete' ? `${type}Order` : 'createOrder',
-      id,
-    ],
-    mutationFn,
+    mutationKey: ['updateOrder', id],
+    mutationFn: (data: CreateOrder) => updateOrder(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders','storeOrders'] })
+      queryClient.invalidateQueries({ queryKey: ['orders', 'storeOrders'] })
+      onSuccess?.()
+    },
+  })
+}
+
+// Update Order Status Mutation
+export function useUpdateOrderStatusMutation(id: number, onSuccess?: () => void) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ['updatestatusOrder', id],
+    mutationFn: (status: OrderStatus) => updateOrderStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders', 'storeOrders'] })
+      onSuccess?.()
+    },
+  })
+}
+
+// Delete Order Mutation
+export function useDeleteOrderMutation(id: number, onSuccess?: () => void) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ['deleteOrder', id],
+    mutationFn: () => deleteOrder(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders', 'storeOrders'] })
       onSuccess?.()
     },
   })

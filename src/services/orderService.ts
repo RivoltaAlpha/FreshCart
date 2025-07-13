@@ -1,65 +1,71 @@
-import type { ApproveOrder, Order, CreateOrder, ShipOrder, CustomerOrder } from "@/types/types";
+import type {
+  ApproveOrder,
+  Order,
+  CreateOrder,
+  ShipOrder,
+  CustomerOrder,
+} from '@/types/types'
 
-const url = 'http://localhost:8000';
+const url = 'http://localhost:8000'
 
 const getAuthToken = (): string => {
-  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
-  const token = auth.tokens?.accessToken;
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}')
+  const token = auth.tokens?.accessToken
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error('No authentication token found')
   }
-  return token;
-};
+  return token
+}
 
 const handleApiResponse = async (response: Response) => {
-      if (!response.ok) {
-    let errorMessage = `Request failed with status ${response.status}: ${response.statusText}`;
+  if (!response.ok) {
+    let errorMessage = `Request failed with status ${response.status}: ${response.statusText}`
 
     try {
       // Try to parse as JSON first
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers.get('content-type')
       if (contentType && contentType.includes('application/json')) {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorData.error || errorMessage;
+        const errorData = await response.json()
+        errorMessage = errorData.message || errorData.error || errorMessage
       } else {
         // If not JSON, try to read as text
-        const errorText = await response.text();
+        const errorText = await response.text()
         if (errorText) {
-          errorMessage = errorText;
+          errorMessage = errorText
         }
       }
     } catch (parseError) {
       // If parsing fails, use the default error message
-      console.warn('Failed to parse error response:', parseError);
+      console.warn('Failed to parse error response:', parseError)
     }
 
-    throw new Error(errorMessage);
+    throw new Error(errorMessage)
   }
-  return response;
-};
+  return response
+}
 
 export const getAllOrders = async () => {
-      const token = getAuthToken();
+  const token = getAuthToken()
   const response = await fetch(`${url}/orders/all`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
-  return handleApiResponse(response);
-};
+  })
+  return handleApiResponse(response)
+}
 
 export const getOrderById = async (order_id: number): Promise<Order> => {
-      const token = getAuthToken();
+  const token = getAuthToken()
   const response = await fetch(`${url}/orders/${order_id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
-  return handleApiResponse(response).then(res => res.json()); 
-};
+  })
+  return handleApiResponse(response).then((res) => res.json())
+}
 
 export const createOrder = async (orderData: CreateOrder) => {
-      const token = getAuthToken();
+  const token = getAuthToken()
   const response = await fetch(`${url}/orders/create`, {
     method: 'POST',
     headers: {
@@ -67,12 +73,12 @@ export const createOrder = async (orderData: CreateOrder) => {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(orderData),
-  });
-  return handleApiResponse(response).then(res => res.json());
-};
+  })
+  return handleApiResponse(response).then((res) => res.json())
+}
 
 export const updateOrder = async (order_id: number, orderData: CreateOrder) => {
-      const token = getAuthToken();
+  const token = getAuthToken()
   const response = await fetch(`${url}/orders/update/${order_id}`, {
     method: 'PATCH',
     headers: {
@@ -80,105 +86,128 @@ export const updateOrder = async (order_id: number, orderData: CreateOrder) => {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(orderData),
-  });
-  return handleApiResponse(response).then(res => res.json());
-};
+  })
+  return handleApiResponse(response).then((res) => res.json())
+}
+
+// update order status
+export const updateOrderStatus = async (order_id: number, status: string) => {
+  const token = getAuthToken()
+  const response = await fetch(`${url}/orders/update-status/${order_id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ order_id, status }),
+  })
+  return handleApiResponse(response).then((res) => res.json())
+}
 
 export const deleteOrder = async (order_id: number) => {
-      const token = getAuthToken();
+  const token = getAuthToken()
   const response = await fetch(`${url}/orders/delete/${order_id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
-  return handleApiResponse(response);
-};
+  })
+  return handleApiResponse(response)
+}
 
-export const approveOrder = async (order_id: number, approvedOrder: ApproveOrder): Promise<Order> => {
-  const token = getAuthToken();
+export const approveOrder = async (
+  order_id: number,
+  approvedOrder: ApproveOrder,
+): Promise<Order> => {
+  const token = getAuthToken()
   if (!token) {
-    throw new Error('No token available in localStorage');
+    throw new Error('No token available in localStorage')
   }
 
   try {
     const response = await fetch(`${url}/orders/update/${order_id}`, {
       method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ order: approvedOrder }),
-    });
-    await handleApiResponse(response);
-    return response.json();
+    })
+    await handleApiResponse(response)
+    return response.json()
   } catch (error) {
-    console.error('Error in approving Order:', error);
-    throw error;
+    console.error('Error in approving Order:', error)
+    throw error
   }
 }
-export const shipOrder = async (order_id: number, shippingDetails: ShipOrder): Promise<Order> => {
-  const token = getAuthToken();
+export const shipOrder = async (
+  order_id: number,
+  shippingDetails: ShipOrder,
+): Promise<Order> => {
+  const token = getAuthToken()
   if (!token) {
-    throw new Error('No token available in localStorage');
+    throw new Error('No token available in localStorage')
   }
 
   try {
     const response = await fetch(`${url}/orders/update/${order_id}`, {
       method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ order: shippingDetails }),
-    });
-    await handleApiResponse(response);
-    return response.json();
+    })
+    await handleApiResponse(response)
+    return response.json()
   } catch (error) {
-    console.error('Error in shipping Order:', error);
-    throw error;
+    console.error('Error in shipping Order:', error)
+    throw error
   }
 }
 
 // user orders
-export const getUserOrders = async (userId: number): Promise<CustomerOrder[]> => {
-  const token = getAuthToken();
+export const getUserOrders = async (
+  userId: number,
+): Promise<CustomerOrder[]> => {
+  const token = getAuthToken()
   if (!token) {
-    throw new Error('No token available in localStorage');
+    throw new Error('No token available in localStorage')
   }
 
   try {
     const response = await fetch(`${url}/orders/user/${userId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
-    });
-    await handleApiResponse(response);
-    return response.json();
+    })
+    await handleApiResponse(response)
+    return response.json()
   } catch (error) {
-    console.error('Error fetching user orders:', error);
-    throw error;
+    console.error('Error fetching user orders:', error)
+    throw error
   }
-};
+}
 
 // get store orders
-export const getStoreOrders = async (storeId: number): Promise<CustomerOrder[]> => {
-  const token = getAuthToken();
+export const getStoreOrders = async (
+  storeId: number,
+): Promise<CustomerOrder[]> => {
+  const token = getAuthToken()
   if (!token) {
-    throw new Error('No token available in localStorage');
+    throw new Error('No token available in localStorage')
   }
 
   try {
     const response = await fetch(`${url}/orders/store/${storeId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
-    });
-    await handleApiResponse(response);
-    return response.json();
+    })
+    await handleApiResponse(response)
+    return response.json()
   } catch (error) {
-    console.error('Error fetching store orders:', error);
-    throw error;
+    console.error('Error fetching store orders:', error)
+    throw error
   }
-};
-
+}
