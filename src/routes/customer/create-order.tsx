@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useOrderMutation } from '@/hooks/useOrders';
+import { useCreateOrderMutation } from '@/hooks/useOrders';
 import { useState, useEffect } from 'react';
 import type { CreateOrder, DeliveryMethod, Product } from '@/types/types';
 import { loggedInUser } from '@/store/auth';
@@ -18,7 +18,7 @@ function RouteComponent() {
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryPhone, setDeliveryPhone] = useState('');
 
-  const mutation = useOrderMutation({ type: 'create' });
+  const mutation = useCreateOrderMutation();
   const navigate = useNavigate();
 
   function handleSubmit(e: React.FormEvent) {
