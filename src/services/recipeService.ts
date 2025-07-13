@@ -278,12 +278,9 @@ class RecipeService {
     ingredients: RecipeIngredient[],
     products: ApiProduct[],
   ): Promise<RecipeIngredient[]> {
-    // Ensure products is an array
-    const productsArray = Array.isArray(products) ? products : []
-
     return ingredients.map((ingredient) => {
       // Try to find exact or close matches
-      const matches = productsArray.filter((product) => {
+      const matches = products.filter((product) => {
         const productName = product.name.toLowerCase()
         const ingredientName = ingredient.name.toLowerCase()
 

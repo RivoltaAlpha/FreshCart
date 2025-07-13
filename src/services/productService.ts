@@ -38,24 +38,8 @@ const handleApiResponse = async (response: Response) => {
 }
 
 export const getAllProducts = async () => {
-  let token
   try {
-    token = getAuthToken()
-  } catch (error) {
-    // If no token, return empty array instead of throwing
-    console.warn(
-      'No authentication token found, returning empty products array',
-    )
-    return []
-  }
-
-  try {
-    const response = await fetch(`${url}/products/all`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
+    const response = await fetch(`${url}/products/all`)
     await handleApiResponse(response)
     return response.json()
   } catch (error) {

@@ -53,18 +53,8 @@ export const getAllStores = async (): Promise<StoresResponse> => {
 
 // Fetch products for a specific store
 export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
-  const token = getAuthToken()
-  if (!token) {
-    throw new Error('No token available in localStorage')
-  }
-
   try {
-    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
+    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`)
     await handleApiResponse(response)
     const data = await response.json()
 
@@ -86,18 +76,9 @@ export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
 export const getallStoreProducts = async (
   storeId: number,
 ): Promise<allStoreProductsResponse> => {
-  const token = getAuthToken()
-  if (!token) {
-    throw new Error('No token available in localStorage')
-  }
-
+  
   try {
-    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
+    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`)
     await handleApiResponse(response)
     const data = await response.json()
 
@@ -115,15 +96,10 @@ export const searchStoreProducts = async (
   query: string,
   categoryId?: number,
 ): Promise<StoreProductsResponse> => {
-  const token = getAuthToken()
   const response = await fetch(
     `${API_BASE_URL}/stores/${storeId}/products/search`,
     {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({ query, categoryId }),
     },
   )

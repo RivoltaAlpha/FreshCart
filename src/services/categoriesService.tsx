@@ -39,22 +39,8 @@ const handleApiResponse = async (response: Response) => {
 };
 
 export const getAllCategories = async () => {
-  let token;
   try {
-    token = getAuthToken();
-  } catch (error) {
-    // If no token, return empty array instead of throwing
-    console.warn('No authentication token found, returning empty categories array');
-    return [];
-  }
-
-  try {
-    const response = await fetch(`${url}/categories/all`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(`${url}/categories/all`);
     await handleApiResponse(response);
     return response.json();
   } catch (error) {
