@@ -4,19 +4,25 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 function DriverLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const handleSidebarClose = () => setSidebarOpen(false);
+  const handlePageChange = (id: string) => {
+    if (id === 'openSidebar') {
+      setSidebarOpen(true);
+    } else {
+      setCurrentPage(id);
+    }
   };
 
   return (
     <div className="flex bg-[#f4f8fa] min-h-screen">
       <Sidebar
         userType="driver"
-        currentPage="dashboard"
-        onPageChange={() => {}}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
         sidebarOpen={sidebarOpen}
-        onClose={toggleSidebar}
+        sidebarToggle={true} 
+        onClose={handleSidebarClose}
       />
       <div className="flex-1 p-4">
         <Outlet />
@@ -41,17 +47,17 @@ const checkDriverAuth = () => {
 }
 
 export const Route = createFileRoute('/driver')({
-    beforeLoad: async ({ location }) => {
-      const { isAuthenticated, isDriver } = checkDriverAuth()
-  
-      if (isAuthenticated && !isDriver) {
-        throw redirect({
-          to: '/login',
-          search: {
-            redirect: location.href,
-          },
-        })
-      }
-    },
+  beforeLoad: async ({ location }) => {
+    const { isAuthenticated, isDriver } = checkDriverAuth()
+
+    if (isAuthenticated && !isDriver) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+  },
   component: DriverLayout,
 })

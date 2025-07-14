@@ -5,18 +5,25 @@ import { useState } from 'react'
 
 function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const handleSidebarClose = () => setSidebarOpen(false);
+  const handlePageChange = (id: string) => {
+    if (id === 'openSidebar') {
+      setSidebarOpen(true);
+    } else {
+      setCurrentPage(id);
+    }
   };
 
   return (
     <div className="flex bg-[#f4f8fa] min-h-screen">
       <Sidebar
         userType="admin"
-        currentPage="dashboard"
-        onPageChange={() => { }}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
         sidebarOpen={sidebarOpen}
-        onClose={toggleSidebar}
+        sidebarToggle={true}
+        onClose={handleSidebarClose}
       />
       <div className="flex-1 p-4">
         <Outlet />

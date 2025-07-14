@@ -7,19 +7,26 @@ import { loggedInUser } from '@/store/auth';
 
 function CustomerLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
   const authUser = loggedInUser()
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const handleSidebarClose = () => setSidebarOpen(false);
+  const handlePageChange = (id: string) => {
+    if (id === 'openSidebar') {
+      setSidebarOpen(true);
+    } else {
+      setCurrentPage(id);
+    }
+  };
 
   return (
     <div className="flex bg-[#f4f8fa] min-h-screen">
       <Sidebar
-        userType="customer"
-        currentPage="dashboard"
-        onPageChange={() => { }}
+        userType="driver"
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
         sidebarOpen={sidebarOpen}
-        onClose={toggleSidebar}
+        sidebarToggle={true}
+        onClose={handleSidebarClose}
       />
       <div className="flex-1 p-4 flex flex-col overflow-hidden">
         <header className="bg-navbar shadow-sm border-b px-6 py-4 rounded-2xl">
