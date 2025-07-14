@@ -21,7 +21,7 @@ interface WishlistItem {
   name: string
   price: number
   image_url: string
-  rating?: string | number
+  rating?: number
   discount?: number
   unit?: string
   weight?: number

@@ -26,7 +26,7 @@ type CartItem = {
   id: number;
   name: string;
   price: number;
-  image: string;
+  image_url: string;
   quantity: number;
   category: string;
   unit: string;
@@ -110,7 +110,7 @@ function ProductsPage() {
         id: product.product_id,
         name: product.name,
         price: product.price,
-        image: product.image_url,
+        image_url: product.image_url,
         quantity: quantity,
         category: product.category?.name || 'Unknown',
         unit: product.unit,
