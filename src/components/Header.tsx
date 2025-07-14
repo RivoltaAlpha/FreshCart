@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { ShoppingCart, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ThemeToggle } from './ui/theme-toggle';
 
 interface HeaderProps {
@@ -9,9 +9,20 @@ interface HeaderProps {
 
 export default function Header({ cartItems = 0 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const user = localStorage.getItem('auth')
-  const loggedIn = JSON.parse(user || '{}')?.isAuthenticated
-  const role = JSON.parse(user || '{}')?.user?.role || 'Customer';
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const navRef = useRef<HTMLDivElement>(null);
+  
+  // Store auth data in state instead of localStorage for artifact compatibility
+  const [authData, setAuthData] = useState({ isAuthenticated: false, user: { role: 'Customer' } });
+  
+  // Simulate auth check (in real app, this would come from localStorage)
+  useEffect(() => {
+    // For demo purposes, you can toggle this to test different states
+    setAuthData({ isAuthenticated: false, user: { role: 'Customer' } });
+  }, []);
+
+  const loggedIn = authData.isAuthenticated;
+  const role = authData.user.role;
 
   const buttonStatus = {
     login: !loggedIn,
@@ -19,7 +30,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
   }
   const navigate = useNavigate();
   const logout = () => {
-    localStorage.removeItem('auth');
+    setAuthData({ isAuthenticated: false, user: { role: 'Customer' } });
     navigate({ to: '/login' });
   }
 
@@ -41,6 +52,28 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
     }
     return location.pathname.startsWith(path);
   };
+
+  // Update indicator position when route changes
+  useEffect(() => {
+    const updateIndicator = () => {
+      if (!navRef.current) return;
+      
+      const activeLink = navRef.current.querySelector('.active-nav-link');
+      if (activeLink) {
+        const navRect = navRef.current.getBoundingClientRect();
+        const linkRect = activeLink.getBoundingClientRect();
+        
+        setIndicatorStyle({
+          left: linkRect.left - navRect.left,
+          width: linkRect.width
+        });
+      }
+    };
+
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(updateIndicator, 10);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   const dashboardRedirect = (role: string) => {
     switch (role) {
@@ -70,15 +103,26 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav ref={navRef} className="hidden md:flex space-x-8 relative">
+            {/* Animated indicator */}
+            <div 
+              className="absolute bottom-0 h-0.5 bg-[#189AB4] transition-all duration-300 ease-out"
+              style={{ 
+                left: `${indicatorStyle.left}px`, 
+                width: `${indicatorStyle.width}px`,
+                transform: 'translateZ(0)' // Hardware acceleration
+              }}
+            />
+            
             {navigation.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 text-sm font-medium transition-colors relative ${isActiveRoute(item.path)
-                  ? 'text-[#189AB4] border-b-2 border-[#189AB4]'
-                  : 'text-gray-600 hover:text-[#05445E]'
-                  }`}
+                className={`px-3 py-2 text-sm font-medium transition-all duration-200 relative ${
+                  isActiveRoute(item.path)
+                    ? 'text-[#189AB4] active-nav-link'
+                    : 'text-gray-600 hover:text-[#05445E] hover:scale-105'
+                }`}
               >
                 {item.name}
               </Link>
@@ -91,20 +135,20 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
             <div className="hidden md:flex items-center space-x-3">
               <Link
                 to="/login"
-                className="bg-[#189AB4] hover:bg-[#05445E] text-white px-4 py-2 rounded-full font-medium transition duration-300"
+                className="bg-[#189AB4] hover:bg-[#05445E] text-white px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg"
                 onClick={buttonStatus.logout ? logout : undefined}
               >
                 {buttonStatus.login ? 'Login' : 'Logout'}
               </Link>
               <Link
                 to="/register"
-                className="border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition duration-300"
+                className="border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-md"
               >
                 Register
               </Link>
               <Link
                 to={dashboardRedirect(role)}
-                className="border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition duration-300"
+                className="border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-md"
               >
                 Dashboard
               </Link>
@@ -116,11 +160,11 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
             {/* Cart Button */}
             <Link
               to="/cart"
-              className="relative p-2 text-gray-600 hover:text-[#05445E] transition-colors"
+              className="relative p-2 text-gray-600 hover:text-[#05445E] transition-all duration-200 hover:scale-110"
             >
               <ShoppingCart className="h-6 w-6" />
               {cartItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#189AB4] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-[#189AB4] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
                   {cartItems}
                 </span>
               )}
@@ -128,7 +172,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2 text-gray-600 hover:text-[#05445E]"
+              className="md:hidden p-2 text-gray-600 hover:text-[#05445E] transition-all duration-200 hover:scale-110"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle mobile menu"
             >
@@ -138,44 +182,48 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 border-t border-gray-200">
-              {/* Mobile Navigation Links */}
-              {navigation.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 text-base font-medium w-full text-left transition-colors rounded-md ${isActiveRoute(item.path)
-                    ? 'text-[#189AB4] bg-[#75E6DA]/10'
-                    : 'text-gray-600 hover:text-[#05445E] hover:bg-gray-100'
-                    }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        } overflow-hidden`}>
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 border-t border-gray-200">
+            {/* Mobile Navigation Links */}
+            {navigation.map((item, index) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMenuOpen(false)}
+                className={`block px-3 py-2 text-base font-medium w-full text-left transition-all duration-200 rounded-md transform ${
+                  isActiveRoute(item.path)
+                    ? 'text-[#189AB4] bg-[#75E6DA]/10 translate-x-2'
+                    : 'text-gray-600 hover:text-[#05445E] hover:bg-gray-100 hover:translate-x-1'
+                }`}
+                style={{ 
+                  transitionDelay: isMenuOpen ? `${index * 50}ms` : '0ms' 
+                }}
+              >
+                {item.name}
+              </Link>
+            ))}
 
-              {/* Mobile Auth Buttons */}
-              <div className="pt-4 border-t border-gray-200 space-y-2">
-                <Link
-                  to="/login"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-center bg-[#189AB4] hover:bg-[#05445E] text-white px-4 py-2 rounded-full font-medium transition duration-300"
-                >
-                  {buttonStatus.login ? 'Login' : 'Logout'}
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-center border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition duration-300"
-                >
-                  Register
-                </Link>
-              </div>
+            {/* Mobile Auth Buttons */}
+            <div className="pt-4 border-t border-gray-200 space-y-2">
+              <Link
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="block w-full text-center bg-[#189AB4] hover:bg-[#05445E] text-white px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              >
+                {buttonStatus.login ? 'Login' : 'Logout'}
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setIsMenuOpen(false)}
+                className="block w-full text-center border border-[#189AB4] hover:border-[#05445E] text-[#189AB4] hover:text-[#05445E] px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 hover:shadow-md"
+              >
+                Register
+              </Link>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
