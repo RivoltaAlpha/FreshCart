@@ -21,7 +21,7 @@ function StoreLayout() {
   return (
     <div className="flex bg-[#f4f8fa] min-h-screen">
       <Sidebar
-        userType="driver"
+        userType="store"
         currentPage={currentPage}
         onPageChange={handlePageChange}
         sidebarOpen={sidebarOpen}

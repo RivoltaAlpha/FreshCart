@@ -21,7 +21,7 @@ function CustomerLayout() {
   return (
     <div className="flex bg-[#f4f8fa] min-h-screen">
       <Sidebar
-        userType="driver"
+        userType="customer"
         currentPage={currentPage}
         onPageChange={handlePageChange}
         sidebarOpen={sidebarOpen}
