@@ -9,6 +9,7 @@ export const Route = createFileRoute('/store/dashboard')({
 function RouteComponent() {
   const authUser = loggedInUser()
   const userId = authUser?.user_id ? parseInt(authUser.user_id) : 0;
+  console.log(userId)
   const stats = [
     { title: 'Total Products', value: '156', color: '#00A7B3', icon: Package },
     { title: 'Pending Orders', value: '8', color: '#005A61', icon: ShoppingCart },

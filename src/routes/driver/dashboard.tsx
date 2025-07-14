@@ -1,5 +1,8 @@
+import { useDeliveriesForDriver } from '@/hooks/useDeliveries'
+import { loggedInUser } from '@/store/auth'
+import type { Delivery } from '@/types/delivery'
 import { createFileRoute } from '@tanstack/react-router'
-import { Package, MapPin, DollarSign, Navigation, Bell, Search, Phone, CheckCircle } from 'lucide-react'
+import { Package, DollarSign, Bell, Search, CheckCircle, Eye, Edit } from 'lucide-react'
 
 export const Route = createFileRoute('/driver/dashboard')({
   component: RouteComponent,
@@ -11,39 +14,12 @@ function RouteComponent() {
     { title: 'Completed Today', value: '12', color: '#005A61', icon: CheckCircle },
     { title: 'Total Earnings', value: '$245', color: '#516E89', icon: DollarSign },
   ]
+  const user = loggedInUser();
+  const { data: alldeliveries } = useDeliveriesForDriver(user?.user_id ? parseInt(user.user_id) : 0);
 
-  const activeOrders = [
-    {
-      id: 'ORD001',
-      customer: 'Tiffany Nyawira ',
-      address: '123 Main St, Downtown',
-      phone: '+1 234-567-8900',
-      items: 15,
-      amount: '$85.50',
-      distance: '2.3 km',
-      status: 'picked_up'
-    },
-    {
-      id: 'ORD002',
-      customer: 'Mwaniki Nyawira ',
-      address: '456 Oak Ave, Uptown',
-      phone: '+1 234-567-8901',
-      items: 8,
-      amount: '$42.30',
-      distance: '1.8 km',
-      status: 'ready_pickup'
-    },
-    {
-      id: 'ORD003',
-      customer: 'Nyawira Wambui',
-      address: '789 Pine Blvd, Suburb',
-      phone: '+1 234-567-8902',
-      items: 22,
-      amount: '$120.75',
-      distance: '4.1 km',
-      status: 'preparing'
-    },
-  ]
+  const delivery: Delivery[] | undefined = alldeliveries?.filter(
+    (delivery: Delivery) => delivery.delivery_status === 'assigned' || delivery.delivery_status === 'picked_up' || delivery.delivery_status === 'in_transit'
+  );
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -99,58 +75,49 @@ function RouteComponent() {
             </div>
 
             <div className="p-6 space-y-4">
-              {activeOrders.map((order) => (
-                <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <h3 className="font-semibold text-gray-800">#{order.id}</h3>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${order.status === 'picked_up' ? 'bg-[#005A61] text-white' :
-                            order.status === 'ready_pickup' ? 'bg-[#516E89] text-white' :
-                              'bg-[#00A7B3] text-white'
-                          }`}>
-                          {order.status.replace('_', ' ').toUpperCase()}
-                        </span>
-                      </div>
-                      <p className="text-lg font-medium text-gray-900">{order.customer}</p>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 mt-2">
-                        <div className="flex items-center space-x-1">
-                          <MapPin size={16} />
-                          <span>{order.address}</span>
+              {(delivery && delivery.length > 0) ? (
+                delivery.map((delivery: any) => {
+                  // const customer = delivery.user;
+                  // const customerProfile = customer?.profile;
+                  // const defaultAddress = customerProfile?.addresses?.find((addr: any) => addr.isDefault) || customerProfile?.addresses?.[0];
+                  // // Get order info
+                  // const order = delivery.order;
+                  return (
+                    <div key={delivery.delivery_id || delivery.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <h3 className="font-semibold text-fresh-primary">#{delivery.order?.order_number || delivery.delivery_id || delivery.id}</h3>
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${delivery.order?.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            delivery.order?.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
+                              delivery.order?.status === 'ready' ? 'bg-green-100 text-green-800' :
+                                'bg-gray-100 text-fresh-primary'
+                            }`}>
+                            {delivery.order?.status ? delivery.order.status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}
+                          </span>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <Phone size={16} />
-                          <span>{order.phone}</span>
+                        <p className="text-white">{delivery.user?.profile?.first_name} {delivery.user?.profile?.last_name}</p>
+                        <p className="text-sm text-gray-500">{delivery.order?.items?.length || 0} items • {delivery.order?.created_at ? new Date(delivery.order.created_at).toLocaleTimeString() : '-'}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-gray-900">KSh {delivery.order?.total_amount || delivery.total}</p>
+                        <div className="flex space-x-1 mt-2">
+                          <button className="p-1 text-gray-400 hover:text-indigo-600">
+                            <Eye size={16} />
+                          </button>
+                          <button className="p-1 text-gray-400 hover:text-indigo-600">
+                            <Edit size={16} />
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold text-gray-900">{order.amount}</p>
-                      <p className="text-sm text-gray-600">{order.items} items</p>
-                      <p className="text-sm text-gray-600">{order.distance}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex space-x-2">
-                    {order.status === 'ready_pickup' && (
-                      <button className="flex-1 bg-[#516E89] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-                        Pick Up Order
-                      </button>
-                    )}
-                    {order.status === 'picked_up' && (
-                      <button className="flex-1 bg-[#00A7B3] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-                        Mark as Delivered
-                      </button>
-                    )}
-                    <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                      <Navigation size={16} />
-                    </button>
-                    <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                      <Phone size={16} />
-                    </button>
-                  </div>
+                  );
+                })
+              ) : (
+                <div className="text-center text-gray-500 py-8">
+                  <p>No active deliveries found.</p>
                 </div>
-              ))}
+              )}
+
             </div>
           </div>
 
