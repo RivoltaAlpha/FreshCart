@@ -95,7 +95,7 @@ function RegisterPage() {
           backgroundSize: "cover",
         }}
       >
-        <div className="bg-white lg:max-w-3xl rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
+        <div className="bg-white lg:max-w-3xl mx-2 rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-white" />
