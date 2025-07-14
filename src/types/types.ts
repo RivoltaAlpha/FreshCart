@@ -1,7 +1,7 @@
 import type { Payment } from './payments'
 
 export interface User {
-  user_id: string
+  user_id: number
   email: string
   password: string
   role: 'Customer' | 'Store' | 'Driver' | 'Admin'
@@ -33,7 +33,15 @@ export enum UserRole {
 
 export type StoreDetails = Partial<Store>
 
-export type CreateUser = Partial<User>
+export type CreateUser = {
+  email: string
+  password: string
+  role: 'Customer' | 'Store' | 'Driver' | 'Admin'
+  first_name: string
+  last_name: string
+  phone_number: string
+  addresses?: Partial<Address>[]
+}
 
 export interface LoginType {
   email: string
@@ -285,7 +293,7 @@ export interface BackendProduct {
   name: string
   description: string
   price: number
-  stock_quantity:  number  
+  stock_quantity: number
   image_url: string
   weight: string
   unit: string
@@ -317,7 +325,7 @@ export interface Product {
   name: string
   description: string
   price: number
-  stock_quantity:  number  
+  stock_quantity: number
   image_url: string
   weight: string
   unit: string
@@ -348,8 +356,8 @@ export interface CreateProduct {
   store_id: number
   description: string
   price: number
-  stock_quantity:  number
-    category_id: number
+  stock_quantity: number
+  category_id: number
   image_url?: string
   weight?: number
   unit?: string
@@ -441,7 +449,7 @@ export interface CreateOrder {
   actual_delivery_time?: Date
 }
 
-export type UpdateOrderStatus = Partial<CreateOrder>;
+export type UpdateOrderStatus = Partial<CreateOrder>
 
 export interface RateOrder {
   rating: number
@@ -580,7 +588,7 @@ export interface CustomerOrder {
       name: string
       description: string
       price: number
-      stock_quantity:  number      
+      stock_quantity: number
       image_url: string
       weight: string
       unit: string

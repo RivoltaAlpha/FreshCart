@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import React, { useEffect } from 'react';
-import { useStore } from '@/hooks/useStore';
+import {  useStores } from '@/hooks/useStore';
 import type { Store } from '@/types/store';
 import {
   createColumnHelper,
@@ -105,7 +105,7 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   // Use the store hook to fetch stores
-  const { stores, loading: storeLoading, error: storeError } = useStore();
+  const { stores, loading: storeLoading, error: storeError } = useStores();
 
   useEffect(() => {
     if (stores) {

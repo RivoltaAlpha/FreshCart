@@ -244,7 +244,7 @@ function RouteComponent() {
               {/* Member Since */}
               <div className="text-sm text-gray-500">
                 <Calendar className="h-4 w-4 inline mr-1" />
-                Member since {user?.createdAt ? formatDate(user.createdAt) : 'N/A'}
+                Member since {user?.created_at ? formatDate(user.created_at) : 'N/A'}
               </div>
             </div>
           </div>
@@ -382,7 +382,7 @@ function RouteComponent() {
                       <Calendar className="h-4 w-4 text-gray-500" />
                       <div>
                         <span className="text-sm text-gray-600">Member Since</span>
-                        <p className="font-medium">{user?.createdAt ? formatDate(user.createdAt) : 'N/A'}</p>
+                        <p className="font-medium">{user?.created_at ? formatDate(user.created_at) : 'N/A'}</p>
                       </div>
                     </div>
                   </div>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useStoreProducts, useStores } from '../../hooks/useStore';
-import type { StoreProduct, Store } from '../../types/store';
+import type { StoreProduct } from '../../types/store';
 import { 
   Search, 
   Filter, 
@@ -11,7 +11,6 @@ import {
   Star, 
   Package, 
   DollarSign,
-  TrendingUp,
   Eye,
   RefreshCw,
   Grid,
@@ -73,18 +72,18 @@ function MyProductsPage() {
   };
 
   // Get current store
-  const currentStore = stores.find(store => store.store_id === selectedStoreId);
+  // const currentStore = stores.find(store => store.store_id === selectedStoreId);
 
   // Product stats
   const productStats = React.useMemo(() => {
     const totalValue = products.reduce((sum, product) => 
-      sum + (parseFloat(product.price) * parseInt(product.stock_quantity)), 0
+      sum + (product.price * product.stock_quantity), 0
     );
     const averageRating = products.reduce((sum, product) => 
       sum + parseFloat(product.rating), 0
     ) / products.length;
     const lowStockProducts = products.filter(product => 
-      parseInt(product.stock_quantity) < 10
+      product.stock_quantity < 10
     ).length;
 
     return {
@@ -96,8 +95,8 @@ function MyProductsPage() {
   }, [products, total]);
 
   const ProductCard: React.FC<{ product: StoreProduct }> = ({ product }) => {
-    const discountedPrice = parseFloat(product.price) * (1 - product.discount / 100);
-    const isLowStock = parseInt(product.stock_quantity) < 10;
+    const discountedPrice = product.price * (1 - product.discount / 100);
+    const isLowStock = product.stock_quantity < 10;
 
     return (
       <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
@@ -121,7 +120,7 @@ function MyProductsPage() {
                 <AlertCircle className="w-4 h-4" />
               </div>
             )}
-            {parseInt(product.stock_quantity) > 0 ? (
+            {product.stock_quantity > 0 ? (
               <div className="bg-green-500 text-white p-1 rounded-full">
                 <CheckCircle className="w-4 h-4" />
               </div>
@@ -180,9 +179,9 @@ function MyProductsPage() {
 
           <div className="flex items-center justify-between mb-4">
             <span className={`text-sm px-2 py-1 rounded ${
-              isLowStock 
-                ? 'bg-orange-100 text-orange-700' 
-                : parseInt(product.stock_quantity) > 0 
+              isLowStock
+                ? 'bg-orange-100 text-orange-700'
+                : product.stock_quantity > 0
                   ? 'bg-green-100 text-green-700'
                   : 'bg-red-100 text-red-700'
             }`}>
@@ -209,8 +208,8 @@ function MyProductsPage() {
   };
 
   const ProductListItem: React.FC<{ product: StoreProduct }> = ({ product }) => {
-    const discountedPrice = parseFloat(product.price) * (1 - product.discount / 100);
-    const isLowStock = parseInt(product.stock_quantity) < 10;
+    const discountedPrice = product.price * (1 - product.discount / 100);
+    const isLowStock = product.stock_quantity < 10;
 
     return (
       <div className="bg-white rounded-lg shadow-md p-4 flex items-center gap-4 hover:shadow-lg transition-shadow duration-200">
@@ -262,7 +261,7 @@ function MyProductsPage() {
               <span className={`text-sm px-2 py-1 rounded ${
                 isLowStock 
                   ? 'bg-orange-100 text-orange-700' 
-                  : parseInt(product.stock_quantity) > 0 
+                  : product.stock_quantity > 0 
                     ? 'bg-green-100 text-green-700'
                     : 'bg-red-100 text-red-700'
               }`}>

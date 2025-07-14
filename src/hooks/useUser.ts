@@ -1,6 +1,6 @@
 import type { CreateUser, User } from '../types/types'
 import { getAllUsers, getUserById, createUser,updateUser, deleteUser } from '@/services/userService'
-import { useMutation, useQuery, useQueryClient, type UseMutationResult, type UseQueryResult } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 export const useUsers = (): UseQueryResult<User[], Error> => {
@@ -18,7 +18,7 @@ export const useUser = (id: number) => {
     })
 }
 
-export const useCreateUser = (): UseMutationResult<User, Error, CreateUser> => {
+export const useCreateUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ["createUser"],

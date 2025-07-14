@@ -1,4 +1,3 @@
-import type { Part } from '@google/generative-ai'
 
 export interface Category {
   category_id: number
@@ -13,8 +12,8 @@ export interface StoreProduct {
   category_id: number
   name: string
   description: string
-  price: string
-  stock_quantity: string
+  price: number
+  stock_quantity: number
   image_url: string
   weight: string
   unit: string

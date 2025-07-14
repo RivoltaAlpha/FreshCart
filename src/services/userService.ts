@@ -69,7 +69,7 @@ export const getUserById = async (id: number): Promise<User[]> => {
   await handleApiResponse(response)
   return response.json()
 }
-export const createUser = async (user: User): Promise<CreateUser[]> => {
+export const createUser = async (user: CreateUser): Promise<CreateUser[]> => {
   const token = getAuthToken()
   const response = await fetch(`${url}/users/create`, {
     method: 'POST',

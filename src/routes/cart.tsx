@@ -2,7 +2,6 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, } from 'react';
 import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, CreditCard, Truck, Shield, Tag, MapPin, Clock } from 'lucide-react';
 import { toast } from 'sonner';
-import type { CartItem } from '@/types/types';
 import { initialCartItems } from '@/data/cart';
 
 export const Route = createFileRoute('/cart')({
@@ -21,7 +20,8 @@ function RouteComponent() {
 
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [promoCode, setPromoCode] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState(null);
+  type Promo = { code: string; discount: number; description: string };
+  const [appliedPromo, setAppliedPromo] = useState<Promo | null>(null);
   const [deliveryOption, setDeliveryOption] = useState('standard');
 
   // Calculate totals
@@ -31,25 +31,36 @@ function RouteComponent() {
   const total = subtotal + deliveryFee - promoDiscount;
 
   // Promo codes
-  const promoCodes = {
+  const promoCodes: Record<string, { discount: number; description: string }> = {
     'FRESH10': { discount: 10, description: '10% off your order' },
     'WELCOME': { discount: 15, description: '15% off for new customers' },
     'SAVE20': { discount: 20, description: '20% off orders over KSh 500' }
   };
+  // interface CartItem {
+  //   id: number;
+  //   name: string;
+  //   price: number;
+  //   quantity: number;
+  //   image: string;
+  //   seller: string;
+  //   category: string;
+  //   location: string;
+  //   unit: string;
+  // }
 
-  const updateQuantity = (id, newQuantity) => {
+  const updateQuantity = (id: number, newQuantity: number): void => {
     if (newQuantity <= 0) {
       removeItem(id);
       return;
     }
     setCartItems(items =>
       items.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
+        String(item.id) === String(id) ? { ...item, quantity: newQuantity } : item
       )
     );
   };
 
-  const removeItem = (id) => {
+  const removeItem = (id: number): void => {
     setCartItems(items => items.filter(item => item.id !== id));
   };
 
@@ -71,9 +82,15 @@ function RouteComponent() {
     setAppliedPromo(null);
   };
 
-  const setCartItemsToLocalStorage = (items) => {
-    localStorage.setItem('cartItems', JSON.stringify(items));
-  };
+  // interface SetCartItemsToLocalStorage {
+  //   (items: CartItem[]): void;
+  // }
+
+  // const setCartItemsToLocalStorage: SetCartItemsToLocalStorage = (items) => {
+  //   localStorage.setItem('cartItems', JSON.stringify(items));
+  // };
+
+  // console.log('Cart Items:', cartItems);
 
   if (cartItems.length === 0) {
     return (
@@ -314,7 +331,7 @@ function RouteComponent() {
 
                 {promoDiscount > 0 && (
                   <div className="flex justify-between text-green-600">
-                    <span>Discount ({appliedPromo.code})</span>
+                    <span>Discount ({appliedPromo?.code})</span>
                     <span>-KSh {promoDiscount.toFixed(2)}</span>
                   </div>
                 )}

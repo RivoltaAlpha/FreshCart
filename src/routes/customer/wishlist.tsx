@@ -19,7 +19,7 @@ export const Route = createFileRoute('/customer/wishlist')({
 interface WishlistItem {
   product_id: number
   name: string
-  price: string | number
+  price: number
   image_url: string
   rating?: string | number
   discount?: number
@@ -89,7 +89,7 @@ function RouteComponent() {
       const product: Product = {
         product_id: item.product_id,
         name: item.name,
-        price: item.price.toString(),
+        price: item.price,
         image_url: item.image_url,
         rating: item.rating?.toString() || '0',
         discount: item.discount || 0,
@@ -98,11 +98,11 @@ function RouteComponent() {
         description: item.description || '',
         // Required fields with defaults
         category_id: 0,
-        stock_quantity: '999',
+        stock_quantity: 999,
         review_count: 0,
         expiry_date: null,
         created_at: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         category: {
           category_id: 0,
           name: item.category || 'General',

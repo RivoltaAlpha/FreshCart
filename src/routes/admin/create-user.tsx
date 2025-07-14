@@ -14,12 +14,16 @@ function RouteComponent() {
     email: '',
     password: '',
     role: "Store" as UserRole,
+    phone_number: '',
+    addresses: '[{"street": "", "city": "", "country": ""}]',
   });
   const navigate = useNavigate();
 
   const createUserMutation = useCreateUser();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setForm(prev => ({
       ...prev,
@@ -29,7 +33,15 @@ function RouteComponent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createUserMutation.mutate(form);
+    createUserMutation.mutate({
+      email: form.email,
+      password: form.password,
+      role: form.role,
+      first_name: form.first_name,
+      last_name: form.last_name,
+      phone_number: form.phone_number,
+      addresses: JSON.parse(form.addresses),
+    });
   };
 
   useEffect(() => {
@@ -107,6 +119,29 @@ function RouteComponent() {
             <option value="Sales">Sales</option>
             <option value="Supplier">Supplier</option>
           </select>
+        </div>
+        <div>
+          <label className="block mb-1 font-medium text-[#005A61]">Phone Number</label>
+          <input
+            type="tel"
+            name="phone_number"
+            value={form.phone_number}
+            onChange={handleChange}
+            className="w-full border border-[#6A89A7] rounded px-4 py-2 focus:ring-2 focus:ring-[#00A7B3]"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium text-[#005A61]">Addresses</label>
+          <textarea
+            name="addresses"
+            value={form.addresses}
+            onChange={handleChange}
+            className="w-full border border-[#6A89A7] rounded px-4 py-2 focus:ring-2 focus:ring-[#00A7B3]"
+            placeholder="Enter addresses as JSON array"
+            required
+          />
+          <p className="text-xs text-gray-500">Format: [{'{"street": "123 Main St", "city": "Anytown", "country": "USA"}'}]</p>
         </div>
 
         <button

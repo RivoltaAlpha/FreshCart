@@ -22,7 +22,7 @@ export const Route = createFileRoute('/admin/products')({
 })
 
 function RouteComponent() {
-  const { data: products = [], isLoading, error } = useProducts();
+  const { data: products , isLoading, error } = useProducts();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -66,7 +66,7 @@ function RouteComponent() {
   ];
 
   const table = useReactTable({
-    data: products || [],
+    data: Array.isArray(products) ? products : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

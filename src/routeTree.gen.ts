@@ -28,7 +28,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as StoreSuccessRouteImport } from './routes/store/success'
 import { Route as StoreStockManagementRouteImport } from './routes/store/stock-management'
 import { Route as StoreShipmentsRouteImport } from './routes/store/shipments'
-import { Route as StoreShipOrderRouteImport } from './routes/store/ship-order'
 import { Route as StoreSettingsRouteImport } from './routes/store/settings'
 import { Route as StoreProfileRouteImport } from './routes/store/profile'
 import { Route as StoreProductsRouteImport } from './routes/store/products'
@@ -169,11 +168,6 @@ const StoreStockManagementRoute = StoreStockManagementRouteImport.update({
 const StoreShipmentsRoute = StoreShipmentsRouteImport.update({
   id: '/shipments',
   path: '/shipments',
-  getParentRoute: () => StoreRoute,
-} as any)
-const StoreShipOrderRoute = StoreShipOrderRouteImport.update({
-  id: '/ship-order',
-  path: '/ship-order',
   getParentRoute: () => StoreRoute,
 } as any)
 const StoreSettingsRoute = StoreSettingsRouteImport.update({
@@ -471,7 +465,6 @@ export interface FileRoutesByFullPath {
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
-  '/store/ship-order': typeof StoreShipOrderRoute
   '/store/shipments': typeof StoreShipmentsRoute
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
@@ -539,7 +532,6 @@ export interface FileRoutesByTo {
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
-  '/store/ship-order': typeof StoreShipOrderRoute
   '/store/shipments': typeof StoreShipmentsRoute
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
@@ -608,7 +600,6 @@ export interface FileRoutesById {
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
-  '/store/ship-order': typeof StoreShipOrderRoute
   '/store/shipments': typeof StoreShipmentsRoute
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
@@ -678,7 +669,6 @@ export interface FileRouteTypes {
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
-    | '/store/ship-order'
     | '/store/shipments'
     | '/store/stock-management'
     | '/store/success'
@@ -746,7 +736,6 @@ export interface FileRouteTypes {
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
-    | '/store/ship-order'
     | '/store/shipments'
     | '/store/stock-management'
     | '/store/success'
@@ -814,7 +803,6 @@ export interface FileRouteTypes {
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
-    | '/store/ship-order'
     | '/store/shipments'
     | '/store/stock-management'
     | '/store/success'
@@ -972,13 +960,6 @@ declare module '@tanstack/react-router' {
       path: '/shipments'
       fullPath: '/store/shipments'
       preLoaderRoute: typeof StoreShipmentsRouteImport
-      parentRoute: typeof StoreRoute
-    }
-    '/store/ship-order': {
-      id: '/store/ship-order'
-      path: '/ship-order'
-      fullPath: '/store/ship-order'
-      preLoaderRoute: typeof StoreShipOrderRouteImport
       parentRoute: typeof StoreRoute
     }
     '/store/settings': {
@@ -1415,7 +1396,6 @@ interface StoreRouteChildren {
   StoreProductsRoute: typeof StoreProductsRoute
   StoreProfileRoute: typeof StoreProfileRoute
   StoreSettingsRoute: typeof StoreSettingsRoute
-  StoreShipOrderRoute: typeof StoreShipOrderRoute
   StoreShipmentsRoute: typeof StoreShipmentsRoute
   StoreStockManagementRoute: typeof StoreStockManagementRoute
   StoreSuccessRoute: typeof StoreSuccessRoute
@@ -1433,7 +1413,6 @@ const StoreRouteChildren: StoreRouteChildren = {
   StoreProductsRoute: StoreProductsRoute,
   StoreProfileRoute: StoreProfileRoute,
   StoreSettingsRoute: StoreSettingsRoute,
-  StoreShipOrderRoute: StoreShipOrderRoute,
   StoreShipmentsRoute: StoreShipmentsRoute,
   StoreStockManagementRoute: StoreStockManagementRoute,
   StoreSuccessRoute: StoreSuccessRoute,
