@@ -50,7 +50,6 @@ interface RecommendationResult {
 
 // Initialize Gemini AI with updated model name
 const getApiKey = (): string => {
-  // Try to get API key from environment variables first
   const envApiKey = import.meta.env?.VITE_GEMINI_API_KEY
   console.log(`Gemini API Key from env: ${envApiKey ? 'Yes' : 'No'}`)
 
@@ -58,7 +57,6 @@ const getApiKey = (): string => {
 }
 
 const apiKey = getApiKey()
-// Only initialize AI if we have an API key
 let genAI: GoogleGenerativeAI | null = null
 let model: any = null
 
@@ -69,14 +67,11 @@ if (apiKey) {
     // Updated model name - try these in order of preference
     const getModel = () => {
       try {
-        // Try the latest model first
         return genAI!.getGenerativeModel({ model: 'gemini-2.5-flash' })
       } catch {
         try {
-          // Fallback to stable model
           return genAI!.getGenerativeModel({ model: 'gemini-2.0-flash' })
         } catch {
-          // Last resort fallback
           return genAI!.getGenerativeModel({ model: 'gemini-2.0-flash' })
         }
       }
@@ -132,7 +127,7 @@ function getUserPreferredCategories(): string[] {
 
   return Object.entries(categoryCount)
     .sort(([, a], [, b]) => b - a)
-    .slice(0, 4)
+    .slice(0, 6)
     .map(([category]) => category)
 }
 
@@ -151,7 +146,6 @@ const appContext: AppContext = {
 const getAIRecommendations = async (
   userContext: AppContext,
 ): Promise<Recommendation[]> => {
-  // If no model available, return fallback immediately
   if (!model || !apiKey) {
     console.log('No Gemini model available, using fallback recommendations')
     return getFallbackRecommendations(userContext)
@@ -159,7 +153,7 @@ const getAIRecommendations = async (
 
   try {
     const prompt = `
-    Based on the following user behavior data, recommend 5 products that this user might be interested in:
+    Based on the following user behavior data, recommend 6 products that this user might be interested in:
     
     Recently Clicked Items: ${JSON.stringify(userContext.clickedItems.slice(-10))}
     Current Cart Items: ${JSON.stringify(userContext.cartItems)}
@@ -169,7 +163,7 @@ const getAIRecommendations = async (
     
     Available Products: ${JSON.stringify(userContext.appData.products)}
 
-    Please analyze the user's preferences and suggest 4 products from different categories they are likely to purchase.
+    Please analyze the user's preferences and suggest 6 products from different categories they are likely to purchase.
     Return the response as a JSON array with product IDs and brief explanations.
     Format: [{"productId": 123, "reason": "why recommended"}]
     
@@ -177,6 +171,7 @@ const getAIRecommendations = async (
     - Return ONLY the JSON array, no additional text or formatting
     - Product IDs must be numbers, not strings
     - Only recommend products that exist in the Available Products list
+    - also give health benefits of the products
     `
 
     const result = await model.generateContent(prompt)
@@ -190,8 +185,6 @@ const getAIRecommendations = async (
 
     try {
       const recommendations = JSON.parse(cleanedText) as Recommendation[]
-
-      // Ensure all productIds are numbers and validate they exist
       const validRecommendations = recommendations
         .map((rec) => ({
           ...rec,
@@ -201,7 +194,6 @@ const getAIRecommendations = async (
               : rec.productId,
         }))
         .filter((rec) => {
-          // Check if productId is a valid number and exists in products
           const isValidId = !isNaN(rec.productId) && rec.productId > 0
           const productExists = userContext.appData.products.some(
             (p) => p.product_id === rec.productId,
@@ -229,7 +221,6 @@ const getAIRecommendations = async (
     }
   } catch (error) {
     console.error('Error getting AI recommendations:', error)
-    // Check if it's a network/API error
     if (error instanceof Error) {
       const errorMessage = error.message.toLowerCase()
       if (

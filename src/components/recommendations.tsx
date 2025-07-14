@@ -87,14 +87,14 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   return (
     <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommended Products</h2>
           <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-4"></div>
           <p className="text-lg text-gray-600">Personalized recommendations just for you</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-6 mb-12">
           {recommendations
             .map((rec) => {
               const product = products.find((p) => p.product_id === rec.productId);
@@ -110,7 +110,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
                   <img
                     src={imageErrors.has(product.product_id) ? getFallbackImage() : product.image}
                     alt={product.name}
-                    className="w-full h-32 object-cover"
+                    className="w-full h-44 object-cover"
                     onError={() => handleImageError(product.product_id)}
                     onLoad={() =>
                       setImageErrors((prev) => {
