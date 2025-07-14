@@ -355,7 +355,7 @@ function StoreLayout() {
               <img
                 src="/market-concept-with-vegetables.jpg"
                 alt="Owner Avatar"
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-20 h-20 rounded-full object-cover"
               />
             </div>
           </div>
