@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { ShoppingCart, Package, Heart, Star, Plus, Minus, Truck, Gift, ShoppingBagIcon, ShoppingBasketIcon } from 'lucide-react'
+import { ShoppingCart, Package, Heart, Star, Plus, Minus, Truck, ShoppingBagIcon, ShoppingBasketIcon } from 'lucide-react'
 import { loggedInUser } from '@/store/auth'
 import { useCustomerOrders } from '@/hooks/useOrders'
 import type { StoreProduct } from '@/types/store'
+import { useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/customer/dashboard')({
   component: RouteComponent,
@@ -30,16 +31,16 @@ function RouteComponent() {
   }, []);
 
   const quickStats = [
-    { title: 'Orders This Month', value: '12', color: 'bg-blue-500', icon: Package },
-    { title: 'Total Saved', value: '$48.50', color: 'bg-blue-700', icon: Gift },
-    { title: 'Favorite Items', value: '25', color: 'bg-teal-500', icon: Heart },
-    { title: 'Loyalty Points', value: '1,250', color: 'bg-teal-700', icon: Star },
+    { title: 'Orders This Month', value: '12', color: 'bg-[#30739C]', icon: Package },
+    { title: 'Favorite Items', value: '25', color: 'bg-[#0074B7]', icon: Heart },
+    { title: 'Loyalty Points', value: '1,250', color: 'bg-[#145DA0]', icon: Star },
   ]
 
   const user = loggedInUser()
   const { data: orders } = useCustomerOrders(user?.user_id ? parseInt(user.user_id) : 0)
 
   const recentOrders = orders?.slice(0, 3)
+  const navigate = useNavigate();
 
   // Cart item structure: { product: StoreProduct, quantity: number }
 
@@ -62,7 +63,7 @@ function RouteComponent() {
         {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-6">
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-20 gap-6 mb-8">
             {quickStats.map((stat, index) => (
               <div key={index} className={`${stat.color} rounded-xl p-6 text-white`}>
                 <div className="flex items-center justify-between">
@@ -207,7 +208,8 @@ function RouteComponent() {
                           <span>Total:</span>
                           <span>KSh {cartTotal.toFixed(2)}</span>
                         </div>
-                        <button className="w-full mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                        <button className="w-full mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                        onClick={() => navigate({ to: '/customer/cart' })}>
                           Proceed to Checkout
                         </button>
                       </div>
