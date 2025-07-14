@@ -11,7 +11,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
-      <ThemeProvider defaultTheme="system" storageKey="freshcart-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="freshcart-ui-theme">
         <Outlet />
         <TanStackRouterDevtools />
         <TanStackQueryLayout />
