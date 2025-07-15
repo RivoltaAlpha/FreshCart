@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Star, Search, Filter, Plus, Minus, ShoppingCart, Eye } from 'lucide-react';
+import { Star, Search, Filter, ShoppingCart, Eye } from 'lucide-react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useProducts } from '@/hooks/useProducts';
 import Categories from '@/components/categories';
@@ -15,6 +15,9 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog'
+import { storeActions } from '@/store/store';
+import { toast } from 'sonner';
+import { getStoreHavingProduct } from '@/services/storeService';
 
 export const Route = createFileRoute('/products')({
   component: ProductsPage,
@@ -45,6 +48,7 @@ function ProductsPage() {
   const isInitialMount = useRef(true);
   const navigate = useNavigate();
   const products: BackendProduct[] = productsData?.products || [];
+
 
   const shouldUseSampleData = products.length === 0 && !!error;
 
@@ -136,26 +140,23 @@ function ProductsPage() {
     });
   };
 
-  const removeFromCart = (product_id: number): void => {
-    setCart(prev => {
-      const currentQty = prev[product_id] || 0;
-      let newCart: Cart;
+  // navigation to store with product
+  const handleShopProduct = async (product: any) => {
+    addToCart(product.product_id);
+    // Fetch store for this product
+    try {
+      const store = await getStoreHavingProduct(product.product_id)
 
-      if (currentQty <= 1) {
-        newCart = { ...prev };
-        delete newCart[product_id];
-      } else {
-        newCart = {
-          ...prev,
-          [product_id]: currentQty - 1
-        };
-      }
+      console.log(store)
 
-      // Save detailed cart items
-      saveCartItemsToLocalStorage(newCart);
+      // Save store in your storeActions (or context)
+      storeActions.saveStore(store);
 
-      return newCart;
-    });
+      // Navigate to shop-store page
+      navigate({ to: '/shop-store' });
+    } catch (err) {
+      toast.error('Could not find store for this product.');
+    }
   };
 
   // Modal and navigation handlers
@@ -347,33 +348,14 @@ function ProductsPage() {
                           </div>
                           <span className="text-sm text-muted-foreground">{product.stock_quantity} in stock</span>
                         </div>
-
-                        <div className="flex items-center justify-between">
-                          {cart[product.product_id] > 0 ? (
-                            <div className="flex items-center gap-3">
-                              <button
-                                onClick={() => removeFromCart(product.product_id)}
-                                className="w-8 h-8 bg-muted hover:bg-muted/80 rounded-full flex items-center justify-center transition-colors"
-                              >
-                                <Minus className="h-4 w-4" />
-                              </button>
-                              <span className="font-semibold text-fresh-primary">{cart[product.product_id]}</span>
-                              <button
-                                onClick={() => addToCart(product.product_id)}
-                                className="w-8 h-8 bg-fresh-primary hover:bg-fresh-primary/90 text-fresh-primary-foreground rounded-full flex items-center justify-center transition-colors"
-                              >
-                                <Plus className="h-4 w-4" />
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => addToCart(product.product_id)}
-                              className="bg-fresh-secondary hover:bg-fresh-secondary/90 text-fresh-primary-foreground px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
-                            >
-                              <Plus className="h-4 w-4" />
-                              <ShoppingCart size={18} />
-                            </button>
-                          )}
+                        <div className='flex items-center justify-between'>
+                          <button
+                            onClick={() => handleShopProduct(product)}
+                            className="bg-fresh-secondary hover:bg-fresh-secondary/90 text-fresh-primary-foreground px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
+                          >
+                            Shop
+                            <ShoppingCart size={18} />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -456,10 +438,10 @@ function ProductsPage() {
                   {/* Stock Status */}
                   <div className="flex items-center gap-2">
                     <div className={`w-3 h-3 rounded-full ${selectedProduct.stock_quantity > 10
-                        ? 'bg-green-500'
-                        : selectedProduct.stock_quantity > 0
-                          ? 'bg-yellow-500'
-                          : 'bg-red-500'
+                      ? 'bg-green-500'
+                      : selectedProduct.stock_quantity > 0
+                        ? 'bg-yellow-500'
+                        : 'bg-red-500'
                       }`} />
                     <span className="text-[#05445E]">
                       {selectedProduct.stock_quantity > 10
