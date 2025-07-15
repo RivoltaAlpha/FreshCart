@@ -1,7 +1,7 @@
 export interface Delivery {
   delivery_id: number;
   order_id: number;
-  delivery_status: DeliveryStatus | string;
+  status: DeliveryStatus | string;
   driver: {
     id: number;
     name: string;

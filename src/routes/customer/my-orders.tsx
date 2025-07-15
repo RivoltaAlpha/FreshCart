@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Package,
   Clock,
@@ -17,6 +17,8 @@ import {
 import { useCustomerOrders } from '@/hooks/useOrders'
 import { loggedInUser } from '@/store/auth'
 import { type CustomerOrder } from '@/types/types'
+import { useDeliveryByOrderId } from '@/hooks/useDeliveries'
+import { deliveryActions } from '@/store/delivery'
 
 export const Route = createFileRoute('/customer/my-orders')({
   component: RouteComponent,
@@ -25,6 +27,7 @@ export const Route = createFileRoute('/customer/my-orders')({
 function RouteComponent() {
   const navigate = useNavigate()
   const user = loggedInUser()
+
   const [statusFilter, setStatusFilter] = useState<string | 'all'>('all')
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(null)
 
@@ -173,6 +176,24 @@ function RouteComponent() {
       </div>
     </div>
   )
+
+  const [deliveryOrderId, setDeliveryOrderId] = useState<number | null>(null);
+  const { data: deliveryInfo } = useDeliveryByOrderId(deliveryOrderId ?? 0);
+
+
+  // Effect to set delivery info and navigate when deliveryOrderId changes
+  useEffect(() => {
+    if (deliveryOrderId && deliveryInfo) {
+      deliveryActions.setSelectedDelivery(deliveryInfo);
+      navigate({ to: '/customer/order-delivery' });
+    }
+  }, [deliveryOrderId, deliveryInfo, navigate]);
+
+  const handleViewDetails = (order_id: number) => {
+    setDeliveryOrderId(order_id);
+    console.log('Fetching delivery info for order:', order_id);
+  }
+  console.log(deliveryInfo);
 
   if (!user) {
     return (
@@ -336,9 +357,19 @@ function RouteComponent() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <MapPin className="h-4 w-4" />
-                        <span>{order.delivery_address}</span>
+                      <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4" />
+                          <span>{order.delivery_address}</span>
+                        </div>
+                        <div>
+                          <button
+                            onClick={() => handleViewDetails(order.order_id)}
+                            className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
+                          >
+                            View Delivery details
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
