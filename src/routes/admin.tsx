@@ -49,7 +49,7 @@ export const Route = createFileRoute('/admin')({
   beforeLoad: async ({ location }) => {
     const { isAuthenticated, isAdmin } = checkAdminAuth()
 
-    if (isAuthenticated && !isAdmin) {
+    if (!isAuthenticated && !isAdmin || isAuthenticated && !isAdmin) {
       throw redirect({
         to: '/login',
         search: {

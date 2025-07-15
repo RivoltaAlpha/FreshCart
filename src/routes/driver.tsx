@@ -50,7 +50,7 @@ export const Route = createFileRoute('/driver')({
   beforeLoad: async ({ location }) => {
     const { isAuthenticated, isDriver } = checkDriverAuth()
 
-    if (isAuthenticated && !isDriver) {
+    if (!isAuthenticated && !isDriver || isAuthenticated && !isDriver) {
       throw redirect({
         to: '/login',
         search: {
