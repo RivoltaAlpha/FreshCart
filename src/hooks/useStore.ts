@@ -2,7 +2,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 import { useState, useEffect, useCallback } from 'react'
 import type { allStoreProductsResponse, Store } from '../types/store'
 import type { Product } from '../types/types'
-import { getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreProducts } from '@/services/storeService'
+import { getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreHavingProduct, getStoreProducts } from '@/services/storeService'
 import { useQuery } from '@tanstack/react-query'
 
 interface UseStoreProductsParams {
@@ -143,6 +143,7 @@ export const useStores = (): UseStoresReturn => {
     queryKey: ['stores'],
     queryFn: getAllStores,
   })
+  
 
   const fetchStores = useCallback(async () => {
     try {
@@ -211,3 +212,16 @@ export const useAllStoreProducts = (storeId: number): UseQueryResult<allStorePro
     },
   })
 }
+
+
+// get store having that product:
+export const useStoreByProduct = (productId: number) => {
+  return useQuery({
+    queryKey: ['storeByProduct', productId],
+    queryFn: async () => {
+      const res = await getStoreHavingProduct(productId);
+      return res.json();
+    },
+    enabled: !!productId,
+  });
+};

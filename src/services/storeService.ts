@@ -73,6 +73,28 @@ export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
   }
 }
 
+// Fetch products for a specific store
+export const getStoreHavingProduct = async (product_id: number) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/products/${product_id}/store`)
+    await handleApiResponse(response)
+    const data = await response.json()
+
+    // Ensure we always return an array
+    if (Array.isArray(data)) {
+      return data
+    } else if (data && data.products && Array.isArray(data.products)) {
+      return data.products
+    } else {
+      console.warn('API returned non-array data for store products:', data)
+      return []
+    }
+  } catch (error) {
+    console.error('Error in getStoreProducts:', error)
+    throw error
+  }
+}
+
 export const getallStoreProducts = async (
   storeId: number,
 ): Promise<allStoreProductsResponse> => {
