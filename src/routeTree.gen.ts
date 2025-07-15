@@ -21,7 +21,6 @@ import { Route as DriverRouteImport } from './routes/driver'
 import { Route as DraftRouteImport } from './routes/draft'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CartRouteImport } from './routes/cart'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -53,6 +52,7 @@ import { Route as CustomerProfileRouteImport } from './routes/customer/profile'
 import { Route as CustomerPaymentVerifyRouteImport } from './routes/customer/payment-verify'
 import { Route as CustomerPaymentSuccessfulRouteImport } from './routes/customer/payment-successful'
 import { Route as CustomerOrderDetailsRouteImport } from './routes/customer/order-details'
+import { Route as CustomerOrderDeliveryRouteImport } from './routes/customer/order-delivery'
 import { Route as CustomerMyOrdersRouteImport } from './routes/customer/my-orders'
 import { Route as CustomerDashboardRouteImport } from './routes/customer/dashboard'
 import { Route as CustomerCreateOrderRouteImport } from './routes/customer/create-order'
@@ -133,11 +133,6 @@ const CustomerRoute = CustomerRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CartRoute = CartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -296,6 +291,11 @@ const CustomerOrderDetailsRoute = CustomerOrderDetailsRouteImport.update({
   path: '/order-details',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerOrderDeliveryRoute = CustomerOrderDeliveryRouteImport.update({
+  id: '/order-delivery',
+  path: '/order-delivery',
+  getParentRoute: () => CustomerRoute,
+} as any)
 const CustomerMyOrdersRoute = CustomerMyOrdersRouteImport.update({
   id: '/my-orders',
   path: '/my-orders',
@@ -406,7 +406,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
-  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
   '/draft': typeof DraftRoute
@@ -440,6 +439,7 @@ export interface FileRoutesByFullPath {
   '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/my-orders': typeof CustomerMyOrdersRoute
+  '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
   '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
@@ -473,7 +473,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
-  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
   '/draft': typeof DraftRoute
@@ -507,6 +506,7 @@ export interface FileRoutesByTo {
   '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/my-orders': typeof CustomerMyOrdersRoute
+  '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
   '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
@@ -541,7 +541,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
-  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
   '/draft': typeof DraftRoute
@@ -575,6 +574,7 @@ export interface FileRoutesById {
   '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/my-orders': typeof CustomerMyOrdersRoute
+  '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
   '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
@@ -610,7 +610,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/cart'
     | '/contact'
     | '/customer'
     | '/draft'
@@ -644,6 +643,7 @@ export interface FileRouteTypes {
     | '/customer/create-order'
     | '/customer/dashboard'
     | '/customer/my-orders'
+    | '/customer/order-delivery'
     | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
@@ -677,7 +677,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/cart'
     | '/contact'
     | '/customer'
     | '/draft'
@@ -711,6 +710,7 @@ export interface FileRouteTypes {
     | '/customer/create-order'
     | '/customer/dashboard'
     | '/customer/my-orders'
+    | '/customer/order-delivery'
     | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
@@ -744,7 +744,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/cart'
     | '/contact'
     | '/customer'
     | '/draft'
@@ -778,6 +777,7 @@ export interface FileRouteTypes {
     | '/customer/create-order'
     | '/customer/dashboard'
     | '/customer/my-orders'
+    | '/customer/order-delivery'
     | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
@@ -812,7 +812,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
-  CartRoute: typeof CartRoute
   ContactRoute: typeof ContactRoute
   CustomerRoute: typeof CustomerRouteWithChildren
   DraftRoute: typeof DraftRoute
@@ -911,13 +910,6 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cart': {
-      id: '/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -1137,6 +1129,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerOrderDetailsRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/order-delivery': {
+      id: '/customer/order-delivery'
+      path: '/order-delivery'
+      fullPath: '/customer/order-delivery'
+      preLoaderRoute: typeof CustomerOrderDeliveryRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/customer/my-orders': {
       id: '/customer/my-orders'
       path: '/my-orders'
@@ -1333,6 +1332,7 @@ interface CustomerRouteChildren {
   CustomerCreateOrderRoute: typeof CustomerCreateOrderRoute
   CustomerDashboardRoute: typeof CustomerDashboardRoute
   CustomerMyOrdersRoute: typeof CustomerMyOrdersRoute
+  CustomerOrderDeliveryRoute: typeof CustomerOrderDeliveryRoute
   CustomerOrderDetailsRoute: typeof CustomerOrderDetailsRoute
   CustomerPaymentSuccessfulRoute: typeof CustomerPaymentSuccessfulRoute
   CustomerPaymentVerifyRoute: typeof CustomerPaymentVerifyRoute
@@ -1347,6 +1347,7 @@ const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerCreateOrderRoute: CustomerCreateOrderRoute,
   CustomerDashboardRoute: CustomerDashboardRoute,
   CustomerMyOrdersRoute: CustomerMyOrdersRoute,
+  CustomerOrderDeliveryRoute: CustomerOrderDeliveryRoute,
   CustomerOrderDetailsRoute: CustomerOrderDetailsRoute,
   CustomerPaymentSuccessfulRoute: CustomerPaymentSuccessfulRoute,
   CustomerPaymentVerifyRoute: CustomerPaymentVerifyRoute,
@@ -1424,7 +1425,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
-  CartRoute: CartRoute,
   ContactRoute: ContactRoute,
   CustomerRoute: CustomerRouteWithChildren,
   DraftRoute: DraftRoute,
