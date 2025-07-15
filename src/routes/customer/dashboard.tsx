@@ -57,7 +57,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div id="dashboard" className="flex h-screen bg-gray-50">
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Dashboard Content */}

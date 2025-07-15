@@ -109,7 +109,7 @@ function LoginPage() {
             </div>
 
             <form onSubmit={onLogin} className="space-y-6">
-              <div>
+              <div id='email'>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -125,7 +125,7 @@ function LoginPage() {
                 </div>
               </div>
 
-              <div>
+              <div id='password'>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -157,6 +157,7 @@ function LoginPage() {
               </div>
 
               <button
+              id='login-button'
                 type="submit"
                 className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transform hover:scale-105 transition-all duration-200"
               >

@@ -80,7 +80,7 @@ function RouteComponent() {
                             <h3 className="font-semibold text-gray-800">Order #{order?.order_number || delivery.order_id}</h3>
                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${delivery.delivery_status === 'picked_up' ? 'bg-[#005A61] text-white' :
                               delivery.delivery_status === 'ready_pickup' ? 'bg-[#516E89] text-white' :
-                                delivery.delivery_status === 'assigned' ? 'bg-[#00A7B3] text-white' :
+                                delivery.delivery_status === 'assigned' ? 'bg-[#0074B7] text-white' :
                                   delivery.delivery_status === 'in_transit' ? 'bg-[#516E89] text-white' :
                                     delivery.delivery_status === 'delivered' ? 'bg-green-600 text-white' :
                                       'bg-gray-300 text-gray-800'

@@ -198,6 +198,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
           <div className="p-4 border-t border-gray-600 mt-auto">
             <div className='px-2 flex items-center justify-between mb-4 hover:bg-[#41729F] rounded transition-colors duration-200'>
               <button
+                id='logout-button'
                 onClick={() => {
                   // Store auth data in state instead of localStorage for artifact compatibility
                   navigation({ to: '/login' });

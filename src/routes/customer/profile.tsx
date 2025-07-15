@@ -406,7 +406,7 @@ function RouteComponent() {
       </div>
 
       {/* Additional Actions */}
-      <div className="mt-8 flex flex-wrap gap-4">
+      <div className="mt-8 flex flex-wrap  mx-[20px] gap-4">
         <button
           onClick={() => navigate({ to: '/customer/my-orders' })}
           className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"

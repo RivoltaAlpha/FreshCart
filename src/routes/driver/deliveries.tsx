@@ -51,7 +51,7 @@ function RouteComponent() {
                             <h3 className="font-semibold text-gray-800">Order #{order?.order_number || delivery.order_id}</h3>
                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${delivery.delivery_status === 'picked_up' ? 'bg-[#005A61] text-white' :
                               delivery.delivery_status === 'ready_pickup' ? 'bg-[#516E89] text-white' :
-                                delivery.delivery_status === 'assigned' ? 'bg-[#00A7B3] text-white' :
+                                delivery.delivery_status === 'assigned' ? 'bg-[#0074B7] text-white' :
                                   delivery.delivery_status === 'in_transit' ? 'bg-[#516E89] text-white' :
                                     delivery.delivery_status === 'delivered' ? 'bg-green-600 text-white' :
                                       'bg-gray-300 text-gray-800'
@@ -103,7 +103,7 @@ function RouteComponent() {
                         )}
                         {(delivery.delivery_status === 'picked_up' || delivery.delivery_status === 'in_transit') && (
                           <button
-                            className="flex-1 min-w-[120px] bg-[#00A7B3] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                            className="flex-1 min-w-[120px] bg-[#0074B7] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
                             onClick={() => {
                               updateDeliveryMutation.mutate({
                                 deliveryId: delivery.delivery_id,
