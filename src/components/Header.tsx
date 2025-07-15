@@ -159,7 +159,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
 
             {/* Cart Button */}
             <Link
-              to="/cart"
+              to="/customer/cart"
               className="relative p-2 text-gray-600 hover:text-[#05445E] transition-all duration-200 hover:scale-110"
             >
               <ShoppingCart className="h-6 w-6" />
