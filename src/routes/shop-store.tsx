@@ -4,7 +4,7 @@ import { Search, Heart, ChevronDown, ShoppingCart, LocateFixedIcon, Eye } from '
 import { useStoreProducts } from '@/hooks/useProducts'
 import { useStores } from '@/hooks/useStore'
 import type { Product } from '@/types/types'
-import { storesStore, storeActions } from '@/store/store'
+import { storeActions } from '@/store/store'
 import { cartActions, cartStore } from '@/store/cart'
 import { toast } from 'sonner'
 import Header from '@/components/Header'
@@ -29,7 +29,8 @@ function StoreLayout() {
   const [sortBy, setSortBy] = useState('name')
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [cartCount, setCartCount] = useState(0)
-  const store_id = storesStore.state.store_id
+  const store = localStorage.getItem('selectedStore')
+  const store_id = store ? JSON.parse(store).store_id : null
   const [dietaryOpen, setDietaryOpen] = useState(true)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
