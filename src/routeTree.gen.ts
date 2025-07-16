@@ -51,11 +51,9 @@ import { Route as CustomerSuccessRouteImport } from './routes/customer/success'
 import { Route as CustomerProfileRouteImport } from './routes/customer/profile'
 import { Route as CustomerPaymentVerifyRouteImport } from './routes/customer/payment-verify'
 import { Route as CustomerPaymentSuccessfulRouteImport } from './routes/customer/payment-successful'
-import { Route as CustomerOrderDetailsRouteImport } from './routes/customer/order-details'
 import { Route as CustomerOrderDeliveryRouteImport } from './routes/customer/order-delivery'
 import { Route as CustomerMyOrdersRouteImport } from './routes/customer/my-orders'
 import { Route as CustomerDashboardRouteImport } from './routes/customer/dashboard'
-import { Route as CustomerCreateOrderRouteImport } from './routes/customer/create-order'
 import { Route as CustomerCheckoutOrderRouteImport } from './routes/customer/checkout-order'
 import { Route as CustomerCartRouteImport } from './routes/customer/cart'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
@@ -286,11 +284,6 @@ const CustomerPaymentSuccessfulRoute =
     path: '/payment-successful',
     getParentRoute: () => CustomerRoute,
   } as any)
-const CustomerOrderDetailsRoute = CustomerOrderDetailsRouteImport.update({
-  id: '/order-details',
-  path: '/order-details',
-  getParentRoute: () => CustomerRoute,
-} as any)
 const CustomerOrderDeliveryRoute = CustomerOrderDeliveryRouteImport.update({
   id: '/order-delivery',
   path: '/order-delivery',
@@ -304,11 +297,6 @@ const CustomerMyOrdersRoute = CustomerMyOrdersRouteImport.update({
 const CustomerDashboardRoute = CustomerDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => CustomerRoute,
-} as any)
-const CustomerCreateOrderRoute = CustomerCreateOrderRouteImport.update({
-  id: '/create-order',
-  path: '/create-order',
   getParentRoute: () => CustomerRoute,
 } as any)
 const CustomerCheckoutOrderRoute = CustomerCheckoutOrderRouteImport.update({
@@ -436,11 +424,9 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
-  '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/my-orders': typeof CustomerMyOrdersRoute
   '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
-  '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
   '/customer/profile': typeof CustomerProfileRoute
@@ -503,11 +489,9 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
-  '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/my-orders': typeof CustomerMyOrdersRoute
   '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
-  '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
   '/customer/profile': typeof CustomerProfileRoute
@@ -571,11 +555,9 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
-  '/customer/create-order': typeof CustomerCreateOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/my-orders': typeof CustomerMyOrdersRoute
   '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
-  '/customer/order-details': typeof CustomerOrderDetailsRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
   '/customer/profile': typeof CustomerProfileRoute
@@ -640,11 +622,9 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/customer/cart'
     | '/customer/checkout-order'
-    | '/customer/create-order'
     | '/customer/dashboard'
     | '/customer/my-orders'
     | '/customer/order-delivery'
-    | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
     | '/customer/profile'
@@ -707,11 +687,9 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/customer/cart'
     | '/customer/checkout-order'
-    | '/customer/create-order'
     | '/customer/dashboard'
     | '/customer/my-orders'
     | '/customer/order-delivery'
-    | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
     | '/customer/profile'
@@ -774,11 +752,9 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/customer/cart'
     | '/customer/checkout-order'
-    | '/customer/create-order'
     | '/customer/dashboard'
     | '/customer/my-orders'
     | '/customer/order-delivery'
-    | '/customer/order-details'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
     | '/customer/profile'
@@ -1122,13 +1098,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerPaymentSuccessfulRouteImport
       parentRoute: typeof CustomerRoute
     }
-    '/customer/order-details': {
-      id: '/customer/order-details'
-      path: '/order-details'
-      fullPath: '/customer/order-details'
-      preLoaderRoute: typeof CustomerOrderDetailsRouteImport
-      parentRoute: typeof CustomerRoute
-    }
     '/customer/order-delivery': {
       id: '/customer/order-delivery'
       path: '/order-delivery'
@@ -1148,13 +1117,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/customer/dashboard'
       preLoaderRoute: typeof CustomerDashboardRouteImport
-      parentRoute: typeof CustomerRoute
-    }
-    '/customer/create-order': {
-      id: '/customer/create-order'
-      path: '/create-order'
-      fullPath: '/customer/create-order'
-      preLoaderRoute: typeof CustomerCreateOrderRouteImport
       parentRoute: typeof CustomerRoute
     }
     '/customer/checkout-order': {
@@ -1329,11 +1291,9 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface CustomerRouteChildren {
   CustomerCartRoute: typeof CustomerCartRoute
   CustomerCheckoutOrderRoute: typeof CustomerCheckoutOrderRoute
-  CustomerCreateOrderRoute: typeof CustomerCreateOrderRoute
   CustomerDashboardRoute: typeof CustomerDashboardRoute
   CustomerMyOrdersRoute: typeof CustomerMyOrdersRoute
   CustomerOrderDeliveryRoute: typeof CustomerOrderDeliveryRoute
-  CustomerOrderDetailsRoute: typeof CustomerOrderDetailsRoute
   CustomerPaymentSuccessfulRoute: typeof CustomerPaymentSuccessfulRoute
   CustomerPaymentVerifyRoute: typeof CustomerPaymentVerifyRoute
   CustomerProfileRoute: typeof CustomerProfileRoute
@@ -1344,11 +1304,9 @@ interface CustomerRouteChildren {
 const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerCartRoute: CustomerCartRoute,
   CustomerCheckoutOrderRoute: CustomerCheckoutOrderRoute,
-  CustomerCreateOrderRoute: CustomerCreateOrderRoute,
   CustomerDashboardRoute: CustomerDashboardRoute,
   CustomerMyOrdersRoute: CustomerMyOrdersRoute,
   CustomerOrderDeliveryRoute: CustomerOrderDeliveryRoute,
-  CustomerOrderDetailsRoute: CustomerOrderDetailsRoute,
   CustomerPaymentSuccessfulRoute: CustomerPaymentSuccessfulRoute,
   CustomerPaymentVerifyRoute: CustomerPaymentVerifyRoute,
   CustomerProfileRoute: CustomerProfileRoute,

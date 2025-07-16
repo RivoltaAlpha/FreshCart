@@ -186,9 +186,9 @@ function RouteComponent() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="text-center">
-          <ShoppingCart className="h-24 w-24 text-fresh-secondary animate-spin mb-6" />
+        <div className="text-center flex flex-col items-center">
           <h1 className="text-2xl font-bold text-fresh-primary mb-4">Processing your order...</h1>
+          <ShoppingCart className="h-24 w-24 text-fresh-secondary animate-spin mb-6" />
           <p className="text-fresh-secondary">Please wait while we prepare your order.</p>
         </div>
       </div>

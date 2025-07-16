@@ -44,7 +44,7 @@ function RouteComponent() {
     setCurrentOrder(order);
   }, [navigate]);
 
-    // Compose delivery address from selections
+  // Compose delivery address from selections
   useEffect(() => {
     if (county && subCounty && localityName && area) {
       setDeliveryAddress([area, localityName, subCounty, county].filter(Boolean).join(', '));
@@ -61,19 +61,8 @@ function RouteComponent() {
       delivery_instructions: deliveryInstructions,
       delivery_phone: deliveryPhone,
     });
-    
+
     setCurrentOrder(orderActions.getCurrentOrder());
-  };
-
-  const handleUpdateOrder = () => {
-    if (currentOrder) {
-
-    updateMutation.mutate({
-      delivery_address: deliveryAddress,
-      delivery_instructions: deliveryInstructions,
-      delivery_phone: deliveryPhone,
-    });
-    }
   };
 
   const processPayment = async () => {
@@ -99,6 +88,12 @@ function RouteComponent() {
     }
 
     setIsLoading(true);
+
+    updateMutation.mutate({
+      delivery_address: deliveryAddress,
+      delivery_instructions: deliveryInstructions,
+      delivery_phone: deliveryPhone,
+    });
 
     try {
       // Update order with delivery info
@@ -128,7 +123,6 @@ function RouteComponent() {
               to: '/customer/payment-verify'
             });
           }
-        handleUpdateOrder(); // Update order after payment initialization
           toast.success('Payment initialized successfully');
         },
         onError: (error) => {
@@ -209,6 +203,10 @@ function RouteComponent() {
 
               {currentOrder.delivery_method !== 'pickup' && (
                 <div className="space-y-2">
+                  <label className="block text-sm font-medium text-fresh-secondary mb-2">
+                    Delivery Address *
+                  </label>
+                  <p>Kindly choose a location near you</p>
                   <select
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                     value={county}
