@@ -431,14 +431,13 @@ export interface Order {
 }
 
 export interface OrderItem {
-  product_id: number
+  product_id?: number
   quantity: number
 }
 
 export interface CreateOrder {
-  store_id: number
-  items: OrderItem[]
-  delivery_address: string
+  items?: OrderItem[]
+  delivery_address?: string
   delivery_instructions?: string
   delivery_latitude?: number
   delivery_longitude?: number
@@ -448,6 +447,8 @@ export interface CreateOrder {
   driver_id?: number
   actual_delivery_time?: Date
 }
+
+export type UpdateOrder = Partial<CreateOrder>
 
 export type UpdateOrderStatus = Partial<CreateOrder>
 
