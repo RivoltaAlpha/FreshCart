@@ -87,14 +87,14 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   return (
     <section className="py-20 bg-gray-50">
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommended Products</h2>
           <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-4"></div>
           <p className="text-lg text-gray-600">Personalized recommendations just for you</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-3 gap-6 mb-12">
           {recommendations
             .map((rec) => {
               const product = products.find((p) => p.product_id === rec.productId);
@@ -131,9 +131,6 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
                 <div className="mb-4">
                   <h3 className="font-semibold text-[#05445E] mb-1">{product.name}</h3>
                   <p className="text-[#189AB4] font-bold mb-2">KSh {product.price}</p>
-                  <div className="bg-[#75E6DA]/20 px-2 py-1 rounded-md">
-                    <span className="text-xs text-[#05445E]">{rec.reason}</span>
-                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
