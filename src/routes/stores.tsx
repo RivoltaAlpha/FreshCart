@@ -344,7 +344,6 @@ function StoresPage() {
                         }}
                       />
                       <h4 className="font-semibold text-[#005A61] mb-1">{product.name}</h4>
-                      <p className="text-sm text-[#516E89] mb-2 line-clamp-2">{product.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-[#00A7B3]">KSh {product.price}</span>
                         <div className="flex items-center">
