@@ -22,6 +22,7 @@ function RouteComponent() {
   const user_id = JSON.parse(authUser || '{}')?.user?.user_id;
   const selectedStore = localStorage.getItem('selectedStore');
   const store_id = JSON.parse(selectedStore || '{}')?.store_id;
+  const [loading, setLoading] = useState(false);
 
   const { mutate: createNewOrder } = useCreateOrderMutation();
 
@@ -129,6 +130,7 @@ function RouteComponent() {
       };
 
       orderActions.setCurrentOrder(orderDetails);
+      setLoading(true);
       createNewOrder(orderData, {
         onSuccess: (createdOrder) => {
           console.log('Order created:', createdOrder);
@@ -144,13 +146,14 @@ function RouteComponent() {
           // Navigate to checkout
           navigate({ to: '/customer/checkout-order' });
           toast.success('Order created successfully! Proceeding to checkout...');
+          setLoading(false);
         },
         onError: (error) => {
           console.error('Error creating order:', error);
           toast.error('Failed to create order. Please try again.');
+          setLoading(false);
         }
       });
-
     } catch (error) {
       console.error('Error in checkout process:', error);
       toast.error('Failed to proceed to checkout. Please try again.');
@@ -175,6 +178,18 @@ function RouteComponent() {
               Continue Shopping
             </Link>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-center">
+          <ShoppingCart className="h-24 w-24 text-fresh-secondary animate-spin mb-6" />
+          <h1 className="text-2xl font-bold text-fresh-primary mb-4">Processing your order...</h1>
+          <p className="text-fresh-secondary">Please wait while we prepare your order.</p>
         </div>
       </div>
     );
