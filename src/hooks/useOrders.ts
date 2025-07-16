@@ -5,6 +5,7 @@ import type {
   ShipOrder,
   CustomerOrder,
   OrderStatus,
+  UpdateOrder,
 } from '../types/types'
 import {
   getAllOrders,
@@ -78,7 +79,7 @@ export function useUpdateOrderMutation(id: number, onSuccess?: () => void) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationKey: ['updateOrder', id],
-    mutationFn: (data: CreateOrder) => updateOrder(id, data),
+    mutationFn: (data: UpdateOrder) => updateOrder(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders', 'storeOrders'] })
       onSuccess?.()
