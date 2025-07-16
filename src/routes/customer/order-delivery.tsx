@@ -1,7 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { MapPin, Phone, Package, User, Route as RouteIcon, ArrowLeft } from 'lucide-react';
+import { MapPin, Phone, Package, User, Route as RouteIcon, ArrowLeft, CheckCircle2Icon } from 'lucide-react';
 import { deliveryStore } from '@/store/delivery';
 import type { DeliveryStatus } from '@/types/delivery';
+import { useUpdateOrderStatusMutation } from '@/hooks/useOrders';
+import type { OrderStatus } from '@/types/types';
 
 export const Route = createFileRoute('/customer/order-delivery')({
     component: RouteComponent,
@@ -10,6 +12,8 @@ export const Route = createFileRoute('/customer/order-delivery')({
 function RouteComponent() {
     const delivery = deliveryStore.state.selectedDelivery;
     const navigate = useNavigate();
+    const updateMutation = useUpdateOrderStatusMutation(delivery?.order_id ?? 0);
+
 
     if (!delivery) {
         return (
@@ -67,6 +71,13 @@ function RouteComponent() {
                 return 'bg-green-500 text-white';
             default:
                 return 'bg-gray-300 text-gray-800';
+        }
+    };
+
+    const handleStatusChange = () => {
+        const newStatus = 'delivered';
+        if (delivery?.status == 'delivered') {
+            updateMutation.mutate(newStatus as OrderStatus);
         }
     };
 
@@ -165,6 +176,17 @@ function RouteComponent() {
                                     </div>
                                 </div>
                             </div>
+
+                            <button
+                                onClick={handleStatusChange}
+                                className="px-4 py-2 bg-[#00A7B3] text-white rounded-lg hover:bg-[#00A7B3]/90 transition-colors"
+                                disabled={updateMutation.isPending}
+                            >
+                                <div className="flex items-center justify-between space-x-2">
+                                    <CheckCircle2Icon className="h-4 w-4" />
+                                    {updateMutation.isPending ? 'Updating...' : 'Order Received'}
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </main>
