@@ -410,10 +410,10 @@ function StoresPage() {
 
         {/* Stats Section */}
         <div className="bg-gradient-to-r from-[#120061] to-[#00A7B3] text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                   <StoreIcon className="w-8 h-8" />
                 </div>
                 <div className="text-3xl font-bold mb-2">{stores?.length || 0}</div>
