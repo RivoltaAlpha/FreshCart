@@ -218,7 +218,8 @@ function RouteComponent() {
                     <div className="text-center py-8">
                       <ShoppingCart className="text-gray-400 mx-auto mb-4" size={48} />
                       <p className="text-gray-600">Your cart is empty</p>
-                      <button className="mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                      <button className="mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                      onClick={() => navigate({ to: '/products' })}>
                         Start Shopping
                       </button>
                     </div>
