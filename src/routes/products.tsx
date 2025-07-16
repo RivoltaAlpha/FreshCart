@@ -233,32 +233,11 @@ function ProductsPage() {
             </div>
           )}
 
-          {/* Authentication Error - Using Sample Data */}
-          {shouldUseSampleData && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
-              <h2 className="text-lg font-semibold text-yellow-800 mb-2">Using Sample Data</h2>
-              <p className="text-yellow-700">
-                Authentication required to load products from backend. Currently showing sample products.
-                Please log in to view actual products.
-              </p>
-            </div>
-          )}
-
-          {/* Backend returned empty - show info */}
-          {!isLoading && !error && products && products.length === 0 && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-              <h2 className="text-lg font-semibold text-blue-800 mb-2">No Products Found</h2>
-              <p className="text-blue-700">
-                Connected to backend successfully, but no products are available in the database.
-              </p>
-            </div>
-          )}
-
           {/* Main Content - only show when not loading */}
           {!isLoading && (
             <>            {/* Categories Section */}
               <div className="mb-8 flex flex-col space-y-12">
-                <h2 className="text-2xl flex justify-center font-bold text-foreground mb-6">Browse by Category</h2>
+                <h2 className="text-2xl flex justify-center font-bold text-foreground my-6">Browse by Category</h2>
                 <Categories
                   onCategorySelect={handleCategorySelect}
                   selectedCategoryId={selectedCategoryId}
