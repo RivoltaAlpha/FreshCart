@@ -4,6 +4,8 @@ import { ArrowLeft, CreditCard, MapPin, ShoppingBag } from 'lucide-react';
 import { toast } from 'sonner';
 import { orderActions, type OrderDetails } from '@/store/order';
 import { useInitializePayment } from '@/hooks/usePayments';
+import { getAreasInLocality, getLocalitiesInCounty, getSubCountiesInCounty, getCounties } from 'kenya-locations';
+import { useUpdateOrderMutation } from '@/hooks/useOrders';
 
 export const Route = createFileRoute('/customer/checkout-order')({
   component: RouteComponent,
@@ -19,6 +21,16 @@ function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const authUser = localStorage.getItem('auth');
   const customer_email = JSON.parse(authUser || '{}')?.user?.email;
+  const updateMutation = useUpdateOrderMutation(currentOrder?.order_id ?? 0);
+
+  const [county, setCounty] = useState('');
+  const [subCounty, setSubCounty] = useState('');
+  const [localityName, setLocalityName] = useState('');
+  const [area, setArea] = useState('');
+  const counties = getCounties();
+  const subCounties = county ? getSubCountiesInCounty(county) : [];
+  const localities = subCounty ? getLocalitiesInCounty(county) : [];
+  const areas = localityName ? getAreasInLocality(localityName) : [];
 
   useEffect(() => {
     orderActions.loadFromStorage();
@@ -32,6 +44,15 @@ function RouteComponent() {
     setCurrentOrder(order);
   }, [navigate]);
 
+    // Compose delivery address from selections
+  useEffect(() => {
+    if (county && subCounty && localityName && area) {
+      setDeliveryAddress([area, localityName, subCounty, county].filter(Boolean).join(', '));
+    } else {
+      setDeliveryAddress('');
+    }
+  }, [county, subCounty, localityName, area]);
+
   const updateOrderWithDeliveryInfo = () => {
     if (!currentOrder) return;
 
@@ -40,8 +61,19 @@ function RouteComponent() {
       delivery_instructions: deliveryInstructions,
       delivery_phone: deliveryPhone,
     });
-
+    
     setCurrentOrder(orderActions.getCurrentOrder());
+  };
+
+  const handleUpdateOrder = () => {
+    if (currentOrder) {
+
+    updateMutation.mutate({
+      delivery_address: deliveryAddress,
+      delivery_instructions: deliveryInstructions,
+      delivery_phone: deliveryPhone,
+    });
+    }
   };
 
   const processPayment = async () => {
@@ -96,6 +128,8 @@ function RouteComponent() {
               to: '/customer/payment-verify'
             });
           }
+        handleUpdateOrder(); // Update order after payment initialization
+          toast.success('Payment initialized successfully');
         },
         onError: (error) => {
           console.error('Payment initialization failed:', error);
@@ -121,7 +155,7 @@ function RouteComponent() {
       </div>
     );
   }
-    if (isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00A7B3]"></div>
@@ -174,18 +208,69 @@ function RouteComponent() {
               </div>
 
               {currentOrder.delivery_method !== 'pickup' && (
-                <div>
-                  <label className="block text-sm font-medium text-fresh-secondary mb-2">
-                    Delivery Address *
-                  </label>
-                  <textarea
-                    value={deliveryAddress}
-                    onChange={(e) => setDeliveryAddress(e.target.value)}
-                    placeholder="Enter your full delivery address..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent resize-none"
-                    rows={3}
+                <div className="space-y-2">
+                  <select
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                    value={county}
+                    onChange={e => {
+                      setCounty(e.target.value);
+                      setSubCounty('');
+                      setLocalityName('');
+                      setArea('');
+                    }}
                     required
-                  />
+                  >
+                    <option value="">Select County</option>
+                    {counties.map((c: any) => (
+                      <option key={c.code} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                  {county && (
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                      value={subCounty}
+                      onChange={e => {
+                        setSubCounty(e.target.value);
+                        setLocalityName('');
+                        setArea('');
+                      }}
+                      required
+                    >
+                      <option value="">Select Sub-County</option>
+                      {subCounties.map((sc: any) => (
+                        <option key={sc.code} value={sc.name}>{sc.name}</option>
+                      ))}
+                    </select>
+                  )}
+                  {subCounty && (
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                      value={localityName}
+                      onChange={e => {
+                        setLocalityName(e.target.value);
+                        setArea('');
+                      }}
+                      required
+                    >
+                      <option value="">Select Locality</option>
+                      {localities.map((l: any, idx: number) => (
+                        <option key={l.name || idx} value={l.name || ''}>{l.name || ''}</option>
+                      ))}
+                    </select>
+                  )}
+                  {localityName && (
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                      value={area}
+                      onChange={e => setArea(e.target.value)}
+                      required
+                    >
+                      <option value="">Select Area</option>
+                      {areas.map((a: any, idx: number) => (
+                        <option key={a.name || a || idx} value={a.name || a || ''}>{a.name || a || ''}</option>
+                      ))}
+                    </select>
+                  )}
                 </div>
               )}
 
