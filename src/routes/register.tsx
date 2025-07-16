@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useRegister } from '@/hooks/useRegister';
 import { Footer } from '@/components/Footer';
 import Header from '@/components/Header';
+import { getAreasInLocality, getLocalitiesInCounty, getSubCountiesInCounty, getCounties } from 'kenya-locations';
 
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
@@ -19,12 +20,21 @@ function RegisterPage() {
     password: '',
     phone_number: '',
     town: '',
+    area: '',
     county: '',
-    country: '',
+    country: 'Kenya',
     role: 'Customer' as 'Customer' | 'Store' | 'Driver' | 'Admin',
   });
   const navigate = useNavigate();
   const registerMutation = useRegister();
+  const [county, setCounty] = useState('');
+  const [subCounty, setSubCounty] = useState('');
+  const [localityName, setLocalityName] = useState('');
+  const [area, setArea] = useState('');
+  const counties = getCounties();
+  const subCounties = county ? getSubCountiesInCounty(county) : [];
+  const localities = subCounty ? getLocalitiesInCounty(county) : [];
+  const areas = localityName ? getAreasInLocality(localityName) : [];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -167,104 +177,71 @@ function RegisterPage() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2"> Town</label>
-              <div className="relative">
-                <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  name="town"
-                  value={formData.town || ''}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                  placeholder="Nearest Town"
-                  required
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className='flex gap-4'>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 mb-2"> County </label>
-                <div className="relative">
-                  <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+
+                <div className="space-y-2">
                   <select
-                    name="county"
-                    value={formData.county || ''}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                    required
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select a county</option>
-                    <option value="Baringo">Baringo</option>
-                    <option value="Bomet">Bomet</option>
-                    <option value="Bungoma">Bungoma</option>
-                    <option value="Busia">Busia</option>
-                    <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
-                    <option value="Embu">Embu</option>
-                    <option value="Garissa">Garissa</option>
-                    <option value="Homa Bay">Homa Bay</option>
-                    <option value="Isiolo">Isiolo</option>
-                    <option value="Kajiado">Kajiado</option>
-                    <option value="Kakamega">Kakamega</option>
-                    <option value="Kericho">Kericho</option>
-                    <option value="Kiambu">Kiambu</option>
-                    <option value="Kilifi">Kilifi</option>
-                    <option value="Kirinyaga">Kirinyaga</option>
-                    <option value="Kisii">Kisii</option>
-                    <option value="Kisumu">Kisumu</option>
-                    <option value="Kitui">Kitui</option>
-                    <option value="Kwale">Kwale</option>
-                    <option value="Laikipia">Laikipia</option>
-                    <option value="Lamu">Lamu</option>
-                    <option value="Machakos">Machakos</option>
-                    <option value="Makueni">Makueni</option>
-                    <option value="Mandera">Mandera</option>
-                    <option value="Marsabit">Marsabit</option>
-                    <option value="Meru">Meru</option>
-                    <option value="Migori">Migori</option>
-                    <option value="Mombasa">Mombasa</option>
-                    <option value="Murang'a">Murang'a</option>
-                    <option value="Nairobi">Nairobi</option>
-                    <option value="Nakuru">Nakuru</option>
-                    <option value="Nandi">Nandi</option>
-                    <option value="Narok">Narok</option>
-                    <option value="Nyamira">Nyamira</option>
-                    <option value="Nyandarua">Nyandarua</option>
-                    <option value="Nyeri">Nyeri</option>
-                    <option value="Samburu">Samburu</option>
-                    <option value="Siaya">Siaya</option>
-                    <option value="Taita Taveta">Taita Taveta</option>
-                    <option value="Tana River">Tana River</option>
-                    <option value="Tharaka Nithi">Tharaka Nithi</option>
-                    <option value="Trans Nzoia">Trans Nzoia</option>
-                    <option value="Turkana">Turkana</option>
-                    <option value="Uasin Gishu">Uasin Gishu</option>
-                    <option value="Vihiga">Vihiga</option>
-                    <option value="Wajir">Wajir</option>
-                    <option value="West Pokot">West Pokot</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 mb-2"> Country</label>
-                <div className="relative">
-                  <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <select
-                    name="country"
-                    value={formData.country || ''}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                    value={county}
+                    onChange={e => {
+                      setCounty(e.target.value);
+                      setSubCounty('');
+                      setLocalityName('');
+                      setArea('');
+                    }}
                     required
                   >
-                    <option value="Kenya">Kenya</option>
-                    <option value="Uganda">Uganda</option>
-                    <option value="Tanzania">Tanzania</option>
-                    <option value="Rwanda">Rwanda</option>
-                    <option value="South Africa">South Africa</option>
+                    <option value="">Select County</option>
+                    {counties.map((c: any) => (
+                      <option key={c.code} value={c.name}>{c.name}</option>
+                    ))}
                   </select>
+                  {county && (
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                      value={subCounty}
+                      onChange={e => {
+                        setSubCounty(e.target.value);
+                        setLocalityName('');
+                        setArea('');
+                      }}
+                      required
+                    >
+                      <option value="">Select Sub-County</option>
+                      {subCounties.map((sc: any) => (
+                        <option key={sc.code} value={sc.name}>{sc.name}</option>
+                      ))}
+                    </select>
+                  )}
+                  {subCounty && (
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                      value={localityName}
+                      onChange={e => {
+                        setLocalityName(e.target.value);
+                        setArea('');
+                      }}
+                      required
+                    >
+                      <option value="">Select Locality</option>
+                      {localities.map((l: any, idx: number) => (
+                        <option key={l.name || idx} value={l.name || ''}>{l.name || ''}</option>
+                      ))}
+                    </select>
+                  )}
+                  {localityName && (
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                      value={area}
+                      onChange={e => setArea(e.target.value)}
+                      required
+                    >
+                      <option value="">Select Area</option>
+                      {areas.map((a: any, idx: number) => (
+                        <option key={a.name || a || idx} value={a.name || a || ''}>{a.name || a || ''}</option>
+                      ))}
+                    </select>
+                  )}
                 </div>
-              </div>
-            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>

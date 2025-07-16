@@ -38,6 +38,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.0.1",
     "jwt-decode": "^4.0.0",
+    "kenya-locations": "^0.1.8",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.476.0",
     "motion": "^12.23.3",
