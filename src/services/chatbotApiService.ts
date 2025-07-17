@@ -73,11 +73,41 @@ class ChatbotApiService {
     }
   }
 
+  //fetch products ny category name
+  async getProductsByCategoryName(categoryName: string): Promise<ApiProduct[]> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/categories/category-products?category_name=${encodeURIComponent(categoryName)}`,
+      )
+      if (!response.ok) {
+        throw new Error('Failed to fetch products by category name')
+      }
+      const data = await response.json()
+      console.log('Fetched products by category name:', data)
+      // If the response is an array of categories, get products from the first one
+      if (
+        Array.isArray(data) &&
+        data.length > 0 &&
+        Array.isArray(data[0].products)
+      ) {
+        return data[0].products
+      }
+      // If the response is an object with products array
+      if (Array.isArray(data.products)) {
+        return data.products
+      }
+      return []
+    } catch (error) {
+      console.error('Error fetching products by category name:', error)
+      return []
+    }
+  }
+
   // Search products by name or description
   async searchProducts(query: string): Promise<ApiProduct[]> {
     try {
       const response = await fetch(
-        `${this.baseUrl}/products/search?q=${encodeURIComponent(query)}`,
+        `${this.baseUrl}/products/search-all?q=${encodeURIComponent(query)}`,
       )
       if (!response.ok) {
         throw new Error('Failed to search products')
@@ -86,6 +116,36 @@ class ChatbotApiService {
     } catch (error) {
       console.error('Error searching products:', error)
       return []
+    }
+  }
+
+  async getPopularProducts(): Promise<ApiProduct[]> {
+  try {
+    const response = await fetch(`${this.baseUrl}/order-item/top-products`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch popular products');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching popular products:', error);
+    return [];
+  }
+}
+
+  // search a single product by name
+  async searchProductByName(name: string): Promise<ApiProduct | null> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/products/search?name=${encodeURIComponent(name)}`,
+      )
+      if (!response.ok) {
+        throw new Error('Failed to search product by name')
+      }
+      const data = await response.json()
+      return data.length > 0 ? data[0] : null
+    } catch (error) {
+      console.error('Error searching product by name:', error)
+      return null
     }
   }
 

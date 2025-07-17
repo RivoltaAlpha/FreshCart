@@ -11,8 +11,6 @@ export const Route = createFileRoute('/recipes')({
 function RecipesPage() {
     const handleAddToCart = (recipe: RecipeWithIngredients) => {
         console.log('Recipe ingredients added to cart:', recipe.name);
-        // Integration with your existing cart system
-        // You can add additional logic here to sync with your global cart state
     };
 
     const userPreferences = {

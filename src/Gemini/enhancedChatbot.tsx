@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, ShoppingCart, Search, Filter } from 'lucide-react';
+import { Send, Bot, User, ShoppingCart, Search, Filter, Sun, Moon, X } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import ChatbotApiService, { type ApiProduct, type Category } from '../services/chatbotApiService';
+import ChatbotApiService, { type ApiProduct } from '../services/chatbotApiService';
+import { getStoreHavingProduct } from '@/services/storeService';
+import { storeActions } from '@/store/store';
+import { toast } from 'sonner';
+import { useNavigate } from '@tanstack/react-router';
+import { useProducts } from '@/hooks/useProducts';
+import { useCategories } from '@/hooks/useCategory';
 
 interface ChatMessage {
     id: string;
@@ -37,37 +43,43 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [products, setProducts] = useState<ApiProduct[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
+    const { data: products = [] } = useProducts();
+    const { data: categories = [], refetch: refetchCategories } = useCategories();
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const [loadingError, setLoadingError] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     // Initialize Gemini AI
     const getApiKey = (): string => {
         const envApiKey = import.meta.env?.VITE_GEMINI_API_KEY;
-        return envApiKey || 'AIzaSyDvNxPUmA6uA3aQ8suP8529nOZzU_iobC0';
+        return envApiKey;
     };
 
     const apiKey = getApiKey();
     const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
     const model = genAI ? genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }) : null;
 
-    // Load initial data
+    // Load initial data from backend only
     useEffect(() => {
         const loadInitialData = async () => {
             try {
-                const [productsData, categoriesData] = await Promise.all([
+                setIsLoading(true);
+                setLoadingError(null);
+
+                await Promise.all([
                     apiService.getAllProducts(),
                     apiService.getCategories()
                 ]);
 
-                // Use sample data if API returns empty
-                setProducts(productsData.length > 0 ? productsData : apiService.getSampleProducts());
-                setCategories(categoriesData.length > 0 ? categoriesData : apiService.getSampleCategories());
+                // Data will be updated by hooks
+                setDataLoaded(true);
             } catch (error) {
                 console.error('Error loading initial data:', error);
-                // Fallback to sample data
-                setProducts(apiService.getSampleProducts());
-                setCategories(apiService.getSampleCategories());
+                setLoadingError('Failed to load data from backend. Please try again.');
+                setDataLoaded(false);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -83,25 +95,40 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
         scrollToBottom();
     }, [messages]);
 
-    // Initialize chatbot with welcome message
+    // Initialize chatbot with welcome message only after data is loaded
     useEffect(() => {
-        if (messages.length === 0 && categories.length > 0) {
+        if (messages.length === 0 && dataLoaded && categories.length > 0) {
             const welcomeMessage: ChatMessage = {
                 id: '1',
                 type: 'bot',
-                content: `Hello! 👋 I'm your FreshCart shopping assistant. I can help you find products by category, search for specific items, or get recommendations. We have ${categories.length} categories and ${products.length} products available.`,
+                content: `Hello! 👋 I'm your FreshCart shopping assistant. I can help you find products by category, search for specific items, or get recommendations. We have ${categories.length} categories and ${(Array.isArray(products) ? products.length : 0)} products available.`,
                 timestamp: new Date(),
                 suggestions: [
                     'Show me all categories',
-                    'Find fresh produce',
+                    'Fruits',
+                    'Vegetables',
                     'Products under KSh 100',
                     'What\'s popular today?',
-                    'Recommend something for me'
+                    'Recommend something for me',
+                    'help me shop',
                 ]
             };
             setMessages([welcomeMessage]);
+        } else if (messages.length === 0 && dataLoaded && categories.length === 0) {
+            const errorMessage: ChatMessage = {
+                id: '1',
+                type: 'bot',
+                content: 'Hello! I\'m your FreshCart shopping assistant. It seems we\'re having trouble loading our product catalog right now. Please try again later or contact support.',
+                timestamp: new Date(),
+                suggestions: [
+                    'Retry loading',
+                    'Contact support',
+                    'Try again later'
+                ]
+            };
+            setMessages([errorMessage]);
         }
-    }, [categories, products, messages.length]);
+    }, [categories, products, messages.length, dataLoaded]);
 
     // Generate AI response using Gemini
     const generateAIResponse = async (userMessage: string, context: string = ''): Promise<string> => {
@@ -114,7 +141,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
       You are a helpful shopping assistant for FreshCart, a grocery delivery app.
       
       Available categories: ${categories.map(c => c.name).join(', ')}
-      Total products: ${products.length}
+      Total products: ${Array.isArray(products) ? products.length : 0}
       ${context}
       
       User message: "${userMessage}"
@@ -138,100 +165,272 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
         }
     };
 
-    // Search products based on user query
+    // Search products using backend API only
     const searchProducts = async (query: string): Promise<ApiProduct[]> => {
         try {
-            // Try API search first
             const searchResults = await apiService.searchProducts(query);
-            if (searchResults.length > 0) {
-                return searchResults;
-            }
-
-            // Fallback to local search
-            const searchTerm = query.toLowerCase();
-            return products.filter(product =>
-                product.name.toLowerCase().includes(searchTerm) ||
-                product.description.toLowerCase().includes(searchTerm) ||
-                product.category.name.toLowerCase().includes(searchTerm)
-            );
+            return searchResults;
         } catch (error) {
             console.error('Error searching products:', error);
-            return [];
+            throw error;
         }
     };
 
     // Handle different types of queries
     const handleQuery = async (query: string): Promise<{ products: ApiProduct[], response: string, suggestions?: string[] }> => {
         const lowerQuery = query.toLowerCase();
+        const normalQuery = query.trim();
 
-        // Category queries
-        if (lowerQuery.includes('categories') || lowerQuery.includes('category')) {
+        // Check if data is loaded
+        if (!dataLoaded) {
             return {
                 products: [],
-                response: `Here are our available categories: ${categories.map(c => c.name).join(', ')}. Which category would you like to explore?`,
-                suggestions: categories.map(c => `Show me ${c.name.toLowerCase()}`)
+                response: 'I\'m still loading our product catalog. Please wait a moment and try again.',
+                suggestions: ['Try again', 'Wait for loading']
             };
         }
 
-        // Price-based queries
-        const priceMatch = lowerQuery.match(/under|below|less than|cheaper than.*?(\d+)/);
-        if (priceMatch) {
-            const maxPrice = parseInt(priceMatch[1]);
+        // Handle retry loading
+        if (lowerQuery.includes('retry') || lowerQuery.includes('try again')) {
             try {
-                const priceFilteredProducts = await apiService.getProductsByPriceRange(0, maxPrice);
-                const productsToShow = priceFilteredProducts.length > 0 ? priceFilteredProducts :
-                    products.filter(p => parseFloat(p.price) <= maxPrice);
+                setIsLoading(true);
+                await Promise.all([
+                    apiService.getAllProducts(),
+                    apiService.getCategories()
+                ]);
+                if (refetchCategories) await refetchCategories();
+                setDataLoaded(true);
+                setLoadingError(null);
 
                 return {
-                    products: productsToShow.slice(0, 6),
-                    response: `I found ${productsToShow.length} products under KSh ${maxPrice}:`,
-                    suggestions: ['Show me more', 'Different price range', 'Show categories']
+                    products: [],
+                    response: `Great! I've reloaded our catalog. We now have ${categories.length} categories and ${Array.isArray(products) ? products.length : 0} products available.`,
+                    suggestions: ['Show me all categories', 'Search products', 'Get recommendations']
                 };
             } catch (error) {
-                console.error('Error filtering by price:', error);
-                return { products: [], response: 'Sorry, I had trouble filtering by price. Try searching for specific products instead.' };
+                return {
+                    products: [],
+                    response: 'I\'m still having trouble loading data. Please check your connection and try again.',
+                    suggestions: ['Try again', 'Contact support']
+                };
+            } finally {
+                setIsLoading(false);
             }
         }
 
-        // Category-specific searches
-        const matchedCategory = categories.find(cat =>
-            lowerQuery.includes(cat.name.toLowerCase()) ||
-            cat.description.toLowerCase().includes(lowerQuery.split(' ')[0])
-        );
+        // Handle "Show me all products" query
+        if (lowerQuery.includes('show me all products') || lowerQuery.includes('all products')) {
+            if (!Array.isArray(products) || products.length === 0) {
+                return {
+                    products: [],
+                    response: 'I don\'t have any products loaded right now. Please try refreshing.',
+                    suggestions: ['Retry loading', 'Contact support']
+                };
+            }
+
+            return {
+                products: products.slice(0, 6),
+                response: `Here are all our available products:`,
+                suggestions: ['View more', 'Browse categories', 'Search specific product']
+            };
+        }
+
+        // Handle "Show me all categories" query
+        if (lowerQuery.includes('show me all categories') || lowerQuery.includes('all categories')) {
+            if (categories.length === 0) {
+                return {
+                    products: [],
+                    response: 'I don\'t have any categories loaded right now. Please try refreshing.',
+                    suggestions: ['Retry loading', 'Contact support']
+                };
+            }
+
+            return {
+                products: [],
+                response: `Here are our available categories: ${categories.map(c => c.name).join(', ')}. Which category would you like to explore?`,
+                suggestions: categories.slice(0, 5).map(c => c.name)
+            };
+        }
+
+        // Handle "What's popular today?" query
+        if (lowerQuery.includes('popular') || lowerQuery.includes('trending') || lowerQuery.includes('recommend')) {
+            try {
+                const popularProducts = await apiService.getPopularProducts();
+
+                if (popularProducts.length === 0) {
+                    return {
+                        products: [],
+                        response: 'No popular products found right now. Try browsing categories instead.',
+                        suggestions: ['Show me all categories', 'Search products', 'Try again']
+                    };
+                }
+
+                return {
+                    products: popularProducts.slice(0, 6),
+                    response: "Here are today's popular products:",
+                    suggestions: ['Add to cart', 'View more', 'Browse categories']
+                };
+            } catch (error) {
+                console.error('Error getting popular products:', error);
+                return {
+                    products: [],
+                    response: "I'm having trouble loading popular products right now. Try browsing categories instead.",
+                    suggestions: ['Show me all categories', 'Search products', 'Try again']
+                };
+            }
+        }
+
+        // Price-based queries - Fixed regex and parsing
+        const priceMatch = lowerQuery.match(/(?:under|below|less than|cheaper than)\s*(?:ksh?\s*)?(\d+)/i);
+        if (priceMatch) {
+            const maxPrice = parseInt(priceMatch[1]);
+
+            if (isNaN(maxPrice)) {
+                return {
+                    products: [],
+                    response: 'I couldn\'t understand the price range. Please try again with a specific number like "Products under KSh 100".',
+                    suggestions: ['Products under KSh 100', 'Products under KSh 200', 'Show categories']
+                };
+            }
+
+            try {
+                // Filter products by price instead of API call if the API doesn't support price filtering
+                interface PriceFilteredProduct extends ApiProduct {
+                    price: string;
+                }
+
+                let priceFilteredProducts: PriceFilteredProduct[] = [];
+                if (Array.isArray(products)) {
+                    priceFilteredProducts = products.filter((product: ApiProduct): product is PriceFilteredProduct => {
+                        const price = parseFloat(product.price);
+                        return !isNaN(price) && price <= maxPrice;
+                    });
+                }
+
+                if (priceFilteredProducts.length === 0) {
+                    return {
+                        products: [],
+                        response: `I couldn't find any products under KSh ${maxPrice} right now. Try a different price range or browse our categories.`,
+                        suggestions: ['Different price range', 'Show categories', 'Search products']
+                    };
+                }
+
+                return {
+                    products: priceFilteredProducts.slice(0, 6),
+                    response: `I found ${priceFilteredProducts.length} products under KSh ${maxPrice}:`,
+                    suggestions: ['Show more', 'Different price range', 'Show categories']
+                };
+            } catch (error) {
+                console.error('Error filtering by price:', error);
+                return {
+                    products: [],
+                    response: 'Sorry, I had trouble filtering by price. Please try searching for specific products instead.',
+                    suggestions: ['Search products', 'Show categories', 'Try again']
+                };
+            }
+        }
+
+        // Category-specific searches - Fixed to handle partial matches
+        const matchedCategory = categories.find(cat => {
+            const categoryName = cat.name.toLowerCase();
+            const searchTerm = lowerQuery.toLowerCase();
+
+            return categoryName.includes(searchTerm) ||
+                searchTerm.includes(categoryName) ||
+                (cat.description && cat.description.toLowerCase().includes(searchTerm));
+        });
 
         if (matchedCategory) {
             try {
-                const categoryProducts = await apiService.getProductsByCategory(matchedCategory.category_id);
-                const productsToShow = categoryProducts.length > 0 ? categoryProducts :
-                    products.filter(p => p.category_id === matchedCategory.category_id);
+                const categoryProducts = await apiService.getProductsByCategoryName(matchedCategory.name);
+
+                if (categoryProducts.length === 0) {
+                    return {
+                        products: [],
+                        response: `I couldn't find any products in ${matchedCategory.name} right now. Try a different category or search for specific products.`,
+                        suggestions: ['Different category', 'Search products', 'Show all categories']
+                    };
+                }
 
                 return {
-                    products: productsToShow.slice(0, 6),
+                    products: categoryProducts.slice(0, 6),
                     response: `Here are products from ${matchedCategory.name}:`,
                     suggestions: ['Show all products', 'Different category', 'Add to cart']
                 };
             } catch (error) {
                 console.error('Error fetching category products:', error);
+                return {
+                    products: [],
+                    response: `Sorry, I had trouble loading products from ${matchedCategory.name}. Please try again.`,
+                    suggestions: ['Try again', 'Different category', 'Search products']
+                };
             }
         }
 
-        // General product search
-        const searchResults = await searchProducts(query);
-        if (searchResults.length > 0) {
+        //help me shop
+        // navigate to products
+        if (lowerQuery.includes('help me shop') || lowerQuery.includes('shop for me ')) {
+            if (!onNavigateToCategory) {
+                return {
+                    products: [],
+                    response: 'I can help you find products, but I need to know which category you want to explore first.',
+                    suggestions: ['Show me all categories', 'Search products', 'Get recommendations']
+                };
+            }
+
+            onNavigateToCategory(0); // Navigate to all products or a default category
             return {
-                products: searchResults.slice(0, 6),
-                response: `I found ${searchResults.length} products matching "${query}":`,
-                suggestions: ['Show more results', 'Refine search', 'Browse categories']
+                products: [],
+                response: 'Sure! I\'m taking you to our product catalog. You can browse through all available products.',
+                suggestions: ['Browse categories', 'Search specific product', 'Get recommendations']
             };
         }
 
-        // AI-powered response for complex queries
-        const aiResponse = await generateAIResponse(query, `User is looking for: ${query}`);
-        return {
-            products: [],
-            response: aiResponse,
-            suggestions: ['Show all categories', 'Search products', 'Get recommendations', 'Browse popular items']
-        };
+
+        // Search for specific product by name (exact match)
+        try {
+            const productByName = await apiService.searchProductByName(normalQuery);
+            if (productByName) {
+                return {
+                    products: [productByName],
+                    response: `I found the product "${productByName.name}":`,
+                    suggestions: ['Add to cart', 'View similar', 'Browse category']
+                };
+            }
+        } catch (error) {
+            console.error('Error searching product by name:', error);
+        }
+
+        // General product search
+        try {
+            const searchResults = await searchProducts(normalQuery);
+
+            if (searchResults.length === 0) {
+                // AI-powered response for no results
+                const aiResponse = await generateAIResponse(normalQuery, `No products found for: ${normalQuery}`);
+                return {
+                    products: [],
+                    response: aiResponse,
+                    suggestions: ['Show all categories', 'Try different search', 'Browse popular items']
+                };
+            }
+
+            return {
+                products: searchResults.slice(0, 6),
+                response: `I found ${searchResults.length} products matching "${normalQuery}":`,
+                suggestions: ['Show more results', 'Refine search', 'Browse categories']
+            };
+        } catch (error) {
+            console.error('Error searching products:', error);
+
+            // AI-powered response for search errors
+            const aiResponse = await generateAIResponse(normalQuery, `Search error for: ${normalQuery}`);
+            return {
+                products: [],
+                response: aiResponse,
+                suggestions: ['Try again', 'Show all categories', 'Browse popular items']
+            };
+        }
     };
 
     // Handle user input and generate responses
@@ -268,9 +467,9 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             const errorMessage: ChatMessage = {
                 id: (Date.now() + 1).toString(),
                 type: 'bot',
-                content: 'Sorry, I encountered an error. Please try again or search for specific products.',
+                content: 'Sorry, I encountered an error while processing your request. Please try again.',
                 timestamp: new Date(),
-                suggestions: ['Show all categories', 'Search products', 'Get help']
+                suggestions: ['Try again', 'Show all categories', 'Contact support']
             };
             setMessages(prev => [...prev, errorMessage]);
         } finally {
@@ -339,7 +538,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
                 type: 'bot',
                 content: `Sorry, I couldn't add ${product.name} to your cart. Please try again.`,
                 timestamp: new Date(),
-                suggestions: ['Try again', 'Continue shopping', 'Get help']
+                suggestions: ['Try again', 'Continue shopping', 'Contact support']
             };
             setMessages(prev => [...prev, message]);
         }
@@ -366,6 +565,18 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             const similarProducts = await apiService.getProductsByCategory(product.category_id);
             const filteredSimilar = similarProducts.filter(p => p.product_id !== product.product_id).slice(0, 4);
 
+            if (filteredSimilar.length === 0) {
+                const message: ChatMessage = {
+                    id: Date.now().toString(),
+                    type: 'bot',
+                    content: `I couldn't find similar products to ${product.name} right now. Try browsing the category or searching for specific items.`,
+                    timestamp: new Date(),
+                    suggestions: ['Browse category', 'Search products', 'Try different category']
+                };
+                setMessages(prev => [...prev, message]);
+                return;
+            }
+
             const message: ChatMessage = {
                 id: Date.now().toString(),
                 type: 'bot',
@@ -377,13 +588,40 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             setMessages(prev => [...prev, message]);
         } catch (error) {
             console.error('Error finding similar products:', error);
+            const message: ChatMessage = {
+                id: Date.now().toString(),
+                type: 'bot',
+                content: `Sorry, I had trouble finding similar products. Please try again.`,
+                timestamp: new Date(),
+                suggestions: ['Try again', 'Browse category', 'Search products']
+            };
+            setMessages(prev => [...prev, message]);
+        }
+    };
+
+    const navigate = useNavigate();
+
+    // navigation to store with product
+    const handleShopProduct = async (product: any) => {
+        try {
+            const store = await getStoreHavingProduct(product.product_id)
+
+            console.log(store)
+
+            // Save store in your storeActions (or context)
+            storeActions.saveStore(store);
+
+            // Navigate to shop-store page
+            navigate({ to: '/shop-store' });
+        } catch (err) {
+            toast.error('Could not find store for this product.');
         }
     };
 
     // Render product card
-    const renderProductCard = (product: ApiProduct) => (
+    const renderProductCard = (product: ApiProduct, idx?: number) => (
         <div
-            key={product.product_id}
+            key={product.product_id + (idx !== undefined ? `-${idx}` : '')}
             className="bg-white border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer min-w-[200px]"
             onClick={() => handleProductClick(product)}
         >
@@ -395,84 +633,157 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
                     e.currentTarget.src = 'https://via.placeholder.com/200x200?text=Product+Image';
                 }}
             />
-            <h4 className="font-semibold text-sm mb-1 line-clamp-2">{product.name}</h4>
-            <p className="text-xs text-gray-600 mb-2 line-clamp-2">{product.description}</p>
-            <div className="flex justify-between items-center">
-                <span className="font-bold text-green-600">KSh {parseFloat(product.price).toFixed(2)}</span>
-                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                    ⭐ {parseFloat(product.rating).toFixed(1)}
-                </span>
+            <div className="flex justify-between items-center mb-2">
+                <h4 className="font-semibold text-sm mb-1 line-clamp-2">{product.name}</h4>
+                <button
+                    className="bg-gradient-to-r from-[#75E6DA] to-[#189AB4] text-white px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 hover:from-[#189AB4] hover:to-[#05445E]"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleShopProduct(product);
+                    }}
+                >
+                    <ShoppingCart className="inline-block mr-1" size={16} />
+                    Shop
+                </button>
             </div>
-            {product.discount > 0 && (
-                <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded mt-1 inline-block">
-                    {product.discount}% OFF
-                </span>
-            )}
-            <div className="text-xs text-gray-500 mt-1">
-                Stock: {product.stock_quantity} {product.unit}
-            </div>
+            <p className="text-[#189AB4] font-bold text-sm">KSh {parseFloat(product.price).toFixed(2)}</p>
         </div>
     );
+
+    // Show loading state while data is being fetched
+    if (!dataLoaded && isLoading) {
+        return (
+            <>
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="fixed bottom-6 right-6 bg-gradient-to-r from-[#0074B7] to-[#60A3D9] hover:from-[#005A8F] hover:to-[#4A8BC2] text-white p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 z-50"
+                >
+                    <Bot className="h-6 w-6" />
+                </button>
+
+                {isOpen && (
+                    <div className="fixed bottom-20 right-6 lg:w-[650px] w-80 h-[700px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden">
+                        <div className="bg-gradient-to-r from-[#0074B7] to-[#60A3D9] text-white p-4 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-white/20 p-2 rounded-full">
+                                    <Bot className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <span className="font-semibold">FreshCart Assistant</span>
+                                    <p className="text-xs opacity-80">Loading...</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                            >
+                                <X className="h-4 w-4" />
+                            </button>
+                        </div>
+                        <div className="flex-1 flex items-center justify-center bg-gray-50">
+                            <div className="text-center">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0074B7] mx-auto mb-4"></div>
+                                <p className="text-gray-600">Loading product catalog...</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </>
+        );
+    }
 
     return (
         <>
             {/* Chatbot Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition-all z-50"
+                className="fixed bottom-6 right-6 bg-gradient-to-r from-[#0074B7] to-[#60A3D9] hover:from-[#005A8F] hover:to-[#4A8BC2] text-white p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 z-50"
             >
                 <Bot className="h-6 w-6" />
             </button>
 
             {/* Chatbot Window */}
             {isOpen && (
-                <div className="fixed bottom-20 right-6 lg:w-[600px] w-64 h-[600px] bg-white border border-gray-200 rounded-lg shadow-xl z-50 flex flex-col">
+                <div className={`fixed bottom-20 right-6 lg:w-[650px] w-80 h-[700px] 
+                               ${isDarkMode ? 'bg-gray-900' : 'bg-white'} 
+                               border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} 
+                               rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden`}>
+
                     {/* Header */}
-                    <div className="bg-gray-900 text-white p-4 rounded-t-lg flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                            <Bot className="h-5 w-5" />
-                            <span className="font-semibold">FreshCart Assistant</span>
+                    <div className="bg-gradient-to-r from-[#0074B7] to-[#60A3D9] text-white p-4 flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-white/20 p-2 rounded-full">
+                                <Bot className="h-5 w-5" />
+                            </div>
+                            <div>
+                                <span className="font-semibold">FreshCart Assistant</span>
+                                <p className="text-xs opacity-80">
+                                    {loadingError ? 'Connection issues' : 'Always here to help'}
+                                </p>
+                            </div>
                         </div>
-                        <button
-                            onClick={() => setIsOpen(false)}
-                            className="text-white hover:text-gray-200"
-                        >
-                            ×
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setIsDarkMode(!isDarkMode)}
+                                className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                            >
+                                {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                            </button>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                            >
+                                <X className="h-4 w-4" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
                         {messages.map((message) => (
                             <div
                                 key={message.id}
                                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
-                                <div className={`max-w-[80%] ${message.type === 'user'
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-100 text-gray-800'
-                                    } rounded-lg p-3`}>
-                                    <div className="flex items-start gap-2">
-                                        {message.type === 'bot' && <Bot className="h-4 w-4 mt-1 flex-shrink-0" />}
-                                        {message.type === 'user' && <User className="h-4 w-4 mt-1 flex-shrink-0" />}
+                                <div className={`max-w-[85%] ${message.type === 'user'
+                                    ? 'bg-gradient-to-r from-[#0074B7] to-[#60A3D9] text-white'
+                                    : isDarkMode
+                                        ? 'bg-gray-800 text-gray-100 border border-gray-700'
+                                        : 'bg-white text-gray-800 border border-gray-200'
+                                    } rounded-2xl p-4 shadow-sm`}>
+
+                                    <div className="flex items-start gap-3">
+                                        {message.type === 'bot' && (
+                                            <div className={`${isDarkMode ? 'bg-[#60A3D9]' : 'bg-[#BFD7ED]'} p-2 rounded-full flex-shrink-0`}>
+                                                <Bot className={`h-4 w-4 ${isDarkMode ? 'text-white' : 'text-[#0074B7]'}`} />
+                                            </div>
+                                        )}
+                                        {message.type === 'user' && (
+                                            <div className="bg-white/20 p-2 rounded-full flex-shrink-0">
+                                                <User className="h-4 w-4 text-white" />
+                                            </div>
+                                        )}
+
                                         <div className="flex-1">
-                                            <p className="text-sm">{message.content}</p>
+                                            <p className="text-sm leading-relaxed">{message.content}</p>
 
                                             {/* Render products if available */}
                                             {message.products && message.products.length > 0 && (
-                                                <div className="mt-3 space-y-2 max-h-48 overflow-y-auto">
-                                                    {message.products.map(renderProductCard)}
+                                                <div className="mt-4 space-y-3 max-h-64 overflow-y-auto">
+                                                    <div className="grid gap-3">
+                                                        {message.products.map(renderProductCard)}
+                                                    </div>
                                                 </div>
                                             )}
 
                                             {/* Render action buttons if available */}
                                             {message.actions && (
-                                                <div className="mt-3 flex flex-wrap gap-2">
+                                                <div className="mt-4 flex flex-wrap gap-2">
                                                     {message.actions.map((action, index) => (
                                                         <button
                                                             key={index}
                                                             onClick={action.action}
-                                                            className="flex items-center gap-1 text-xs bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 transition-colors"
+                                                            className="flex items-center gap-2 text-xs bg-[#0074B7] hover:bg-[#005A8F] text-white px-3 py-2 rounded-full transition-colors duration-200"
                                                         >
                                                             {action.icon}
                                                             {action.label}
@@ -483,12 +794,15 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
 
                                             {/* Render suggestions if available */}
                                             {message.suggestions && (
-                                                <div className="mt-3 flex flex-wrap gap-2">
+                                                <div className="mt-4 flex flex-wrap gap-2">
                                                     {message.suggestions.map((suggestion, index) => (
                                                         <button
                                                             key={index}
                                                             onClick={() => handleSuggestionClick(suggestion)}
-                                                            className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
+                                                            className={`text-xs px-3 py-2 rounded-full transition-colors duration-200 border
+                                                                      ${isDarkMode
+                                                                    ? 'bg-gray-700 text-[#60A3D9] border-gray-600 hover:bg-gray-600'
+                                                                    : 'bg-[#BFD7ED] text-[#0074B7] border-[#60A3D9] hover:bg-[#60A3D9] hover:text-white'}`}
                                                         >
                                                             {suggestion}
                                                         </button>
@@ -503,13 +817,16 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
 
                         {isLoading && (
                             <div className="flex justify-start">
-                                <div className="bg-gray-100 rounded-lg p-3">
-                                    <div className="flex items-center gap-2">
-                                        <Bot className="h-4 w-4" />
+                                <div className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} 
+                                               border rounded-2xl p-4 shadow-sm`}>
+                                    <div className="flex items-center gap-3">
+                                        <div className={`${isDarkMode ? 'bg-[#60A3D9]' : 'bg-[#BFD7ED]'} p-2 rounded-full`}>
+                                            <Bot className={`h-4 w-4 ${isDarkMode ? 'text-white' : 'text-[#0074B7]'}`} />
+                                        </div>
                                         <div className="flex gap-1">
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                            <div className="w-2 h-2 bg-[#0074B7] rounded-full animate-bounce"></div>
+                                            <div className="w-2 h-2 bg-[#60A3D9] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                                            <div className="w-2 h-2 bg-[#BFD7ED] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                                         </div>
                                     </div>
                                 </div>
@@ -519,24 +836,30 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
                         <div ref={messagesEndRef} />
                     </div>
 
-                    {/* Input */}
-                    <div className="p-4 border-t">
-                        <div className="flex gap-2">
+                    {/* Input Section */}
+                    <div className={`p-4 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-t`}>
+                        <div className="flex gap-3">
                             <input
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                                placeholder="Ask about products, categories, or stores..."
-                                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Ask about products, categories, or get recommendations..."
+                                className={`flex-1 px-4 py-3 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#0074B7] transition-all duration-200
+                                          ${isDarkMode
+                                        ? 'bg-gray-700 text-white border-gray-600 placeholder-gray-400'
+                                        : 'bg-gray-50 text-gray-800 border-gray-300 placeholder-gray-500'} 
+                                          border`}
                                 disabled={isLoading}
                             />
                             <button
                                 onClick={handleSendMessage}
                                 disabled={isLoading || !input.trim()}
-                                className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white p-2 rounded-lg transition-colors"
+                                className="bg-gradient-to-r from-[#0074B7] to-[#60A3D9] hover:from-[#005A8F] hover:to-[#4A8BC2] 
+                                         disabled:from-gray-400 disabled:to-gray-500 text-white p-3 rounded-full transition-all duration-200 
+                                         transform hover:scale-105 disabled:transform-none"
                             >
-                                <Send className="h-4 w-4" />
+                                <Send className="h-5 w-5" />
                             </button>
                         </div>
                     </div>

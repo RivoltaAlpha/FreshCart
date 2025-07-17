@@ -1,7 +1,6 @@
 import { Star, Truck, Shield, Heart } from 'lucide-react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import RecommendationsSection from '@/components/recommendations';
-import ChatbotIntegration from '@/components/ChatbotIntegration';
 import { useState } from 'react';
 import sampleProducts from "../../public/marketplaceItems.json";
 import type { Product } from '@/Gemini/context';
@@ -460,13 +459,6 @@ function App() {
                 </p>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* Chatbot Integration Section */}
-        <section className="py-2">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ChatbotIntegration />
           </div>
         </section>
       </div>
