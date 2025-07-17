@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as ShopStoreRouteImport } from './routes/shop-store'
+import { Route as RegisterStoreRouteImport } from './routes/register-store'
+import { Route as RegisterDriverRouteImport } from './routes/register-driver'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RecipesRouteImport } from './routes/recipes'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -56,6 +58,7 @@ import { Route as CustomerMyOrdersRouteImport } from './routes/customer/my-order
 import { Route as CustomerDashboardRouteImport } from './routes/customer/dashboard'
 import { Route as CustomerCheckoutOrderRouteImport } from './routes/customer/checkout-order'
 import { Route as CustomerCartRouteImport } from './routes/customer/cart'
+import { Route as CustomerAiRecommendationsRouteImport } from './routes/customer/ai-recommendations'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminSuccessRouteImport } from './routes/admin/success'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
@@ -86,6 +89,16 @@ const StoreRoute = StoreRouteImport.update({
 const ShopStoreRoute = ShopStoreRouteImport.update({
   id: '/shop-store',
   path: '/shop-store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterStoreRoute = RegisterStoreRouteImport.update({
+  id: '/register-store',
+  path: '/register-store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterDriverRoute = RegisterDriverRouteImport.update({
+  id: '/register-driver',
+  path: '/register-driver',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -309,6 +322,12 @@ const CustomerCartRoute = CustomerCartRouteImport.update({
   path: '/cart',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerAiRecommendationsRoute =
+  CustomerAiRecommendationsRouteImport.update({
+    id: '/ai-recommendations',
+    path: '/ai-recommendations',
+    getParentRoute: () => CustomerRoute,
+  } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -403,6 +422,8 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
+  '/register-driver': typeof RegisterDriverRoute
+  '/register-store': typeof RegisterStoreRoute
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -422,6 +443,7 @@ export interface FileRoutesByFullPath {
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
+  '/customer/ai-recommendations': typeof CustomerAiRecommendationsRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
@@ -468,6 +490,8 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
+  '/register-driver': typeof RegisterDriverRoute
+  '/register-store': typeof RegisterStoreRoute
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -487,6 +511,7 @@ export interface FileRoutesByTo {
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
+  '/customer/ai-recommendations': typeof CustomerAiRecommendationsRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
@@ -534,6 +559,8 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
+  '/register-driver': typeof RegisterDriverRoute
+  '/register-store': typeof RegisterStoreRoute
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -553,6 +580,7 @@ export interface FileRoutesById {
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
+  '/customer/ai-recommendations': typeof CustomerAiRecommendationsRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
@@ -601,6 +629,8 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
+    | '/register-driver'
+    | '/register-store'
     | '/shop-store'
     | '/store'
     | '/stores'
@@ -620,6 +650,7 @@ export interface FileRouteTypes {
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
+    | '/customer/ai-recommendations'
     | '/customer/cart'
     | '/customer/checkout-order'
     | '/customer/dashboard'
@@ -666,6 +697,8 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
+    | '/register-driver'
+    | '/register-store'
     | '/shop-store'
     | '/store'
     | '/stores'
@@ -685,6 +718,7 @@ export interface FileRouteTypes {
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
+    | '/customer/ai-recommendations'
     | '/customer/cart'
     | '/customer/checkout-order'
     | '/customer/dashboard'
@@ -731,6 +765,8 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
+    | '/register-driver'
+    | '/register-store'
     | '/shop-store'
     | '/store'
     | '/stores'
@@ -750,6 +786,7 @@ export interface FileRouteTypes {
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
+    | '/customer/ai-recommendations'
     | '/customer/cart'
     | '/customer/checkout-order'
     | '/customer/dashboard'
@@ -797,6 +834,8 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   RecipesRoute: typeof RecipesRoute
   RegisterRoute: typeof RegisterRoute
+  RegisterDriverRoute: typeof RegisterDriverRoute
+  RegisterStoreRoute: typeof RegisterStoreRoute
   ShopStoreRoute: typeof ShopStoreRoute
   StoreRoute: typeof StoreRouteWithChildren
   StoresRoute: typeof StoresRoute
@@ -823,6 +862,20 @@ declare module '@tanstack/react-router' {
       path: '/shop-store'
       fullPath: '/shop-store'
       preLoaderRoute: typeof ShopStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register-store': {
+      id: '/register-store'
+      path: '/register-store'
+      fullPath: '/register-store'
+      preLoaderRoute: typeof RegisterStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register-driver': {
+      id: '/register-driver'
+      path: '/register-driver'
+      fullPath: '/register-driver'
+      preLoaderRoute: typeof RegisterDriverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1133,6 +1186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerCartRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/ai-recommendations': {
+      id: '/customer/ai-recommendations'
+      path: '/ai-recommendations'
+      fullPath: '/customer/ai-recommendations'
+      preLoaderRoute: typeof CustomerAiRecommendationsRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -1289,6 +1349,7 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface CustomerRouteChildren {
+  CustomerAiRecommendationsRoute: typeof CustomerAiRecommendationsRoute
   CustomerCartRoute: typeof CustomerCartRoute
   CustomerCheckoutOrderRoute: typeof CustomerCheckoutOrderRoute
   CustomerDashboardRoute: typeof CustomerDashboardRoute
@@ -1302,6 +1363,7 @@ interface CustomerRouteChildren {
 }
 
 const CustomerRouteChildren: CustomerRouteChildren = {
+  CustomerAiRecommendationsRoute: CustomerAiRecommendationsRoute,
   CustomerCartRoute: CustomerCartRoute,
   CustomerCheckoutOrderRoute: CustomerCheckoutOrderRoute,
   CustomerDashboardRoute: CustomerDashboardRoute,
@@ -1392,6 +1454,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   RecipesRoute: RecipesRoute,
   RegisterRoute: RegisterRoute,
+  RegisterDriverRoute: RegisterDriverRoute,
+  RegisterStoreRoute: RegisterStoreRoute,
   ShopStoreRoute: ShopStoreRoute,
   StoreRoute: StoreRouteWithChildren,
   StoresRoute: StoresRoute,
