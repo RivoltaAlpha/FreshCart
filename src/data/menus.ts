@@ -56,6 +56,12 @@ export const customerMenu: MenuItem[] = [
     path: '/customer/wishlist',
   },
   {
+    id: 'ai-recommendations',
+    label: 'AI Recommendations',
+    icon: Heart,
+    path: '/customer/ai-recommendations',
+  },
+  {
     id: 'profile',
     label: 'Profile',
     icon: User,

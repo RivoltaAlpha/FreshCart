@@ -1,3 +1,4 @@
+import type { StoreProduct } from '@/types/store'
 import type {
   ApproveOrder,
   Order,
@@ -208,6 +209,28 @@ export const getStoreOrders = async (
     return response.json()
   } catch (error) {
     console.error('Error fetching store orders:', error)
+    throw error
+  }
+}
+
+export const getUserPurchases = async (
+  userId: number,
+): Promise<StoreProduct[]> => {
+  const token = getAuthToken()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${url}/orders/user-purchases/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error fetching user purchases:', error)
     throw error
   }
 }
