@@ -22,7 +22,7 @@ export interface StoreProduct {
   discount: number
   expiry_date: string | null
   created_at: string
-  updated_at: string
+  updatedAt: string
   category: Category
 }
 

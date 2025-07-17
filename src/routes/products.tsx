@@ -47,7 +47,7 @@ function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isInitialMount = useRef(true);
   const navigate = useNavigate();
-  const products: BackendProduct[] = productsData?.products || [];
+  const products: BackendProduct[] = productsData || [];
 
 
   const shouldUseSampleData = products.length === 0 && !!error;

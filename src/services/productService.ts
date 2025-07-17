@@ -41,7 +41,8 @@ export const getAllProducts = async () => {
   try {
     const response = await fetch(`${url}/products/all`)
     await handleApiResponse(response)
-    return response.json()
+    const data = await response.json()
+    return data.products 
   } catch (error) {
     console.error('Error in getAllProducts:', error)
     return []

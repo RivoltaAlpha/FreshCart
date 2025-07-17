@@ -1,4 +1,4 @@
-import type { allProductsResponse, CreateProduct, Product } from '@/types/types'
+import type { CreateProduct, Product } from '@/types/types'
 import {
   getAllProducts,
   getProductById,
@@ -10,12 +10,10 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  type UseMutationResult,
-  type UseQueryResult,
-} from '@tanstack/react-query'
+  type UseMutationResult} from '@tanstack/react-query'
 import { getStoreProducts } from '@/services/storeService'
 
-export const useProducts = (): UseQueryResult<allProductsResponse, Error> => {
+export const useProducts = () => {
   return useQuery({
     queryKey: ['products'],
     queryFn: getAllProducts,
