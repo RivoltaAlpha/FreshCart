@@ -93,6 +93,7 @@ export interface ProductItem {
 export interface InventoryProducts {
   store_id: number
   inventory_id: number
+  name: string
   stock_qty: number
   reorder_level: number
   max_stock_level: number

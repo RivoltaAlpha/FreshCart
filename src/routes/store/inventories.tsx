@@ -40,6 +40,7 @@ function RouteComponent() {
       inventoriesArray = inventory.map((inv: any) => ({
         store_id: inv.store_id ?? 0,
         inventory_id: inv.inventory_id ?? 0,
+        name: inv.name || 'Unknown Inventory',
         stock_qty: inv.stock_qty ?? 0,
         reorder_level: inv.reorder_level ?? 0,
         max_stock_level: inv.max_stock_level ?? 0,
@@ -54,6 +55,7 @@ function RouteComponent() {
       inventoriesArray = ((inventory as any).inventories || []).map((inv: any) => ({
         store_id: inv.store_id ?? 0,
         inventory_id: inv.inventory_id ?? 0,
+        name: inv.name || 'Unknown Inventory',
         stock_qty: inv.stock_qty ?? 0,
         reorder_level: inv.reorder_level ?? 0,
         max_stock_level: inv.max_stock_level ?? 0,
@@ -68,6 +70,7 @@ function RouteComponent() {
       inventoriesArray = ((inventory as any).data || []).map((inv: any) => ({
         store_id: inv.store_id ?? 0,
         inventory_id: inv.inventory_id ?? 0,
+        name: inv.name || 'Unknown Inventory',
         stock_qty: inv.stock_qty ?? 0,
         reorder_level: inv.reorder_level ?? 0,
         max_stock_level: inv.max_stock_level ?? 0,
@@ -158,8 +161,8 @@ function RouteComponent() {
                 <div className="flex items-center gap-2">
                   <Package className="h-4 w-4 text-gray-500" />
                   <div>
-                    <p className="text-sm text-gray-600">Inventory ID</p>
-                    <p className="font-semibold">#{inventory.inventory_id}</p>
+                    <p className="text-sm text-gray-600">Inventory Name</p>
+                    <p className="font-semibold">{inventory.name}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
