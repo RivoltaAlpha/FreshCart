@@ -1,6 +1,7 @@
 import type { Product } from '@/types/types'
 import type {
   allStoreProductsResponse,
+  CreateStore,
   Store,
   StoreProductsResponse,
   StoresResponse,
@@ -138,6 +139,24 @@ export const getStoreByOwnerId = async (owner_id: number): Promise<Store> => {
     return response.json()
   } catch (error) {
     console.error('Error in getAllUsers:', error)
+    throw error
+  }
+}
+
+// Create a new store
+export const createStore = async (storeData: CreateStore): Promise<Store> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/stores/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(storeData),
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error in createStore:', error)
     throw error
   }
 }

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyStoreRouteImport } from './routes/verify-store'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as ShopStoreRouteImport } from './routes/shop-store'
@@ -76,6 +77,11 @@ import { Route as AdminCreateCategoryRouteImport } from './routes/admin/create-c
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
 
+const VerifyStoreRoute = VerifyStoreRouteImport.update({
+  id: '/verify-store',
+  path: '/verify-store',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoresRoute = StoresRouteImport.update({
   id: '/stores',
   path: '/stores',
@@ -427,6 +433,7 @@ export interface FileRoutesByFullPath {
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
+  '/verify-store': typeof VerifyStoreRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/create-category': typeof AdminCreateCategoryRoute
@@ -495,6 +502,7 @@ export interface FileRoutesByTo {
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
+  '/verify-store': typeof VerifyStoreRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/create-category': typeof AdminCreateCategoryRoute
@@ -564,6 +572,7 @@ export interface FileRoutesById {
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
+  '/verify-store': typeof VerifyStoreRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/create-category': typeof AdminCreateCategoryRoute
@@ -634,6 +643,7 @@ export interface FileRouteTypes {
     | '/shop-store'
     | '/store'
     | '/stores'
+    | '/verify-store'
     | '/admin/analytics'
     | '/admin/categories'
     | '/admin/create-category'
@@ -702,6 +712,7 @@ export interface FileRouteTypes {
     | '/shop-store'
     | '/store'
     | '/stores'
+    | '/verify-store'
     | '/admin/analytics'
     | '/admin/categories'
     | '/admin/create-category'
@@ -770,6 +781,7 @@ export interface FileRouteTypes {
     | '/shop-store'
     | '/store'
     | '/stores'
+    | '/verify-store'
     | '/admin/analytics'
     | '/admin/categories'
     | '/admin/create-category'
@@ -839,10 +851,18 @@ export interface RootRouteChildren {
   ShopStoreRoute: typeof ShopStoreRoute
   StoreRoute: typeof StoreRouteWithChildren
   StoresRoute: typeof StoresRoute
+  VerifyStoreRoute: typeof VerifyStoreRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify-store': {
+      id: '/verify-store'
+      path: '/verify-store'
+      fullPath: '/verify-store'
+      preLoaderRoute: typeof VerifyStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stores': {
       id: '/stores'
       path: '/stores'
@@ -1459,6 +1479,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopStoreRoute: ShopStoreRoute,
   StoreRoute: StoreRouteWithChildren,
   StoresRoute: StoresRoute,
+  VerifyStoreRoute: VerifyStoreRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

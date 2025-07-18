@@ -36,7 +36,7 @@ export interface Store {
   country: string
   contact_info: string
   image_url: string
-  rating: string
+  rating: number
   total_reviews: number
   store_code: string
   delivery_fee: number
@@ -58,6 +58,7 @@ export interface Store {
   is_active?: boolean
 }
 export type StoreDetails = Partial<Store>
+export type CreateStore = Partial<Store>
 
 export interface StoreProductsResponse {
   products: StoreProduct[]

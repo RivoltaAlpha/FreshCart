@@ -2,8 +2,8 @@ import type { UseQueryResult } from '@tanstack/react-query'
 import { useState, useEffect, useCallback } from 'react'
 import type { allStoreProductsResponse, Store } from '../types/store'
 import type { Product } from '../types/types'
-import { getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreHavingProduct, getStoreProducts } from '@/services/storeService'
-import { useQuery } from '@tanstack/react-query'
+import { createStore, getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreHavingProduct, getStoreProducts } from '@/services/storeService'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface UseStoreProductsParams {
   storeId: number
@@ -225,3 +225,16 @@ export const useStoreByProduct = (productId: number) => {
     enabled: !!productId,
   });
 };
+
+// create store hook
+export const useCreateStore = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ['createStore'],
+    mutationFn: createStore,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stores'] })
+    },
+  })
+}
