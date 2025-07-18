@@ -163,7 +163,7 @@ export const createStore = async (storeData: CreateStore): Promise<Store> => {
 
 // fetch unverified stores
 export const getUnverifiedStores = async (): Promise<Store[]> => {
-  const response = await fetch(`${API_BASE_URL}/stores/unverified`)
+  const response = await fetch(`${API_BASE_URL}/stores/unverified-stores`)
   await handleApiResponse(response)
   return response.json()
 }
@@ -177,7 +177,7 @@ export const verifyStore = async (storeId: number): Promise<Store> => {
 
   try {
     const response = await fetch(`${API_BASE_URL}/stores/verify/${storeId}`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

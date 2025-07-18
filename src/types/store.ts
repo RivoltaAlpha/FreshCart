@@ -1,4 +1,3 @@
-
 export interface Category {
   category_id: number
   name: string
@@ -50,6 +49,12 @@ export interface Store {
       last_name: string
       phone_number: string
     }
+  }
+  address: {
+    area: string
+    town: string
+    county: string
+    country: string
   }
   // Add computed properties for compatibility
   location?: string

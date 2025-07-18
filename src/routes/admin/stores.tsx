@@ -61,7 +61,7 @@ const columns = [
     ),
     footer: info => info.column.id,
   }),
-  columnHelper.accessor(row => `${row.county}, ${row.town}`, {
+  columnHelper.accessor(row => `${row.address.town}, ${row.address.area}`, {
     id: 'location',
     header: 'Location',
     cell: info => (
@@ -106,6 +106,7 @@ function RouteComponent() {
 
   // Use the store hook to fetch stores
   const { stores, loading: storeLoading, error: storeError } = useStores();
+  // console.log('Fetched stores:', stores);
 
   useEffect(() => {
     if (stores) {
@@ -170,10 +171,10 @@ function RouteComponent() {
       <h1 className="flex justify-center text-2xl font-bold text-[#005A61]">Store Management</h1>
       <div className="flex justify-around items-center mb-4 bg-gray-300 shadow-2xl rounded py-10 mt-10">
         <div className="mt-2 flex items-center justify-center gap-4">
-          <h2 className="text-lg font-semibold">Add Store</h2>
+          <h2 className="text-lg font-semibold">Verify Stores</h2>
           <Plus
             className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-            onClick={() => navigate({ to: '/admin/create-user' })}
+            onClick={() => navigate({ to: '/admin/verify-store' })}
           />
         </div>
         <div className="mb-6">

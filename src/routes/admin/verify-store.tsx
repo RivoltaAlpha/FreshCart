@@ -12,7 +12,7 @@ import {
   Edit3,
   CheckCircle
 } from 'lucide-react'
-import { toast } from 'sonner'
+  import { toast } from 'sonner'
 
 export const Route = createFileRoute('/admin/verify-store')({
   component: RouteComponent,
