@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useStoreProducts, useStores } from '../../hooks/useStore';
 import type { StoreProduct } from '../../types/store';
-import { 
-  Search, 
-  Filter, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Star, 
-  Package, 
+import {
+  Search,
+  Filter,
+  Plus,
+  Edit,
+  Trash2,
+  Star,
+  Package,
   DollarSign,
   Eye,
   RefreshCw,
@@ -26,9 +26,9 @@ export const Route = createFileRoute('/store/myproducts')({
 
 function MyProductsPage() {
   const navigate = useNavigate();
-  
-  // State management
-  const [selectedStoreId, setSelectedStoreId] = useState<number>(2); // Default store ID
+  const store = localStorage.getItem("currentStore") || '';
+  const storeId = store ? JSON.parse(store).store_id : 0;
+  const [selectedStoreId, setSelectedStoreId] = useState<number>(storeId);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<number | undefined>();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -36,18 +36,18 @@ function MyProductsPage() {
 
   // Hooks
   const { stores, loading: storesLoading } = useStores();
-  const { 
-    products, 
-    loading, 
-    error, 
-    total, 
-    hasMore, 
-    searchProducts, 
-    loadMore, 
-    refresh 
-  } = useStoreProducts({ 
+  const {
+    products,
+    loading,
+    error,
+    total,
+    hasMore,
+    searchProducts,
+    loadMore,
+    refresh
+  } = useStoreProducts({
     storeId: selectedStoreId,
-    limit: 12 
+    limit: 12
   });
 
   // Get unique categories from products
@@ -57,7 +57,7 @@ function MyProductsPage() {
         acc.push(product.category);
       }
       return acc;
-    }, [] as Array<{category_id: number, name: string}>);
+    }, [] as Array<{ category_id: number, name: string }>);
     return uniqueCategories;
   }, [products]);
 
@@ -76,13 +76,13 @@ function MyProductsPage() {
 
   // Product stats
   const productStats = React.useMemo(() => {
-    const totalValue = products.reduce((sum, product) => 
+    const totalValue = products.reduce((sum, product) =>
       sum + (product.price * product.stock_quantity), 0
     );
-    const averageRating = products.reduce((sum, product) => 
+    const averageRating = products.reduce((sum, product) =>
       sum + parseFloat(product.rating), 0
     ) / products.length;
-    const lowStockProducts = products.filter(product => 
+    const lowStockProducts = products.filter(product =>
       product.stock_quantity < 10
     ).length;
 
@@ -178,13 +178,12 @@ function MyProductsPage() {
           </div>
 
           <div className="flex items-center justify-between mb-4">
-            <span className={`text-sm px-2 py-1 rounded ${
-              isLowStock
+            <span className={`text-sm px-2 py-1 rounded ${isLowStock
                 ? 'bg-orange-100 text-orange-700'
                 : product.stock_quantity > 0
                   ? 'bg-green-100 text-green-700'
                   : 'bg-red-100 text-red-700'
-            }`}>
+              }`}>
               Stock: {product.stock_quantity}
             </span>
           </div>
@@ -258,13 +257,12 @@ function MyProductsPage() {
                   {product.rating} ({product.review_count})
                 </span>
               </div>
-              <span className={`text-sm px-2 py-1 rounded ${
-                isLowStock 
-                  ? 'bg-orange-100 text-orange-700' 
-                  : product.stock_quantity > 0 
+              <span className={`text-sm px-2 py-1 rounded ${isLowStock
+                  ? 'bg-orange-100 text-orange-700'
+                  : product.stock_quantity > 0
                     ? 'bg-green-100 text-green-700'
                     : 'bg-red-100 text-red-700'
-              }`}>
+                }`}>
                 Stock: {product.stock_quantity}
               </span>
             </div>
@@ -311,7 +309,7 @@ function MyProductsPage() {
                 Manage your store inventory and product listings
               </p>
             </div>
-            <button 
+            <button
               onClick={() => navigate({ to: '/store/create-product' })}
               className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors"
             >
@@ -335,17 +333,16 @@ function MyProductsPage() {
               <RefreshCw className="w-5 h-5" />
             </button>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {stores.map((store) => (
               <div
                 key={store.store_id}
                 onClick={() => setSelectedStoreId(store.store_id)}
-                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                  selectedStoreId === store.store_id
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${selectedStoreId === store.store_id
                     ? 'border-[#00A7B3] bg-[#E8F8FA]'
                     : 'border-[#E1EAF2] hover:border-[#B8D0DC]'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <img
@@ -492,7 +489,7 @@ function MyProductsPage() {
                     ))}
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-[#005A61] mb-2">
                     Stock Status
@@ -582,12 +579,12 @@ function MyProductsPage() {
             <Package className="w-16 h-16 text-[#B8D0DC] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-[#005A61] mb-2">No products found</h3>
             <p className="text-[#516E89] mb-6">
-              {searchQuery 
+              {searchQuery
                 ? `No products match your search for "${searchQuery}"`
                 : "Start by adding your first product to the store"
               }
             </p>
-            <button 
+            <button
               onClick={() => navigate({ to: '/store/create-product' })}
               className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center gap-2"
             >

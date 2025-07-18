@@ -43,9 +43,8 @@ function RouteComponent() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSuccess, setShowSuccess] = useState(false);
   const [imageMethod, setImageMethod] = useState<'url' | 'upload'>('url');
-
-  const storeId = 2; // Replace with actual store ID or fetch dynamically
-  const createProductMutation = useCreateProduct();
+  const store = localStorage.getItem("currentStore") || '';
+  const storeId = store ? JSON.parse(store).store_id : 0;  const createProductMutation = useCreateProduct();
   const addProductToInventoryMutation = useAddProductToInventory();
   const { data: Categories, isLoading, isError } = useCategories();
   const { data: storeInventories, isLoading: inventoriesLoading, isError: inventoriesError } = useStoreInventoryProducts(storeId);

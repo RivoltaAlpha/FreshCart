@@ -8,8 +8,9 @@ export const Route = createFileRoute('/store/stock-management')({
 })
 
 function RouteComponent() {
-  const store_id = 8; // Replace with actual store ID from auth context
-  const { data: inventory, isLoading, isError } = useStoreInventoryProducts(store_id);
+  const store = localStorage.getItem("currentStore") || '';
+  const storeId = store ? JSON.parse(store).store_id : 0;
+  const { data: inventory, isLoading, isError } = useStoreInventoryProducts(storeId);
   const [editId, setEditId] = useState<number | null>(null)
   const [newStock, setNewStock] = useState('')
   const [successMsg, setSuccessMsg] = useState('')

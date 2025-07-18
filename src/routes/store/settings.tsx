@@ -31,7 +31,7 @@ function RouteComponent() {
   const [editedProfile, setEditedProfile] = useState({
     name: '',
     description: '',
-    city: '',
+    area: '',
     town: '',
     country: '',
     contact_info: '',
@@ -46,38 +46,40 @@ function RouteComponent() {
   const store = Array.isArray(storeData) ? storeData[0] : storeData
 
   // Initialize edit form when store data loads
+  // ...existing code...
   useState(() => {
     if (store) {
       setEditedProfile({
-        name: store.profile?.name || '',
-        description: store.profile?.description || '',
-        city: store.profile?.city || '',
-        town: store.profile?.town || '',
-        country: store.profile?.country || '',
-        contact_info: store.profile?.contact_info || '',
-        image_url: store.profile?.image_url || '',
-        rating: store.profile?.rating || 0,
-        total_reviews: store.profile?.total_reviews || 0,
-        store_code: store.profile?.store_code || '',
-        delivery_fee: store.profile?.delivery_fee || 0,
+        name: store.name || '',
+        description: store.description || '',
+        area: store.address?.area || '', // If you use area, otherwise remove
+        town: store.address?.town || '',
+        country: store.address?.country || '',
+        contact_info: store.contact_info || '',
+        image_url: store.image_url || '',
+        rating: Number(store.rating) || 0,
+        total_reviews: store.total_reviews || 0,
+        store_code: store.store_code || '',
+        delivery_fee: store.delivery_fee || 0,
       })
     }
   })
+  // ...existing code...
 
   const handleEditToggle = () => {
     if (store) {
       setEditedProfile({
-        name: store.profile?.name || '',
-        description: store.profile?.description || '',
-        city: store.profile?.city || '',
-        town: store.profile?.town || '',
-        country: store.profile?.country || '',
-        contact_info: store.profile?.contact_info || '',
-        image_url: store.profile?.image_url || '',
-        rating: store.profile?.rating || 0,
-        total_reviews: store.profile?.total_reviews || 0,
-        store_code: store.profile?.store_code || '',
-        delivery_fee: store.profile?.delivery_fee || 0,
+        name: store.name || '',
+        description: store.description || '',
+        area: store.address?.area || '',
+        town: store.address?.town || '',
+        country: store.address?.country || '',
+        contact_info: store.contact_info || '',
+        image_url: store.image_url || '',
+        rating: store.rating || 0,
+        total_reviews: store.total_reviews || 0,
+        store_code: store.store_code || '',
+        delivery_fee: store.delivery_fee || 0,
       })
     }
     setIsEditing(!isEditing)
@@ -272,6 +274,29 @@ function RouteComponent() {
                     {/* Name */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Area
+                      </label>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editedProfile.area}
+                          onChange={(e) =>
+                            setEditedProfile((prev) => ({
+                              ...prev,
+                              area: e.target.value,
+                            }))
+                          }
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                        />
+                      ) : (
+                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                          <LocateIcon className="h-4 w-4 text-gray-500" />
+                          <span>{store.address.area || 'Not provided'}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Town
                       </label>
                       {isEditing ? (
@@ -288,31 +313,8 @@ function RouteComponent() {
                         />
                       ) : (
                         <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                          <LocateIcon className="h-4 w-4 text-gray-500" />
-                          <span>{store.town || 'Not provided'}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        City
-                      </label>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={editedProfile.city}
-                          onChange={(e) =>
-                            setEditedProfile((prev) => ({
-                              ...prev,
-                              city: e.target.value,
-                            }))
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
-                        />
-                      ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
                           <LocateFixedIcon className="h-4 w-4 text-gray-500" />
-                          <span>{store.city || 'Not provided'}</span>
+                          <span>{store.address.town || 'Not provided'}</span>
                         </div>
                       )}
                     </div>

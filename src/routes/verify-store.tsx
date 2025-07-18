@@ -13,18 +13,19 @@ export const Route = createFileRoute('/verify-store')({
 
 function RegisterPage() {
     const storeOwner = localStorage.getItem('storeOwner');
-    const owner_id = storeOwner ? JSON.parse(storeOwner).user_id : 1;
+    const owner_id = storeOwner ? JSON.parse(storeOwner).user_id : 0;
     const [formData, setFormData] = useState({
         "owner_id": owner_id,
         "name": "",
         "description": "",
-        "city": "",
         "town": "",
+        "area": "",
         "county": "",
-        "country": "Kenya",
         "contact_info": "",
         "delivery_fee": 0,
-        "store_code": "https://c.wallhere.com/photos/55/d0/barcelona_color_fruit_colore_flavor_100v10f_mercado_senses-819706.jpg",
+        "store_code": "",
+        "country": "Kenya",
+        "image_url": "https://c.wallhere.com/photos/55/d0/barcelona_color_fruit_colore_flavor_100v10f_mercado_senses-819706.jpg",
         "delivery_time_minutes": 30,
         "rating": 2.0
     });
@@ -46,12 +47,16 @@ function RegisterPage() {
         e.preventDefault();
 
         if (!formData.store_code) {
-            const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const codeLength = Math.floor(Math.random() * 3) + 6; 
+            const randomCode = Array.from({ length: codeLength }, () =>
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-#*"[Math.floor(Math.random() * 36)]
+            ).join('');
             setFormData(prev => ({
                 ...prev,
                 store_code: randomCode
             }));
         }
+        console.log("Form data before submission:", formData);
 
         try {
             const response = await createStoreMutation.mutateAsync(formData);
@@ -125,9 +130,13 @@ function RegisterPage() {
                                 <label className="block text-sm font-medium text-gray-700 mb-2">County</label>
                                 <select
                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
-                                    value={county}
+                                    value={formData.county}
                                     onChange={e => {
                                         setCounty(e.target.value);
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            county: e.target.value
+                                        }));
                                     }}
                                     required
                                 >
@@ -141,8 +150,8 @@ function RegisterPage() {
                                 <label className="block text-sm font-medium text-gray-700 mb-2">City | Town</label>
                                 <input
                                     type="text"
-                                    name="city"
-                                    value={formData.city || ''}
+                                    name="town"
+                                    value={formData.town || ''}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                     placeholder="Your city or town"
                                     required
@@ -154,8 +163,8 @@ function RegisterPage() {
                             <label className="block text-sm font-medium text-gray-700 mb-2">Area</label>
                             <input
                                 type="text"
-                                name="town"
-                                value={formData.town || ''}
+                                name="area"
+                                value={formData.area || ''}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                 placeholder="Nearest Area around you"
                                 required
@@ -187,11 +196,19 @@ function RegisterPage() {
                                 <input
                                     type="number"
                                     name="delivery_fee"
-                                    value={formData.delivery_fee || ''}
+                                    value={formData.delivery_fee === 0 ? '' : formData.delivery_fee}
+                                    min={1}
+                                    step={1}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                     placeholder="Enter delivery fee"
                                     required
-                                    onChange={handleInputChange}
+                                    onChange={e => {
+                                        const value = e.target.value;
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            delivery_fee: value === '' ? 0 : Number(value)
+                                        }));
+                                    }}
                                 />
                             </div>
                         </div>

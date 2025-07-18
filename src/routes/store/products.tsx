@@ -21,7 +21,8 @@ export const Route = createFileRoute('/store/products')({
 })
 
 function RouteComponent() {
-  const storeId = 2;
+  const store = localStorage.getItem("currentStore") || '';
+  const storeId = store ? JSON.parse(store).store_id : 0;
   const navigate = useNavigate();
   const { data: allProducts, isLoading, isError } = useAllStoreProducts(storeId);
   const [selectedProduct, setSelectedProduct] = useState<ProductInStore | null>(null);

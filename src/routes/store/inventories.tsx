@@ -23,7 +23,8 @@ export const Route = createFileRoute('/store/inventories')({
 })
 
 function RouteComponent() {
-  const store_id = 2;
+  const store = localStorage.getItem("currentStore") || '';
+  const store_id = store ? JSON.parse(store).store_id : 0;
   const { data: inventory, isLoading, isError } = useStoreInventoryProducts(store_id);
   const [selectedInventory, setSelectedInventory] = useState<InventoryProducts | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | 'all'>('all');
