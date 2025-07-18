@@ -6,6 +6,7 @@ import { useLogin } from '@/hooks/useLogin';
 import { Footer } from '@/components/Footer';
 import Header from '@/components/Header';
 import * as motion from "motion/react-client";
+import { getStoreByOwnerId } from '@/services/storeService';
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -41,7 +42,6 @@ function LoginPage() {
       toast.success("Login successful!");
 
       let userRole = response.user?.role || response.data?.user?.role;
-      // Normalize role to capitalize first letter
       if (typeof userRole === 'string') {
         userRole = userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase();
       }
@@ -50,7 +50,12 @@ function LoginPage() {
           navigate({ to: '/admin/dashboard' });
           break;
         case 'Store':
-          navigate({ to: '/store/dashboard' });
+          const ownerId = response.user?.user_id || response.data?.user?.user_id;
+          if (ownerId) {
+            const storeData = await getStoreByOwnerId(Number(ownerId));
+            localStorage.setItem('currentStore', JSON.stringify(storeData));
+            navigate({ to: '/store/dashboard' });
+          }
           break;
         case 'Customer':
           navigate({ to: '/customer/dashboard' });
@@ -157,7 +162,7 @@ function LoginPage() {
               </div>
 
               <button
-              id='login-button'
+                id='login-button'
                 type="submit"
                 className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transform hover:scale-105 transition-all duration-200"
               >
