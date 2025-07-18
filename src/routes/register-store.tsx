@@ -6,6 +6,7 @@ import { useRegister } from '@/hooks/useRegister';
 import { Footer } from '@/components/Footer';
 import Header from '@/components/Header';
 import { getAreasInLocality, getLocalitiesInCounty, getSubCountiesInCounty, getCounties } from 'kenya-locations';
+import type { UserRole } from '@/types/types';
 
 export const Route = createFileRoute('/register-store')({
   component: RegisterPage,
@@ -23,7 +24,7 @@ function RegisterPage() {
     area: '',
     county: '',
     country: 'Kenya',
-    role: 'Customer' as 'Customer' | 'Store' | 'Driver' | 'Admin',
+    role: 'Store' as UserRole,
   });
   const navigate = useNavigate();
   const registerMutation = useRegister();
@@ -56,7 +57,7 @@ function RegisterPage() {
       const response = await registerMutation.mutateAsync(formData);
       console.log("Register response:", response);
       toast.success("Registration successful!");
-      localStorage.setItem('storeOwner', JSON.stringify(response));
+      localStorage.setItem('storeOwner', JSON.stringify(response.user));
 
       let userRole = response.user?.role || response.data?.user?.role;
       if (typeof userRole === 'string') {
@@ -168,8 +169,8 @@ function RegisterPage() {
               </div>
             </div>
 
-
             <div className="space-y-2">
+              {/* County */}
               <select
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                 value={formData.county}
@@ -178,6 +179,13 @@ function RegisterPage() {
                   setSubCounty('');
                   setLocalityName('');
                   setArea('');
+                  setFormData(prev => ({
+                    ...prev,
+                    county: e.target.value,
+                    subCounty: '',
+                    town: '',
+                    area: ''
+                  }));
                 }}
                 required
               >
@@ -186,6 +194,7 @@ function RegisterPage() {
                   <option key={c.code} value={c.name}>{c.name}</option>
                 ))}
               </select>
+              {/* Sub-County */}
               {county && (
                 <select
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
@@ -194,6 +203,12 @@ function RegisterPage() {
                     setSubCounty(e.target.value);
                     setLocalityName('');
                     setArea('');
+                    setFormData(prev => ({
+                      ...prev,
+                      subCounty: e.target.value,
+                      town: '',
+                      area: ''
+                    }));
                   }}
                   required
                 >
@@ -203,6 +218,7 @@ function RegisterPage() {
                   ))}
                 </select>
               )}
+              {/* Locality (Town) */}
               {subCounty && (
                 <select
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
@@ -212,7 +228,8 @@ function RegisterPage() {
                     setArea('');
                     setFormData(prev => ({
                       ...prev,
-                      town: e.target.value
+                      town: e.target.value,
+                      area: ''
                     }));
                   }}
                   required
@@ -223,6 +240,7 @@ function RegisterPage() {
                   ))}
                 </select>
               )}
+              {/* Area */}
               {localityName && (
                 <select
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"

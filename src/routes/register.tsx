@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Mail, Lock, Phone, Home, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Phone, Eye, EyeOff } from 'lucide-react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner';
 import { useRegister } from '@/hooks/useRegister';
@@ -94,6 +94,16 @@ function RegisterPage() {
     navigate({ to: '/login' });
   }
 
+  const onSwitchToDriver = () => {
+    setFormData(prev => ({ ...prev, role: 'Driver' }));
+    navigate({ to: '/register-driver' });
+  }
+
+  const onSwitchToVendor = () => {
+    setFormData(prev => ({ ...prev, role: 'Store' }));
+    navigate({ to: '/register-store' });
+  }
+
   return (
     <>
       <Header />
@@ -178,70 +188,70 @@ function RegisterPage() {
             </div>
 
 
-                <div className="space-y-2">
-                  <select
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
-                    value={county}
-                    onChange={e => {
-                      setCounty(e.target.value);
-                      setSubCounty('');
-                      setLocalityName('');
-                      setArea('');
-                    }}
-                    required
-                  >
-                    <option value="">Select County</option>
-                    {counties.map((c: any) => (
-                      <option key={c.code} value={c.name}>{c.name}</option>
-                    ))}
-                  </select>
-                  {county && (
-                    <select
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
-                      value={subCounty}
-                      onChange={e => {
-                        setSubCounty(e.target.value);
-                        setLocalityName('');
-                        setArea('');
-                      }}
-                      required
-                    >
-                      <option value="">Select Sub-County</option>
-                      {subCounties.map((sc: any) => (
-                        <option key={sc.code} value={sc.name}>{sc.name}</option>
-                      ))}
-                    </select>
-                  )}
-                  {subCounty && (
-                    <select
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
-                      value={localityName}
-                      onChange={e => {
-                        setLocalityName(e.target.value);
-                        setArea('');
-                      }}
-                      required
-                    >
-                      <option value="">Select Locality</option>
-                      {localities.map((l: any, idx: number) => (
-                        <option key={l.name || idx} value={l.name || ''}>{l.name || ''}</option>
-                      ))}
-                    </select>
-                  )}
-                  {localityName && (
-                    <select
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
-                      value={area}
-                      onChange={e => setArea(e.target.value)}
-                      required
-                    >
-                      <option value="">Select Area</option>
-                      {areas.map((a: any, idx: number) => (
-                        <option key={a.name || a || idx} value={a.name || a || ''}>{a.name || a || ''}</option>
-                      ))}
-                    </select>
-                  )}
-                </div>
+            <div className="space-y-2">
+              <select
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                value={county}
+                onChange={e => {
+                  setCounty(e.target.value);
+                  setSubCounty('');
+                  setLocalityName('');
+                  setArea('');
+                }}
+                required
+              >
+                <option value="">Select County</option>
+                {counties.map((c: any) => (
+                  <option key={c.code} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+              {county && (
+                <select
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                  value={subCounty}
+                  onChange={e => {
+                    setSubCounty(e.target.value);
+                    setLocalityName('');
+                    setArea('');
+                  }}
+                  required
+                >
+                  <option value="">Select Sub-County</option>
+                  {subCounties.map((sc: any) => (
+                    <option key={sc.code} value={sc.name}>{sc.name}</option>
+                  ))}
+                </select>
+              )}
+              {subCounty && (
+                <select
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                  value={localityName}
+                  onChange={e => {
+                    setLocalityName(e.target.value);
+                    setArea('');
+                  }}
+                  required
+                >
+                  <option value="">Select Locality</option>
+                  {localities.map((l: any, idx: number) => (
+                    <option key={l.name || idx} value={l.name || ''}>{l.name || ''}</option>
+                  ))}
+                </select>
+              )}
+              {localityName && (
+                <select
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                  value={area}
+                  onChange={e => setArea(e.target.value)}
+                  required
+                >
+                  <option value="">Select Area</option>
+                  {areas.map((a: any, idx: number) => (
+                    <option key={a.name || a || idx} value={a.name || a || ''}>{a.name || a || ''}</option>
+                  ))}
+                </select>
+              )}
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
@@ -282,7 +292,7 @@ function RegisterPage() {
             </button>
           </form>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center gap-6 items-center">
             <p className="text-gray-600">
               Already have an account?{' '}
               <button
@@ -290,6 +300,24 @@ function RegisterPage() {
                 className="text-[#00A7B3] hover:text-[#008C9E] font-semibold"
               >
                 Sign in
+              </button>
+            </p>
+          </div>
+          <div className="mt-2 text-center flex gap-6 justify-evenly items-center">
+            <p className="text-gray-600">
+              <button
+                onClick={onSwitchToDriver}
+                className="text-[#00A7B3] hover:text-[#008C9E] font-semibold"
+              >
+                Join as driver
+              </button>
+            </p>
+            <p className="text-gray-600">
+              <button
+                onClick={onSwitchToVendor}
+                className="text-[#00A7B3] hover:text-[#008C9E] font-semibold"
+              >
+                Join as Vendor
               </button>
             </p>
           </div>
