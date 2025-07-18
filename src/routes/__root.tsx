@@ -25,7 +25,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         <TanStackRouterDevtools />
         <TanStackQueryLayout />
         {/* Chatbot Integration Section */}
-        <section className="py-2">
+        <section>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ChatbotIntegration />
           </div>
