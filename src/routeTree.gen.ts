@@ -34,7 +34,6 @@ import { Route as StoreSettingsRouteImport } from './routes/store/settings'
 import { Route as StoreProfileRouteImport } from './routes/store/profile'
 import { Route as StoreProductsRouteImport } from './routes/store/products'
 import { Route as StoreMyproductsRouteImport } from './routes/store/myproducts'
-import { Route as StoreManageProductsRouteImport } from './routes/store/manageProducts'
 import { Route as StoreManageOrdersRouteImport } from './routes/store/manage-orders'
 import { Route as StoreInventoriesRouteImport } from './routes/store/inventories'
 import { Route as StoreDashboardRouteImport } from './routes/store/dashboard'
@@ -200,11 +199,6 @@ const StoreProductsRoute = StoreProductsRouteImport.update({
 const StoreMyproductsRoute = StoreMyproductsRouteImport.update({
   id: '/myproducts',
   path: '/myproducts',
-  getParentRoute: () => StoreRoute,
-} as any)
-const StoreManageProductsRoute = StoreManageProductsRouteImport.update({
-  id: '/manageProducts',
-  path: '/manageProducts',
   getParentRoute: () => StoreRoute,
 } as any)
 const StoreManageOrdersRoute = StoreManageOrdersRouteImport.update({
@@ -475,7 +469,6 @@ export interface FileRoutesByFullPath {
   '/store/dashboard': typeof StoreDashboardRoute
   '/store/inventories': typeof StoreInventoriesRoute
   '/store/manage-orders': typeof StoreManageOrdersRoute
-  '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
@@ -544,7 +537,6 @@ export interface FileRoutesByTo {
   '/store/dashboard': typeof StoreDashboardRoute
   '/store/inventories': typeof StoreInventoriesRoute
   '/store/manage-orders': typeof StoreManageOrdersRoute
-  '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
@@ -614,7 +606,6 @@ export interface FileRoutesById {
   '/store/dashboard': typeof StoreDashboardRoute
   '/store/inventories': typeof StoreInventoriesRoute
   '/store/manage-orders': typeof StoreManageOrdersRoute
-  '/store/manageProducts': typeof StoreManageProductsRoute
   '/store/myproducts': typeof StoreMyproductsRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
@@ -685,7 +676,6 @@ export interface FileRouteTypes {
     | '/store/dashboard'
     | '/store/inventories'
     | '/store/manage-orders'
-    | '/store/manageProducts'
     | '/store/myproducts'
     | '/store/products'
     | '/store/profile'
@@ -754,7 +744,6 @@ export interface FileRouteTypes {
     | '/store/dashboard'
     | '/store/inventories'
     | '/store/manage-orders'
-    | '/store/manageProducts'
     | '/store/myproducts'
     | '/store/products'
     | '/store/profile'
@@ -823,7 +812,6 @@ export interface FileRouteTypes {
     | '/store/dashboard'
     | '/store/inventories'
     | '/store/manage-orders'
-    | '/store/manageProducts'
     | '/store/myproducts'
     | '/store/products'
     | '/store/profile'
@@ -1029,13 +1017,6 @@ declare module '@tanstack/react-router' {
       path: '/myproducts'
       fullPath: '/store/myproducts'
       preLoaderRoute: typeof StoreMyproductsRouteImport
-      parentRoute: typeof StoreRoute
-    }
-    '/store/manageProducts': {
-      id: '/store/manageProducts'
-      path: '/manageProducts'
-      fullPath: '/store/manageProducts'
-      preLoaderRoute: typeof StoreManageProductsRouteImport
       parentRoute: typeof StoreRoute
     }
     '/store/manage-orders': {
@@ -1432,7 +1413,6 @@ interface StoreRouteChildren {
   StoreDashboardRoute: typeof StoreDashboardRoute
   StoreInventoriesRoute: typeof StoreInventoriesRoute
   StoreManageOrdersRoute: typeof StoreManageOrdersRoute
-  StoreManageProductsRoute: typeof StoreManageProductsRoute
   StoreMyproductsRoute: typeof StoreMyproductsRoute
   StoreProductsRoute: typeof StoreProductsRoute
   StoreProfileRoute: typeof StoreProfileRoute
@@ -1449,7 +1429,6 @@ const StoreRouteChildren: StoreRouteChildren = {
   StoreDashboardRoute: StoreDashboardRoute,
   StoreInventoriesRoute: StoreInventoriesRoute,
   StoreManageOrdersRoute: StoreManageOrdersRoute,
-  StoreManageProductsRoute: StoreManageProductsRoute,
   StoreMyproductsRoute: StoreMyproductsRoute,
   StoreProductsRoute: StoreProductsRoute,
   StoreProfileRoute: StoreProfileRoute,
