@@ -2,7 +2,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 import { useState, useEffect, useCallback } from 'react'
 import type { allStoreProductsResponse, Store } from '../types/store'
 import type { Product } from '../types/types'
-import { createStore, getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreHavingProduct, getStoreProducts } from '@/services/storeService'
+import { createStore, getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreHavingProduct, getStoreProducts, getUnverifiedStores, verifyStore } from '@/services/storeService'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface UseStoreProductsParams {
@@ -236,5 +236,20 @@ export const useCreateStore = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['stores'] })
     },
+  })
+}
+
+// Fetch unverified stores
+export function useUnverifiedStores() {
+  return useQuery({
+    queryKey: ['unverifiedStores'],
+    queryFn: () => getUnverifiedStores(),
+  })
+}
+
+// Verify a store by ID
+export function useVerifyStoreMutation(storeId: number) {
+  return useMutation({
+    mutationFn: () => verifyStore(storeId),
   })
 }

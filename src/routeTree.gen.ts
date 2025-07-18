@@ -59,6 +59,7 @@ import { Route as CustomerDashboardRouteImport } from './routes/customer/dashboa
 import { Route as CustomerCheckoutOrderRouteImport } from './routes/customer/checkout-order'
 import { Route as CustomerCartRouteImport } from './routes/customer/cart'
 import { Route as CustomerAiRecommendationsRouteImport } from './routes/customer/ai-recommendations'
+import { Route as AdminVerifyStoreRouteImport } from './routes/admin/verify-store'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminSuccessRouteImport } from './routes/admin/success'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
@@ -328,6 +329,11 @@ const CustomerAiRecommendationsRoute =
     path: '/ai-recommendations',
     getParentRoute: () => CustomerRoute,
   } as any)
+const AdminVerifyStoreRoute = AdminVerifyStoreRouteImport.update({
+  id: '/verify-store',
+  path: '/verify-store',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -444,6 +450,7 @@ export interface FileRoutesByFullPath {
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/verify-store': typeof AdminVerifyStoreRoute
   '/customer/ai-recommendations': typeof CustomerAiRecommendationsRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
@@ -512,6 +519,7 @@ export interface FileRoutesByTo {
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/verify-store': typeof AdminVerifyStoreRoute
   '/customer/ai-recommendations': typeof CustomerAiRecommendationsRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
@@ -581,6 +589,7 @@ export interface FileRoutesById {
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/verify-store': typeof AdminVerifyStoreRoute
   '/customer/ai-recommendations': typeof CustomerAiRecommendationsRoute
   '/customer/cart': typeof CustomerCartRoute
   '/customer/checkout-order': typeof CustomerCheckoutOrderRoute
@@ -651,6 +660,7 @@ export interface FileRouteTypes {
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
+    | '/admin/verify-store'
     | '/customer/ai-recommendations'
     | '/customer/cart'
     | '/customer/checkout-order'
@@ -719,6 +729,7 @@ export interface FileRouteTypes {
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
+    | '/admin/verify-store'
     | '/customer/ai-recommendations'
     | '/customer/cart'
     | '/customer/checkout-order'
@@ -787,6 +798,7 @@ export interface FileRouteTypes {
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
+    | '/admin/verify-store'
     | '/customer/ai-recommendations'
     | '/customer/cart'
     | '/customer/checkout-order'
@@ -1194,6 +1206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerAiRecommendationsRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/admin/verify-store': {
+      id: '/admin/verify-store'
+      path: '/verify-store'
+      fullPath: '/admin/verify-store'
+      preLoaderRoute: typeof AdminVerifyStoreRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -1326,6 +1345,7 @@ interface AdminRouteChildren {
   AdminStoresRoute: typeof AdminStoresRoute
   AdminSuccessRoute: typeof AdminSuccessRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  AdminVerifyStoreRoute: typeof AdminVerifyStoreRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -1345,6 +1365,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminStoresRoute: AdminStoresRoute,
   AdminSuccessRoute: AdminSuccessRoute,
   AdminUsersRoute: AdminUsersRoute,
+  AdminVerifyStoreRoute: AdminVerifyStoreRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

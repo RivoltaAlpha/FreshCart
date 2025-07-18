@@ -160,3 +160,33 @@ export const createStore = async (storeData: CreateStore): Promise<Store> => {
     throw error
   }
 }
+
+// fetch unverified stores
+export const getUnverifiedStores = async (): Promise<Store[]> => {
+  const response = await fetch(`${API_BASE_URL}/stores/unverified`)
+  await handleApiResponse(response)
+  return response.json()
+}
+
+// Verify a store
+export const verifyStore = async (storeId: number): Promise<Store> => {
+  const token = getAuthToken()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/stores/verify/${storeId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error in verifyStore:', error)
+    throw error
+  }
+}

@@ -46,20 +46,24 @@ function RegisterPage() {
     const onRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!formData.store_code) {
-            const codeLength = Math.floor(Math.random() * 3) + 6; 
+        let submissionData = { ...formData };
+
+        if (!submissionData.store_code) {
+            const codeLength = Math.floor(Math.random() * 3) + 6; // 6-8 chars
             const randomCode = Array.from({ length: codeLength }, () =>
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-#*"[Math.floor(Math.random() * 36)]
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[Math.floor(Math.random() * 36)]
             ).join('');
+            submissionData.store_code = randomCode;
             setFormData(prev => ({
                 ...prev,
                 store_code: randomCode
             }));
         }
-        console.log("Form data before submission:", formData);
+
+        console.log("Form data before submission:", submissionData);
 
         try {
-            const response = await createStoreMutation.mutateAsync(formData);
+            const response = await createStoreMutation.mutateAsync(submissionData);
             console.log("Register response:", response);
             toast.success("Registration successful!");
             localStorage.setItem('currentStore', JSON.stringify(response));
