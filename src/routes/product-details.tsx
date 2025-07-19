@@ -62,7 +62,7 @@ function RouteComponent() {
     image_url: search.image || '',
     weight: '1kg', // Default weight
     unit: 'piece', // Default unit
-    rating: search.rating || '4.5',
+    rating: search.rating ? parseFloat(search.rating) : 4.5,
     review_count: parseInt(search.reviews || '0'),
     discount: 0, // Default discount
     expiry_date: null, // Default expiry
@@ -221,7 +221,7 @@ function RouteComponent() {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${i < Math.floor(parseFloat(product.rating))
+                        className={`w-4 h-4 ${i < Math.floor(product.rating)
                           ? 'text-yellow-400 fill-current'
                           : 'text-gray-300'
                           }`}

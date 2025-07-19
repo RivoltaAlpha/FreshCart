@@ -80,7 +80,7 @@ function MyProductsPage() {
       sum + (product.price * product.stock_quantity), 0
     );
     const averageRating = products.reduce((sum, product) =>
-      sum + parseFloat(product.rating), 0
+      sum + (typeof product.rating === 'string' ? parseFloat(product.rating) : product.rating), 0
     ) / products.length;
     const lowStockProducts = products.filter(product =>
       product.stock_quantity < 10

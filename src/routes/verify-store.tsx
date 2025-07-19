@@ -33,6 +33,7 @@ function RegisterPage() {
     const navigate = useNavigate();
     const createStoreMutation = useCreateStore();
     const [county, setCounty] = useState('');
+    console.log(county)
     const counties = getCounties();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

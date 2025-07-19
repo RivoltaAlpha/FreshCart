@@ -101,7 +101,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
               return product ? { rec, product } : null;
             })
             .filter((item): item is { rec: any; product: Product } => item !== null)
-            .map(({ rec, product }) => (
+            .map(({ product }) => (
               <div
                 key={product.product_id}
                 className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 group"

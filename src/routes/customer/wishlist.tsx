@@ -91,7 +91,7 @@ function RouteComponent() {
         name: item.name,
         price: item.price,
         image_url: item.image_url,
-        rating: item.rating?.toString() || '0',
+        rating: item.rating || 0,
         discount: item.discount || 0,
         unit: item.unit || 'piece',
         weight: item.weight?.toString() || '0',

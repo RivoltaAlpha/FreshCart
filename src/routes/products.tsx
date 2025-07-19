@@ -43,6 +43,7 @@ function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [cart, setCart] = useState<Cart>({});
+  console.log('Cart:', cart);
   const [selectedProduct, setSelectedProduct] = useState<BackendProduct | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isInitialMount = useRef(true);

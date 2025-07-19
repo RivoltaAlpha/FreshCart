@@ -32,6 +32,7 @@ function RegisterPage() {
   const [subCounty, setSubCounty] = useState('');
   const [localityName, setLocalityName] = useState('');
   const [area, setArea] = useState('');
+  console.log(area)
   const counties = getCounties();
   const subCounties = county ? getSubCountiesInCounty(county) : [];
   const localities = subCounty ? getLocalitiesInCounty(county) : [];

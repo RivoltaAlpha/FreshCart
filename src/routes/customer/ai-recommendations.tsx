@@ -1,5 +1,3 @@
-import { useCategories } from '@/hooks/useCategory'
-import { useProducts } from '@/hooks/useProducts'
 import { getUserPurchases } from '@/services/orderService'
 import { loggedInUser } from '@/store/auth'
 import type { StoreProduct } from '@/types/store'
@@ -177,8 +175,6 @@ function RouteComponent() {
   const geminiService = useMemo(() => GeminiService.getInstance(import.meta.env.VITE_GEMINI_API_KEY || ''), []);
   const navigate = useNavigate()
   const user = loggedInUser()
-  const storeProducts = useProducts()
-  const availableCategories = useCategories()
   const [purchasedProducts, setPurchasedProducts] = useState<StoreProduct[]>([])
   const [aiRecommendations, setAiRecommendations] = useState<AIResponse | null>(null)
   const [loading, setLoading] = useState(false)

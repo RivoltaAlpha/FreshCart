@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Mail, Lock, Phone, Home, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Phone, Eye, EyeOff } from 'lucide-react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner';
 import { useRegister } from '@/hooks/useRegister';

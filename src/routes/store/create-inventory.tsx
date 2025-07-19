@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { useCreateInventory } from '@/hooks/useInventory'
 import { useProducts } from '@/hooks/useProducts'
-import type { CreateInventory } from '@/types/types'
+import type { CreateInventory, Product } from '@/types/types'
 
 export const Route = createFileRoute('/store/create-inventory')({
   component: RouteComponent,
@@ -93,7 +93,7 @@ function RouteComponent() {
     }
   }
 
-  const selectedProduct = products.find(p => p.product_id === formData.product_id)
+  const selectedProduct = products.find((p: Product) => p.product_id === formData.product_id)
 
   if (showSuccess) {
     return (
@@ -147,7 +147,7 @@ function RouteComponent() {
                     <option value={0}>
                       {productsLoading ? 'Loading products...' : 'Select a product'}
                     </option>
-                    {products.map((product) => (
+                    {products.map((product: Product) => (
                       <option key={product.product_id} value={product.product_id}>
                         {product.name} - KSh {product.price}
                       </option>

@@ -70,7 +70,9 @@ function StoresPage() {
         case 'name':
           return a.name.localeCompare(b.name);
         case 'rating':
-          return parseFloat(b.rating) - parseFloat(a.rating);
+          const ratingA = typeof a.rating === 'string' ? parseFloat(a.rating) : a.rating;
+          const ratingB = typeof b.rating === 'string' ? parseFloat(b.rating) : b.rating;
+          return ratingB - ratingA;
         case 'county':
           return a.county.localeCompare(b.county);
         case 'town':

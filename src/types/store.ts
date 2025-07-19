@@ -16,12 +16,12 @@ export interface StoreProduct {
   image_url: string
   weight: string
   unit: string
-  rating: string
+  rating: number
   review_count: number
   discount: number
   expiry_date: string | null
   created_at: string
-  updatedAt: string
+  updated_at: string
   category: Category
 }
 

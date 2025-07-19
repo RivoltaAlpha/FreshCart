@@ -297,7 +297,7 @@ export interface BackendProduct {
   image_url: string
   weight: string
   unit: string
-  rating: string
+  rating: number
   review_count: number
   discount: number
   expiry_date: string | null
@@ -329,7 +329,7 @@ export interface Product {
   image_url: string
   weight: string
   unit: string
-  rating: string
+  rating: number
   review_count: number
   discount: number
   expiry_date: string | null
