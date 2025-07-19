@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { useEffect, useState } from "react";
 import { useStoreOrders, useUpdateOrderStatusMutation } from "@/hooks/useOrders";
 import type { CustomerOrder, OrderStatus } from "@/types/types";
 import {
@@ -15,6 +15,7 @@ import {
   Filter,
   Edit3
 } from 'lucide-react'
+import { useDeliveryByOrderId } from "@/hooks/useDeliveries";
 
 export const Route = createFileRoute('/store/manage-orders')({
   component: RouteComponent,
@@ -117,6 +118,8 @@ function RouteComponent() {
         return <Package className="h-4 w-4" />
       case 'ready_for_pickup':
         return <Truck className="h-4 w-4" />
+      case 'in_transit':
+        return <Package className="h-4 w-4" />
       case 'delivered':
         return <Package className="h-4 w-4" />
       case 'cancelled':
@@ -136,6 +139,8 @@ function RouteComponent() {
         return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'ready_for_pickup':
         return 'bg-purple-100 text-purple-800 border-purple-200'
+      case 'in_transit':
+        return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'delivered':
         return 'bg-green-100 text-green-800 border-green-200'
       case 'cancelled':
@@ -154,6 +159,22 @@ function RouteComponent() {
       minute: '2-digit'
     })
   }
+
+  const [deliveryOrderId, setDeliveryOrderId] = useState<number | null>(null);
+  const { data: deliveryInfo } = useDeliveryByOrderId(deliveryOrderId ?? 0);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (deliveryOrderId && deliveryInfo) {
+      localStorage.setItem('selectedDelivery', JSON.stringify(deliveryInfo));
+      navigate({ to: '/store/track-order' });
+    }
+  }, [deliveryOrderId, deliveryInfo, navigate]);
+
+  const handleViewDetails = (order_id: number) => {
+    setDeliveryOrderId(order_id);
+    console.log('Fetching delivery info for order:', order_id);
+  }
+  console.log(deliveryInfo);
 
   // Status Change Modal Component
   const StatusChangeModal = ({ order, onClose }: { order: CustomerOrder, onClose: () => void }) => (
@@ -195,6 +216,7 @@ function RouteComponent() {
               <option value="confirmed">Confirmed</option>
               <option value="preparing">Preparing</option>
               <option value="ready_for_pickup">Ready for Pickup</option>
+              <option value="in_transit">In Transit</option>
               <option value="delivered">Delivered</option>
               <option value="cancelled">Cancelled</option>
             </select>
@@ -270,6 +292,7 @@ function RouteComponent() {
               <option value="confirmed">Confirmed</option>
               <option value="preparing">Preparing</option>
               <option value="ready_for_pickup">Ready for Pickup</option>
+              <option value="in_transit">In Transit</option>
               <option value="delivered">Delivered</option>
               <option value="cancelled">Cancelled</option>
             </select>
@@ -356,9 +379,19 @@ function RouteComponent() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <MapPin className="h-4 w-4" />
-                    <span>{order.delivery_address || 'No delivery address'}</span>
+                  <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4" />
+                      <span>{order.delivery_address}</span>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => handleViewDetails(order.order_id)}
+                        className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
+                      >
+                        View Delivery details
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

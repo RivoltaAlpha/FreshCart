@@ -27,6 +27,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoreTrackOrderRouteImport } from './routes/store/track-order'
 import { Route as StoreSuccessRouteImport } from './routes/store/success'
 import { Route as StoreStockManagementRouteImport } from './routes/store/stock-management'
 import { Route as StoreShipmentsRouteImport } from './routes/store/shipments'
@@ -166,6 +167,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const StoreTrackOrderRoute = StoreTrackOrderRouteImport.update({
+  id: '/track-order',
+  path: '/track-order',
+  getParentRoute: () => StoreRoute,
 } as any)
 const StoreSuccessRoute = StoreSuccessRouteImport.update({
   id: '/success',
@@ -483,6 +489,7 @@ export interface FileRoutesByFullPath {
   '/store/shipments': typeof StoreShipmentsRoute
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
+  '/store/track-order': typeof StoreTrackOrderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -552,6 +559,7 @@ export interface FileRoutesByTo {
   '/store/shipments': typeof StoreShipmentsRoute
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
+  '/store/track-order': typeof StoreTrackOrderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -622,6 +630,7 @@ export interface FileRoutesById {
   '/store/shipments': typeof StoreShipmentsRoute
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
+  '/store/track-order': typeof StoreTrackOrderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -693,6 +702,7 @@ export interface FileRouteTypes {
     | '/store/shipments'
     | '/store/stock-management'
     | '/store/success'
+    | '/store/track-order'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -762,6 +772,7 @@ export interface FileRouteTypes {
     | '/store/shipments'
     | '/store/stock-management'
     | '/store/success'
+    | '/store/track-order'
   id:
     | '__root__'
     | '/'
@@ -831,6 +842,7 @@ export interface FileRouteTypes {
     | '/store/shipments'
     | '/store/stock-management'
     | '/store/success'
+    | '/store/track-order'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -981,6 +993,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/store/track-order': {
+      id: '/store/track-order'
+      path: '/track-order'
+      fullPath: '/store/track-order'
+      preLoaderRoute: typeof StoreTrackOrderRouteImport
+      parentRoute: typeof StoreRoute
     }
     '/store/success': {
       id: '/store/success'
@@ -1441,6 +1460,7 @@ interface StoreRouteChildren {
   StoreShipmentsRoute: typeof StoreShipmentsRoute
   StoreStockManagementRoute: typeof StoreStockManagementRoute
   StoreSuccessRoute: typeof StoreSuccessRoute
+  StoreTrackOrderRoute: typeof StoreTrackOrderRoute
 }
 
 const StoreRouteChildren: StoreRouteChildren = {
@@ -1457,6 +1477,7 @@ const StoreRouteChildren: StoreRouteChildren = {
   StoreShipmentsRoute: StoreShipmentsRoute,
   StoreStockManagementRoute: StoreStockManagementRoute,
   StoreSuccessRoute: StoreSuccessRoute,
+  StoreTrackOrderRoute: StoreTrackOrderRoute,
 }
 
 const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
