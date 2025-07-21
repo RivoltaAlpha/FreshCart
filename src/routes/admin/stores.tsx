@@ -14,7 +14,7 @@ import {
   type SortingState,
   type ColumnFiltersState,
 } from '@tanstack/react-table';
-import { Building2, Plus, Eye, Settings } from 'lucide-react';
+import { Building2, ClipboardCheckIcon, PackageCheckIcon } from 'lucide-react';
 
 const columnHelper = createColumnHelper<Store>();
 
@@ -174,10 +174,10 @@ function RouteComponent() {
         </h1>
         
         {/* Quick Actions Grid - Responsive */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6 sm:mb-8">
           <div className="bg-gray-300 shadow-lg rounded-lg p-4 flex flex-col sm:flex-row items-center justify-center gap-3 hover:shadow-xl transition-shadow">
             <h2 className="text-base sm:text-lg font-semibold text-center sm:text-left">Verify Stores</h2>
-            <Plus
+            <ClipboardCheckIcon
               className="w-10 h-10 sm:w-12 sm:h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61] transition-colors flex-shrink-0"
               onClick={() => navigate({ to: '/admin/verify-store' })}
             />
@@ -185,17 +185,9 @@ function RouteComponent() {
           
           <div className="bg-gray-300 shadow-lg rounded-lg p-4 flex flex-col sm:flex-row items-center justify-center gap-3 hover:shadow-xl transition-shadow">
             <h2 className="text-base sm:text-lg font-semibold text-center sm:text-left">View Orders</h2>
-            <Eye
+            <PackageCheckIcon
               className="w-10 h-10 sm:w-12 sm:h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61] transition-colors flex-shrink-0"
               onClick={() => navigate({ to: '/admin/orders' })}
-            />
-          </div>
-          
-          <div className="bg-gray-300 shadow-lg rounded-lg p-4 flex flex-col sm:flex-row items-center justify-center gap-3 hover:shadow-xl transition-shadow sm:col-span-2 lg:col-span-1">
-            <h2 className="text-base sm:text-lg font-semibold text-center sm:text-left">Store Settings</h2>
-            <Settings
-              className="w-10 h-10 sm:w-12 sm:h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61] transition-colors flex-shrink-0"
-              onClick={() => navigate({ to: '/admin/settings' })}
             />
           </div>
         </div>
