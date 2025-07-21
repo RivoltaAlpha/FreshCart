@@ -4,7 +4,6 @@ import {
   Package,
   Heart,
   User,
-  Settings,
   Store,
   BarChart3,
   Users,
@@ -225,11 +224,5 @@ export const adminMenu: MenuItem[] = [
     label: 'Payments',
     icon: DollarSign,
     path: '/admin/payments',
-  },
-  {
-    id: 'settings',
-    label: 'System Settings',
-    icon: Settings,
-    path: '/admin/settings',
   },
 ]
