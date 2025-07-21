@@ -40,7 +40,12 @@ export type CreateUser = {
   first_name: string
   last_name: string
   phone_number: string
-  addresses?: Partial<Address>[]
+  area?: string
+  town?: string
+  county?: string
+  country?: string
+  is_active?: boolean
+  is_available?: boolean
 }
 
 export interface LoginType {

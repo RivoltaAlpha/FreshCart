@@ -138,7 +138,7 @@ function RouteComponent() {
   return (
     <>
       <h1 className="flex justify-center text-2xl font-bold text-[#005A61]">Quick Actions</h1>
-      <div className="flex justify-around items-center mb-4 bg-gray-300 shadow-2xl rounded py-10 mt-10">
+      <div className="flex justify-around items-center mb-4 bg-gray-300 shadow-2xl rounded mt-6">
         <div className="mt-2 flex items-center justify-center gap-4">
           <h2 className="text-lg font-semibold">Add User</h2>
           <User2

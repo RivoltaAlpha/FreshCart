@@ -1,22 +1,35 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect } from 'react';
 import { useCreateUser } from '@/hooks/useUser';
-import type { UserRole } from '@/types/types';
+import { UserRole } from '@/types/types';
+import { getAreasInLocality, getLocalitiesInCounty, getSubCountiesInCounty, getCounties } from 'kenya-locations';
 
 export const Route = createFileRoute('/admin/create-user')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const [county, setCounty] = useState('');
+  const [subCounty, setSubCounty] = useState('');
+  const [localityName, setLocalityName] = useState('');
+  const [area, setArea] = useState('');
+  const counties = getCounties();
+  const subCounties = county ? getSubCountiesInCounty(county) : [];
+  const localities = subCounty ? getLocalitiesInCounty(county) : [];
+  const areas = localityName ? getAreasInLocality(localityName) : [];
   const [form, setForm] = useState({
     first_name: '',
     last_name: '',
     email: '',
     password: '',
-    role: "Store" as UserRole,
+    role: 'Admin' as UserRole,
     phone_number: '',
-    addresses: '[{"street": "", "city": "", "country": ""}]',
+    town: '',
+    area: '',
+    county: '',
+    country: 'Kenya'
   });
+
   const navigate = useNavigate();
 
   const createUserMutation = useCreateUser();
@@ -40,7 +53,12 @@ function RouteComponent() {
       first_name: form.first_name,
       last_name: form.last_name,
       phone_number: form.phone_number,
-      addresses: JSON.parse(form.addresses),
+      area: form.area,
+      town: form.town,
+      county: form.county,
+      country: form.country,
+      is_active: true,
+      is_available: true,
     });
   };
 
@@ -114,10 +132,8 @@ function RouteComponent() {
             required
           >
             <option value="Admin">Admin</option>
-            <option value="Manager">Manager</option>
-            <option value="Warehouse">Warehouse</option>
-            <option value="Sales">Sales</option>
-            <option value="Supplier">Supplier</option>
+            <option value="Store">Store</option>
+            <option value="Driver">Driver</option>
           </select>
         </div>
         <div>
@@ -131,17 +147,69 @@ function RouteComponent() {
             required
           />
         </div>
-        <div>
-          <label className="block mb-1 font-medium text-[#005A61]">Addresses</label>
-          <textarea
-            name="addresses"
-            value={form.addresses}
-            onChange={handleChange}
-            className="w-full border border-[#6A89A7] rounded px-4 py-2 focus:ring-2 focus:ring-[#00A7B3]"
-            placeholder="Enter addresses as JSON array"
+        <div className="space-y-2">
+          <select
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+            value={county}
+            onChange={e => {
+              setCounty(e.target.value);
+              setSubCounty('');
+              setLocalityName('');
+              setArea('');
+            }}
             required
-          />
-          <p className="text-xs text-gray-500">Format: [{'{"street": "123 Main St", "city": "Anytown", "country": "USA"}'}]</p>
+          >
+            <option value="">Select County</option>
+            {counties.map((c: any) => (
+              <option key={c.code} value={c.name}>{c.name}</option>
+            ))}
+          </select>
+          {county && (
+            <select
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+              value={subCounty}
+              onChange={e => {
+                setSubCounty(e.target.value);
+                setLocalityName('');
+                setArea('');
+              }}
+              required
+            >
+              <option value="">Select Sub-County</option>
+              {subCounties.map((sc: any) => (
+                <option key={sc.code} value={sc.name}>{sc.name}</option>
+              ))}
+            </select>
+          )}
+          {subCounty && (
+            <select
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+              value={localityName}
+              onChange={e => {
+                setLocalityName(e.target.value);
+                setArea('');
+              }}
+              required
+            >
+              <option value="">Select Locality</option>
+              {localities.map((l: any, idx: number) => (
+                <option key={l.name || idx} value={l.name || ''}>{l.name || ''}</option>
+              ))}
+            </select>
+          )}
+          {localityName && (
+            <select
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+              value={area}
+              onChange={e => setArea(e.target.value)}
+              required
+            >
+              <option value="">Select Area</option>
+              {areas.map((a: any, idx: number) => (
+                <option key={a.name || a || idx} value={a.name || a || ''}>{a.name || a || ''}</option>
+              ))}
+            </select>
+          )}
         </div>
 
         <button

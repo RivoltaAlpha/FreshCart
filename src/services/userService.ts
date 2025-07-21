@@ -70,12 +70,10 @@ export const getUserById = async (id: number): Promise<User[]> => {
   return response.json()
 }
 export const createUser = async (user: CreateUser): Promise<CreateUser[]> => {
-  const token = getAuthToken()
-  const response = await fetch(`${url}/users/create`, {
+  const response = await fetch(`${url}/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(user),
   })
