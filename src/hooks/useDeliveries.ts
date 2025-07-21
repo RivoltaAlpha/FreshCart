@@ -5,7 +5,14 @@ import {
   getDeliveriesForDriver,
   getDeliveriesForCustomer,
   getDeliveriesByStatus,
+  getAllDeliveries,
 } from '@/services/deliveryService'
+
+export const useDeliveries = () =>
+  useQuery({
+    queryKey: ['deliveries'],
+    queryFn: () => getAllDeliveries(),
+  })
 
 export const useDeliveryByOrderId = (orderId: number) =>
   useQuery({

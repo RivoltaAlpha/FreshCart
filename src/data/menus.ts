@@ -191,10 +191,10 @@ export const adminMenu: MenuItem[] = [
     path: '/admin/stores',
   },
   {
-    id: 'drivers',
-    label: 'Driver Management',
+    id: 'deliveries',
+    label: 'Delivery Management',
     icon: Truck,
-    path: '/admin/drivers',
+    path: '/admin/deliveries',
   },
   {
     id: 'products',

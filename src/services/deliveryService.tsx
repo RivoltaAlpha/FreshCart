@@ -83,3 +83,13 @@ export const getDeliveriesByStatus = async (status: string) => {
   return response.json();
 };
 
+
+// get all deliveries
+export const getAllDeliveries = async () => {
+  const token = getAuthToken();
+  const response = await fetch(`${url}/deliveries/all`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  await handleApiResponse(response);
+  return response.json();
+};
