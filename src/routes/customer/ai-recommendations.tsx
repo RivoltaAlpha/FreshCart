@@ -37,7 +37,7 @@ class GeminiService {
   private static instance: GeminiService
   private lastRequestTime: number = 0
   private readonly MIN_REQUEST_INTERVAL = 4000 // 4 seconds between requests
-  
+
   // Instance method to get API key
   private getApiKey(): string {
     const envApiKey = import.meta.env?.VITE_GEMINI_API_KEY
@@ -86,13 +86,13 @@ class GeminiService {
   private async waitForRateLimit(): Promise<void> {
     const now = Date.now()
     const timeSinceLastRequest = now - this.lastRequestTime
-    
+
     if (timeSinceLastRequest < this.MIN_REQUEST_INTERVAL) {
       const waitTime = this.MIN_REQUEST_INTERVAL - timeSinceLastRequest
       console.log(`Rate limiting: waiting ${waitTime}ms before next request`)
       await new Promise(resolve => setTimeout(resolve, waitTime))
     }
-    
+
     this.lastRequestTime = Date.now()
   }
 
@@ -115,9 +115,9 @@ Format your response as JSON with this structure:
   "recipes": [
     {
       "name": "Recipe Name",
-      "image": "https://via.placeholder.com", 
+      "image": "https://via.placeholder.com/400x300?text=Ingredient1+Image",
       "ingredients": ["ingredient1", "ingredient2", "ingredient3", ...],
-      "instructions": ["step1", "step2", "step3", ...],
+      "instructions": ["step1", "step2", "step3", "step4", "step5", ...],
       "cookingTime": "30 minutes",
       "difficulty": "Easy"
     }
@@ -131,7 +131,8 @@ Format your response as JSON with this structure:
   ]
 }
   Important:
-  -the image URL should be a valid link to an image of the recipe
+  -the image URL should be a valid link to an image of any ingredient in the recipe
+  - Only use image URLs that are public and hotlinkable (e.g., from unsplash.com, pexels.com, or via.placeholder.com).
   -the ingredients and instructions should be concise and relevant
   -the cooking time should be realistic for the recipe
   -the difficulty should be one of: Easy, Medium, Hard
@@ -179,7 +180,7 @@ function RouteComponent() {
   const [aiRecommendations, setAiRecommendations] = useState<AIResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  
+
   // Refs to prevent duplicate requests
   const hasGeneratedRecommendations = useRef(false)
   const currentRequestRef = useRef<Promise<void> | null>(null)
@@ -244,10 +245,17 @@ function RouteComponent() {
 
   const handleRetryRecommendations = async () => {
     if (purchasedProducts.length === 0) return
-    
+
     // Reset the flag to allow regeneration
     hasGeneratedRecommendations.current = false
     await generateRecommendations(purchasedProducts)
+  }
+
+  // search product image from 1 of the ingredients in our products by returning a product then passing it's image
+  const getProductImage = (recipe: Recipe) => {
+    const ingredient = recipe.ingredients[0]
+    const product = purchasedProducts.find(p => p.name.toLowerCase().includes(ingredient.toLowerCase()))
+    return product ? product.image_url : 'https://via.placeholder.com/400x300?text=No+Image'
   }
 
   if (!user) {
@@ -366,9 +374,12 @@ function RouteComponent() {
                   >
                     {recipe.image && (
                       <img
-                        src={recipe.image}
+                        src={getProductImage(recipe)}
                         alt={recipe.name}
                         className="w-full h-48 object-cover rounded-lg mb-4"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "https://www.pixelstalk.net/wp-content/uploads/2016/08/Desktop-Food-Images-Download.jpg";
+                        }}
                       />
                     )}
                     <h3 className="font-semibold text-gray-900 mb-2">
@@ -377,13 +388,12 @@ function RouteComponent() {
                     <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                       <span>⏱️ {recipe.cookingTime}</span>
                       <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          recipe.difficulty === 'Easy'
-                            ? 'bg-green-100 text-green-800'
-                            : recipe.difficulty === 'Medium'
+                        className={`px-2 py-1 rounded-full text-xs ${recipe.difficulty === 'Easy'
+                          ? 'bg-green-100 text-green-800'
+                          : recipe.difficulty === 'Medium'
                             ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-red-100 text-red-800'
-                        }`}
+                          }`}
                       >
                         {recipe.difficulty}
                       </span>
