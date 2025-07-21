@@ -64,16 +64,14 @@ import { Route as AdminVerifyStoreRouteImport } from './routes/admin/verify-stor
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminSuccessRouteImport } from './routes/admin/success'
 import { Route as AdminStoresRouteImport } from './routes/admin/stores'
-import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminProductsRouteImport } from './routes/admin/products'
 import { Route as AdminPaymentsRouteImport } from './routes/admin/payments'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminInventoriesRouteImport } from './routes/admin/inventories'
-import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
+import { Route as AdminDeliveriesRouteImport } from './routes/admin/deliveries'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminCreateUserRouteImport } from './routes/admin/create-user'
 import { Route as AdminCreateStoreRouteImport } from './routes/admin/create-store'
-import { Route as AdminCreateProductRouteImport } from './routes/admin/create-product'
 import { Route as AdminCreateCategoryRouteImport } from './routes/admin/create-category'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
@@ -355,11 +353,6 @@ const AdminStoresRoute = AdminStoresRouteImport.update({
   path: '/stores',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
@@ -380,9 +373,9 @@ const AdminInventoriesRoute = AdminInventoriesRouteImport.update({
   path: '/inventories',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminDriversRoute = AdminDriversRouteImport.update({
-  id: '/drivers',
-  path: '/drivers',
+const AdminDeliveriesRoute = AdminDeliveriesRouteImport.update({
+  id: '/deliveries',
+  path: '/deliveries',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
@@ -398,11 +391,6 @@ const AdminCreateUserRoute = AdminCreateUserRouteImport.update({
 const AdminCreateStoreRoute = AdminCreateStoreRouteImport.update({
   id: '/create-store',
   path: '/create-store',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCreateProductRoute = AdminCreateProductRouteImport.update({
-  id: '/create-product',
-  path: '/create-product',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminCreateCategoryRoute = AdminCreateCategoryRouteImport.update({
@@ -443,16 +431,14 @@ export interface FileRoutesByFullPath {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/create-category': typeof AdminCreateCategoryRoute
-  '/admin/create-product': typeof AdminCreateProductRoute
   '/admin/create-store': typeof AdminCreateStoreRoute
   '/admin/create-user': typeof AdminCreateUserRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/deliveries': typeof AdminDeliveriesRoute
   '/admin/inventories': typeof AdminInventoriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/products': typeof AdminProductsRoute
-  '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
@@ -513,16 +499,14 @@ export interface FileRoutesByTo {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/create-category': typeof AdminCreateCategoryRoute
-  '/admin/create-product': typeof AdminCreateProductRoute
   '/admin/create-store': typeof AdminCreateStoreRoute
   '/admin/create-user': typeof AdminCreateUserRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/deliveries': typeof AdminDeliveriesRoute
   '/admin/inventories': typeof AdminInventoriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/products': typeof AdminProductsRoute
-  '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
@@ -584,16 +568,14 @@ export interface FileRoutesById {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/create-category': typeof AdminCreateCategoryRoute
-  '/admin/create-product': typeof AdminCreateProductRoute
   '/admin/create-store': typeof AdminCreateStoreRoute
   '/admin/create-user': typeof AdminCreateUserRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/deliveries': typeof AdminDeliveriesRoute
   '/admin/inventories': typeof AdminInventoriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/products': typeof AdminProductsRoute
-  '/admin/settings': typeof AdminSettingsRoute
   '/admin/stores': typeof AdminStoresRoute
   '/admin/success': typeof AdminSuccessRoute
   '/admin/users': typeof AdminUsersRoute
@@ -656,16 +638,14 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/categories'
     | '/admin/create-category'
-    | '/admin/create-product'
     | '/admin/create-store'
     | '/admin/create-user'
     | '/admin/dashboard'
-    | '/admin/drivers'
+    | '/admin/deliveries'
     | '/admin/inventories'
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/products'
-    | '/admin/settings'
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
@@ -726,16 +706,14 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/categories'
     | '/admin/create-category'
-    | '/admin/create-product'
     | '/admin/create-store'
     | '/admin/create-user'
     | '/admin/dashboard'
-    | '/admin/drivers'
+    | '/admin/deliveries'
     | '/admin/inventories'
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/products'
-    | '/admin/settings'
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
@@ -796,16 +774,14 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/categories'
     | '/admin/create-category'
-    | '/admin/create-product'
     | '/admin/create-store'
     | '/admin/create-user'
     | '/admin/dashboard'
-    | '/admin/drivers'
+    | '/admin/deliveries'
     | '/admin/inventories'
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/products'
-    | '/admin/settings'
     | '/admin/stores'
     | '/admin/success'
     | '/admin/users'
@@ -1253,13 +1229,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStoresRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/settings': {
-      id: '/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/products': {
       id: '/admin/products'
       path: '/products'
@@ -1288,11 +1257,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminInventoriesRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/drivers': {
-      id: '/admin/drivers'
-      path: '/drivers'
-      fullPath: '/admin/drivers'
-      preLoaderRoute: typeof AdminDriversRouteImport
+    '/admin/deliveries': {
+      id: '/admin/deliveries'
+      path: '/deliveries'
+      fullPath: '/admin/deliveries'
+      preLoaderRoute: typeof AdminDeliveriesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/dashboard': {
@@ -1314,13 +1283,6 @@ declare module '@tanstack/react-router' {
       path: '/create-store'
       fullPath: '/admin/create-store'
       preLoaderRoute: typeof AdminCreateStoreRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/create-product': {
-      id: '/admin/create-product'
-      path: '/create-product'
-      fullPath: '/admin/create-product'
-      preLoaderRoute: typeof AdminCreateProductRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/create-category': {
@@ -1351,16 +1313,14 @@ interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCreateCategoryRoute: typeof AdminCreateCategoryRoute
-  AdminCreateProductRoute: typeof AdminCreateProductRoute
   AdminCreateStoreRoute: typeof AdminCreateStoreRoute
   AdminCreateUserRoute: typeof AdminCreateUserRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminDriversRoute: typeof AdminDriversRoute
+  AdminDeliveriesRoute: typeof AdminDeliveriesRoute
   AdminInventoriesRoute: typeof AdminInventoriesRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminProductsRoute: typeof AdminProductsRoute
-  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStoresRoute: typeof AdminStoresRoute
   AdminSuccessRoute: typeof AdminSuccessRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -1371,16 +1331,14 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCreateCategoryRoute: AdminCreateCategoryRoute,
-  AdminCreateProductRoute: AdminCreateProductRoute,
   AdminCreateStoreRoute: AdminCreateStoreRoute,
   AdminCreateUserRoute: AdminCreateUserRoute,
   AdminDashboardRoute: AdminDashboardRoute,
-  AdminDriversRoute: AdminDriversRoute,
+  AdminDeliveriesRoute: AdminDeliveriesRoute,
   AdminInventoriesRoute: AdminInventoriesRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminProductsRoute: AdminProductsRoute,
-  AdminSettingsRoute: AdminSettingsRoute,
   AdminStoresRoute: AdminStoresRoute,
   AdminSuccessRoute: AdminSuccessRoute,
   AdminUsersRoute: AdminUsersRoute,
