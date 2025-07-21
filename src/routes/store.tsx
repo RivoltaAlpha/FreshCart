@@ -30,9 +30,9 @@ function StoreLayout() {
       />
       <div className="flex-1 p-4 flex flex-col overflow-hidden">
         <header className="bg-navbar shadow-sm border-b px-6 py-4 rounded-2xl">
-          <div className="flex items-center justify-between">
+          <div className="lg:flex-row flex flex-col items-center justify-between">
             <div className=" px-6 py-4 ">
-              <h1 className="text-2xl font-bold text-fresh-primary">Welcome back to your Store Management Platform {authUser?.profile.first_name}!</h1>
+              <h1 className="text-2xl font-bold text-fresh-primary">Welcome back {authUser?.profile.first_name}!</h1>
               <p className="text-fresh-secondary">Manage your store, products, and orders</p>
             </div>            <div className="flex items-center space-x-4">
               <div className="relative">

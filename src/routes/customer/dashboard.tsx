@@ -6,6 +6,7 @@ import { useCustomerOrders } from '@/hooks/useOrders'
 import type { StoreProduct } from '@/types/store'
 import { useNavigate } from '@tanstack/react-router'
 
+
 export const Route = createFileRoute('/customer/dashboard')({
   component: RouteComponent,
 })
@@ -56,6 +57,8 @@ function RouteComponent() {
     );
   };
 
+  
+
   return (
     <div id="dashboard" className="flex h-screen bg-gray-50">
       {/* Main Content */}
@@ -63,7 +66,7 @@ function RouteComponent() {
         {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-6">
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-20 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-4 gap-6 mb-8">
             {quickStats.map((stat, index) => (
               <div key={index} className={`${stat.color} rounded-xl p-6 text-white`}>
                 <div className="flex items-center justify-between">
