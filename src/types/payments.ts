@@ -7,17 +7,17 @@ export enum PaymentMethod {
 }
 
 export enum PaymentStatus {
-  PENDING = 'PENDING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
-  CANCELLED = 'CANCELLED',
-  REFUNDED = 'REFUNDED'
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+  CANCELLED = 'cancelled',
+  REFUNDED = 'refunded'
 }
 
 export enum PaymentGateway {
-  PAYSTACK = 'PAYSTACK',
-  MPESA = 'MPESA',
-  STRIPE = 'STRIPE'
+  PAYSTACK = 'paystack',
+  MPESA = 'mpesa',
+  STRIPE = 'stripe'
 }
 
 // Payment Entity Type
@@ -37,6 +37,7 @@ export interface Payment {
   gateway_response?: any;
   failed_at?: Date;
   failure_reason?: string;
+  processed_at: string;
   created_at: Date;
   updated_at: Date;
 }
