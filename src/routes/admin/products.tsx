@@ -134,7 +134,7 @@ function RouteComponent() {
             {topProducts?.map((product, index) => (
               <div 
                 key={product.product_id} 
-                className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-[#005A61]/10"
+                className="group relative gap-0 bg-white lg:h-full md:h-20 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-[#005A61]/10"
               >
                 {/* Rank Badge */}
                 <div className="absolute top-3 left-3 bg-gradient-to-r from-[#005A61] to-[#6A89A7] text-white text-xs font-bold px-2 py-1 rounded-full z-10 shadow-md">
@@ -147,11 +147,11 @@ function RouteComponent() {
                 </div>
 
                 {/* Image Container */}
-                <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                <div className="relative aspect-square bg-gray-50 overflow-hidden lg:w-full md:w-10">
                   <img 
                     src={product.image_url} 
                     alt={product.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="lg:w-full md:w-20 lg:h-full md:h-60 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>

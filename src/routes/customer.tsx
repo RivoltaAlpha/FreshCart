@@ -30,8 +30,8 @@ function CustomerLayout() {
       />
       <div className="flex-1 p-4 flex flex-col overflow-hidden">
         <header className="bg-navbar shadow-sm border-b px-6 py-4 rounded-2xl">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="lg:flex-row flex flex-col items-center justify-between">
+            <div className="flex-col items-center space-x-4">
               <h1 className="text-2xl font-bold text-fresh-primary">Welcome back, {authUser?.profile.first_name}!</h1>
               <p className="text-fresh-secondary">Discover fresh groceries and great deals</p>
             </div>

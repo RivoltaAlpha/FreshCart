@@ -299,7 +299,7 @@ function RouteComponent() {
           {purchasedProducts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {purchasedProducts.slice(0, 6).map((product, index) => (
-                <div key={index} className="bg-gray-50 rounded-lg p-4">
+                <div key={index} className="bg-gray-300 rounded-lg p-4">
                   <h3 className="font-medium text-gray-900">{product.name}</h3>
                 </div>
               ))}
@@ -370,7 +370,7 @@ function RouteComponent() {
                 {aiRecommendations.recipes.map((recipe, index) => (
                   <div
                     key={index}
-                    className="border border-gray-200 rounded-lg p-4"
+                    className="border border-gray-300 rounded-lg p-4"
                   >
                     {recipe.image && (
                       <img
