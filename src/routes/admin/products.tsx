@@ -13,7 +13,7 @@ import {
   type SortingState,
   type ColumnFiltersState,
 } from '@tanstack/react-table';
-import { PackageCheckIcon, TrendingUpIcon, StarIcon } from 'lucide-react';
+import { TrendingUpIcon, StarIcon } from 'lucide-react';
 import { usePopularProducts, useProducts } from '@/hooks/useProducts';
 
 
@@ -27,7 +27,7 @@ function RouteComponent() {
   const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const { data: topProducts } = usePopularProducts();
-
+  const navigate = useNavigate();
   const columnHelper = createColumnHelper<Product>();
 
   const columns = [
@@ -173,7 +173,9 @@ function RouteComponent() {
 
           {/* View All Button */}
           <div className="text-center mt-10">
-            <button className="bg-gradient-to-r from-[#005A61] to-[#6A89A7] text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+            <button className="bg-gradient-to-r from-[#005A61] to-[#6A89A7] text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              onClick={() => navigate({ to: '/admin/products' })}
+            >
               View All Products
             </button>
           </div>
