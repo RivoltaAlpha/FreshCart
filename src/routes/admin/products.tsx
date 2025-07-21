@@ -15,6 +15,7 @@ import {
 } from '@tanstack/react-table';
 import { TrendingUpIcon, StarIcon } from 'lucide-react';
 import { usePopularProducts, useProducts } from '@/hooks/useProducts';
+import { ProductModal } from '@/components/ProductModal';
 
 
 export const Route = createFileRoute('/admin/products')({
@@ -29,6 +30,16 @@ function RouteComponent() {
   const { data: topProducts } = usePopularProducts();
   const navigate = useNavigate();
   const columnHelper = createColumnHelper<Product>();
+
+  const showProductModal = (product: Product) => {
+    <ProductModal
+      isModalOpen={true}
+      setIsModalOpen={() => {}}
+      selectedProduct={{ ...product, inventory: product.inventory ?? [] }}
+      handleAddToCartFromModal={() => {}}
+      handleViewDetails={() => {}}
+    />
+  };
 
   const columns = [
     columnHelper.accessor('product_id', {
@@ -163,7 +174,11 @@ function RouteComponent() {
 
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#005A61]/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                  <button className="bg-white text-[#005A61] px-4 py-2 rounded-full font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-[#005A61] hover:text-white">
+                  <button className="bg-white text-[#005A61] px-4 py-2 rounded-full font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-[#005A61] hover:text-white"
+                    onClick={() => {
+                      showProductModal(product);
+                    }}
+                  >
                     View Details
                   </button>
                 </div>

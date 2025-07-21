@@ -6,30 +6,13 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog'
+import type { BackendProduct } from '@/types/types';
 import { Eye, ShoppingCart, Star } from 'lucide-react';
 
-export const ProductModal = ({
-  isModalOpen,
-    setIsModalOpen,
-    selectedProduct,
-    handleAddToCartFromModal,
-    handleViewDetails,
-}: {
+export const ProductModal = ({  isModalOpen, setIsModalOpen,  selectedProduct,  handleAddToCartFromModal, handleViewDetails}: {
   isModalOpen: boolean;
     setIsModalOpen: (open: boolean) => void;
-    selectedProduct: {
-      name: string;
-      category?: { name: string };
-      image_url?: string;
-      price: number;
-      unit: string;
-      rating: number;
-      review_count: number;
-      stock_quantity: number;
-      description?: string;
-      weight?: string;
-      discount?: number;
-    } | null;
+    selectedProduct: BackendProduct | null;
     handleAddToCartFromModal: () => void;
     handleViewDetails: () => void;
 }) => {
