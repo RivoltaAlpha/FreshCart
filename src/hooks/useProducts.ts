@@ -5,6 +5,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getPopularProducts,
 } from '@/services/productService'
 import {
   useMutation,
@@ -73,6 +74,16 @@ export const useStoreProducts = (storeId: number) => {
     queryKey: ['storeProducts', storeId],
     queryFn: () => getStoreProducts(storeId),
     enabled: !!storeId,
+    initialData: [], // Provide a default empty array
+    retry: 2, // Retry failed requests
+  })
+}
+
+// Fetch popular products
+export const usePopularProducts = () => {
+  return useQuery({
+    queryKey: ['popularProducts'],
+    queryFn: async () => getPopularProducts(),
     initialData: [], // Provide a default empty array
     retry: 2, // Retry failed requests
   })

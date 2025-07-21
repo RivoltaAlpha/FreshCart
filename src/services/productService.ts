@@ -134,3 +134,16 @@ export const deleteProduct = async (product_id: number) => {
   })
   await handleApiResponse(response)
 }
+
+  export const getPopularProducts = async (): Promise<Product[]> => {
+  try {
+    const response = await fetch(`${url}/order-item/top-products`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch popular products');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching popular products:', error);
+    return [];
+  }
+}

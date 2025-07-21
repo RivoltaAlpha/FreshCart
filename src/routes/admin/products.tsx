@@ -13,8 +13,8 @@ import {
   type SortingState,
   type ColumnFiltersState,
 } from '@tanstack/react-table';
-import { ClipboardCheckIcon, PackageCheckIcon, PackagePlusIcon } from 'lucide-react';
-import { useProducts } from '@/hooks/useProducts';
+import { PackageCheckIcon, TrendingUpIcon, StarIcon } from 'lucide-react';
+import { usePopularProducts, useProducts } from '@/hooks/useProducts';
 
 
 export const Route = createFileRoute('/admin/products')({
@@ -22,11 +22,11 @@ export const Route = createFileRoute('/admin/products')({
 })
 
 function RouteComponent() {
-  const { data: products , isLoading, error } = useProducts();
+  const { data: products, isLoading, error } = useProducts();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const navigate = useNavigate();
+  const { data: topProducts } = usePopularProducts();
 
   const columnHelper = createColumnHelper<Product>();
 
@@ -100,37 +100,90 @@ function RouteComponent() {
 
   return (
     <>
-      <h1 className="flex justify-center text-2xl font-bold text-[#005A61]">Quick Actions</h1>
-      <div className="flex justify-around items-center mb-4 bg-gray-300 shadow-2xl rounded py-10 mt-10">
-        <div className="mt-2 flex items-center justify-center gap-4">
-          <h2 className="text-lg font-semibold">New Product</h2>
-          <PackagePlusIcon
-            className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-            onClick={() => navigate({ to: '/admin/create-category' })}
-          />
-        </div>
-        <div className="mb-6">
-          <div className="mt-2 flex items-center justify-center gap-4">
-            <h2 className="text-lg font-semibold">Update Product</h2>
-            <PackageCheckIcon
-              className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-              onClick={() => navigate({ to: '/admin/create-product' })}
-            />
+      {/* Top Products Section */}
+      <div className="bg-gradient-to-br from-[#005A61]/5 to-[#6A89A7]/10 py-12 px-4 mb-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <div className="flex justify-center items-center gap-3 mb-4">
+              <div className="bg-[#005A61] p-3 rounded-full shadow-lg">
+                <TrendingUpIcon className="h-8 w-8 text-white" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#005A61] to-[#6A89A7] bg-clip-text text-transparent">
+                Top Products
+              </h1>
+            </div>
+            <p className="text-[#516E89] text-lg max-w-2xl mx-auto">
+              Discover our most popular and trending products loved by customers
+            </p>
           </div>
-        </div>
-        <div className="mb-6">
-          <div className="mt-2 flex items-center justify-center gap-4">
-            <h2 className="text-lg font-semibold">Product Inventory</h2>
-            <ClipboardCheckIcon
-              className="w-12 h-12 text-[#00A7B3] cursor-pointer hover:text-[#005A61]"
-              onClick={() => navigate({ to: '/store/products' })}
-            />
+
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {topProducts?.map((product, index) => (
+              <div 
+                key={product.product_id} 
+                className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-[#005A61]/10"
+              >
+                {/* Rank Badge */}
+                <div className="absolute top-3 left-3 bg-gradient-to-r from-[#005A61] to-[#6A89A7] text-white text-xs font-bold px-2 py-1 rounded-full z-10 shadow-md">
+                  #{index + 1}
+                </div>
+                
+                {/* Trending Badge */}
+                <div className="absolute top-3 right-3 bg-yellow-400 text-yellow-800 p-1 rounded-full shadow-md z-10">
+                  <StarIcon className="h-3 w-3 fill-current" />
+                </div>
+
+                {/* Image Container */}
+                <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                  <img 
+                    src={product.image_url} 
+                    alt={product.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+
+                {/* Content */}
+                <div className="p-4 space-y-2">
+                  <h3 className="font-semibold text-[#005A61] text-sm leading-tight line-clamp-2 min-h-[2.5rem] group-hover:text-[#6A89A7] transition-colors">
+                    {product.name}
+                  </h3>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-[#00A7B3]">
+                      KSh {product.price?.toLocaleString()}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <StarIcon className="h-3 w-3 text-yellow-400 fill-current" />
+                      <span className="text-xs text-gray-500">4.8</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#005A61]/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                  <button className="bg-white text-[#005A61] px-4 py-2 rounded-full font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-[#005A61] hover:text-white">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* View All Button */}
+          <div className="text-center mt-10">
+            <button className="bg-gradient-to-r from-[#005A61] to-[#6A89A7] text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+              View All Products
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Products Table Section */}
       <div className="flex min-h-screen">
         <div className="flex flex-col lg:w-7xl md:w-auto mx-auto py-12 px-4">
-          <h2 className="text-3xl font-bold text-[#005A61] mb-6">Products</h2>
+          <h2 className="text-3xl font-bold text-[#005A61] mb-6">All Products</h2>
 
           <div className="overflow-x-auto bg-white shadow-md rounded-lg border border-[#005A61]/20">
             <table className="min-w-full divide-y divide-[#005A61]/30 text-sm">
