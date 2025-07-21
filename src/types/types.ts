@@ -491,7 +491,12 @@ export interface OrderResponse {
   total_amount: number
   delivery_method: DeliveryMethod
   delivery_address: string
+  delivery_fee: number
+  tax_amount: number
+  discount_amount: number
+  estimated_delivery_time: number
   created_at: Date
+  confirmed_at: Date | null
   customer: CustomerResponse
   store: StoreResponse
   items: OrderItemResponse[]

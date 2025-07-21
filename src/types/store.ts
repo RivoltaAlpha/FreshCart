@@ -86,7 +86,7 @@ export interface ProductItem {
   image_url: string
   weight: string
   unit: string
-  rating: string
+  rating: number
   review_count: number
   discount: number
   expiry_date: string | null
