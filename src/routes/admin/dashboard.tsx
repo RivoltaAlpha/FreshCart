@@ -26,7 +26,7 @@ function RouteComponent() {
   const totalOrders = orders?.length || 0
   const totalDeliveries = deliveries?.length || 0
   const totalUnverifiedStores = unverifiedStores?.length || 0
-  const ordersData = useOrders()
+  const ordersData: any = useOrders()
 
   const stats = [
     { title: 'Total Users', value: totalUsers, color: 'bg-[#30739C]', icon: Users },
