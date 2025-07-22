@@ -185,21 +185,19 @@ function RouteComponent() {
   const hasGeneratedRecommendations = useRef(false)
   const currentRequestRef = useRef<Promise<void> | null>(null)
 
-  // Fetch purchases asynchronously
-  useEffect(() => {
-    async function fetchPurchases() {
-      if (user?.user_id) {
-        try {
-          const products = await getUserPurchases(parseInt(user.user_id))
-          setPurchasedProducts(products)
-        } catch (error) {
-          console.error('Error fetching purchases:', error)
-          setError('Failed to load your purchases')
-        }
-      }
+useEffect(() => {
+  if (!user?.user_id) return;
+  async function fetchPurchases() {
+    try {
+      const products = await getUserPurchases(parseInt(user.user_id))
+      setPurchasedProducts(products)
+    } catch (error) {
+      console.error('Error fetching purchases:', error)
+      setError('Failed to load your purchases')
     }
-    fetchPurchases()
-  }, [user])
+  }
+  fetchPurchases()
+}, [user?.user_id])
 
   // Memoized recommendation generation function
   const generateRecommendations = useCallback(async (products: StoreProduct[]) => {
@@ -377,9 +375,9 @@ function RouteComponent() {
                         src={getProductImage(recipe)}
                         alt={recipe.name}
                         className="w-full h-48 object-cover rounded-lg mb-4"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = "https://www.pixelstalk.net/wp-content/uploads/2016/08/Desktop-Food-Images-Download.jpg";
-                        }}
+                        // onError={(e) => {
+                        //   (e.currentTarget as HTMLImageElement).src = "https://www.pixelstalk.net/wp-content/uploads/2016/08/Desktop-Food-Images-Download.jpg";
+                        // }}
                       />
                     )}
                     <h3 className="font-semibold text-gray-900 mb-2">
