@@ -147,3 +147,10 @@ export const deleteProduct = async (product_id: number) => {
     return [];
   }
 }
+
+// all products analytics
+export const getAllProductsAnalytics = async (): Promise<any> => {
+  const response = await fetch(`${url}/products/analytics`)
+  await handleApiResponse(response)
+  return response.json()
+}

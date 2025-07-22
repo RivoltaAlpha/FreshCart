@@ -3,10 +3,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import PaymentsDashboard from '@/components/SalesAnalytics' // Adjust path as needed
 
 export const Route = createFileRoute('/admin/payments')({
-  component: RouteComponent,
+  component: PaymentsAnalytics,
 })
 
-function RouteComponent() {
+function PaymentsAnalytics() {
   const { data: payments, isLoading, error } = usePayments()
 
   if (isLoading) {
@@ -36,3 +36,5 @@ function RouteComponent() {
 
   return <PaymentsDashboard payments={paymentsData} />
 }
+
+export default PaymentsAnalytics
