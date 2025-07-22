@@ -612,3 +612,25 @@ export interface CustomerOrder {
     }
   }[]
 }
+
+
+export interface Feedback {
+  feedback_id: number
+  user_id: number
+  order_id: number
+  comment: string
+  rating: number
+  created_at: Date
+  updated_at: Date
+}
+
+export interface CreateFeedback {
+  user_id: number
+  order_id: number
+  comment: string
+  rating: number
+}
+
+export interface OrderFeedback {
+  feedback: Feedback[]
+}

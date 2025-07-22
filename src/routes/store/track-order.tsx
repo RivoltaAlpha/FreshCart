@@ -45,6 +45,11 @@ function RouteComponent() {
     }
   };
 
+  const handleBack = () => {
+    localStorage.removeItem('selectedDelivery');
+    navigate({ to: '/store/manage-orders' });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Header */}
@@ -53,7 +58,7 @@ function RouteComponent() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 mb-4">
               <button
-                onClick={() => navigate({ to: '/store/manage-orders' })}
+                onClick={() => handleBack()}
                 className="text-gray-500 hover:text-gray-700 transition-colors"
               >
                 <ArrowLeft className="h-6 w-6" />

@@ -174,7 +174,7 @@ function RouteComponent() {
     setDeliveryOrderId(order_id);
     console.log('Fetching delivery info for order:', order_id);
   }
-  console.log(deliveryInfo);
+  // console.log(deliveryInfo);
 
   // Status Change Modal Component
   const StatusChangeModal = ({ order, onClose }: { order: CustomerOrder, onClose: () => void }) => (
