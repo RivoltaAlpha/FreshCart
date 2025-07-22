@@ -115,7 +115,7 @@ Format your response as JSON with this structure:
   "recipes": [
     {
       "name": "Recipe Name",
-      "image": "https://via.placeholder.com/400x300?text=Ingredient1+Image",
+      "image": "",
       "ingredients": ["ingredient1", "ingredient2", "ingredient3", ...],
       "instructions": ["step1", "step2", "step3", "step4", "step5", ...],
       "cookingTime": "30 minutes",
@@ -131,8 +131,7 @@ Format your response as JSON with this structure:
   ]
 }
   Important:
-  -the image URL should be a valid link to an image of any ingredient in the recipe
-  - Only use image URLs that are public and hotlinkable (e.g., from unsplash.com, pexels.com, or via.placeholder.com).
+  -the image URL should be a valid link to an image of any ingredient in the recipe from https://unsplash.com/s/photos/food.
   -the ingredients and instructions should be concise and relevant
   -the cooking time should be realistic for the recipe
   -the difficulty should be one of: Easy, Medium, Hard
@@ -249,12 +248,17 @@ useEffect(() => {
     await generateRecommendations(purchasedProducts)
   }
 
+  // rendomly 
+  
+
+
   // search product image from 1 of the ingredients in our products by returning a product then passing it's image
-  const getProductImage = (recipe: Recipe) => {
-    const ingredient = recipe.ingredients[0]
-    const product = purchasedProducts.find(p => p.name.toLowerCase().includes(ingredient.toLowerCase()))
-    return product ? product.image_url : 'https://via.placeholder.com/400x300?text=No+Image'
-  }
+  // const getProductImage = (recipe: Recipe) => {
+  //   const ingredient = recipe.ingredients[0]
+  //   console.log(`Searching for product image for ingredient: ${ingredient}`)
+  //   const product = purchasedProducts.find(p => p.name.toLowerCase().includes(ingredient.toLowerCase()))
+  //   return product ? product.image_url : 'https://unsplash.com/s/photos/food'
+  // }
 
   if (!user) {
     return (
@@ -372,12 +376,12 @@ useEffect(() => {
                   >
                     {recipe.image && (
                       <img
-                        src={getProductImage(recipe)}
+                        src={recipe.image}
                         alt={recipe.name}
                         className="w-full h-48 object-cover rounded-lg mb-4"
-                        // onError={(e) => {
-                        //   (e.currentTarget as HTMLImageElement).src = "https://www.pixelstalk.net/wp-content/uploads/2016/08/Desktop-Food-Images-Download.jpg";
-                        // }}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "https://plus.unsplash.com/premium_photo-1672363353881-68c8ff594e25?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+                        }}
                       />
                     )}
                     <h3 className="font-semibold text-gray-900 mb-2">
