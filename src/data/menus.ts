@@ -60,15 +60,15 @@ export const customerMenu: MenuItem[] = [
     icon: Heart,
     path: '/customer/ai-recommendations',
   },
-  {
-    id: 'shopping-insights',
-    label: 'Shopping Insights',
-    icon: BarChart3,
-    path: '/customer/shopping-insights',
-  },
+  // {
+  //   id: 'shopping-insights',
+  //   label: 'Shopping Insights',
+  //   icon: BarChart3,
+  //   path: '/customer/shopping-insights',
+  // },
   {
     id: 'payments',
-    label: 'Payments',
+    label: 'Payment Insights',
     icon: DollarSign,
     path: '/customer/payments',
   },
