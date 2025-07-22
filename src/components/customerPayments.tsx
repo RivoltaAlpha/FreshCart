@@ -171,7 +171,7 @@ const CustomerPayments: React.FC<CustomerPaymentsProps> = ({ payments = [] }) =>
 
         {/* Revenue Generation over time */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Trends Over Time</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Shopping Trend Over Time</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" />
