@@ -4,6 +4,7 @@ import type {
   CreateStore,
   Store,
   StoreProductsResponse,
+  StoresAnalytics,
   StoresResponse,
 } from '../types/store'
 
@@ -189,4 +190,11 @@ export const verifyStore = async (storeId: number): Promise<Store> => {
     console.error('Error in verifyStore:', error)
     throw error
   }
+}
+
+// all stores analytics
+export const getAllStoresAnalytics = async (): Promise<StoresAnalytics> => {
+  const response = await fetch(`${API_BASE_URL}/stores/analytics`)
+  await handleApiResponse(response)
+  return response.json()
 }

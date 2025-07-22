@@ -156,3 +156,67 @@ export interface ProductInStore {
 export interface allStoreProductsResponse {
   products: ProductInStore[]
 }
+
+// Store revenue item
+export interface StoreRevenue {
+  store_store_id: number
+  store_name: string
+  totalRevenue: string | null
+}
+
+// Store order volume item
+export interface StoreOrderVolume {
+  store_store_id: number
+  store_name: string
+  month: string | null
+  ordercount: string
+}
+
+// Top performing store
+export interface TopPerformingStore {
+  store_store_id: number
+  store_name: string
+  orderCount: string
+}
+
+// New stores trend item
+export interface NewStoresTrend {
+  month: string
+  storecount: string
+}
+
+// Main analytics response
+export interface StoresAnalytics {
+  totalStores: number
+  verifiedStores: number
+  unverifiedStores: number
+  storeRevenue: StoreRevenue[]
+  topPerformingStore: TopPerformingStore
+  newStoresTrend: NewStoresTrend[]
+  storeOrderVolume: StoreOrderVolume[]
+}
+
+export interface ProductCategory {
+  category_category_id: number
+  category_name: string
+  total_sales: string | null
+}
+
+export interface ProductRating {
+  product_product_id: number
+  product_name: string
+  average_rating: string
+  review_count: string
+}
+
+ export interface TopProduct {
+  product_id: number
+  product_name: string
+  totalquantity: string
+}
+
+export interface ProductAnalyticsData {
+  topCategories: ProductCategory[]
+  productRatings: ProductRating[]
+  topProducts: TopProduct[]
+}
