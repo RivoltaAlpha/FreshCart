@@ -18,7 +18,6 @@ import { useCustomerOrders } from '@/hooks/useOrders'
 import { loggedInUser } from '@/store/auth'
 import { type CustomerOrder } from '@/types/types'
 import { useDeliveryByOrderId } from '@/hooks/useDeliveries'
-import { deliveryActions } from '@/store/delivery'
 
 export const Route = createFileRoute('/customer/my-orders')({
   component: RouteComponent,
@@ -84,6 +83,11 @@ function RouteComponent() {
       hour: '2-digit',
       minute: '2-digit'
     })
+  }
+
+  const handeleReorder = (order_id: number) => {
+    setSelectedOrder(null)
+    navigate({ to: `/customer/reorder/${order_id}` })
   }
 
   const OrderDetailModal = ({ order, onClose }: { order: CustomerOrder, onClose: () => void }) => (
@@ -172,6 +176,14 @@ function RouteComponent() {
                 )}
             </div>
           </div>
+          <div className='flex justify-center mt-4 bg-[#0d94b9] p-4 rounded-xl'>
+            <button
+              onClick={() => handeleReorder(order.order_id)}
+              className="text-white hover:underline"
+            >
+              Reorder
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -184,7 +196,7 @@ function RouteComponent() {
   // Effect to set delivery info and navigate when deliveryOrderId changes
   useEffect(() => {
     if (deliveryOrderId && deliveryInfo) {
-      deliveryActions.setSelectedDelivery(deliveryInfo);
+      localStorage.setItem('selectedDelivery', JSON.stringify(deliveryInfo));
       navigate({ to: '/customer/order-delivery' });
     }
   }, [deliveryOrderId, deliveryInfo, navigate]);
@@ -193,7 +205,7 @@ function RouteComponent() {
     setDeliveryOrderId(order_id);
     console.log('Fetching delivery info for order:', order_id);
   }
-  console.log(deliveryInfo);
+  // console.log(deliveryInfo);
 
   if (!user) {
     return (
