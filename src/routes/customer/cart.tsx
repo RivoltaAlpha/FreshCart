@@ -4,7 +4,6 @@ import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, CreditCard, Truck, Shield
 import { toast } from 'sonner';
 import { cartStore, cartActions } from '@/store/cart';
 import { orderActions } from '@/store/order';
-import { storesStore } from '@/store/store';
 import { authStore } from '@/store/auth';
 import { DeliveryMethod } from '@/types/types';
 import { useCreateOrderMutation } from '@/hooks/useOrders';
@@ -84,9 +83,9 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const proceedToCheckout = async () => {
-    console.log('Proceeding to checkout with cart items:', cartItems);
-    console.log('Auth user:', authStore.state.user);
-    console.log('Store state:', storesStore.state);
+    // console.log('Proceeding to checkout with cart items:', cartItems);
+    // console.log('Auth user:', authStore.state.user);
+    // console.log('Store state:', storesStore.state);
 
     // Validate user and store data
     if (!user_id) {

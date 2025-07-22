@@ -582,7 +582,6 @@ export interface CustomerOrder {
     refunded_amount: string
     processed_at: string
     failed_at: string | null
-    updated_at: string
   }[]
   driver: any
   items: {
@@ -592,7 +591,6 @@ export interface CustomerOrder {
     quantity: number
     unit_price: string
     total_price: string
-    created_at: string
     product: {
       product_id: number
       category_id: number

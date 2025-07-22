@@ -12,12 +12,15 @@ import {
   Eye,
   ArrowLeft,
   CreditCard,
-  Filter
+  Filter,
+  ShoppingCart
 } from 'lucide-react'
-import { useCustomerOrders } from '@/hooks/useOrders'
-import { loggedInUser } from '@/store/auth'
-import { type CustomerOrder } from '@/types/types'
+import { useCreateOrderMutation, useCustomerOrders } from '@/hooks/useOrders'
+import { authStore, loggedInUser } from '@/store/auth'
+import { DeliveryMethod, type CustomerOrder } from '@/types/types'
 import { useDeliveryByOrderId } from '@/hooks/useDeliveries'
+import { toast } from 'sonner'
+import { orderActions } from '@/store/order'
 
 export const Route = createFileRoute('/customer/my-orders')({
   component: RouteComponent,
@@ -26,10 +29,10 @@ export const Route = createFileRoute('/customer/my-orders')({
 function RouteComponent() {
   const navigate = useNavigate()
   const user = loggedInUser()
-
   const [statusFilter, setStatusFilter] = useState<string | 'all'>('all')
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(null)
-
+  const { mutate: createNewOrder } = useCreateOrderMutation();
+  const [loading, setLoading] = useState(false);
   const { data: orders, isLoading, error } = useCustomerOrders(user?.user_id ? parseInt(user.user_id) : 0)
 
   // Filter orders based on status
@@ -85,10 +88,67 @@ function RouteComponent() {
     })
   }
 
-  const handeleReorder = (order_id: number) => {
-    setSelectedOrder(null)
-    navigate({ to: `/customer/reorder/${order_id}` })
+  const handeleReorder = async () => {
+    try {
+      const orderData = {
+        user_id: Number(selectedOrder?.user_id), // Use the parsed user_id, not authUser
+        store_id: Number(selectedOrder?.store_id),
+        delivery_method: selectedOrder?.delivery_method as DeliveryMethod,
+        delivery_address: selectedOrder?.delivery_address,
+        estimated_delivery_time: selectedOrder?.estimated_delivery_time,
+        items: selectedOrder?.items.map(item => ({
+          product_id: item.product.product_id,
+          quantity: item.quantity
+        }))
+      };
+      console.log('Order data prepared for API:', orderData);
+
+      // Prepare order details for local store
+      const orderDetails = {
+        user_id: selectedOrder?.user_id, // Use parsed user_id
+        store_id: selectedOrder?.store_id,
+        customer_email: authStore.state.user.email,
+        items: selectedOrder?.items ?? [],
+        delivery_method: selectedOrder?.delivery_method as DeliveryMethod,
+        delivery_address: selectedOrder?.delivery_address,
+        total_amount: selectedOrder?.total_amount,
+        delivery_fee: selectedOrder?.delivery_fee,
+        estimated_delivery_time: selectedOrder?.delivery_method,
+        subtotal: 0,
+        promo_discount: 0,
+      };
+
+      orderActions.setCurrentOrder(orderDetails as any);
+      setLoading(true);
+      createNewOrder(orderData, {
+        onSuccess: (createdOrder) => {
+          console.log('Order created:', createdOrder);
+
+          // Update local store with the created order ID if available
+          if (createdOrder?.order_id) {
+            orderActions.updateOrderDetails({
+              order_id: createdOrder.order_id,
+              order_number: createdOrder.order_number
+            });
+          }
+
+          // Navigate to checkout
+          navigate({ to: '/customer/checkout-order' });
+          toast.success('Order created successfully! Proceeding to checkout...');
+          setLoading(false);
+        },
+        onError: (error) => {
+          console.error('Error creating order:', error);
+          toast.error('Failed to create order. Please try again.');
+          setLoading(false);
+        }
+      });
+    } catch (error) {
+      console.error('Error in checkout process:', error);
+      toast.error('Failed to proceed to checkout. Please try again.');
+    }
   }
+
 
   const OrderDetailModal = ({ order, onClose }: { order: CustomerOrder, onClose: () => void }) => (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -178,7 +238,7 @@ function RouteComponent() {
           </div>
           <div className='flex justify-center mt-4 bg-[#0d94b9] p-4 rounded-xl'>
             <button
-              onClick={() => handeleReorder(order.order_id)}
+              onClick={() => handeleReorder()}
               className="text-white hover:underline"
             >
               Reorder
@@ -222,6 +282,18 @@ function RouteComponent() {
         </div>
       </div>
     )
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-center flex flex-col items-center">
+          <h1 className="text-2xl font-bold text-fresh-primary mb-4">Processing your order...</h1>
+          <ShoppingCart className="h-24 w-24 text-fresh-secondary animate-spin mb-6" />
+          <p className="text-fresh-secondary">Please wait while we prepare your order.</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

@@ -102,7 +102,7 @@ function RouteComponent() {
         user_id: Number(currentOrder.user_id),
         order_id: currentOrder.order_id,
         email: customer_email,
-        amount: currentOrder.total_amount,
+        amount: Number(currentOrder.total_amount), 
         callback_url: 'http://localhost:5173/customer/payment-verify'
       };
 
@@ -323,11 +323,11 @@ function RouteComponent() {
                     <div className="flex-1">
                       <h4 className="font-semibold text-fresh-primary">{item.product.name}</h4>
                       <p className="text-sm text-fresh-secondary">
-                        {item.quantity} × KSh {Number(item.product.price).toFixed(2)}
+                        {item.quantity} × KSh {Number(item.product.price)}
                       </p>
                     </div>
                     <span className="font-bold text-fresh-primary">
-                      KSh {(Number(item.product.price) * item.quantity).toFixed(2)}
+                      KSh {(Number(item.product.price) * item.quantity)}
                     </span>
                   </div>
                 ))}
@@ -342,27 +342,27 @@ function RouteComponent() {
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span className="text-fresh-secondary">Subtotal</span>
-                    <span className="font-semibold">KSh {currentOrder.subtotal.toFixed(2)}</span>
+                    <span className="font-semibold">KSh {currentOrder.subtotal}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-fresh-secondary">Delivery Fee</span>
                     <span className="font-semibold">
-                      {currentOrder.delivery_fee === 0 ? 'Free' : `KSh ${currentOrder.delivery_fee.toFixed(2)}`}
+                      {currentOrder.delivery_fee === 0 ? 'Free' : `KSh ${currentOrder.delivery_fee}`}
                     </span>
                   </div>
 
                   {currentOrder.promo_discount > 0 && (
                     <div className="flex justify-between text-green-600">
                       <span>Discount ({currentOrder.promo_code})</span>
-                      <span>-KSh {currentOrder.promo_discount.toFixed(2)}</span>
+                      <span>-KSh {currentOrder.promo_discount}</span>
                     </div>
                   )}
 
                   <div className="border-t border-gray-200 pt-4">
                     <div className="flex justify-between text-xl font-bold">
                       <span>Total</span>
-                      <span className="text-[#00A7B3]">KSh {currentOrder.total_amount.toFixed(2)}</span>
+                      <span className="text-[#00A7B3]">KSh {currentOrder.total_amount}</span>
                     </div>
                   </div>
                 </div>
