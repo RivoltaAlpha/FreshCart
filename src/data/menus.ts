@@ -231,10 +231,4 @@ export const adminMenu: MenuItem[] = [
     icon: BarChart3,
     path: '/admin/analytics',
   },
-  {
-    id: 'payments',
-    label: 'Payments',
-    icon: DollarSign,
-    path: '/admin/payments',
-  },
 ]
