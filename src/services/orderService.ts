@@ -234,3 +234,24 @@ export const getUserPurchases = async (
     throw error
   }
 }
+
+export const getAllOrdersAnalytics = async () => {
+  const token = getAuthToken()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${url}/orders/analytics`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error fetching orders analytics:', error)
+    throw error
+  }
+}
