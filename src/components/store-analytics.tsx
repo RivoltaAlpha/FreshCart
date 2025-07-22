@@ -2,11 +2,27 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { TrendingUp, Store, DollarSign, ShoppingCart } from 'lucide-react'
 import { getAllStoresAnalytics } from '@/services/storeService'
 import type { StoreOrderVolume, StoreRevenue, StoresAnalytics } from '@/types/store'
+import { useEffect, useState } from 'react'
 
 
 
-const analyticsData: StoresAnalytics = await getAllStoresAnalytics()
 function StoreAnalytics() {
+    const [analyticsData, setAnalyticsData] = useState<StoresAnalytics | null>(null)
+
+    useEffect(() => {
+        getAllStoresAnalytics().then(setAnalyticsData)
+    }, [])
+
+    if (!analyticsData) {
+        return (
+            <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading store analytics...</p>
+                </div>
+            </div>
+        )
+    }
     // Process data for charts
     const revenueData = analyticsData.storeRevenue
         .filter((store) => store.totalRevenue !== null)

@@ -2,12 +2,27 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Package, Star, TrendingUp, ShoppingBag, Award, BarChart3 } from 'lucide-react'
 import { getAllProductsAnalytics } from '@/services/productService'
 import type { ProductAnalyticsData, ProductRating, TopProduct } from '@/types/store'
+import { useEffect, useState } from 'react'
 
-// Your product analytics data
-const productAnalyticsData: ProductAnalyticsData = await getAllProductsAnalytics()
 
 function ProductAnalytics() {
-    // Process category sales data
+    const [productAnalyticsData, setProductAnalyticsData] = useState<ProductAnalyticsData | null>(null)
+
+    useEffect(() => {
+        getAllProductsAnalytics().then(setProductAnalyticsData)
+    }, [])
+
+    if (!productAnalyticsData) {
+        return (
+            <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading product analytics...</p>
+                </div>
+            </div>
+        )
+    }
+
     const categoryData = productAnalyticsData.topCategories
         .filter(cat => cat.total_sales !== null)
         .map(cat => ({
@@ -19,7 +34,6 @@ function ProductAnalytics() {
 
     const totalCategorySales = categoryData.reduce((sum, cat) => sum + cat.sales, 0)
 
-    // Process product ratings data
     const ratingsData = productAnalyticsData.productRatings.map((product: ProductRating) => ({
         name: product.product_name.length > 20
             ? product.product_name.substring(0, 20) + '...'
@@ -39,10 +53,8 @@ function ProductAnalytics() {
 
     const totalProductsSold = topProductsData.reduce((sum, product) => sum + product.quantity, 0)
 
-    // Colors for pie chart
     const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6']
 
-    // Average rating calculation
     const averageRating = ratingsData.length > 0
         ? ratingsData.reduce((sum, product) => sum + product.rating, 0) / ratingsData.length
         : 0
@@ -67,7 +79,6 @@ function ProductAnalytics() {
     return (
         <div className="min-h-screen bg-gray-50 p-6">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Product Analytics Dashboard</h1>
                     <p className="text-gray-600 mt-2">Insights into product performance, categories, and customer ratings</p>
@@ -189,7 +200,7 @@ function ProductAnalytics() {
                                     paddingAngle={5}
                                     dataKey="sales"
                                 >
-                                    {categoryData.map((entry, index) => (
+                                    {categoryData.map((_, index) => (
                                         <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                                     ))}
                                 </Pie>
