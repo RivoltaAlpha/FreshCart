@@ -51,7 +51,9 @@ import { Route as DriverDeliveriesRouteImport } from './routes/driver/deliveries
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
 import { Route as CustomerWishlistRouteImport } from './routes/customer/wishlist'
 import { Route as CustomerSuccessRouteImport } from './routes/customer/success'
+import { Route as CustomerShoppingInsightsRouteImport } from './routes/customer/shopping-insights'
 import { Route as CustomerProfileRouteImport } from './routes/customer/profile'
+import { Route as CustomerPaymentsRouteImport } from './routes/customer/payments'
 import { Route as CustomerPaymentVerifyRouteImport } from './routes/customer/payment-verify'
 import { Route as CustomerPaymentSuccessfulRouteImport } from './routes/customer/payment-successful'
 import { Route as CustomerOrderDeliveryRouteImport } from './routes/customer/order-delivery'
@@ -286,9 +288,20 @@ const CustomerSuccessRoute = CustomerSuccessRouteImport.update({
   path: '/success',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerShoppingInsightsRoute =
+  CustomerShoppingInsightsRouteImport.update({
+    id: '/shopping-insights',
+    path: '/shopping-insights',
+    getParentRoute: () => CustomerRoute,
+  } as any)
 const CustomerProfileRoute = CustomerProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerPaymentsRoute = CustomerPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
   getParentRoute: () => CustomerRoute,
 } as any)
 const CustomerPaymentVerifyRoute = CustomerPaymentVerifyRouteImport.update({
@@ -451,7 +464,9 @@ export interface FileRoutesByFullPath {
   '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
+  '/customer/payments': typeof CustomerPaymentsRoute
   '/customer/profile': typeof CustomerProfileRoute
+  '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
@@ -519,7 +534,9 @@ export interface FileRoutesByTo {
   '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
+  '/customer/payments': typeof CustomerPaymentsRoute
   '/customer/profile': typeof CustomerProfileRoute
+  '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
@@ -588,7 +605,9 @@ export interface FileRoutesById {
   '/customer/order-delivery': typeof CustomerOrderDeliveryRoute
   '/customer/payment-successful': typeof CustomerPaymentSuccessfulRoute
   '/customer/payment-verify': typeof CustomerPaymentVerifyRoute
+  '/customer/payments': typeof CustomerPaymentsRoute
   '/customer/profile': typeof CustomerProfileRoute
+  '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
   '/driver/dashboard': typeof DriverDashboardRoute
@@ -658,7 +677,9 @@ export interface FileRouteTypes {
     | '/customer/order-delivery'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
+    | '/customer/payments'
     | '/customer/profile'
+    | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
     | '/driver/dashboard'
@@ -726,7 +747,9 @@ export interface FileRouteTypes {
     | '/customer/order-delivery'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
+    | '/customer/payments'
     | '/customer/profile'
+    | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
     | '/driver/dashboard'
@@ -794,7 +817,9 @@ export interface FileRouteTypes {
     | '/customer/order-delivery'
     | '/customer/payment-successful'
     | '/customer/payment-verify'
+    | '/customer/payments'
     | '/customer/profile'
+    | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
     | '/driver/dashboard'
@@ -1138,11 +1163,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerSuccessRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/shopping-insights': {
+      id: '/customer/shopping-insights'
+      path: '/shopping-insights'
+      fullPath: '/customer/shopping-insights'
+      preLoaderRoute: typeof CustomerShoppingInsightsRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/customer/profile': {
       id: '/customer/profile'
       path: '/profile'
       fullPath: '/customer/profile'
       preLoaderRoute: typeof CustomerProfileRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/payments': {
+      id: '/customer/payments'
+      path: '/payments'
+      fullPath: '/customer/payments'
+      preLoaderRoute: typeof CustomerPaymentsRouteImport
       parentRoute: typeof CustomerRoute
     }
     '/customer/payment-verify': {
@@ -1356,7 +1395,9 @@ interface CustomerRouteChildren {
   CustomerOrderDeliveryRoute: typeof CustomerOrderDeliveryRoute
   CustomerPaymentSuccessfulRoute: typeof CustomerPaymentSuccessfulRoute
   CustomerPaymentVerifyRoute: typeof CustomerPaymentVerifyRoute
+  CustomerPaymentsRoute: typeof CustomerPaymentsRoute
   CustomerProfileRoute: typeof CustomerProfileRoute
+  CustomerShoppingInsightsRoute: typeof CustomerShoppingInsightsRoute
   CustomerSuccessRoute: typeof CustomerSuccessRoute
   CustomerWishlistRoute: typeof CustomerWishlistRoute
 }
@@ -1370,7 +1411,9 @@ const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerOrderDeliveryRoute: CustomerOrderDeliveryRoute,
   CustomerPaymentSuccessfulRoute: CustomerPaymentSuccessfulRoute,
   CustomerPaymentVerifyRoute: CustomerPaymentVerifyRoute,
+  CustomerPaymentsRoute: CustomerPaymentsRoute,
   CustomerProfileRoute: CustomerProfileRoute,
+  CustomerShoppingInsightsRoute: CustomerShoppingInsightsRoute,
   CustomerSuccessRoute: CustomerSuccessRoute,
   CustomerWishlistRoute: CustomerWishlistRoute,
 }

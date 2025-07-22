@@ -94,3 +94,16 @@ export const getPaymentById = async (paymentId: number) => {
   await handleApiResponse(response)
   return response.json()
 }
+
+// get user payments
+export const getCustomerPayments = async (userId: number) => {
+  const token = getAuthToken()
+  const response = await fetch(`${url}/payments/user/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  await handleApiResponse(response)
+  return response.json()
+}

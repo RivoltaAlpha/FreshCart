@@ -61,6 +61,18 @@ export const customerMenu: MenuItem[] = [
     path: '/customer/ai-recommendations',
   },
   {
+    id: 'shopping-insights',
+    label: 'Shopping Insights',
+    icon: BarChart3,
+    path: '/customer/shopping-insights',
+  },
+  {
+    id: 'payments',
+    label: 'Payments',
+    icon: DollarSign,
+    path: '/customer/payments',
+  },
+  {
     id: 'profile',
     label: 'Profile',
     icon: User,

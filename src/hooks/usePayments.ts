@@ -4,6 +4,7 @@ import {
   verifyPayment,
   getAllPayments,
   getPaymentById,
+  getCustomerPayments,
 } from '@/services/paymentService'
 import type { CreatePayment } from '@/types/payments'
 
@@ -43,5 +44,13 @@ export const useVerifyPayment = () => {
     onError: (error) => {
       console.error('Payment verification failed:', error)
     },
+  })
+}
+
+export const useCustomerPayments = (userId: number) => {
+  return useQuery({
+    queryKey: ['userPayments', userId],
+    queryFn: () => getCustomerPayments(userId),
+    enabled: !!userId,
   })
 }
