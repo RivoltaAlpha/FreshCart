@@ -10,8 +10,9 @@ export const Route = createFileRoute('/customer/payments')({
 function RouteComponent() {
   const authUser = loggedInUser()
   const userId = authUser?.user_id
-  const { data: payments, isLoading, error } = useCustomerPayments(userId)
-  console.log('payments:', payments)
+  const { data: allPayments, isLoading, error } = useCustomerPayments(userId)
+  const payments = allPayments?.filter((payment:any) => payment.status === 'completed') || []
+  // console.log('completed payments:', payments)
 
   if (isLoading) {
     return (

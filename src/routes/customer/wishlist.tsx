@@ -263,7 +263,7 @@ function RouteComponent() {
 
                   {/* Unit info */}
                   {item.unit && (
-                    <p className="text-sm text-gray-500 mb-3">per {item.unit}</p>
+                    <p className="text-sm text-gray-500 mb-3">{item.unit}</p>
                   )}
 
                   {/* Add to Cart Button */}

@@ -5,11 +5,11 @@ import Header from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const Route = createFileRoute('/contact')({
-  component: ContactPage,
+  component: RouteComponent,
 })
 
 // Contact Page Component
-function ContactPage() {
+function RouteComponent() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',

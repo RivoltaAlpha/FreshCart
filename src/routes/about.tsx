@@ -4,14 +4,14 @@ import Header from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const Route = createFileRoute('/about')({
-  component: AboutPage,
+  component: RouteComponent,
 })
 
-function AboutPage() {
+function RouteComponent() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen mx-4 bg-background py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
           <div className="text-center mb-16">

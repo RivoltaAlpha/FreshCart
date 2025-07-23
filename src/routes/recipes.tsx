@@ -5,10 +5,10 @@ import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
 export const Route = createFileRoute('/recipes')({
-    component: RecipesPage,
+    component: RouteComponent,
 })
 
-function RecipesPage() {
+function RouteComponent() {
     const handleAddToCart = (recipe: RecipeWithIngredients) => {
         console.log('Recipe ingredients added to cart:', recipe.name);
     };
@@ -36,4 +36,3 @@ function RecipesPage() {
     );
 }
 
-export default RecipesPage;

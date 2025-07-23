@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight, HomeIcon, Menu, X } from 'lucide-react';
 import { customerMenu, storeMenu, driverMenu, adminMenu } from '@/data/menus';
 import { useNavigate, useLocation } from '@tanstack/react-router';
+import { logout } from '@/services/authService';
+import { authActions, loggedInUser } from '@/store/auth';
 
 const menus = {
   customer: customerMenu,
@@ -22,26 +24,35 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
 
   const navigation = useNavigate();
   const location = useLocation();
-  
+
   const onClickNavigation = (path: string) => {
     navigation({ to: path });
     onPageChange(path);
+  }
+
+  const user = loggedInUser();
+  const user_id = user?.user_id;
+
+  const handleLogout = () => {
+    logout(user_id);
+    authActions.deleteUser();
+    navigation({ to: '/' });
   }
 
   // Enhanced function to check if a menu item is active
   const isActiveMenuItem = (item: any) => {
     // Check if currentPage matches the item ID
     if (currentPage === item.id) return true;
-    
+
     // Check if currentPage matches the item path
     if (item.path && currentPage === item.path) return true;
-    
+
     // Check if current location pathname matches the item path
     if (item.path && location.pathname === item.path) return true;
-    
+
     // Check if current location pathname starts with the item path (for nested routes)
     if (item.path && location.pathname.startsWith(item.path)) return true;
-    
+
     return false;
   };
 
@@ -77,30 +88,27 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
             {menus[userType]?.map((item) => {
               const Icon = item.icon;
               const isActive = isActiveMenuItem(item);
-              
+
               return (
                 <button
                   key={item.id}
                   onClick={() => {
                     onClickNavigation(item.path || item.id);
                   }}
-                  className={`w-full flex items-center px-6 py-4 text-left transition-all duration-200 relative ${
-                    isActive 
-                      ? 'bg-[#189AB4]/20 text-white border-l-4 border-[#189AB4] shadow-lg' 
-                      : 'hover:bg-[#41729F]'
-                  }`}
+                  className={`w-full flex items-center px-6 py-4 text-left transition-all duration-200 relative ${isActive
+                    ? 'bg-[#189AB4]/20 text-white border-l-4 border-[#189AB4] shadow-lg'
+                    : 'hover:bg-[#41729F]'
+                    }`}
                 >
-                  <Icon className={`w-5 h-5 transition-all duration-200 ${
-                    isActive ? 'text-[#189AB4]' : ''
-                  } ${sidebarOpen ? 'mr-3' : ''}`} />
+                  <Icon className={`w-5 h-5 transition-all duration-200 ${isActive ? 'text-[#189AB4]' : ''
+                    } ${sidebarOpen ? 'mr-3' : ''}`} />
                   {sidebarOpen && (
-                    <span className={`transition-all duration-200 ${
-                      isActive ? 'font-semibold' : ''
-                    }`}>
+                    <span className={`transition-all duration-200 ${isActive ? 'font-semibold' : ''
+                      }`}>
                       {item.label}
                     </span>
                   )}
-                  
+
                   {/* Active indicator dot for collapsed sidebar */}
                   {!sidebarOpen && isActive && (
                     <div className="absolute right-2 w-2 h-2 bg-[#189AB4] rounded-full"></div>
@@ -116,8 +124,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
               <div className='px-2 flex items-center justify-between mb-4 hover:bg-[#41729F] rounded transition-colors duration-200'>
                 <button
                   onClick={() => {
-                    // Store auth data in state instead of localStorage for artifact compatibility
-                    navigation({ to: '/login' });
+                    handleLogout();
                   }}
                   className="w-full flex items-center py-2 text-left"
                 >
@@ -160,30 +167,27 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
           {menus[userType]?.map((item) => {
             const Icon = item.icon;
             const isActive = isActiveMenuItem(item);
-            
+
             return (
               <button
                 key={item.id}
                 onClick={() => {
                   onClickNavigation(item.path || item.id);
                 }}
-                className={`w-full flex items-center px-6 py-4 text-left transition-all duration-200 relative ${
-                  isActive 
-                    ? 'bg-[#BFD7ED]/20 text-white border-l-4 border-[#BFD7ED] shadow-lg' 
-                    : 'hover:bg-[#0074B7]'
-                }`}
+                className={`w-full flex items-center px-6 py-4 text-left transition-all duration-200 relative ${isActive
+                  ? 'bg-[#BFD7ED]/20 text-white border-l-4 border-[#BFD7ED] shadow-lg'
+                  : 'hover:bg-[#0074B7]'
+                  }`}
               >
-                <Icon className={`w-5 h-5 transition-all duration-200 ${
-                  isActive ? 'text-[#189AB4]' : ''
-                } ${sidebarToggle ? 'mr-3' : ''}`} />
+                <Icon className={`w-5 h-5 transition-all duration-200 ${isActive ? 'text-[#189AB4]' : ''
+                  } ${sidebarToggle ? 'mr-3' : ''}`} />
                 {sidebarToggle && (
-                  <span className={`transition-all duration-200 ${
-                    isActive ? 'font-semibold' : ''
-                  }`}>
+                  <span className={`transition-all duration-200 ${isActive ? 'font-semibold' : ''
+                    }`}>
                     {item.label}
                   </span>
                 )}
-                
+
                 {/* Active indicator dot for collapsed sidebar */}
                 {!sidebarToggle && isActive && (
                   <div className="absolute right-2 w-2 h-2 bg-[#189AB4] rounded-full"></div>
@@ -200,8 +204,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
               <button
                 id='logout-button'
                 onClick={() => {
-                  // Store auth data in state instead of localStorage for artifact compatibility
-                  navigation({ to: '/login' });
+                  handleLogout();
                 }}
                 className="w-full flex items-center py-2 text-left"
               >

@@ -119,8 +119,8 @@ function StoresPage() {
           <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-110">
             <Heart
               className={`w-5 h-5 transition-all duration-300 cursor-pointer ${isFavorited
-                  ? 'text-red-500 fill-red-500 animate-pulse'
-                  : 'text-gray-400 hover:text-red-500 hover:scale-110'
+                ? 'text-red-500 fill-red-500 animate-pulse'
+                : 'text-gray-400 hover:text-red-500 hover:scale-110'
                 }`}
               onClick={(e) => {
                 e.stopPropagation();
@@ -132,8 +132,8 @@ function StoresPage() {
 
           {/* Store status with enhanced styling */}
           <div className={`absolute bottom-4 left-4 px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300 ${store.is_active
-              ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
-              : 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+            ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
+            : 'bg-red-500 text-white shadow-lg shadow-red-500/30'
             }`}>
             {store.is_active ? 'Open' : 'Closed'}
           </div>
@@ -177,9 +177,9 @@ function StoresPage() {
           {/* Animated action buttons */}
           <div className="flex gap-2 transform group-hover:scale-105 transition-transform duration-300">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate({ to: '/products', search: { store_id: store.store_id } });
+              onClick={() => {
+                navigate({ to: '/shop-store' });
+                storeActions.saveStore(store);
               }}
               className="flex-1 bg-[#145DA0] hover:from-[#0096a2] hover:to-[#00A7B3] text-white py-2 px-4 rounded-lg transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
             >
@@ -187,9 +187,9 @@ function StoresPage() {
               Shop Now
             </button>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedStore(store);
+              onClick={() => {
+                navigate({ to: '/shop-store' });
+                storeActions.saveStore(store);
               }}
               className="bg-[#145DA0] hover:from-[#004A50] hover:to-[#003A40] text-white py-2 px-4 rounded-lg transition-all duration-300 text-sm font-medium flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 active:scale-95 hover:rotate-3"
             >
@@ -223,7 +223,7 @@ function StoresPage() {
                 <span className="text-sm text-[#516E89] ml-1">
                   {store.rating} rating
                 </span>
-                <span className={`ml-4 text-sm px-2 py-1 rounded-full ${store.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                <span className={`ml-4 text-sm px-2 py-1 rounded-full ${store.is_active ? 'bg-green-100 text-teal-500' : 'bg-red-100 text-red-700'
                   }`}>
                   {store.is_active ? 'Open' : 'Closed'}
                 </span>
@@ -242,11 +242,11 @@ function StoresPage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center text-[#516E89] text-sm">
                 <MapPin className="w-4 h-4 mr-1 text-[#00A7B3]" />
-                {store.county}
+                {store.address.county}
               </div>
               <div className="flex items-center text-[#516E89] text-sm">
                 <Phone className="w-4 h-4 mr-1 text-[#00A7B3]" />
-                {store.phone}
+                {store.contact_info}
               </div>
             </div>
 
@@ -256,12 +256,12 @@ function StoresPage() {
                   e.stopPropagation();
                   navigate({ to: '/products', search: { store_id: store.store_id } });
                 }}
-                className="bg-[#071374] hover:bg-[#0096a2] text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium flex items-center gap-2"
+                className="bg-[#03417a] hover:bg-[#0096a2] text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium flex items-center gap-2"
               >
                 <ShoppingBag className="w-4 h-4" />
                 Shop Now
               </button>
-              <button className="bg-[#005A61] hover:bg-[#004A50] text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium">
+              <button className="bg-[#055e92] hover:bg-[#004A50] text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium">
                 <Eye className="w-4 h-4" />
               </button>
             </div>

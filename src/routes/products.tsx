@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import { getStoreHavingProduct } from '@/services/storeService';
 
 export const Route = createFileRoute('/products')({
-  component: ProductsPage,
+  component: RouteComponent,
 })
 
 // Updated types to match backend response
@@ -37,14 +37,14 @@ type CartItem = {
   discount?: number;
 };
 
-function ProductsPage() {
+function RouteComponent() {
   const { data: productsData, isLoading, error } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [cart, setCart] = useState<Cart>({});
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
-  console.log('Cart:', cart);
+  console.log( cart);
   const [selectedProduct, setSelectedProduct] = useState<BackendProduct | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isInitialMount = useRef(true);
@@ -580,5 +580,3 @@ function ProductsPage() {
     </>
   );
 }
-
-export default ProductsPage;

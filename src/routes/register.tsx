@@ -8,10 +8,10 @@ import Header from '@/components/Header';
 import { getAreasInLocality, getLocalitiesInCounty, getSubCountiesInCounty, getCounties } from 'kenya-locations';
 
 export const Route = createFileRoute('/register')({
-  component: RegisterPage,
+  component: RouteComponent,
 })
 
-function RegisterPage() {
+function RouteComponent() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
@@ -328,4 +328,3 @@ function RegisterPage() {
   );
 };
 
-export default RegisterPage;

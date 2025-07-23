@@ -17,7 +17,9 @@ function RouteComponent() {
     const price = typeof item.product.price === 'string' ? parseFloat(item.product.price) : item.product.price;
     return sum + price * item.quantity;
   }, 0);
-
+  
+  const user = loggedInUser()
+  const { data: orders } = useCustomerOrders(user?.user_id ? parseInt(user.user_id) : 0)
   useEffect(() => {
     const cartRaw = localStorage.getItem('cart');
     if (cartRaw) {
@@ -31,16 +33,18 @@ function RouteComponent() {
     }
   }, []);
 
+  const totalOrders = orders?.length || 0
+  const loyaltyPoints = totalOrders * 15 || 0
+  const favoriteItems = localStorage.getItem('wishlist') ? JSON.parse(localStorage.getItem('wishlist') || '[]').length : 0
+
   const quickStats = [
-    { title: 'Orders This Month', value: '12', color: 'bg-[#30739C]', icon: Package },
-    { title: 'Favorite Items', value: '25', color: 'bg-[#0074B7]', icon: Heart },
-    { title: 'Loyalty Points', value: '1,250', color: 'bg-[#145DA0]', icon: Star },
+    { title: 'Orders This Month', value: totalOrders, color: 'bg-[#30739C]', icon: Package },
+    { title: 'Favorite Items', value: favoriteItems, color: 'bg-[#0074B7]', icon: Heart },
+    { title: 'Loyalty Points', value: loyaltyPoints, color: 'bg-[#145DA0]', icon: Star },
   ]
 
-  const user = loggedInUser()
-  const { data: orders } = useCustomerOrders(user?.user_id ? parseInt(user.user_id) : 0)
 
-  const recentOrders = orders?.slice(0, 3)
+  const recentOrders = orders?.slice(0, 4)
   const navigate = useNavigate();
 
   // Cart item structure: { product: StoreProduct, quantity: number }
@@ -87,7 +91,9 @@ function RouteComponent() {
               <div className="bg-white rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b flex items-center justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
-                  <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  <button className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    onClick={() => navigate({ to: '/customer/my-orders' })}
+                  >
                     View All Orders
                   </button>
                 </div>
@@ -109,9 +115,9 @@ function RouteComponent() {
                               <Package className="text-blue-600" size={20} />
                             </div>
                             <div className='space-y-4'>
-                              <h3 className="font-semibold text-gray-800">#{order.order_id}</h3>
+                              <h3 className="font-semibold text-gray-800">#{order.order_number}</h3>
                               <p className="text-sm">{order.store?.name ?? 'Store'} • {order.items?.length ?? 0} items</p>
-                              <p className="text-xs ">{order.created_at}</p>
+                              <p className="text-xs ">{new Date(order.created_at).toLocaleDateString()}</p>
                             </div>
                           </div>
                           <div className="text-right">

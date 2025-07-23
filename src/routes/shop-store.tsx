@@ -19,10 +19,10 @@ import {
 } from '@/components/ui/dialog'
 
 export const Route = createFileRoute('/shop-store')({
-  component: StoreLayout,
+  component: RouteComponent,
 })
 
-function StoreLayout() {
+function RouteComponent() {
   const [activeTab, setActiveTab] = useState('Products')
   const [searchQuery, setSearchQuery] = useState('')
   const [showImageOnly, setShowImageOnly] = useState(false)
@@ -65,10 +65,15 @@ function StoreLayout() {
   }, [store_id, refetch])
 
   const filterOptions = [
-    { id: 'vegetables', name: 'Vegetables', count: 15 },
-    { id: 'fruits', name: 'Fruits', count: 12 },
-    { id: 'grains', name: 'Grains', count: 8 },
-    { id: 'dairy', name: 'Dairy', count: 6 },
+    { id: 'vegetables', name: 'Vegetables'},
+    { id: 'fruits', name: 'Fruits'},
+    { id: 'grains', name: 'Grains'},
+    { id: 'dairy', name: 'Dairy'},
+    { id: 'herbs', name: 'Herbs'},
+    { id: 'meat', name: 'Meat'},
+    { id: 'bakery', name: 'Bakery'},
+    { id: 'legumes', name: 'Legumes'},
+    { id: 'spices & seasonings', name: 'Spices & Seasonings'},
   ]
 
   const currentStore = stores?.find((store) => store.store_id === store_id)
@@ -169,6 +174,12 @@ function StoreLayout() {
     setIsModalOpen(true)
   }
 
+  const handleWishlistClick = (product: Product) => {
+    toast.success(`${product.name} added to wishlist!`)
+    // change heart icon color to red
+    
+  }
+
   const handleViewDetails = () => {
     if (selectedProduct) {
       navigate({
@@ -196,6 +207,7 @@ function StoreLayout() {
     }
   }
 
+
   const ProductCard = ({ product }: { product: Product }) => (
     <div className="bg-card rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
       <div className="relative">
@@ -210,7 +222,9 @@ function StoreLayout() {
           />
         </div>
         <button className="absolute top-2 right-2 p-2 bg-card rounded-full shadow hover:bg-gray-100">
-          <Heart size={16} className="text-fresh-primary" />
+          <Heart size={16} className="text-fresh-primary hover:text-red-500 click:bg-red-500/10 transition-colors"
+            onClick={() => handleWishlistClick(product)}
+           />
         </button>
         <button
           onClick={() => handleProductClick(product)}
@@ -447,7 +461,7 @@ function StoreLayout() {
                           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
                         <span>
-                          {option.name} ({option.count})
+                          {option.name}
                         </span>
                       </label>
                     ))}
@@ -664,4 +678,3 @@ function StoreLayout() {
   )
 }
 
-export default StoreLayout

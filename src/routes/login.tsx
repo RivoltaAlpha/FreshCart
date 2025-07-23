@@ -9,10 +9,10 @@ import * as motion from "motion/react-client";
 import { getStoreByOwnerId } from '@/services/storeService';
 
 export const Route = createFileRoute('/login')({
-  component: LoginPage,
+  component: RouteComponent,
 })
 
-function LoginPage() {
+function RouteComponent() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -190,4 +190,4 @@ function LoginPage() {
   );
 };
 
-export default LoginPage;
+export default RouteComponent;

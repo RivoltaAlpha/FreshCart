@@ -236,14 +236,17 @@ function RouteComponent() {
                 )}
             </div>
           </div>
-          <div className='flex justify-center mt-4 bg-[#0d94b9] p-4 rounded-xl'>
-            <button
-              onClick={() => handeleReorder()}
-              className="text-white hover:underline"
-            >
-              Reorder
-            </button>
-          </div>
+
+          {(["delivered"].includes(order.status)) && (
+            <div className='flex justify-center mt-4 bg-[#0d94b9] p-4 rounded-xl'>
+              <button
+                onClick={() => handeleReorder()}
+                className="text-white hover:underline"
+              >
+                Reorder
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -447,12 +450,14 @@ function RouteComponent() {
                           <span>{order.delivery_address}</span>
                         </div>
                         <div>
-                          <button
-                            onClick={() => handleViewDetails(order.order_id)}
-                            className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
-                          >
-                            View Delivery details
-                          </button>
+                          {!(["pending", "confirmed", "preparing"].includes(order.status)) && (
+                            <button
+                              onClick={() => handleViewDetails(order.order_id)}
+                              className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
+                            >
+                              View Delivery details
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
