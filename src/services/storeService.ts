@@ -7,8 +7,7 @@ import type {
   StoresAnalytics,
   StoresResponse,
 } from '../types/store'
-
-const API_BASE_URL = 'http://localhost:8000'
+import { url } from '@/utils/utils'
 
 const getAuthToken = (): string => {
   const auth = JSON.parse(localStorage.getItem('auth') || '{}')
@@ -48,7 +47,7 @@ const handleApiResponse = async (response: Response) => {
 
 // Fetch all stores
 export const getAllStores = async (): Promise<StoresResponse> => {
-  const response = await fetch(`${API_BASE_URL}/stores/all`)
+  const response = await fetch(`${url}/stores/all`)
   await handleApiResponse(response)
   return response.json()
 }
@@ -56,7 +55,7 @@ export const getAllStores = async (): Promise<StoresResponse> => {
 // Fetch products for a specific store
 export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`)
+    const response = await fetch(`${url}/products/store/${storeId}`)
     await handleApiResponse(response)
     const data = await response.json()
 
@@ -78,7 +77,7 @@ export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
 // Fetch products for a specific store
 export const getStoreHavingProduct = async (product_id: number) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/products/${product_id}/store`)
+    const response = await fetch(`${url}/products/${product_id}/store`)
     await handleApiResponse(response)
     const data = await response.json()
     return data
@@ -93,7 +92,7 @@ export const getallStoreProducts = async (
 ): Promise<allStoreProductsResponse> => {
   
   try {
-    const response = await fetch(`${API_BASE_URL}/products/store/${storeId}`)
+    const response = await fetch(`${url}/products/store/${storeId}`)
     await handleApiResponse(response)
     const data = await response.json()
 
@@ -112,7 +111,7 @@ export const searchStoreProducts = async (
   categoryId?: number,
 ): Promise<StoreProductsResponse> => {
   const response = await fetch(
-    `${API_BASE_URL}/stores/${storeId}/products/search`,
+    `${url}/stores/${storeId}/products/search`,
     {
       method: 'POST',
       body: JSON.stringify({ query, categoryId }),
@@ -130,7 +129,7 @@ export const getStoreByOwnerId = async (owner_id: number): Promise<Store> => {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/stores/owner/${owner_id}`, {
+    const response = await fetch(`${url}/stores/owner/${owner_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -147,7 +146,7 @@ export const getStoreByOwnerId = async (owner_id: number): Promise<Store> => {
 // Create a new store
 export const createStore = async (storeData: CreateStore): Promise<Store> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/stores/create`, {
+    const response = await fetch(`${url}/stores/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -164,7 +163,7 @@ export const createStore = async (storeData: CreateStore): Promise<Store> => {
 
 // fetch unverified stores
 export const getUnverifiedStores = async (): Promise<Store[]> => {
-  const response = await fetch(`${API_BASE_URL}/stores/unverified-stores`)
+  const response = await fetch(`${url}/stores/unverified-stores`)
   await handleApiResponse(response)
   return response.json()
 }
@@ -177,7 +176,7 @@ export const verifyStore = async (storeId: number): Promise<Store> => {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/stores/verify/${storeId}`, {
+    const response = await fetch(`${url}/stores/verify/${storeId}`, {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -194,7 +193,7 @@ export const verifyStore = async (storeId: number): Promise<Store> => {
 
 // all stores analytics
 export const getAllStoresAnalytics = async (): Promise<StoresAnalytics> => {
-  const response = await fetch(`${API_BASE_URL}/stores/analytics`)
+  const response = await fetch(`${url}/stores/analytics`)
   await handleApiResponse(response)
   return response.json()
 }

@@ -1,6 +1,5 @@
 import type { CreateFeedback, Feedback, OrderFeedback } from "@/types/types"
-
-const url = 'http://localhost:8000'
+import { url } from '@/utils/utils'
 
 const getAuthToken = (): string => {
   const auth = JSON.parse(localStorage.getItem('auth') || '{}')

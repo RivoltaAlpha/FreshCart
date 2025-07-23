@@ -1,7 +1,6 @@
 import type { InventoryProducts } from '@/types/store';
 import type { Inventory, CreateInventory } from '../types/types';
-
-const url = 'http://localhost:8000';
+import { url } from '@/utils/utils'
 
 const getAuthToken = (): string => {
   const auth = JSON.parse(localStorage.getItem('auth') || '{}');

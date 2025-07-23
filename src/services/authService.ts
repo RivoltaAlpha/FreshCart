@@ -1,4 +1,5 @@
-const url = 'http://localhost:8000'
+import { url } from '@/utils/utils'
+
 import { authStore } from '@/store/auth'
 import type { CreateUser, LoginResponse } from '@/types/types'
 
