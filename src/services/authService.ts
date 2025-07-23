@@ -1,6 +1,5 @@
 import { url } from '@/utils/utils'
 
-import { authStore } from '@/store/auth'
 import type { CreateUser, LoginResponse } from '@/types/types'
 
 const handleApiResponse = async (response: Response) => {
@@ -50,9 +49,7 @@ export const logout = async (userId: number) => {
   return response.json()
 }
 
-export const refreshToken = async () => {
-  const refreshToken = authStore.state.tokens.refreshToken
-  const user_id = authStore.state.user.user_id
+export const refreshTokens = async (user_id: number, refreshToken: string) => {
   if (!refreshToken || !user_id) {
     throw new Error('No refresh token or user ID available')
   }
