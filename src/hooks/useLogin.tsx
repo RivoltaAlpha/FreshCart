@@ -8,7 +8,7 @@ export const useLogin = () => {
     mutationKey: ['login'],
     mutationFn: ({ email, password }) => login(email, password),
     onSuccess: (data) => {
-      console.log('response from login', data)
+      // console.log('response from login', data)
       const backendData = {
         isAuthenticated: true,
         user: data.user,
