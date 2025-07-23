@@ -1,41 +1,6 @@
 import type { CreateProduct, Product } from '../types/types'
 import { url } from '@/utils/utils'
-
-const getAuthToken = (): string => {
-  const auth = JSON.parse(localStorage.getItem('auth') || '{}')
-  const token = auth.tokens?.accessToken
-  if (!token) {
-    throw new Error('No authentication token found')
-  }
-  return token
-}
-
-const handleApiResponse = async (response: Response) => {
-  if (!response.ok) {
-    let errorMessage = `Request failed with status ${response.status}: ${response.statusText}`
-
-    try {
-      // Try to parse as JSON first
-      const contentType = response.headers.get('content-type')
-      if (contentType && contentType.includes('application/json')) {
-        const errorData = await response.json()
-        errorMessage = errorData.message || errorData.error || errorMessage
-      } else {
-        // If not JSON, try to read as text
-        const errorText = await response.text()
-        if (errorText) {
-          errorMessage = errorText
-        }
-      }
-    } catch (parseError) {
-      // If parsing fails, use the default error message
-      console.warn('Failed to parse error response:', parseError)
-    }
-
-    throw new Error(errorMessage)
-  }
-  return response
-}
+import { getAuthToken, handleApiResponse } from './handleAPICalls'
 
 export const getAllProducts = async () => {
   try {
@@ -52,7 +17,7 @@ export const getAllProducts = async () => {
 export const getProductById = async (
   product_id: number,
 ): Promise<Product[]> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
@@ -73,7 +38,7 @@ export const getProductById = async (
 }
 
 export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
@@ -94,7 +59,7 @@ export const getStoreProducts = async (storeId: number): Promise<Product[]> => {
 }
 
 export const createProduct = async (productData: CreateProduct) => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`${url}/products/create`, {
     method: 'POST',
     headers: {
@@ -111,7 +76,7 @@ export const updateProduct = async (
   product_id: number,
   productData: CreateProduct,
 ) => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`{url}/products/${product_id}`, {
     method: 'PATCH',
     headers: {
@@ -125,7 +90,7 @@ export const updateProduct = async (
 }
 
 export const deleteProduct = async (product_id: number) => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`{url}/products/delete/${product_id}`, {
     method: 'DELETE',
     headers: {

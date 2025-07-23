@@ -111,6 +111,7 @@ export const isTokenExpired = (token: string) => {
   if (!decoded || !decoded.exp) return true
   return Date.now() >= decoded.exp * 1000
 }
+console.log('Is token expired:', isTokenExpired(getAccessToken()))
 
 export const ensureValidAccessToken = async () => {
   const accessToken = getAccessToken();

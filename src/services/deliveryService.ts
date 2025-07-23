@@ -1,40 +1,8 @@
 import { url } from '@/utils/utils'
-
-const getAuthToken = (): string => {
-  const auth = JSON.parse(localStorage.getItem('auth') || '{}')
-  const token = auth.tokens?.accessToken
-  if (!token) {
-    throw new Error('No authentication token found')
-  }
-  return token
-}
-
-const handleApiResponse = async (response: Response) => {
-  if (!response.ok) {
-    let errorMessage = `Request failed with status ${response.status}: ${response.statusText}`
-
-    try {
-      const contentType = response.headers.get('content-type')
-      if (contentType && contentType.includes('application/json')) {
-        const errorData = await response.json()
-        errorMessage = errorData.message || errorData.error || errorMessage
-      } else {
-        const errorText = await response.text()
-        if (errorText) {
-          errorMessage = errorText
-        }
-      }
-    } catch (parseError) {
-      console.warn('Failed to parse error response:', parseError)
-    }
-
-    throw new Error(errorMessage)
-  }
-  return response
-}
+import { getAuthToken, handleApiResponse } from './handleAPICalls'
 
 export const getDeliveryByOrderId = async (orderId: number) => {
-  const token = getAuthToken();
+  const token = await getAuthToken();
   const response = await fetch(`${url}/deliveries/order/${orderId}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -43,7 +11,7 @@ export const getDeliveryByOrderId = async (orderId: number) => {
 };
 
 export const updateDeliveryStatus = async (deliveryId: number, status: string) => {
-  const token = getAuthToken();
+  const token = await getAuthToken();
   const response = await fetch(`${url}/deliveries/${deliveryId}/status`, {
     method: 'PATCH',
     headers: {
@@ -57,7 +25,7 @@ export const updateDeliveryStatus = async (deliveryId: number, status: string) =
 };
 
 export const getDeliveriesForDriver = async (driverId: number) => {
-  const token = getAuthToken();
+  const token = await getAuthToken();
   const response = await fetch(`${url}/deliveries/driver/${driverId}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -66,7 +34,7 @@ export const getDeliveriesForDriver = async (driverId: number) => {
 };
 
 export const getDeliveriesForCustomer = async (customerId: number) => {
-  const token = getAuthToken();
+  const token = await getAuthToken();
   const response = await fetch(`${url}/deliveries/customer/${customerId}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -75,7 +43,7 @@ export const getDeliveriesForCustomer = async (customerId: number) => {
 };
 
 export const getDeliveriesByStatus = async (status: string) => {
-  const token = getAuthToken();
+  const token = await getAuthToken();
   const response = await fetch(`${url}/deliveries/status/${status}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -86,7 +54,7 @@ export const getDeliveriesByStatus = async (status: string) => {
 
 // get all deliveries
 export const getAllDeliveries = async () => {
-  const token = getAuthToken();
+  const token = await getAuthToken();
   const response = await fetch(`${url}/deliveries/all`, {
     headers: { Authorization: `Bearer ${token}` }
   });

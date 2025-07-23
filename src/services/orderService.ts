@@ -7,45 +7,10 @@ import type {
   CustomerOrder,
 } from '@/types/types'
 import { url } from '@/utils/utils'
-
-const getAuthToken = (): string => {
-  const auth = JSON.parse(localStorage.getItem('auth') || '{}')
-  const token = auth.tokens?.accessToken
-  if (!token) {
-    throw new Error('No authentication token found')
-  }
-  return token
-}
-
-const handleApiResponse = async (response: Response) => {
-  if (!response.ok) {
-    let errorMessage = `Request failed with status ${response.status}: ${response.statusText}`
-
-    try {
-      // Try to parse as JSON first
-      const contentType = response.headers.get('content-type')
-      if (contentType && contentType.includes('application/json')) {
-        const errorData = await response.json()
-        errorMessage = errorData.message || errorData.error || errorMessage
-      } else {
-        // If not JSON, try to read as text
-        const errorText = await response.text()
-        if (errorText) {
-          errorMessage = errorText
-        }
-      }
-    } catch (parseError) {
-      // If parsing fails, use the default error message
-      console.warn('Failed to parse error response:', parseError)
-    }
-
-    throw new Error(errorMessage)
-  }
-  return response
-}
+import { getAuthToken, handleApiResponse } from './handleAPICalls'
 
 export const getAllOrders = async () => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`${url}/orders/all`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -55,7 +20,7 @@ export const getAllOrders = async () => {
 }
 
 export const getOrderById = async (order_id: number): Promise<Order> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`${url}/orders/${order_id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -65,7 +30,7 @@ export const getOrderById = async (order_id: number): Promise<Order> => {
 }
 
 export const createOrder = async (orderData: CreateOrder) => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`${url}/orders/create`, {
     method: 'POST',
     headers: {
@@ -78,7 +43,7 @@ export const createOrder = async (orderData: CreateOrder) => {
 }
 
 export const updateOrder = async (order_id: number, orderData: CreateOrder) => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`${url}/orders/update/${order_id}`, {
     method: 'PATCH',
     headers: {
@@ -92,7 +57,7 @@ export const updateOrder = async (order_id: number, orderData: CreateOrder) => {
 
 // update order status
 export const updateOrderStatus = async (order_id: number, status: string) => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`${url}/orders/update-status/${order_id}`, {
     method: 'PATCH',
     headers: {
@@ -105,7 +70,7 @@ export const updateOrderStatus = async (order_id: number, status: string) => {
 }
 
 export const deleteOrder = async (order_id: number) => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   const response = await fetch(`${url}/orders/delete/${order_id}`, {
     method: 'DELETE',
     headers: {
@@ -119,7 +84,7 @@ export const approveOrder = async (
   order_id: number,
   approvedOrder: ApproveOrder,
 ): Promise<Order> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
@@ -144,7 +109,7 @@ export const shipOrder = async (
   order_id: number,
   shippingDetails: ShipOrder,
 ): Promise<Order> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
@@ -170,7 +135,7 @@ export const shipOrder = async (
 export const getUserOrders = async (
   userId: number,
 ): Promise<CustomerOrder[]> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
@@ -193,7 +158,7 @@ export const getUserOrders = async (
 export const getStoreOrders = async (
   storeId: number,
 ): Promise<CustomerOrder[]> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
@@ -215,7 +180,7 @@ export const getStoreOrders = async (
 export const getUserPurchases = async (
   userId: number,
 ): Promise<StoreProduct[]> => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
@@ -235,7 +200,7 @@ export const getUserPurchases = async (
 }
 
 export const getAllOrdersAnalytics = async () => {
-  const token = getAuthToken()
+  const token = await getAuthToken()
   if (!token) {
     throw new Error('No token available in localStorage')
   }
