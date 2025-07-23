@@ -52,7 +52,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
 
     // Initialize Gemini AI
     const getApiKey = (): string => {
-        const envApiKey = import.meta.env?.VITE_GEMINI_API_KEY;
+        const envApiKey = import.meta.env?.VITE_GEMINI_API;
         return envApiKey;
     };
 

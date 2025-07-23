@@ -50,7 +50,7 @@ interface RecommendationResult {
 
 // Initialize Gemini AI with updated model name
 const getApiKey = (): string => {
-  const envApiKey = import.meta.env?.VITE_GEMINI_API_KEY
+  const envApiKey = import.meta.env?.VITE_GEMINI_API
   console.log(`Gemini API Key from env: ${envApiKey ? 'Yes' : 'No'}`)
 
   return envApiKey

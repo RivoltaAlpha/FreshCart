@@ -40,7 +40,7 @@ class GeminiService {
 
   // Instance method to get API key
   private getApiKey(): string {
-    const envApiKey = import.meta.env?.VITE_GEMINI_API_KEY
+    const envApiKey = import.meta.env?.VITE_GEMINI_API
     console.log(`Gemini API Key from env: ${envApiKey ? 'Yes' : 'No'}`)
     return envApiKey
   }
@@ -172,7 +172,7 @@ Only return valid JSON, no additional text.
 }
 
 function RouteComponent() {
-  const geminiService = useMemo(() => GeminiService.getInstance(import.meta.env.VITE_GEMINI_API_KEY || ''), []);
+  const geminiService = useMemo(() => GeminiService.getInstance(import.meta.env.VITE_GEMINI_API || ''), []);
   const navigate = useNavigate()
   const user = loggedInUser()
   const [purchasedProducts, setPurchasedProducts] = useState<StoreProduct[]>([])
@@ -184,19 +184,19 @@ function RouteComponent() {
   const hasGeneratedRecommendations = useRef(false)
   const currentRequestRef = useRef<Promise<void> | null>(null)
 
-useEffect(() => {
-  if (!user?.user_id) return;
-  async function fetchPurchases() {
-    try {
-      const products = await getUserPurchases(parseInt(user.user_id))
-      setPurchasedProducts(products)
-    } catch (error) {
-      console.error('Error fetching purchases:', error)
-      setError('Failed to load your purchases')
+  useEffect(() => {
+    if (!user?.user_id) return;
+    async function fetchPurchases() {
+      try {
+        const products = await getUserPurchases(parseInt(user.user_id))
+        setPurchasedProducts(products)
+      } catch (error) {
+        console.error('Error fetching purchases:', error)
+        setError('Failed to load your purchases')
+      }
     }
-  }
-  fetchPurchases()
-}, [user?.user_id])
+    fetchPurchases()
+  }, [user?.user_id])
 
   // Memoized recommendation generation function
   const generateRecommendations = useCallback(async (products: StoreProduct[]) => {
@@ -249,7 +249,7 @@ useEffect(() => {
   }
 
   // rendomly 
-  
+
 
 
   // search product image from 1 of the ingredients in our products by returning a product then passing it's image

@@ -58,7 +58,7 @@ class RecipeService {
   }
 
   private initializeAI() {
-    const apiKey = import.meta.env?.VITE_GEMINI_API_KEY
+    const apiKey = import.meta.env?.VITE_GEMINI_API
     if (apiKey) {
       try {
         this.genAI = new GoogleGenerativeAI(apiKey)
