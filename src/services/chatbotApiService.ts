@@ -35,11 +35,12 @@ export interface Store {
   rating: string
   created_at: string
 }
+import { url } from '@/utils/utils'
 
 class ChatbotApiService {
   private baseUrl: string
 
-  constructor(baseUrl: string = 'http://localhost:8000') {
+  constructor(baseUrl: string = url) {
     this.baseUrl = baseUrl
   }
 

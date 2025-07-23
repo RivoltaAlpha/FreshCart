@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
+import { url } from '@/utils/utils'
+
 
 export const Route = createFileRoute('/admin/create-category')({
   component: RouteComponent,
@@ -29,7 +31,7 @@ function RouteComponent() {
     setError(null)
     setSuccess(false)
     try {
-      const res = await fetch('http://localhost:8000/categories/create', {
+      const res = await fetch(`${url}/categories/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
