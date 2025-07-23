@@ -6,7 +6,7 @@ import { orderActions, type OrderDetails } from '@/store/order';
 import { useInitializePayment } from '@/hooks/usePayments';
 import { getAreasInLocality, getLocalitiesInCounty, getSubCountiesInCounty, getCounties } from 'kenya-locations';
 import { useUpdateOrderMutation } from '@/hooks/useOrders';
-import { url } from '@/utils/utils'
+import { FRONTEND_URL } from '@/utils/utils'
 
 
 export const Route = createFileRoute('/customer/checkout-order')({
@@ -105,7 +105,7 @@ function RouteComponent() {
         order_id: currentOrder.order_id,
         email: customer_email,
         amount: Number(currentOrder.total_amount),
-        callback_url: `${url}/customer/payment-verify`
+        callback_url: `${FRONTEND_URL}/customer/payment-verify`
       };
 
       initializePayment(paymentData, {
