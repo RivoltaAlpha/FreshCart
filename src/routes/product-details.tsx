@@ -83,7 +83,7 @@ function RouteComponent() {
   }
 
   const handleGoBack = () => {
-    navigate({ to: '/shop-store' })
+    navigate({ to: '/products' })
   }
 
   // Get related products from the same category
@@ -156,15 +156,6 @@ function RouteComponent() {
             <>KSh {relatedProduct.price}</>
           )}
         </div>
-        <div className="font-bold text-[#189AB4] text-lg">
-          {typeof relatedProduct.price === 'string' &&
-            ((relatedProduct.price as string)?.includes('Box') ||
-              (relatedProduct.price as string)?.includes('Pack')) ? (
-            relatedProduct.price
-          ) : (
-            <>KSh {relatedProduct.price}</>
-          )}
-        </div>
         <div className="flex items-center justify-between">
           <button
             onClick={(e) => handleAddRelatedToCart(relatedProduct, e)}
@@ -196,7 +187,7 @@ function RouteComponent() {
             className="flex items-center gap-2 text-[#05445E] hover:text-[#189AB4] transition-colors mb-6"
           >
             <ArrowLeft className="w-5 h-5" />
-            Back to Store
+            Back to Products
           </button>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
