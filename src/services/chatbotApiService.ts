@@ -26,6 +26,10 @@ export interface ApiProduct {
   category: Category
 }
 
+export interface ApiProductResponse {
+  products: ApiProduct[]
+}
+
 export interface Store {
   store_id: number
   name: string
@@ -36,6 +40,8 @@ export interface Store {
   created_at: string
 }
 import { url } from '@/utils/utils'
+import { handleApiResponse } from './handleAPICalls'
+import type { StoresResponse } from '@/types/store'
 
 class ChatbotApiService {
   private baseUrl: string
@@ -104,49 +110,108 @@ class ChatbotApiService {
     }
   }
 
-  // Search products by name or description
-  async searchProducts(query: string): Promise<ApiProduct[]> {
+  async getPopularProducts(): Promise<ApiProduct[]> {
     try {
-      const response = await fetch(
-        `${this.baseUrl}/products/search-all?q=${encodeURIComponent(query)}`,
-      )
+      const response = await fetch(`${this.baseUrl}/order-item/top-products`)
       if (!response.ok) {
-        throw new Error('Failed to search products')
+        throw new Error('Failed to fetch popular products')
       }
       return await response.json()
     } catch (error) {
-      console.error('Error searching products:', error)
+      console.error('Error fetching popular products:', error)
       return []
     }
   }
 
-  async getPopularProducts(): Promise<ApiProduct[]> {
-  try {
-    const response = await fetch(`${this.baseUrl}/order-item/top-products`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch popular products');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching popular products:', error);
-    return [];
-  }
-}
-
-  // search a single product by name
-  async searchProductByName(name: string): Promise<ApiProduct | null> {
+  // Fetch all products
+  async Products(): Promise<ApiProduct[]> {
     try {
-      const response = await fetch(
-        `${this.baseUrl}/products/search?name=${encodeURIComponent(name)}`,
-      )
+      const response = await fetch(`${this.baseUrl}/products/all`)
       if (!response.ok) {
-        throw new Error('Failed to search product by name')
+        throw new Error('Failed to fetch products')
       }
       const data = await response.json()
-      return data.length > 0 ? data[0] : null
+      // If the response is an object with products array
+      if (Array.isArray(data.products)) {
+        return data.products
+      }
+      // If the response is already an array
+      if (Array.isArray(data)) {
+        return data
+      }
+      return []
     } catch (error) {
-      console.error('Error searching product by name:', error)
-      return null
+      console.error('Error fetching products:', error)
+      return []
+    }
+  }
+
+  extractProductKeyword(query: string): string {
+    return query
+      .replace(
+        /do you have|can i get|please|find|show me|list|what is|how much|is there/gi,
+        '',
+      )
+      .replace(/[?.,]/g, '')
+      .trim()
+  }
+
+  // search a single product by name
+  async searchProductByName(query: string): Promise<any | null> {
+    try {
+      const products = await this.Products()
+      console.log(
+        'Available products:',
+        products.map((p: ApiProduct) => p.name),
+      )
+      if (products.length === 0) {
+        return []
+      }
+
+      // Extract keyword from query
+      const name = this.extractProductKeyword(query)
+      const normalizedQuery = name.trim().toLowerCase()
+      console.log('Normalized query:', normalizedQuery)
+
+      let matches = products.filter(
+        (p: ApiProduct) =>
+          p.name && p.name.trim().toLowerCase() === normalizedQuery,
+      )
+      console.log(
+        'Exact matches:',
+        matches.map((p: ApiProduct) => p.name),
+      )
+
+      if (matches.length === 0) {
+        matches = products.filter(
+          (p: ApiProduct) =>
+            p.name && p.name.toLowerCase().includes(normalizedQuery),
+        )
+        console.log(
+          'Partial matches:',
+          matches.map((p: ApiProduct) => p.name),
+        )
+      }
+
+      if (matches.length === 0 && normalizedQuery.endsWith('s')) {
+        const singular = normalizedQuery.slice(0, -1)
+        matches = products.filter(
+          (p: ApiProduct) => p.name && p.name.toLowerCase().includes(singular),
+        )
+        console.log(
+          'Singular matches:',
+          matches.map((p: ApiProduct) => p.name),
+        )
+      }
+
+      const filteredMatches = matches.filter(
+        (p: ApiProduct) => typeof p.name === 'string' && !!p.name && !!p.price,
+      )
+      console.log('Filtered matches:', filteredMatches)
+      return filteredMatches
+    } catch (error) {
+      console.error('Error searching products by name:', error)
+      return []
     }
   }
 
@@ -266,143 +331,11 @@ class ChatbotApiService {
     }
   }
 
-  // Sample data for development/testing
-  getSampleProducts(): ApiProduct[] {
-    return [
-      {
-        product_id: 9,
-        category_id: 1,
-        name: 'Fresh Tomatoes',
-        description: 'Juicy red tomatoes perfect for cooking and salads',
-        price: '120.00',
-        stock_quantity: '50',
-        image_url:
-          'https://images.unsplash.com/photo-1546470427-e8adf5d0e2b1?w=400',
-        weight: '1.000',
-        unit: 'per kg',
-        rating: '4.80',
-        review_count: 25,
-        discount: 10,
-        expiry_date: null,
-        created_at: '2025-07-04T05:17:28.069Z',
-        updatedAt: '2025-07-04T05:17:28.069Z',
-        category: {
-          category_id: 1,
-          name: 'Fresh Produce',
-          description: 'Fresh fruits and vegetables',
-          image_url:
-            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
-          created_at: '2025-07-04T01:33:59.520Z',
-        },
-      },
-      {
-        product_id: 10,
-        category_id: 2,
-        name: 'Fresh Milk',
-        description: 'Pure cow milk, fresh from local farms',
-        price: '80.00',
-        stock_quantity: '30',
-        image_url:
-          'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400',
-        weight: '1.000',
-        unit: 'per liter',
-        rating: '4.60',
-        review_count: 18,
-        discount: 5,
-        expiry_date: '2025-07-10T00:00:00.000Z',
-        created_at: '2025-07-04T05:17:28.069Z',
-        updatedAt: '2025-07-04T05:17:28.069Z',
-        category: {
-          category_id: 2,
-          name: 'Dairy Products',
-          description: 'Fresh dairy products',
-          image_url:
-            'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400',
-          created_at: '2025-07-04T01:33:59.520Z',
-        },
-      },
-      {
-        product_id: 11,
-        category_id: 1,
-        name: 'Green Apples',
-        description: 'Crisp and sweet green apples, perfect for snacking',
-        price: '200.00',
-        stock_quantity: '40',
-        image_url:
-          'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400',
-        weight: '1.000',
-        unit: 'per kg',
-        rating: '4.70',
-        review_count: 32,
-        discount: 0,
-        expiry_date: null,
-        created_at: '2025-07-04T05:17:28.069Z',
-        updatedAt: '2025-07-04T05:17:28.069Z',
-        category: {
-          category_id: 1,
-          name: 'Fresh Produce',
-          description: 'Fresh fruits and vegetables',
-          image_url:
-            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
-          created_at: '2025-07-04T01:33:59.520Z',
-        },
-      },
-      {
-        product_id: 12,
-        category_id: 3,
-        name: 'Whole Wheat Bread',
-        description: 'Freshly baked whole wheat bread',
-        price: '150.00',
-        stock_quantity: '20',
-        image_url:
-          'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400',
-        weight: '500.000',
-        unit: 'per loaf',
-        rating: '4.50',
-        review_count: 15,
-        discount: 15,
-        expiry_date: '2025-07-08T00:00:00.000Z',
-        created_at: '2025-07-04T05:17:28.069Z',
-        updatedAt: '2025-07-04T05:17:28.069Z',
-        category: {
-          category_id: 3,
-          name: 'Bakery',
-          description: 'Fresh baked goods',
-          image_url:
-            'https://images.unsplash.com/photo-1555507036-ab794f0e7e10?w=400',
-          created_at: '2025-07-04T01:33:59.520Z',
-        },
-      },
-    ]
-  }
-
-  getSampleCategories(): Category[] {
-    return [
-      {
-        category_id: 1,
-        name: 'Fresh Produce',
-        description: 'Fresh fruits and vegetables',
-        image_url:
-          'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
-        created_at: '2025-07-04T01:33:59.520Z',
-      },
-      {
-        category_id: 2,
-        name: 'Dairy Products',
-        description: 'Fresh dairy products',
-        image_url:
-          'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400',
-        created_at: '2025-07-04T01:33:59.520Z',
-      },
-      {
-        category_id: 3,
-        name: 'Bakery',
-        description: 'Fresh baked goods',
-        image_url:
-          'https://images.unsplash.com/photo-1555507036-ab794f0e7e10?w=400',
-        created_at: '2025-07-04T01:33:59.520Z',
-      },
-    ]
+  // Fetch all stores
+  async getAllStores(): Promise<StoresResponse> {
+    const response = await fetch(`${url}/stores/all`)
+    await handleApiResponse(response)
+    return response.json()
   }
 }
 
