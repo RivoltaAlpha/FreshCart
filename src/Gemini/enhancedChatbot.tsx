@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { useNavigate } from '@tanstack/react-router';
 import { useProducts } from '@/hooks/useProducts';
 import { useCategories } from '@/hooks/useCategory';
+import { useStores } from '@/hooks/useStore';
 
 interface ChatMessage {
     id: string;
@@ -29,6 +30,7 @@ interface EnhancedChatbotProps {
     onAddToCart?: (product: ApiProduct) => void;
     onNavigateToProducts?: () => void;
     onNavigateToCategory?: (categoryId: number) => void;
+    onNavigateToStores?: () => void;
     userId?: number;
 }
 
@@ -37,6 +39,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
     onProductSelect,
     onAddToCart,
     onNavigateToCategory,
+    onNavigateToStores,
     userId
 }) => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -69,7 +72,8 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
 
                 await Promise.all([
                     apiService.getAllProducts(),
-                    apiService.getCategories()
+                    apiService.getCategories(),
+                    apiService.getStores()
                 ]);
 
                 // Data will be updated by hooks
@@ -86,6 +90,8 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
         loadInitialData();
     }, [apiService]);
 
+    const stores = useStores();
+
     // Scroll to bottom when new messages are added
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -101,7 +107,8 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             const welcomeMessage: ChatMessage = {
                 id: '1',
                 type: 'bot',
-                content: `Hello! 👋 I'm your FreshCart shopping assistant. I can help you find products by category, search for specific items, or get recommendations. We have ${categories.length} categories and ${(Array.isArray(products) ? products.length : 0)} products available.`,
+                content: `Hello! 👋 I'm your FreshCart shopping assistant. I can help you find products by category, search for specific items, or get recommendations. \
+                We have ${categories.length} categories and ${(Array.isArray(products) ? products.length : 0)} products available.`,
                 timestamp: new Date(),
                 suggestions: [
                     'Show me all categories',
@@ -142,6 +149,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
       
       Available categories: ${categories.map(c => c.name).join(', ')}
       Total products: ${Array.isArray(products) ? products.length : 0}
+      Available Stores a user can shop from: ${Array.isArray(stores) ? stores.length : 0}
       ${context}
       
       User message: "${userMessage}"
@@ -162,17 +170,6 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
         } catch (error) {
             console.error('Error generating AI response:', error);
             return 'I\'m having trouble processing that request. Let me help you search for products instead.';
-        }
-    };
-
-    // Search products using backend API only
-    const searchProducts = async (query: string): Promise<ApiProduct[]> => {
-        try {
-            const searchResults = await apiService.searchProducts(query);
-            return searchResults;
-        } catch (error) {
-            console.error('Error searching products:', error);
-            throw error;
         }
     };
 
@@ -231,7 +228,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             return {
                 products: products.slice(0, 6),
                 response: `Here are all our available products:`,
-                suggestions: ['View more', 'Browse categories', 'Search specific product']
+                suggestions: ['View more', 'Show all categories', 'Vegetables', 'Fruits']
             };
         }
 
@@ -268,7 +265,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
                 return {
                     products: popularProducts.slice(0, 6),
                     response: "Here are today's popular products:",
-                    suggestions: ['Add to cart', 'View more', 'Browse categories']
+                    suggestions: ['View Fruits', 'Show all categories']
                 };
             } catch (error) {
                 console.error('Error getting popular products:', error);
@@ -367,7 +364,6 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             }
         }
 
-        //help me shop
         // navigate to products
         if (lowerQuery.includes('help me shop') || lowerQuery.includes('shop for me ')) {
             if (!onNavigateToCategory) {
@@ -382,31 +378,61 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             return {
                 products: [],
                 response: 'Sure! I\'m taking you to our product catalog. You can browse through all available products.',
-                suggestions: ['Browse categories', 'Search specific product', 'Get recommendations']
+                suggestions: ['Show all categories', 'Search specific product', 'Get recommendations']
             };
         }
 
-
-        // Search for specific product by name (exact match)
-        try {
-            const productByName = await apiService.searchProductByName(normalQuery);
-            if (productByName) {
+        // navigate to stores
+        if (lowerQuery.includes('find store') || lowerQuery.includes('where to buy') || lowerQuery.includes('where can i buy')) {
+            handleStores();
+            if (!onNavigateToStores) {
                 return {
-                    products: [productByName],
-                    response: `I found the product "${productByName.name}":`,
-                    suggestions: ['Add to cart', 'View similar', 'Browse category']
+                    products: [],
+                    response: 'I can help you find stores, but I need to know which product you are looking for.',
+                    suggestions: ['Search products', 'Show me all categories', 'Get recommendations']
                 };
             }
-        } catch (error) {
-            console.error('Error searching product by name:', error);
+        }
+
+        // Search for specific product(s) by name (local match first)
+        if (normalQuery.length > 2 && !['search specific product', 'do you have this product'].includes(lowerQuery)) {
+            const productNameMatch = normalQuery.match(/^(?:find|search|show me| do you have|what is|which is|where is)\s*(.*)$/i);
+            const productName = productNameMatch ? productNameMatch[1].trim() : normalQuery;
+
+            // Try to find products locally first
+            const foundProducts = products.filter(
+                (p: any) =>
+                    p.name.toLowerCase() === productName.toLowerCase() ||
+                    p.name.toLowerCase().includes(productName.toLowerCase())
+            );
+            if (foundProducts.length > 0) {
+                return {
+                    products: foundProducts.slice(0, 6),
+                    response: `Yes, we have ${productName}:`,
+                    suggestions: ['Add to cart', 'View similar', 'Browse category'],
+                };
+            }
+            try {
+                const apiProducts = await apiService.searchProductByName(productName);
+                if (Array.isArray(apiProducts) && apiProducts.length > 0) {
+                    return {
+                        products: apiProducts.slice(0, 6),
+                        response: `I found ${apiProducts.length} product(s) matching "${productName}":`,
+                        suggestions: ['Add to cart', 'View similar', 'Browse category'],
+                    };
+                }
+            } catch (error) {
+                console.error('Error searching products by name:', error);
+            }
         }
 
         // General product search
         try {
-            const searchResults = await searchProducts(normalQuery);
+            const searchResults = await apiService.getAllProducts();
 
-            if (searchResults.length === 0) {
-                // AI-powered response for no results
+            const productsArray = Array.isArray(searchResults) ? searchResults : [];
+
+            if (productsArray.length === 0) {
                 const aiResponse = await generateAIResponse(normalQuery, `No products found for: ${normalQuery}`);
                 return {
                     products: [],
@@ -416,14 +442,13 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
             }
 
             return {
-                products: searchResults.slice(0, 6),
-                response: `I found ${searchResults.length} products matching "${normalQuery}":`,
-                suggestions: ['Show more results', 'Refine search', 'Browse categories']
+                products: productsArray.slice(0, 6),
+                response: `I found ${productsArray.length} products matching your search:`,
+                suggestions: ['Browse popular items', 'Show all categories']
             };
         } catch (error) {
             console.error('Error searching products:', error);
 
-            // AI-powered response for search errors
             const aiResponse = await generateAIResponse(normalQuery, `Search error for: ${normalQuery}`);
             return {
                 products: [],
@@ -513,6 +538,25 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
         setMessages(prev => [...prev, message]);
     };
 
+    const handleStores = () => {
+        const message: ChatMessage = {
+            id: Date.now().toString(),
+            type: 'bot',
+            content: `To shop for products in this app, follow these steps:
+                        2. Browse the products to find what you're looking for.
+            3. Use the search bar to quickly find specific products.
+            4. Click on a product to view its details and add it to your cart.
+            5. Proceed to checkout when you're ready to purchase.
+            6. Enjoy your shopping experience!`,
+
+            timestamp: new Date(),
+            suggestions: ['Browse products', 'Search products', 'View cart']
+        };
+        setMessages(prev => [...prev, message]);
+        onNavigateToStores?.();
+        setInput(''); // Clear input after providing steps
+    }
+
     // Handle add to cart
     const handleAddToCart = async (product: ApiProduct) => {
         try {
@@ -525,7 +569,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
                     type: 'bot',
                     content: `✅ ${product.name} has been added to your cart! Continue shopping or check out when ready.`,
                     timestamp: new Date(),
-                    suggestions: ['Continue shopping', 'View cart', 'Get more recommendations', 'Browse categories']
+                    suggestions: ['Continue shopping', 'View cart', 'Get more recommendations', 'Show all categories']
                 };
                 setMessages(prev => [...prev, message]);
             } else {
@@ -692,6 +736,11 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
         );
     }
 
+    // Example: React component snippet
+    if (!products || products.length === 0) {
+        return <div>Product not found</div>
+    }
+
     return (
         <>
             {/* Chatbot Toggle Button */}
@@ -704,7 +753,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
 
             {/* Chatbot Window */}
             {isOpen && (
-                <div className={`fixed bottom-20 right-6 lg:w-[650px] w-80 h-[700px] 
+                <div className={`fixed bottom-20 right-6 lg:w-[650px] w-64 h-[700px] 
                                ${isDarkMode ? 'bg-gray-900' : 'bg-white'} 
                                border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} 
                                rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden`}>
@@ -745,7 +794,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
                                 key={message.id}
                                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
-                                <div className={`max-w-[85%] ${message.type === 'user'
+                                <div className={`w-[90%] ${message.type === 'user'
                                     ? 'bg-gradient-to-r from-[#0074B7] to-[#60A3D9] text-white'
                                     : isDarkMode
                                         ? 'bg-gray-800 text-gray-100 border border-gray-700'
@@ -769,7 +818,7 @@ const EnhancedChatbot: React.FC<EnhancedChatbotProps> = ({
 
                                             {/* Render products if available */}
                                             {message.products && message.products.length > 0 && (
-                                                <div className="mt-4 space-y-3 max-h-64 overflow-y-auto">
+                                                <div className="mt-4 space-y-3 ">
                                                     <div className="grid gap-3">
                                                         {message.products.map(renderProductCard)}
                                                     </div>
