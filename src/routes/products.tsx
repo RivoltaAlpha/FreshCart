@@ -339,7 +339,8 @@ function RouteComponent() {
                                 : 'bg-white/90 text-gray-600 hover:bg-red-500 hover:text-white'
                             }`}
                           >
-                            <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''} />
+                            <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''} 
+                            />
                           </button>
                         </div>
 
