@@ -44,6 +44,7 @@ const ChatbotIntegration: React.FC<ChatbotIntegrationProps> = ({ userId }) => {
         console.log('Cart updated:', currentCart);
     };
 
+
     // Handle navigation to category
     const handleNavigateToCategory = (categoryId: number) => {
         console.log('Navigating to category:', categoryId);
@@ -53,12 +54,19 @@ const ChatbotIntegration: React.FC<ChatbotIntegrationProps> = ({ userId }) => {
         navigate({ to: '/products' });
     };
 
+    // Handle navigate to stores
+    const handleNavigateToStores = () => {
+        console.log('Navigating to stores');
+        navigate({ to: '/stores' });
+    };
+
     return (
         <EnhancedChatbot
             apiService={apiService}
             onProductSelect={handleProductSelect}
             onAddToCart={handleAddToCart}
             onNavigateToCategory={handleNavigateToCategory}
+            onNavigateToStores={handleNavigateToStores}
             userId={userId}
         />
     );
