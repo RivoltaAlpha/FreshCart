@@ -160,10 +160,6 @@ class ChatbotApiService {
   async searchProductByName(query: string): Promise<any | null> {
     try {
       const products = await this.Products()
-      console.log(
-        'Available products:',
-        products.map((p: ApiProduct) => p.name),
-      )
       if (products.length === 0) {
         return []
       }
@@ -171,25 +167,16 @@ class ChatbotApiService {
       // Extract keyword from query
       const name = this.extractProductKeyword(query)
       const normalizedQuery = name.trim().toLowerCase()
-      console.log('Normalized query:', normalizedQuery)
 
       let matches = products.filter(
         (p: ApiProduct) =>
           p.name && p.name.trim().toLowerCase() === normalizedQuery,
-      )
-      console.log(
-        'Exact matches:',
-        matches.map((p: ApiProduct) => p.name),
       )
 
       if (matches.length === 0) {
         matches = products.filter(
           (p: ApiProduct) =>
             p.name && p.name.toLowerCase().includes(normalizedQuery),
-        )
-        console.log(
-          'Partial matches:',
-          matches.map((p: ApiProduct) => p.name),
         )
       }
 
@@ -198,16 +185,11 @@ class ChatbotApiService {
         matches = products.filter(
           (p: ApiProduct) => p.name && p.name.toLowerCase().includes(singular),
         )
-        console.log(
-          'Singular matches:',
-          matches.map((p: ApiProduct) => p.name),
-        )
       }
 
       const filteredMatches = matches.filter(
         (p: ApiProduct) => typeof p.name === 'string' && !!p.name && !!p.price,
       )
-      console.log('Filtered matches:', filteredMatches)
       return filteredMatches
     } catch (error) {
       console.error('Error searching products by name:', error)
