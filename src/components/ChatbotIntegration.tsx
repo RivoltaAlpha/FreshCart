@@ -44,6 +44,18 @@ const ChatbotIntegration: React.FC<ChatbotIntegrationProps> = ({ userId }) => {
         console.log('Cart updated:', currentCart);
     };
 
+    // handle navigate to cart
+    const handleNavigateToCart = () => {
+        console.log('Navigating to cart');
+        navigate({ to: '/customer/cart' });
+    }
+
+    // Handle checkout process
+    const handleCheckout = () => {
+        console.log('Navigating to checkout');
+        navigate({ to: '/customer/checkout-order' });
+    }
+
 
     // Handle navigation to category
     const handleNavigateToCategory = (categoryId: number) => {
@@ -67,6 +79,8 @@ const ChatbotIntegration: React.FC<ChatbotIntegrationProps> = ({ userId }) => {
             onAddToCart={handleAddToCart}
             onNavigateToCategory={handleNavigateToCategory}
             onNavigateToStores={handleNavigateToStores}
+            onNavigateToCart={handleNavigateToCart}
+            onNavigateToCheckout={handleCheckout}
             userId={userId}
         />
     );
