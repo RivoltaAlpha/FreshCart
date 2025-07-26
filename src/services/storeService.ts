@@ -162,3 +162,30 @@ export const getAllStoresAnalytics = async (): Promise<StoresAnalytics> => {
   await handleApiResponse(response)
   return response.json()
 }
+
+// updateStore
+export const updateStore = async (
+  storeId: number,
+  data: Partial<Store>,
+): Promise<Store> => {
+  const token = await getAuthToken()
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+
+  try {
+    const response = await fetch(`${url}/stores/update/${storeId}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    await handleApiResponse(response)
+    return response.json()
+  } catch (error) {
+    console.error('Error in updateStore:', error)
+    throw error
+  }
+}

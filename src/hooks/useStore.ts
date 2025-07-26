@@ -2,7 +2,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 import { useState, useEffect, useCallback } from 'react'
 import type { allStoreProductsResponse, Store } from '../types/store'
 import type { Product } from '../types/types'
-import { createStore, getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreHavingProduct, getStoreProducts, getUnverifiedStores, verifyStore } from '@/services/storeService'
+import { createStore, getallStoreProducts, getAllStores, getStoreByOwnerId, getStoreHavingProduct, getStoreProducts, getUnverifiedStores, updateStore, verifyStore } from '@/services/storeService'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface UseStoreProductsParams {
@@ -234,6 +234,21 @@ export const useCreateStore = () => {
     mutationFn: createStore,
 
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stores'] })
+    },
+  })
+}
+
+// update store hook
+export const useUpdateStoreMutation = (storeId: number) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ['updateStore', storeId],
+    mutationFn: (data: Partial<Store>) => {
+      return updateStore(storeId, data)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['store', storeId] })
       queryClient.invalidateQueries({ queryKey: ['stores'] })
     },
   })
