@@ -64,20 +64,22 @@ function StoreLayout() {
 }
 const checkStoreAuth = () => {
   const authData = localStorage.getItem('auth')
-  if (!authData) return { isAuthenticated: false, isStore: false }
+  const currentStore = localStorage.getItem('currentStore')
+  if (!authData) return { isAuthenticated: false, isStore: false, isVerified: false }
   try {
     const auth = JSON.parse(authData)
     const isAuthenticated = !!auth.isAuthenticated
     const isStore = auth?.user?.role === 'Store'
-    return { isStore, isAuthenticated }
+    const isVerified = currentStore ? JSON.parse(currentStore).is_verified === 'true' : false
+    return { isStore, isAuthenticated, isVerified }
   } catch {
-    return { isStore: false, isAuthenticated: false }
+    return { isStore: false, isAuthenticated: false, isVerified: false }
   }
 }
 
 export const Route = createFileRoute('/store')({
   beforeLoad: async ({ location }) => {
-    const { isAuthenticated, isStore } = checkStoreAuth()
+    const { isAuthenticated, isStore, isVerified } = checkStoreAuth()
 
     if (!isAuthenticated && !isStore || isAuthenticated && !isStore) {
       throw redirect({
@@ -87,6 +89,15 @@ export const Route = createFileRoute('/store')({
         },
       })
     }
+    if (isAuthenticated && isStore && !isVerified) {
+      throw redirect({
+        to: '/store/unverified',
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+
   },
   component: StoreLayout,
 })
