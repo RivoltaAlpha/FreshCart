@@ -39,6 +39,7 @@ export interface Store {
   total_reviews: number
   store_code: string
   delivery_fee: number
+  account_number: string
   created_at: string
   updated_at: string
   owner: {
