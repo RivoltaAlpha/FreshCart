@@ -27,6 +27,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoreUnverifiedRouteImport } from './routes/store/unverified'
 import { Route as StoreTrackOrderRouteImport } from './routes/store/track-order'
 import { Route as StoreSuccessRouteImport } from './routes/store/success'
 import { Route as StoreStockManagementRouteImport } from './routes/store/stock-management'
@@ -51,6 +52,7 @@ import { Route as DriverEarningsRouteImport } from './routes/driver/earnings'
 import { Route as DriverDeliveryHistoryRouteImport } from './routes/driver/delivery-history'
 import { Route as DriverDeliveriesRouteImport } from './routes/driver/deliveries'
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
+import { Route as DriverAddDetailsRouteImport } from './routes/driver/add-details'
 import { Route as CustomerWishlistRouteImport } from './routes/customer/wishlist'
 import { Route as CustomerSuccessRouteImport } from './routes/customer/success'
 import { Route as CustomerShoppingInsightsRouteImport } from './routes/customer/shopping-insights'
@@ -170,6 +172,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoreUnverifiedRoute = StoreUnverifiedRouteImport.update({
+  id: '/unverified',
+  path: '/unverified',
+  getParentRoute: () => StoreRoute,
+} as any)
 const StoreTrackOrderRoute = StoreTrackOrderRouteImport.update({
   id: '/track-order',
   path: '/track-order',
@@ -288,6 +295,11 @@ const DriverDeliveriesRoute = DriverDeliveriesRouteImport.update({
 const DriverDashboardRoute = DriverDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverAddDetailsRoute = DriverAddDetailsRouteImport.update({
+  id: '/add-details',
+  path: '/add-details',
   getParentRoute: () => DriverRoute,
 } as any)
 const CustomerWishlistRoute = CustomerWishlistRouteImport.update({
@@ -481,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
+  '/driver/add-details': typeof DriverAddDetailsRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
@@ -505,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
   '/store/track-order': typeof StoreTrackOrderRoute
+  '/store/unverified': typeof StoreUnverifiedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -553,6 +567,7 @@ export interface FileRoutesByTo {
   '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
+  '/driver/add-details': typeof DriverAddDetailsRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
@@ -577,6 +592,7 @@ export interface FileRoutesByTo {
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
   '/store/track-order': typeof StoreTrackOrderRoute
+  '/store/unverified': typeof StoreUnverifiedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -626,6 +642,7 @@ export interface FileRoutesById {
   '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
+  '/driver/add-details': typeof DriverAddDetailsRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
@@ -650,6 +667,7 @@ export interface FileRoutesById {
   '/store/stock-management': typeof StoreStockManagementRoute
   '/store/success': typeof StoreSuccessRoute
   '/store/track-order': typeof StoreTrackOrderRoute
+  '/store/unverified': typeof StoreUnverifiedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -700,6 +718,7 @@ export interface FileRouteTypes {
     | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
+    | '/driver/add-details'
     | '/driver/dashboard'
     | '/driver/deliveries'
     | '/driver/delivery-history'
@@ -724,6 +743,7 @@ export interface FileRouteTypes {
     | '/store/stock-management'
     | '/store/success'
     | '/store/track-order'
+    | '/store/unverified'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -772,6 +792,7 @@ export interface FileRouteTypes {
     | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
+    | '/driver/add-details'
     | '/driver/dashboard'
     | '/driver/deliveries'
     | '/driver/delivery-history'
@@ -796,6 +817,7 @@ export interface FileRouteTypes {
     | '/store/stock-management'
     | '/store/success'
     | '/store/track-order'
+    | '/store/unverified'
   id:
     | '__root__'
     | '/'
@@ -844,6 +866,7 @@ export interface FileRouteTypes {
     | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
+    | '/driver/add-details'
     | '/driver/dashboard'
     | '/driver/deliveries'
     | '/driver/delivery-history'
@@ -868,6 +891,7 @@ export interface FileRouteTypes {
     | '/store/stock-management'
     | '/store/success'
     | '/store/track-order'
+    | '/store/unverified'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1018,6 +1042,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/store/unverified': {
+      id: '/store/unverified'
+      path: '/unverified'
+      fullPath: '/store/unverified'
+      preLoaderRoute: typeof StoreUnverifiedRouteImport
+      parentRoute: typeof StoreRoute
     }
     '/store/track-order': {
       id: '/store/track-order'
@@ -1185,6 +1216,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/driver/dashboard'
       preLoaderRoute: typeof DriverDashboardRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/add-details': {
+      id: '/driver/add-details'
+      path: '/add-details'
+      fullPath: '/driver/add-details'
+      preLoaderRoute: typeof DriverAddDetailsRouteImport
       parentRoute: typeof DriverRoute
     }
     '/customer/wishlist': {
@@ -1461,6 +1499,7 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 )
 
 interface DriverRouteChildren {
+  DriverAddDetailsRoute: typeof DriverAddDetailsRoute
   DriverDashboardRoute: typeof DriverDashboardRoute
   DriverDeliveriesRoute: typeof DriverDeliveriesRoute
   DriverDeliveryHistoryRoute: typeof DriverDeliveryHistoryRoute
@@ -1473,6 +1512,7 @@ interface DriverRouteChildren {
 }
 
 const DriverRouteChildren: DriverRouteChildren = {
+  DriverAddDetailsRoute: DriverAddDetailsRoute,
   DriverDashboardRoute: DriverDashboardRoute,
   DriverDeliveriesRoute: DriverDeliveriesRoute,
   DriverDeliveryHistoryRoute: DriverDeliveryHistoryRoute,
@@ -1503,6 +1543,7 @@ interface StoreRouteChildren {
   StoreStockManagementRoute: typeof StoreStockManagementRoute
   StoreSuccessRoute: typeof StoreSuccessRoute
   StoreTrackOrderRoute: typeof StoreTrackOrderRoute
+  StoreUnverifiedRoute: typeof StoreUnverifiedRoute
 }
 
 const StoreRouteChildren: StoreRouteChildren = {
@@ -1521,6 +1562,7 @@ const StoreRouteChildren: StoreRouteChildren = {
   StoreStockManagementRoute: StoreStockManagementRoute,
   StoreSuccessRoute: StoreSuccessRoute,
   StoreTrackOrderRoute: StoreTrackOrderRoute,
+  StoreUnverifiedRoute: StoreUnverifiedRoute,
 }
 
 const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
