@@ -34,6 +34,7 @@ import { Route as StoreShipmentsRouteImport } from './routes/store/shipments'
 import { Route as StoreSettingsRouteImport } from './routes/store/settings'
 import { Route as StoreProfileRouteImport } from './routes/store/profile'
 import { Route as StoreProductsRouteImport } from './routes/store/products'
+import { Route as StorePaymentDetailsRouteImport } from './routes/store/payment-details'
 import { Route as StoreMyproductsRouteImport } from './routes/store/myproducts'
 import { Route as StoreManageOrdersRouteImport } from './routes/store/manage-orders'
 import { Route as StoreInventoriesRouteImport } from './routes/store/inventories'
@@ -44,6 +45,7 @@ import { Route as StoreAnalyticsRouteImport } from './routes/store/analytics'
 import { Route as DriverSettingsRouteImport } from './routes/driver/settings'
 import { Route as DriverRouteNavigationRouteImport } from './routes/driver/route-navigation'
 import { Route as DriverProfileRouteImport } from './routes/driver/profile'
+import { Route as DriverPaymentDetailsRouteImport } from './routes/driver/payment-details'
 import { Route as DriverNotificationsRouteImport } from './routes/driver/notifications'
 import { Route as DriverEarningsRouteImport } from './routes/driver/earnings'
 import { Route as DriverDeliveryHistoryRouteImport } from './routes/driver/delivery-history'
@@ -203,6 +205,11 @@ const StoreProductsRoute = StoreProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => StoreRoute,
 } as any)
+const StorePaymentDetailsRoute = StorePaymentDetailsRouteImport.update({
+  id: '/payment-details',
+  path: '/payment-details',
+  getParentRoute: () => StoreRoute,
+} as any)
 const StoreMyproductsRoute = StoreMyproductsRouteImport.update({
   id: '/myproducts',
   path: '/myproducts',
@@ -251,6 +258,11 @@ const DriverRouteNavigationRoute = DriverRouteNavigationRouteImport.update({
 const DriverProfileRoute = DriverProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverPaymentDetailsRoute = DriverPaymentDetailsRouteImport.update({
+  id: '/payment-details',
+  path: '/payment-details',
   getParentRoute: () => DriverRoute,
 } as any)
 const DriverNotificationsRoute = DriverNotificationsRouteImport.update({
@@ -474,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/payment-details': typeof DriverPaymentDetailsRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/route-navigation': typeof DriverRouteNavigationRoute
   '/driver/settings': typeof DriverSettingsRoute
@@ -484,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/store/inventories': typeof StoreInventoriesRoute
   '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/myproducts': typeof StoreMyproductsRoute
+  '/store/payment-details': typeof StorePaymentDetailsRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
@@ -544,6 +558,7 @@ export interface FileRoutesByTo {
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/payment-details': typeof DriverPaymentDetailsRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/route-navigation': typeof DriverRouteNavigationRoute
   '/driver/settings': typeof DriverSettingsRoute
@@ -554,6 +569,7 @@ export interface FileRoutesByTo {
   '/store/inventories': typeof StoreInventoriesRoute
   '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/myproducts': typeof StoreMyproductsRoute
+  '/store/payment-details': typeof StorePaymentDetailsRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
@@ -615,6 +631,7 @@ export interface FileRoutesById {
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
   '/driver/earnings': typeof DriverEarningsRoute
   '/driver/notifications': typeof DriverNotificationsRoute
+  '/driver/payment-details': typeof DriverPaymentDetailsRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/route-navigation': typeof DriverRouteNavigationRoute
   '/driver/settings': typeof DriverSettingsRoute
@@ -625,6 +642,7 @@ export interface FileRoutesById {
   '/store/inventories': typeof StoreInventoriesRoute
   '/store/manage-orders': typeof StoreManageOrdersRoute
   '/store/myproducts': typeof StoreMyproductsRoute
+  '/store/payment-details': typeof StorePaymentDetailsRoute
   '/store/products': typeof StoreProductsRoute
   '/store/profile': typeof StoreProfileRoute
   '/store/settings': typeof StoreSettingsRoute
@@ -687,6 +705,7 @@ export interface FileRouteTypes {
     | '/driver/delivery-history'
     | '/driver/earnings'
     | '/driver/notifications'
+    | '/driver/payment-details'
     | '/driver/profile'
     | '/driver/route-navigation'
     | '/driver/settings'
@@ -697,6 +716,7 @@ export interface FileRouteTypes {
     | '/store/inventories'
     | '/store/manage-orders'
     | '/store/myproducts'
+    | '/store/payment-details'
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
@@ -757,6 +777,7 @@ export interface FileRouteTypes {
     | '/driver/delivery-history'
     | '/driver/earnings'
     | '/driver/notifications'
+    | '/driver/payment-details'
     | '/driver/profile'
     | '/driver/route-navigation'
     | '/driver/settings'
@@ -767,6 +788,7 @@ export interface FileRouteTypes {
     | '/store/inventories'
     | '/store/manage-orders'
     | '/store/myproducts'
+    | '/store/payment-details'
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
@@ -827,6 +849,7 @@ export interface FileRouteTypes {
     | '/driver/delivery-history'
     | '/driver/earnings'
     | '/driver/notifications'
+    | '/driver/payment-details'
     | '/driver/profile'
     | '/driver/route-navigation'
     | '/driver/settings'
@@ -837,6 +860,7 @@ export interface FileRouteTypes {
     | '/store/inventories'
     | '/store/manage-orders'
     | '/store/myproducts'
+    | '/store/payment-details'
     | '/store/products'
     | '/store/profile'
     | '/store/settings'
@@ -1044,6 +1068,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreProductsRouteImport
       parentRoute: typeof StoreRoute
     }
+    '/store/payment-details': {
+      id: '/store/payment-details'
+      path: '/payment-details'
+      fullPath: '/store/payment-details'
+      preLoaderRoute: typeof StorePaymentDetailsRouteImport
+      parentRoute: typeof StoreRoute
+    }
     '/store/myproducts': {
       id: '/store/myproducts'
       path: '/myproducts'
@@ -1112,6 +1143,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/driver/profile'
       preLoaderRoute: typeof DriverProfileRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/payment-details': {
+      id: '/driver/payment-details'
+      path: '/payment-details'
+      fullPath: '/driver/payment-details'
+      preLoaderRoute: typeof DriverPaymentDetailsRouteImport
       parentRoute: typeof DriverRoute
     }
     '/driver/notifications': {
@@ -1428,6 +1466,7 @@ interface DriverRouteChildren {
   DriverDeliveryHistoryRoute: typeof DriverDeliveryHistoryRoute
   DriverEarningsRoute: typeof DriverEarningsRoute
   DriverNotificationsRoute: typeof DriverNotificationsRoute
+  DriverPaymentDetailsRoute: typeof DriverPaymentDetailsRoute
   DriverProfileRoute: typeof DriverProfileRoute
   DriverRouteNavigationRoute: typeof DriverRouteNavigationRoute
   DriverSettingsRoute: typeof DriverSettingsRoute
@@ -1439,6 +1478,7 @@ const DriverRouteChildren: DriverRouteChildren = {
   DriverDeliveryHistoryRoute: DriverDeliveryHistoryRoute,
   DriverEarningsRoute: DriverEarningsRoute,
   DriverNotificationsRoute: DriverNotificationsRoute,
+  DriverPaymentDetailsRoute: DriverPaymentDetailsRoute,
   DriverProfileRoute: DriverProfileRoute,
   DriverRouteNavigationRoute: DriverRouteNavigationRoute,
   DriverSettingsRoute: DriverSettingsRoute,
@@ -1455,6 +1495,7 @@ interface StoreRouteChildren {
   StoreInventoriesRoute: typeof StoreInventoriesRoute
   StoreManageOrdersRoute: typeof StoreManageOrdersRoute
   StoreMyproductsRoute: typeof StoreMyproductsRoute
+  StorePaymentDetailsRoute: typeof StorePaymentDetailsRoute
   StoreProductsRoute: typeof StoreProductsRoute
   StoreProfileRoute: typeof StoreProfileRoute
   StoreSettingsRoute: typeof StoreSettingsRoute
@@ -1472,6 +1513,7 @@ const StoreRouteChildren: StoreRouteChildren = {
   StoreInventoriesRoute: StoreInventoriesRoute,
   StoreManageOrdersRoute: StoreManageOrdersRoute,
   StoreMyproductsRoute: StoreMyproductsRoute,
+  StorePaymentDetailsRoute: StorePaymentDetailsRoute,
   StoreProductsRoute: StoreProductsRoute,
   StoreProfileRoute: StoreProfileRoute,
   StoreSettingsRoute: StoreSettingsRoute,
