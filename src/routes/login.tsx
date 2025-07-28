@@ -98,8 +98,8 @@ function RouteComponent() {
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
-            duration: 0.7,
-            scale: { type: "spring", visualDuration: 0.7, bounce: 0.5 },
+            duration: 0.8,
+            scale: { type: "spring", visualDuration: 0.8, bounce: 0.5, ease: "easeInOut" },
           }}
         >
 

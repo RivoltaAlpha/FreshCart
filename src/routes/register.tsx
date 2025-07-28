@@ -33,8 +33,8 @@ function RouteComponent() {
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
-            duration: 0.8,
-            scale: { type: "spring", visualDuration: 0.8, bounce: 0.5 },
+            duration: 0.2,
+            scale: { type: "spring", visualDuration: 0.8, bounce: 0.2, ease: "easeInOut" },
           }}
         >
           <div className=" lg:max-w-3xl rounded-2xl shadow-2xl md:w-full">
