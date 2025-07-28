@@ -1,18 +1,12 @@
 import { useState } from 'react';
 import { User, Mail, Lock, Phone, Eye, EyeOff } from 'lucide-react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner';
 import { useRegister } from '@/hooks/useRegister';
-import { Footer } from '@/components/Footer';
-import Header from '@/components/Header';
 import { getAreasInLocality, getLocalitiesInCounty, getSubCountiesInCounty, getCounties } from 'kenya-locations';
 import type { UserRole } from '@/types/types';
 
-export const Route = createFileRoute('/register-store')({
-  component: RegisterPage,
-})
-
-function RegisterPage() {
+function StoreForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
@@ -89,16 +83,7 @@ function RegisterPage() {
 
   return (
     <>
-      <Header />
-
-      <div className="min-h-screen flex items-center justify-center py-10"
-        style={{
-          backgroundImage: "url('/store.jpg')",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-      >
-        <div className="bg-white lg:max-w-3xl mx-2 rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
+        <div className="bg-white m-2 lg:max-w-3xl rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-white" />
@@ -314,10 +299,8 @@ function RegisterPage() {
             </p>
           </div>
         </div>
-      </div>
-      <Footer />
     </>
   );
 };
 
-export default RegisterPage;
+export default StoreForm;

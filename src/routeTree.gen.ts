@@ -13,8 +13,6 @@ import { Route as VerifyStoreRouteImport } from './routes/verify-store'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as ShopStoreRouteImport } from './routes/shop-store'
-import { Route as RegisterStoreRouteImport } from './routes/register-store'
-import { Route as RegisterDriverRouteImport } from './routes/register-driver'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RecipesRouteImport } from './routes/recipes'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -100,16 +98,6 @@ const StoreRoute = StoreRouteImport.update({
 const ShopStoreRoute = ShopStoreRouteImport.update({
   id: '/shop-store',
   path: '/shop-store',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterStoreRoute = RegisterStoreRouteImport.update({
-  id: '/register-store',
-  path: '/register-store',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterDriverRoute = RegisterDriverRouteImport.update({
-  id: '/register-driver',
-  path: '/register-driver',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -459,8 +447,6 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
-  '/register-driver': typeof RegisterDriverRoute
-  '/register-store': typeof RegisterStoreRoute
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -533,8 +519,6 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
-  '/register-driver': typeof RegisterDriverRoute
-  '/register-store': typeof RegisterStoreRoute
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -608,8 +592,6 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/recipes': typeof RecipesRoute
   '/register': typeof RegisterRoute
-  '/register-driver': typeof RegisterDriverRoute
-  '/register-store': typeof RegisterStoreRoute
   '/shop-store': typeof ShopStoreRoute
   '/store': typeof StoreRouteWithChildren
   '/stores': typeof StoresRoute
@@ -684,8 +666,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
-    | '/register-driver'
-    | '/register-store'
     | '/shop-store'
     | '/store'
     | '/stores'
@@ -758,8 +738,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
-    | '/register-driver'
-    | '/register-store'
     | '/shop-store'
     | '/store'
     | '/stores'
@@ -832,8 +810,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/recipes'
     | '/register'
-    | '/register-driver'
-    | '/register-store'
     | '/shop-store'
     | '/store'
     | '/stores'
@@ -907,8 +883,6 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   RecipesRoute: typeof RecipesRoute
   RegisterRoute: typeof RegisterRoute
-  RegisterDriverRoute: typeof RegisterDriverRoute
-  RegisterStoreRoute: typeof RegisterStoreRoute
   ShopStoreRoute: typeof ShopStoreRoute
   StoreRoute: typeof StoreRouteWithChildren
   StoresRoute: typeof StoresRoute
@@ -943,20 +917,6 @@ declare module '@tanstack/react-router' {
       path: '/shop-store'
       fullPath: '/shop-store'
       preLoaderRoute: typeof ShopStoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register-store': {
-      id: '/register-store'
-      path: '/register-store'
-      fullPath: '/register-store'
-      preLoaderRoute: typeof RegisterStoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register-driver': {
-      id: '/register-driver'
-      path: '/register-driver'
-      fullPath: '/register-driver'
-      preLoaderRoute: typeof RegisterDriverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -1580,8 +1540,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   RecipesRoute: RecipesRoute,
   RegisterRoute: RegisterRoute,
-  RegisterDriverRoute: RegisterDriverRoute,
-  RegisterStoreRoute: RegisterStoreRoute,
   ShopStoreRoute: ShopStoreRoute,
   StoreRoute: StoreRouteWithChildren,
   StoresRoute: StoresRoute,
