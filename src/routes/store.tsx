@@ -70,8 +70,17 @@ const checkStoreAuth = () => {
     const auth = JSON.parse(authData)
     const isAuthenticated = !!auth.isAuthenticated
     const isStore = auth?.user?.role === 'Store'
-    const isVerified = currentStore ? JSON.parse(currentStore).is_verified === 'true' : false
+    // FIX: handle boolean or string for is_verified
+    let isVerified = false
+    if (currentStore) {
+      const parsedStore = JSON.parse(currentStore)
+      isVerified = typeof parsedStore.is_verified === 'boolean'
+        ? parsedStore.is_verified
+        : parsedStore.is_verified === 'true'
+    }
+    console.log({ isStore, isAuthenticated, isVerified })
     return { isStore, isAuthenticated, isVerified }
+
   } catch {
     return { isStore: false, isAuthenticated: false, isVerified: false }
   }
@@ -90,14 +99,20 @@ export const Route = createFileRoute('/store')({
       })
     }
     if (isAuthenticated && isStore && !isVerified) {
-      throw redirect({
-        to: '/store/unverified',
-        search: {
-          redirect: location.href,
-        },
-      })
+      if (!location.pathname.startsWith('/store/unverified')) {
+        throw redirect({
+          to: '/store/unverified',
+          search: { redirect: location.href },
+        });
+      }
+    } else {
+      if (location.pathname.startsWith('/store/unverified')) {
+        throw redirect({
+          to: '/store/dashboard',
+          search: { redirect: location.href },
+        });
+      }
     }
-
   },
   component: StoreLayout,
 })
