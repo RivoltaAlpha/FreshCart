@@ -43,6 +43,7 @@ import { Route as StoreDashboardRouteImport } from './routes/store/dashboard'
 import { Route as StoreCreateProductRouteImport } from './routes/store/create-product'
 import { Route as StoreCreateInventoryRouteImport } from './routes/store/create-inventory'
 import { Route as StoreAnalyticsRouteImport } from './routes/store/analytics'
+import { Route as DriverUnverifiedRouteImport } from './routes/driver/unverified'
 import { Route as DriverSettingsRouteImport } from './routes/driver/settings'
 import { Route as DriverRouteNavigationRouteImport } from './routes/driver/route-navigation'
 import { Route as DriverProfileRouteImport } from './routes/driver/profile'
@@ -250,6 +251,11 @@ const StoreAnalyticsRoute = StoreAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => StoreRoute,
+} as any)
+const DriverUnverifiedRoute = DriverUnverifiedRouteImport.update({
+  id: '/unverified',
+  path: '/unverified',
+  getParentRoute: () => DriverRoute,
 } as any)
 const DriverSettingsRoute = DriverSettingsRouteImport.update({
   id: '/settings',
@@ -496,6 +502,7 @@ export interface FileRoutesByFullPath {
   '/driver/profile': typeof DriverProfileRoute
   '/driver/route-navigation': typeof DriverRouteNavigationRoute
   '/driver/settings': typeof DriverSettingsRoute
+  '/driver/unverified': typeof DriverUnverifiedRoute
   '/store/analytics': typeof StoreAnalyticsRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -569,6 +576,7 @@ export interface FileRoutesByTo {
   '/driver/profile': typeof DriverProfileRoute
   '/driver/route-navigation': typeof DriverRouteNavigationRoute
   '/driver/settings': typeof DriverSettingsRoute
+  '/driver/unverified': typeof DriverUnverifiedRoute
   '/store/analytics': typeof StoreAnalyticsRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -643,6 +651,7 @@ export interface FileRoutesById {
   '/driver/profile': typeof DriverProfileRoute
   '/driver/route-navigation': typeof DriverRouteNavigationRoute
   '/driver/settings': typeof DriverSettingsRoute
+  '/driver/unverified': typeof DriverUnverifiedRoute
   '/store/analytics': typeof StoreAnalyticsRoute
   '/store/create-inventory': typeof StoreCreateInventoryRoute
   '/store/create-product': typeof StoreCreateProductRoute
@@ -718,6 +727,7 @@ export interface FileRouteTypes {
     | '/driver/profile'
     | '/driver/route-navigation'
     | '/driver/settings'
+    | '/driver/unverified'
     | '/store/analytics'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -791,6 +801,7 @@ export interface FileRouteTypes {
     | '/driver/profile'
     | '/driver/route-navigation'
     | '/driver/settings'
+    | '/driver/unverified'
     | '/store/analytics'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -864,6 +875,7 @@ export interface FileRouteTypes {
     | '/driver/profile'
     | '/driver/route-navigation'
     | '/driver/settings'
+    | '/driver/unverified'
     | '/store/analytics'
     | '/store/create-inventory'
     | '/store/create-product'
@@ -1142,6 +1154,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/store/analytics'
       preLoaderRoute: typeof StoreAnalyticsRouteImport
       parentRoute: typeof StoreRoute
+    }
+    '/driver/unverified': {
+      id: '/driver/unverified'
+      path: '/unverified'
+      fullPath: '/driver/unverified'
+      preLoaderRoute: typeof DriverUnverifiedRouteImport
+      parentRoute: typeof DriverRoute
     }
     '/driver/settings': {
       id: '/driver/settings'
@@ -1489,6 +1508,7 @@ interface DriverRouteChildren {
   DriverProfileRoute: typeof DriverProfileRoute
   DriverRouteNavigationRoute: typeof DriverRouteNavigationRoute
   DriverSettingsRoute: typeof DriverSettingsRoute
+  DriverUnverifiedRoute: typeof DriverUnverifiedRoute
 }
 
 const DriverRouteChildren: DriverRouteChildren = {
@@ -1501,6 +1521,7 @@ const DriverRouteChildren: DriverRouteChildren = {
   DriverProfileRoute: DriverProfileRoute,
   DriverRouteNavigationRoute: DriverRouteNavigationRoute,
   DriverSettingsRoute: DriverSettingsRoute,
+  DriverUnverifiedRoute: DriverUnverifiedRoute,
 }
 
 const DriverRouteWithChildren =
