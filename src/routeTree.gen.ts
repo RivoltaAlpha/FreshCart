@@ -52,7 +52,6 @@ import { Route as DriverEarningsRouteImport } from './routes/driver/earnings'
 import { Route as DriverDeliveryHistoryRouteImport } from './routes/driver/delivery-history'
 import { Route as DriverDeliveriesRouteImport } from './routes/driver/deliveries'
 import { Route as DriverDashboardRouteImport } from './routes/driver/dashboard'
-import { Route as DriverAddDetailsRouteImport } from './routes/driver/add-details'
 import { Route as CustomerWishlistRouteImport } from './routes/customer/wishlist'
 import { Route as CustomerSuccessRouteImport } from './routes/customer/success'
 import { Route as CustomerShoppingInsightsRouteImport } from './routes/customer/shopping-insights'
@@ -297,11 +296,6 @@ const DriverDashboardRoute = DriverDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => DriverRoute,
 } as any)
-const DriverAddDetailsRoute = DriverAddDetailsRouteImport.update({
-  id: '/add-details',
-  path: '/add-details',
-  getParentRoute: () => DriverRoute,
-} as any)
 const CustomerWishlistRoute = CustomerWishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
@@ -493,7 +487,6 @@ export interface FileRoutesByFullPath {
   '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
-  '/driver/add-details': typeof DriverAddDetailsRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
@@ -567,7 +560,6 @@ export interface FileRoutesByTo {
   '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
-  '/driver/add-details': typeof DriverAddDetailsRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
@@ -642,7 +634,6 @@ export interface FileRoutesById {
   '/customer/shopping-insights': typeof CustomerShoppingInsightsRoute
   '/customer/success': typeof CustomerSuccessRoute
   '/customer/wishlist': typeof CustomerWishlistRoute
-  '/driver/add-details': typeof DriverAddDetailsRoute
   '/driver/dashboard': typeof DriverDashboardRoute
   '/driver/deliveries': typeof DriverDeliveriesRoute
   '/driver/delivery-history': typeof DriverDeliveryHistoryRoute
@@ -718,7 +709,6 @@ export interface FileRouteTypes {
     | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
-    | '/driver/add-details'
     | '/driver/dashboard'
     | '/driver/deliveries'
     | '/driver/delivery-history'
@@ -792,7 +782,6 @@ export interface FileRouteTypes {
     | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
-    | '/driver/add-details'
     | '/driver/dashboard'
     | '/driver/deliveries'
     | '/driver/delivery-history'
@@ -866,7 +855,6 @@ export interface FileRouteTypes {
     | '/customer/shopping-insights'
     | '/customer/success'
     | '/customer/wishlist'
-    | '/driver/add-details'
     | '/driver/dashboard'
     | '/driver/deliveries'
     | '/driver/delivery-history'
@@ -1218,13 +1206,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverDashboardRouteImport
       parentRoute: typeof DriverRoute
     }
-    '/driver/add-details': {
-      id: '/driver/add-details'
-      path: '/add-details'
-      fullPath: '/driver/add-details'
-      preLoaderRoute: typeof DriverAddDetailsRouteImport
-      parentRoute: typeof DriverRoute
-    }
     '/customer/wishlist': {
       id: '/customer/wishlist'
       path: '/wishlist'
@@ -1499,7 +1480,6 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 )
 
 interface DriverRouteChildren {
-  DriverAddDetailsRoute: typeof DriverAddDetailsRoute
   DriverDashboardRoute: typeof DriverDashboardRoute
   DriverDeliveriesRoute: typeof DriverDeliveriesRoute
   DriverDeliveryHistoryRoute: typeof DriverDeliveryHistoryRoute
@@ -1512,7 +1492,6 @@ interface DriverRouteChildren {
 }
 
 const DriverRouteChildren: DriverRouteChildren = {
-  DriverAddDetailsRoute: DriverAddDetailsRoute,
   DriverDashboardRoute: DriverDashboardRoute,
   DriverDeliveriesRoute: DriverDeliveriesRoute,
   DriverDeliveryHistoryRoute: DriverDeliveryHistoryRoute,
