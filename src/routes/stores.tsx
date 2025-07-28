@@ -25,6 +25,7 @@ import {
 import { storeActions } from '@/store/store';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import * as motion from "motion/react-client";
 
 export const Route = createFileRoute('/stores')({
   component: StoresPage,
@@ -432,232 +433,241 @@ function StoresPage() {
     <>
       <Header />
       <div className="bg-background  min-h-screen">
-        {/* Header */}
-        <div className="shadow-sm border-b border-[#E1EAF2]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.6,
+            rotate: { duration: 0.6, ease: "easeOut" }
+          }}
+        >
+          <div className="shadow-sm border-b border-[#E1EAF2]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="text-center">
+                <h1 className="text-4xl font-bold text-fresh-primary mb-4">
+                  Discover Local Stores
+                </h1>
+                <p className="text-xl text-fresh-secondary max-w-3xl mx-auto">
+                  Browse through our network of trusted local stores and find fresh, quality products
+                  delivered straight to your doorstep.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Section */}
+          <div className="bg-gradient-to-r from-[#120061] to-[#00A7B3] text-white">
+            <div className="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8 py-12">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="text-center">
+                  <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <StoreIcon className="w-8 h-8" />
+                  </div>
+                  <div className="text-3xl font-bold mb-2">{stores?.length || 0}</div>
+                  <div className="text-blue-100">Partner Stores</div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <TrendingUp className="w-8 h-8" />
+                  </div>
+                  <div className="text-3xl font-bold mb-2">4.7</div>
+                  <div className="text-blue-100">Average Rating</div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <Package className="w-8 h-8" />
+                  </div>
+                  <div className="text-3xl font-bold mb-2">1000+</div>
+                  <div className="text-blue-100">Products Available</div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <Users className="w-8 h-8" />
+                  </div>
+                  <div className="text-3xl font-bold mb-2">50K+</div>
+                  <div className="text-blue-100">Happy Customers</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Search and Filters */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-fresh-primary mb-4">
-                Discover Local Stores
-              </h1>
-              <p className="text-xl text-fresh-secondary max-w-3xl mx-auto">
-                Browse through our network of trusted local stores and find fresh, quality products
-                delivered straight to your doorstep.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Section */}
-        <div className="bg-gradient-to-r from-[#120061] to-[#00A7B3] text-white">
-          <div className="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <StoreIcon className="w-8 h-8" />
+            <div className="bg-searchbar rounded-lg shadow-md p-6 mb-8">
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#6A89A7] w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Search stores by name, county, or type..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent text-lg"
+                  />
                 </div>
-                <div className="text-3xl font-bold mb-2">{stores?.length || 0}</div>
-                <div className="text-blue-100">Partner Stores</div>
-              </div>
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <TrendingUp className="w-8 h-8" />
-                </div>
-                <div className="text-3xl font-bold mb-2">4.7</div>
-                <div className="text-blue-100">Average Rating</div>
-              </div>
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Package className="w-8 h-8" />
-                </div>
-                <div className="text-3xl font-bold mb-2">1000+</div>
-                <div className="text-blue-100">Products Available</div>
-              </div>
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Users className="w-8 h-8" />
-                </div>
-                <div className="text-3xl font-bold mb-2">50K+</div>
-                <div className="text-blue-100">Happy Customers</div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Search and Filters */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="bg-searchbar rounded-lg shadow-md p-6 mb-8">
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#6A89A7] w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search stores by name, county, or type..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent text-lg"
-                />
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 px-4 py-3 border border-[#E1EAF2] rounded-lg hover:bg-[#F9FBFC] transition-colors"
-                >
-                  <Filter className="w-5 h-5" />
-                  Filters
-                </button>
-
-                <div className="flex border border-[#E1EAF2] rounded-lg">
+                <div className="flex gap-2">
                   <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-3 ${viewMode === 'grid' ? 'bg-[#00A7B3] text-white' : 'text-[#6A89A7]'}`}
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center gap-2 px-4 py-3 border border-[#E1EAF2] rounded-lg hover:bg-[#F9FBFC] transition-colors"
                   >
-                    <Grid className="w-5 h-5" />
+                    <Filter className="w-5 h-5" />
+                    Filters
                   </button>
+
+                  <div className="flex border border-[#E1EAF2] rounded-lg">
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`p-3 ${viewMode === 'grid' ? 'bg-[#00A7B3] text-white' : 'text-[#6A89A7]'}`}
+                    >
+                      <Grid className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode('list')}
+                      className={`p-3 ${viewMode === 'list' ? 'bg-[#00A7B3] text-white' : 'text-[#6A89A7]'}`}
+                    >
+                      <List className="w-5 h-5" />
+                    </button>
+                  </div>
+
                   <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-3 ${viewMode === 'list' ? 'bg-[#00A7B3] text-white' : 'text-[#6A89A7]'}`}
+                    onClick={refresh}
+                    className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-4 py-3 rounded-lg transition-colors"
                   >
-                    <List className="w-5 h-5" />
+                    <RefreshCw className="w-5 h-5" />
                   </button>
                 </div>
+              </div>
 
+              {/* Filter Options */}
+              {showFilters && (
+                <div className="mt-6 pt-6 border-t border-[#E1EAF2]">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-[#005A61] mb-2">
+                        Sort By
+                      </label>
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as 'name' | 'rating' | 'county')}
+                        className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                      >
+                        <option value="rating">Highest Rated</option>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="county">county</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-[#005A61] mb-2">
+                        Store Status
+                      </label>
+                      <select className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent">
+                        <option value="">All Stores</option>
+                        <option value="open">Open Now</option>
+                        <option value="closed">Closed</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-[#005A61] mb-2">
+                        Rating
+                      </label>
+                      <select className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent">
+                        <option value="">Any Rating</option>
+                        <option value="4.5">4.5+ Stars</option>
+                        <option value="4.0">4.0+ Stars</option>
+                        <option value="3.5">3.5+ Stars</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Loading State */}
+            {storesLoading && (
+              <div className="text-center py-12">
+                <RefreshCw className="w-8 h-8 animate-spin text-[#00A7B3] mx-auto mb-4" />
+                <p className="text-[#516E89] text-lg">Loading stores...</p>
+              </div>
+            )}
+
+            {/* Error State */}
+            {storesError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+                <div className="text-red-500 text-6xl mb-4">⚠️</div>
+                <p className="text-red-700 font-medium text-lg">Unable to load stores</p>
+                <p className="text-red-600 mt-2">{storesError}</p>
                 <button
                   onClick={refresh}
-                  className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-4 py-3 rounded-lg transition-colors"
+                  className="mt-4 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition-colors"
                 >
-                  <RefreshCw className="w-5 h-5" />
+                  Try Again
                 </button>
               </div>
-            </div>
+            )}
 
-            {/* Filter Options */}
-            {showFilters && (
-              <div className="mt-6 pt-6 border-t border-[#E1EAF2]">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#005A61] mb-2">
-                      Sort By
-                    </label>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as 'name' | 'rating' | 'county')}
-                      className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
-                    >
-                      <option value="rating">Highest Rated</option>
-                      <option value="name">Name (A-Z)</option>
-                      <option value="county">county</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-[#005A61] mb-2">
-                      Store Status
-                    </label>
-                    <select className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent">
-                      <option value="">All Stores</option>
-                      <option value="open">Open Now</option>
-                      <option value="closed">Closed</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-[#005A61] mb-2">
-                      Rating
-                    </label>
-                    <select className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent">
-                      <option value="">Any Rating</option>
-                      <option value="4.5">4.5+ Stars</option>
-                      <option value="4.0">4.0+ Stars</option>
-                      <option value="3.5">3.5+ Stars</option>
-                    </select>
-                  </div>
+            {/* Stores Grid/List */}
+            {!storesLoading && !storesError && filteredStores.length > 0 && (
+              <>
+                <div className="mb-6">
+                  <p className="text-[#516E89]">
+                    Showing {filteredStores.length} of {stores?.length || 0} stores
+                    {searchQuery && ` for "${searchQuery}"`}
+                  </p>
                 </div>
+
+                {viewMode === 'grid' ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredStores.map((store) => (
+                      <StoreCard key={store.store_id} store={store} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {filteredStores.map((store) => (
+                      <StoreListItem key={store.store_id} store={store} />
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Empty State */}
+            {!storesLoading && !storesError && filteredStores.length === 0 && (
+              <div className="text-center py-16">
+                <StoreIcon className="w-20 h-20 text-[#B8D0DC] mx-auto mb-6" />
+                <h3 className="text-2xl font-semibold text-[#005A61] mb-4">No stores found</h3>
+                <p className="text-[#516E89] text-lg mb-8">
+                  {searchQuery
+                    ? `No stores match your search for "${searchQuery}". Try adjusting your search terms.`
+                    : "No stores are currently available in your area."
+                  }
+                </p>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    Clear Search
+                  </button>
+                )}
               </div>
             )}
           </div>
 
-          {/* Loading State */}
-          {storesLoading && (
-            <div className="text-center py-12">
-              <RefreshCw className="w-8 h-8 animate-spin text-[#00A7B3] mx-auto mb-4" />
-              <p className="text-[#516E89] text-lg">Loading stores...</p>
-            </div>
+          {/* Store Modal */}
+          {selectedStore && (
+            <StoreModal
+              store={selectedStore}
+              onClose={() => setSelectedStore(null)}
+            />
           )}
-
-          {/* Error State */}
-          {storesError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
-              <div className="text-red-500 text-6xl mb-4">⚠️</div>
-              <p className="text-red-700 font-medium text-lg">Unable to load stores</p>
-              <p className="text-red-600 mt-2">{storesError}</p>
-              <button
-                onClick={refresh}
-                className="mt-4 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition-colors"
-              >
-                Try Again
-              </button>
-            </div>
-          )}
-
-          {/* Stores Grid/List */}
-          {!storesLoading && !storesError && filteredStores.length > 0 && (
-            <>
-              <div className="mb-6">
-                <p className="text-[#516E89]">
-                  Showing {filteredStores.length} of {stores?.length || 0} stores
-                  {searchQuery && ` for "${searchQuery}"`}
-                </p>
-              </div>
-
-              {viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredStores.map((store) => (
-                    <StoreCard key={store.store_id} store={store} />
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {filteredStores.map((store) => (
-                    <StoreListItem key={store.store_id} store={store} />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-
-          {/* Empty State */}
-          {!storesLoading && !storesError && filteredStores.length === 0 && (
-            <div className="text-center py-16">
-              <StoreIcon className="w-20 h-20 text-[#B8D0DC] mx-auto mb-6" />
-              <h3 className="text-2xl font-semibold text-[#005A61] mb-4">No stores found</h3>
-              <p className="text-[#516E89] text-lg mb-8">
-                {searchQuery
-                  ? `No stores match your search for "${searchQuery}". Try adjusting your search terms.`
-                  : "No stores are currently available in your area."
-                }
-              </p>
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-                >
-                  Clear Search
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Store Modal */}
-        {selectedStore && (
-          <StoreModal
-            store={selectedStore}
-            onClose={() => setSelectedStore(null)}
-          />
-        )}
+        </motion.div>
       </div>
       <Footer />
+
     </>
   );
 }

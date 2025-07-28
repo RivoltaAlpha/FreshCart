@@ -5,6 +5,7 @@ import type { Product } from '@/Gemini/context';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { usePopularProducts, useProducts } from '@/hooks/useProducts';
+import * as motion from "motion/react-client";
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -39,32 +40,42 @@ function App() {
         >
           <div className="absolute inset-0 bg-black/60"></div>
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-              <div className='text-white space-y-6'>
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                  Fresh
-                  <span className="block text-[#75E6DA]">Groceries,</span>
-                  <span className="block">Delivered Fast</span>
-                </h1>
-                <p className="text-xl lg:text-2xl text-gray-100 max-w-xl">
-                  Get farm-fresh produce, quality groceries, and daily essentials delivered to your doorstep in under 30 minutes.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <button
-                    onClick={() => navigate({ to: '/products' })}
-                    className="bg-[#189AB4] hover:bg-[#75E6DA] hover:text-[#05445E] text-white px-10 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-xl"
-                  >
-                    Shop Now
-                  </button>
-                  <button className="border-2 border-[#75E6DA] text-[#75E6DA] hover:bg-[#75E6DA] hover:text-[#05445E] px-10 py-4 rounded-full text-lg font-semibold transition-all">
-                    Learn More
-                  </button>
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.8,
+              rotate: { duration: 0.8, ease: "easeOut" }
+            }}
+          >
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
+                <div className='text-white space-y-6'>
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                    Fresh
+                    <span className="block text-[#75E6DA]">Groceries,</span>
+                    <span className="block">Delivered Fast</span>
+                  </h1>
+                  <p className="text-xl lg:text-2xl text-gray-100 max-w-xl">
+                    Get farm-fresh produce, quality groceries, and daily essentials delivered to your doorstep in under 30 minutes.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <button
+                      onClick={() => navigate({ to: '/products' })}
+                      className="bg-[#189AB4] hover:bg-[#75E6DA] hover:text-[#05445E] text-white px-10 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-xl"
+                    >
+                      Shop Now
+                    </button>
+                    <button className="border-2 border-[#75E6DA] text-[#75E6DA] hover:bg-[#75E6DA] hover:text-[#05445E] px-10 py-4 rounded-full text-lg font-semibold transition-all">
+                      Learn More
+                    </button>
+                  </div>
                 </div>
-              </div>
 
+              </div>
             </div>
-          </div>
+          </motion.div >
+
         </section>
 
         <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -321,6 +332,7 @@ function App() {
         </section>
       </div>
       <Footer />
+
     </>
   );
 }

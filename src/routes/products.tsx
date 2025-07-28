@@ -18,6 +18,8 @@ import {
 import { storeActions } from '@/store/store';
 import { toast } from 'sonner';
 import { getStoreHavingProduct } from '@/services/storeService';
+import * as motion from "motion/react-client";
+
 
 export const Route = createFileRoute('/products')({
   component: RouteComponent,
@@ -44,7 +46,7 @@ function RouteComponent() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [cart, setCart] = useState<Cart>({});
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
-  console.log( cart);
+  console.log(cart);
   const [selectedProduct, setSelectedProduct] = useState<BackendProduct | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isInitialMount = useRef(true);
@@ -257,54 +259,69 @@ function RouteComponent() {
           {!isLoading && (
             <>
               {/* Categories Section */}
-              <div className="mb-8 flex flex-col space-y-12">
-                <div className="text-center animate-fade-in-up">
-                  <h2 className="text-3xl font-bold text-foreground mb-2">Browse by Category</h2>
-                  <div className="w-20 h-1 bg-gradient-to-r from-fresh-primary to-fresh-secondary mx-auto rounded-full mb-6"></div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 1,
+                  rotate: { duration: 0.8, ease: "easeIn" }
+                }}
+              >
+                <div className="mb-8 flex flex-col space-y-12">
+                  <div className="text-center animate-fade-in-up">
+                    <h2 className="text-3xl font-bold text-foreground my-2">Browse by Category</h2>
+                    <div className="w-20 h-1 bg-gradient-to-r from-fresh-primary to-fresh-secondary mx-auto rounded-full mb-6"></div>
+                  </div>
+                  <Categories
+                    onCategorySelect={handleCategorySelect}
+                    selectedCategoryId={selectedCategoryId}
+                    showAllOption={true}
+                    gridCols="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+                    className=""
+                  />
                 </div>
-                <Categories
-                  onCategorySelect={handleCategorySelect}
-                  selectedCategoryId={selectedCategoryId}
-                  showAllOption={true}
-                  gridCols="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
-                  className=""
-                />
-              </div>
+              </motion.div>
 
               {/* Enhanced Search and Filter */}
-              <div className="bg-white/80 backdrop-blur-sm border border-gray-200 p-6 rounded-3xl shadow-xl mb-8 hover:shadow-2xl transition-all duration-300">
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1 relative group">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-fresh-primary transition-colors" />
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-fresh-primary/20 focus:border-fresh-primary bg-white text-foreground transition-all duration-300 hover:shadow-md"
-                    />
-                  </div>
-                  <div className="flex items-center gap-3 bg-gradient-to-r from-gray-50 to-white rounded-2xl px-4 py-2 border border-gray-200">
-                    <Filter className="text-fresh-primary h-5 w-5" />
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="px-4 py-2 border-none bg-transparent focus:ring-2 focus:ring-fresh-primary rounded-xl text-foreground cursor-pointer"
-                    >
-                      {categories.map(category => (
-                        <option key={category} value={category}>{category}</option>
-                      ))}
-                    </select>
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                style={{ overflow: "scroll" }}
+              >
+                <div className="bg-white/80 backdrop-blur-sm border border-gray-200 p-6 rounded-3xl shadow-xl mb-8 hover:shadow-2xl transition-all duration-300">
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="flex-1 relative group">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-fresh-primary transition-colors" />
+                      <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-fresh-primary/20 focus:border-fresh-primary bg-white text-foreground transition-all duration-300 hover:shadow-md"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 bg-gradient-to-r from-gray-50 to-white rounded-2xl px-4 py-2 border border-gray-200">
+                      <Filter className="text-fresh-primary h-5 w-5" />
+                      <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="px-4 py-2 border-none bg-transparent focus:ring-2 focus:ring-fresh-primary rounded-xl text-foreground cursor-pointer"
+                      >
+                        {categories.map(category => (
+                          <option key={category} value={category}>{category}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Enhanced Products Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {filteredProducts?.length > 0 ? (
                   filteredProducts.map((product, index) => (
-                    <div 
-                      key={product.product_id} 
+                    <div
+                      key={product.product_id}
                       className="group relative bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 animate-fade-in-up"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
@@ -316,10 +333,10 @@ function RouteComponent() {
                           className="w-full h-full object-cover cursor-pointer group-hover:scale-110 transition-transform duration-500"
                           onClick={() => handleProductClick(product)}
                         />
-                        
+
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        
+
                         {/* Action Buttons */}
                         <div className="absolute top-3 left-3 right-3 flex justify-between opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0">
                           <button
@@ -333,13 +350,12 @@ function RouteComponent() {
                               e.stopPropagation();
                               toggleFavorite(product.product_id);
                             }}
-                            className={`p-2.5 backdrop-blur-sm rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${
-                              favorites.has(product.product_id) 
-                                ? 'bg-red-500 text-white' 
-                                : 'bg-white/90 text-gray-600 hover:bg-red-500 hover:text-white'
-                            }`}
+                            className={`p-2.5 backdrop-blur-sm rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${favorites.has(product.product_id)
+                              ? 'bg-red-500 text-white'
+                              : 'bg-white/90 text-gray-600 hover:bg-red-500 hover:text-white'
+                              }`}
                           >
-                            <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''} 
+                            <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''}
                             />
                           </button>
                         </div>
@@ -353,20 +369,19 @@ function RouteComponent() {
 
                         {/* Stock Status */}
                         <div className="absolute bottom-3 left-3">
-                          <div className={`px-2 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
-                            product.stock_quantity > 10
-                              ? 'bg-green-500/90 text-white'
-                              : product.stock_quantity > 0
-                                ? 'bg-yellow-500/90 text-white'
-                                : 'bg-red-500/90 text-white'
-                          }`}>
+                          <div className={`px-2 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${product.stock_quantity > 10
+                            ? 'bg-green-500/90 text-white'
+                            : product.stock_quantity > 0
+                              ? 'bg-yellow-500/90 text-white'
+                              : 'bg-red-500/90 text-white'
+                            }`}>
                             {product.stock_quantity > 10 ? 'In Stock' : product.stock_quantity > 0 ? 'Low Stock' : 'Out of Stock'}
                           </div>
                         </div>
 
                         {/* Hover Overlay Button */}
                         <div className="absolute inset-0 bg-gradient-to-t from-fresh-primary/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                          <button 
+                          <button
                             onClick={() => handleProductClick(product)}
                             className="bg-white text-fresh-primary px-6 py-2.5 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-fresh-primary hover:text-white shadow-lg"
                           >
@@ -496,9 +511,9 @@ function RouteComponent() {
                   <div className="flex items-center gap-3 bg-yellow-50 p-3 rounded-xl">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`w-5 h-5 ${i < Math.floor(selectedProduct.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+                        <Star
+                          key={i}
+                          className={`w-5 h-5 ${i < Math.floor(selectedProduct.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
                         />
                       ))}
                       <span className="text-gray-700 ml-2 font-medium">{selectedProduct.rating}</span>
