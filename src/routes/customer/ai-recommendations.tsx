@@ -5,6 +5,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { useNavigate, createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useMemo } from 'react';
+import images from '@/data/recipes.json'
 
 export const Route = createFileRoute('/customer/ai-recommendations')({
   component: RouteComponent,
@@ -198,6 +199,13 @@ function RouteComponent() {
     fetchPurchases()
   }, [user?.user_id])
 
+  // select a random image from the recipes data
+  const random_images = images
+  const getRandomImage = () => {
+    const randomIndex = Math.floor(Math.random() * random_images.length)
+    return random_images[randomIndex].image_url
+  }
+
   // Memoized recommendation generation function
   const generateRecommendations = useCallback(async (products: StoreProduct[]) => {
     if (products.length === 0) return
@@ -247,18 +255,6 @@ function RouteComponent() {
     hasGeneratedRecommendations.current = false
     await generateRecommendations(purchasedProducts)
   }
-
-  // rendomly 
-
-
-
-  // search product image from 1 of the ingredients in our products by returning a product then passing it's image
-  // const getProductImage = (recipe: Recipe) => {
-  //   const ingredient = recipe.ingredients[0]
-  //   console.log(`Searching for product image for ingredient: ${ingredient}`)
-  //   const product = purchasedProducts.find(p => p.name.toLowerCase().includes(ingredient.toLowerCase()))
-  //   return product ? product.image_url : 'https://unsplash.com/s/photos/food'
-  // }
 
   if (!user) {
     return (
@@ -374,9 +370,9 @@ function RouteComponent() {
                     key={index}
                     className="border border-gray-300 rounded-lg p-4"
                   >
-                    {recipe.image && (
+                    {getRandomImage && (
                       <img
-                        src={recipe.image}
+                        src={getRandomImage()}
                         alt={recipe.name}
                         className="w-full h-48 object-cover rounded-lg mb-4"
                         onError={(e) => {
