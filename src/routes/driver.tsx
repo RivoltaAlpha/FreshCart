@@ -38,8 +38,6 @@ const checkDriverAuth = () => {
     const auth = JSON.parse(authData)
     const isAuthenticated = !!auth.isAuthenticated
     const isDriver = auth?.user?.role === 'Driver'
-    console.log("Is auth", isAuthenticated)
-    console.log("Is driver", isDriver)
     return { isDriver, isAuthenticated }
   } catch {
     return { isDriver: false, isAuthenticated: false }

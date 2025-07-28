@@ -34,12 +34,12 @@ export enum UserRole {
 export type StoreDetails = Partial<Store>
 
 export type CreateUser = {
-  email: string
-  password: string
-  role: 'Customer' | 'Store' | 'Driver' | 'Admin'
-  first_name: string
-  last_name: string
-  phone_number: string
+  email?: string
+  password?: string
+  role?: 'Customer' | 'Store' | 'Driver' | 'Admin'
+  first_name?: string
+  last_name?: string
+  phone_number?: string
   area?: string
   town?: string
   county?: string
@@ -63,6 +63,9 @@ export interface LoginResponse {
     last_name: string
     email: string
     role: 'Customer' | 'Store' | 'Driver' | 'Admin'
+    is_available?: boolean
+    is_active?: boolean
+    account_number?: string
   }
   tokens: {
     accessToken: string
