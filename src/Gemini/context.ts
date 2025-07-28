@@ -5,7 +5,7 @@ interface Product {
   name: string
   category: string
   price: number
-  image: string
+  image_url: string
   description?: string
   seller: string
   location: string
@@ -153,8 +153,8 @@ const getAIRecommendations = async (
 
   try {
     const prompt = `
-    Based on the following user behavior data, recommend 6 products that this user might be interested in:
-    
+    Based on the following user behavior data, recommend 5 products that this user might be interested in:
+
     Recently Clicked Items: ${JSON.stringify(userContext.clickedItems.slice(-10))}
     Current Cart Items: ${JSON.stringify(userContext.cartItems)}
     Most Ordered Items: ${JSON.stringify(userContext.mostOrderedItems.slice(-5))}
@@ -163,7 +163,7 @@ const getAIRecommendations = async (
     
     Available Products: ${JSON.stringify(userContext.appData.products)}
 
-    Please analyze the user's preferences and suggest 6 products from different categories they are likely to purchase.
+    Please analyze the user's preferences and suggest 5 products from different categories they are likely to purchase.
     Return the response as a JSON array with product IDs and brief explanations.
     Format: [{"productId": 123, "reason": "why recommended"}]
     
@@ -172,6 +172,7 @@ const getAIRecommendations = async (
     - Product IDs must be numbers, not strings
     - Only recommend products that exist in the Available Products list
     - also give health benefits of the products
+    - do not recommend the same product twice
     `
 
     const result = await model.generateContent(prompt)
@@ -288,7 +289,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             name: 'Fresh Apples',
             category: 'Fruits',
             price: 3.99,
-            image:
+            image_url:
               'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400',
             description: 'Fresh red apples',
             seller: 'Green Farm',
@@ -303,7 +304,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             name: 'Organic Bananas',
             category: 'Fruits',
             price: 2.49,
-            image:
+            image_url:
               'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400',
             description: 'Organic yellow bananas',
             seller: 'Organic Valley',
@@ -318,7 +319,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             name: 'Fresh Spinach',
             category: 'Vegetables',
             price: 1.99,
-            image:
+            image_url:
               'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400',
             description: 'Fresh green spinach',
             seller: 'Local Farm',
@@ -333,7 +334,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             name: 'Whole Milk',
             category: 'Dairy',
             price: 4.29,
-            image:
+            image_url:
               'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400',
             description: 'Fresh whole milk',
             seller: 'Dairy Co',
@@ -348,7 +349,7 @@ const getAppContextWithFallbacks = (): AppContext => {
             name: 'Chicken Breast',
             category: 'Meat',
             price: 8.99,
-            image:
+            image_url:
               'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400',
             description: 'Fresh chicken breast',
             seller: 'Poultry Farm',
