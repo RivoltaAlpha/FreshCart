@@ -15,7 +15,7 @@ function RouteComponent() {
   const { data: alldeliveries } = useDeliveriesForDriver(user?.user_id ? parseInt(user.user_id) : 0);
 
   const deliveries: Delivery[] | undefined = alldeliveries?.filter(
-    (delivery: Delivery) => delivery.status === 'assigned' || delivery.status === 'picked_up' || delivery.status === 'in_transit'
+    (delivery: Delivery) => delivery.delivery_status === 'assigned' || delivery.delivery_status === 'picked_up' || delivery.delivery_status === 'in_transit'
   );  
   const updateDeliveryMutation = useUpdateDeliveryStatus();
   const [mapModalOpen, setMapModalOpen] = useState(false);
