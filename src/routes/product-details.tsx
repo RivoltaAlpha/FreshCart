@@ -7,8 +7,9 @@ import { toast } from 'sonner'
 import Header from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import type { Product } from '@/types/types'
-import { useStoreProducts } from '@/hooks/useProducts'
-import { storesStore } from '@/store/store'
+import { useProducts } from '@/hooks/useProducts'
+import { storeActions } from '@/store/store'
+import { getStoreHavingProduct } from '@/services/storeService'
 
 type ProductDetailsSearch = {
   productId?: string
@@ -44,13 +45,13 @@ function RouteComponent() {
   const search = useSearch({ from: '/product-details' })
   const [quantity, setQuantity] = useState(1)
   const [selectedTab, setSelectedTab] = useState('description')
-  const store_id = storesStore.state.store_id
+  // const store_id = storesStore.state.store_id
 
-  // Fetch store products for related products
+  // Fetch category products for related products
   const {
-    data: storeProducts,
+    data: categoryProducts,
     isLoading: isLoadingProducts,
-  } = useStoreProducts(store_id ?? 0)
+  } = useProducts()
 
   const product: Product = {
     product_id: parseInt(search.productId || '0'),
@@ -86,17 +87,28 @@ function RouteComponent() {
     navigate({ to: '/products' })
   }
 
+    // navigation to store with product
+    const handleShopProduct = async (product: any) => {
+      try {
+        const store = await getStoreHavingProduct(product.product_id)  
+        storeActions.saveStore(store);
+        navigate({ to: '/shop-store' });
+      } catch (err) {
+        toast.error('Could not find store for this product.');
+      }
+    };
+
   // Get related products from the same category
   const relatedProducts = useMemo(() => {
-    if (!storeProducts || !product.category?.name) return []
+    if (!product.category?.name) return []
 
-    return (Array.isArray(storeProducts) ? storeProducts : [])
+    return (Array.isArray(categoryProducts) ? categoryProducts : [])
       .filter((p) =>
         p.category?.name === product.category?.name &&
         p.product_id !== product.product_id
       )
       .slice(0, 4) // Limit to 4 related products
-  }, [storeProducts, product.category?.name, product.product_id])
+  }, [product.category?.name, product.product_id])
 
   const handleRelatedProductClick = (relatedProduct: Product) => {
     navigate({
@@ -158,10 +170,10 @@ function RouteComponent() {
         </div>
         <div className="flex items-center justify-between">
           <button
-            onClick={(e) => handleAddRelatedToCart(relatedProduct, e)}
+            onClick={(e) => { handleAddRelatedToCart(relatedProduct, e); handleShopProduct(relatedProduct); }}
             disabled={!relatedProduct.stock_quantity || parseInt(String(relatedProduct.stock_quantity)) === 0}
             className="p-2 bg-[#189AB4] hover:bg-[#75E6DA] text-white rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
-            title="Add to Cart"
+            title="Shop"
           >
             <ShoppingCart size={18} />
           </button>
@@ -209,7 +221,7 @@ function RouteComponent() {
                 <p className="text-[#189AB4] text-lg">{product.category.name}</p>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(4)].map((_, i) => (
                       <Star
                         key={i}
                         className={`w-4 h-4 ${i < Math.floor(product.rating)
@@ -352,7 +364,7 @@ function RouteComponent() {
               </div>
 
               {isLoadingProducts ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                   {[...Array(4)].map((_, index) => (
                     <div key={index} className="bg-gray-200 rounded-lg h-80 animate-pulse"></div>
                   ))}
