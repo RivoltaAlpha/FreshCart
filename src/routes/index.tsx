@@ -1,11 +1,10 @@
-import { Star, Truck, Shield, Heart } from 'lucide-react';
+import { Star, Truck, Shield, Heart, TrendingUpIcon, StarIcon } from 'lucide-react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import RecommendationsSection from '@/components/recommendations';
-import { useState } from 'react';
-import sampleProducts from "../../public/marketplaceItems.json";
 import type { Product } from '@/Gemini/context';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { usePopularProducts, useProducts } from '@/hooks/useProducts';
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -13,7 +12,10 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const navigate = useNavigate();
-  const [products] = useState<Product[]>(sampleProducts as Product[]);
+  const { data: allProducts } = useProducts();
+  const products = allProducts || [];
+  const { data: topProducts } = usePopularProducts();
+
 
   const handleProductClick = (product: Product) => {
     navigate({ to: '/products' });
@@ -105,121 +107,69 @@ function App() {
             </div>
           </div>
         </section>
-        {/* Featured Products Section */}
-        <section className="py-10 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#05445E] mb-4">Featured Products</h2>
-              <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-4"></div>
+
+
+        {/* Top Products Section */}
+        <section className=" py-12 px-60 mb-8">
+          <div className="text-center mb-10">
+            <div className="flex justify-center items-center gap-3 mb-4">
+              <div className="bg-[#005A61] p-3 rounded-full shadow-lg">
+                <TrendingUpIcon className="h-8 w-8 text-white" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#005A61] to-[#6A89A7] bg-clip-text text-transparent">
+                Top Products
+              </h1>
             </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-              {/* Product cards */}
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/fruits.jpg" alt="Oranges" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart className="h-4 w-4 text-[#189AB4]" />
-                  </button>
+            <p className="text-[#516E89] text-lg max-w-2xl mx-auto">
+              Discover our most popular and trending products loved by customers
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {topProducts?.map((product, index) => (
+              <div
+                key={product.product_id}
+                className="group relative gap-0 bg-white lg:h-full md:h-20 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-[#005A61]/10"
+              >
+                {/* Rank Badge */}
+                <div className="absolute top-3 left-3 bg-gradient-to-r from-[#005A61] to-[#6A89A7] text-white text-xs font-bold px-2 py-1 rounded-full z-10 shadow-md">
+                  #{index + 1}
                 </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Oranges</h3>
-                <p className="text-[#189AB4] font-bold">$4.99</p>
-                <div className="flex items-center mt-2">
-                  <div className="flex text-yellow-400">
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
+
+                {/* Trending Badge */}
+                <div className="absolute top-3 right-3 bg-yellow-400 text-yellow-800 p-1 rounded-full shadow-md z-10">
+                  <StarIcon className="h-3 w-3 fill-current" />
+                </div>
+
+                {/* Image Container */}
+                <div className="relative aspect-square bg-gray-50 overflow-hidden lg:w-full md:w-10">
+                  <img
+                    src={product.image_url}
+                    alt={product.name}
+                    className="lg:w-full md:w-20 lg:h-full md:h-60 object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+
+                {/* Content */}
+                <div className="p-4 space-y-2">
+                  <h3 className="font-semibold text-[#005A61] text-sm leading-tight line-clamp-2 min-h-[2.5rem] group-hover:text-[#6A89A7] transition-colors">
+                    {product.name}
+                  </h3>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-[#00A7B3]">
+                      KSh {product.price?.toLocaleString()}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <StarIcon className="h-3 w-3 text-yellow-400 fill-current" />
+                      <span className="text-xs text-gray-500">4.8</span>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/bannar.png" alt="Bananas" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart className="h-4 w-4 text-[#189AB4]" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Bananas</h3>
-                <p className="text-[#189AB4] font-bold">$2.99</p>
-                <div className="flex items-center mt-2">
-                  <div className="flex text-yellow-400">
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/dairy.jpg" alt="Dairy" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart className="h-4 w-4 text-[#189AB4]" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Fresh Milk</h3>
-                <p className="text-[#189AB4] font-bold">$3.49</p>
-                <div className="flex items-center mt-2">
-                  <div className="flex text-yellow-400">
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/greens.jpg" alt="Greens" className="w-full h-32 object-cover rounded-xl" />
-                  <div className="absolute top-2 left-2 bg-[#189AB4] text-white px-2 py-1 rounded-full text-xs font-semibold">
-                    Hot Deal
-                  </div>
-                  <button className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart className="h-4 w-4 text-[#189AB4]" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Fresh Greens</h3>
-                <p className="text-[#189AB4] font-bold">$1.99</p>
-                <div className="flex items-center mt-2">
-                  <div className="flex text-yellow-400">
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/vegetable.jpg" alt="Vegetables" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Heart className="h-4 w-4 text-[#189AB4]" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Mixed Vegetables</h3>
-                <p className="text-[#189AB4] font-bold">$5.99</p>
-                <div className="flex items-center mt-2">
-                  <div className="flex text-yellow-400">
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                    <Star className="h-4 w-4 fill-current" />
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
+
 
         {/* Categories Section */}
         <section className="py-16 rounded mx-auto shadow-lg">
@@ -241,128 +191,36 @@ function App() {
               <div className="lg:col-span-2">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                   <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
-                    <img src="/fruits.jpg" alt="Fresh Fruit" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <img src="https://jooinn.com/images/fresh-fruits-14.jpg" alt="Fresh Fruit" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
                     <h3 className="font-semibold text-[#05445E]">Fresh Fruit</h3>
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
-                    <img src="/vegetable.jpg" alt="Fresh Vegetable" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <img src="https://jooinn.com/images/vegetable-basket-6.jpg" alt="Fresh Vegetable" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
                     <h3 className="font-semibold text-[#05445E]">Fresh Vegetable</h3>
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
-                    <img src="/dairy.jpg" alt="Meat & Fish" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <img src="https://th.bing.com/th/id/R.c3db916c4d2cc60eab697d635d078447?rik=GbMuNdFBcyiiSw&riu=http%3a%2f%2fs3.wp.wsu.edu%2fuploads%2fsites%2f2055%2f2017%2f07%2fiStock-483027918-1024x683.jpg&ehk=u9JBZ9yWvacUGVPTDQe9pznTtrqn6fXWGd4jo0Ndjpw%3d&risl=&pid=ImgRaw&r=0" alt="Meat & Fish" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
                     <h3 className="font-semibold text-[#05445E]">Meat & Fish</h3>
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
-                    <img src="/spices.jpg" alt="Snacks" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <img src="https://bluegrassingredients.com/wp-content/uploads/2021/09/dairy-seasoning-powders.png" alt="Snacks" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
                     <h3 className="font-semibold text-[#05445E]">Snacks</h3>
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
-                    <img src="/pantry.jpg" alt="Bread & Bakery" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Bread & Bakery</h3>
+                    <img src="https://www.apprenticeship.ng/wp-content/uploads/2019/05/BREAD2.jpg" alt="Bread & Bakery" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 className="font-semibold text-[#05445E]">Pastries</h3>
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
-                    <img src="/Cereals.jpg" alt="Cooking" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Cooking</h3>
+                    <img src="https://cleanfoodcrush.com/wp-content/uploads/2017/03/CleanFoodCrush-Leafy-greens.jpg" alt="Leafy Greens" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
+                    <h3 className="font-semibold text-[#05445E]">Leafy Greens</h3>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* AI Recommended Products Section */}
-        <section className="py-20 bg-gray-50 shadow-2xl">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommended Products</h2>
-              <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-4"></div>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mb-12">
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/healthy-broccoli.jpg" alt="Broccoli" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-[#189AB4] text-white rounded-full p-2 shadow-md">
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Broccoli</h3>
-                <p className="text-[#189AB4] font-bold">$2.99</p>
-                <button className="w-full mt-2 bg-[#75E6DA] hover:bg-[#189AB4] text-[#05445E] hover:text-white py-2 rounded-lg transition-colors font-medium">
-                  Add to Cart
-                </button>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/vegetable.jpg" alt="Tomatoes" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-white text-[#189AB4] rounded-full p-2 shadow-md">
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Tomatoes</h3>
-                <p className="text-[#189AB4] font-bold">$3.99</p>
-                <button className="w-full mt-2 bg-[#75E6DA] hover:bg-[#189AB4] text-[#05445E] hover:text-white py-2 rounded-lg transition-colors font-medium">
-                  Add to Cart
-                </button>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/greens.jpg" alt="Lettuce" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-white text-[#189AB4] rounded-full p-2 shadow-md">
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Lettuce</h3>
-                <p className="text-[#189AB4] font-bold">$1.99</p>
-                <button className="w-full mt-2 bg-[#75E6DA] hover:bg-[#189AB4] text-[#05445E] hover:text-white py-2 rounded-lg transition-colors font-medium">
-                  Add to Cart
-                </button>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/vegetable.jpg" alt="Cherry Tomatoes" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-[#189AB4] text-white rounded-full p-2 shadow-md">
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Cherry Tomatoes</h3>
-                <p className="text-[#189AB4] font-bold">$4.99</p>
-                <button className="w-full mt-2 bg-[#75E6DA] hover:bg-[#189AB4] text-[#05445E] hover:text-white py-2 rounded-lg transition-colors font-medium">
-                  Add to Cart
-                </button>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-4 group">
-                <div className="relative mb-4">
-                  <img src="/dairy.jpg" alt="Eggs" className="w-full h-32 object-cover rounded-xl" />
-                  <button className="absolute top-2 right-2 bg-white text-[#189AB4] rounded-full p-2 shadow-md">
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-                <h3 className="font-semibold text-[#05445E] mb-1">Eggs</h3>
-                <p className="text-[#189AB4] font-bold">$2.49</p>
-                <button className="w-full mt-2 bg-[#75E6DA] hover:bg-[#189AB4] text-[#05445E] hover:text-white py-2 rounded-lg transition-colors font-medium">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <button
-                onClick={() => navigate({ to: '/products' })}
-                className="bg-[#189AB4] hover:bg-[#05445E] text-white px-8 py-3 rounded-full font-semibold transition-all inline-flex items-center gap-2"
-              >
-                View All
-                <span>→</span>
-              </button>
             </div>
           </div>
         </section>

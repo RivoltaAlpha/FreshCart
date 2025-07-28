@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRecommendations } from '../hooks/recommendation';
 import { trackUserInteraction, type Product } from '../Gemini/context';
 import { ShoppingCart } from 'lucide-react';
@@ -15,11 +15,6 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   onAddToCart,
 }) => {
   const { recommendations, loading, error, refetch } = useRecommendations();
-  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
-
-  const handleImageError = (productId: number) => {
-    setImageErrors((prev) => new Set(prev).add(productId));
-  };
 
   const handleProductClick = (product: Product): void => {
     trackUserInteraction('click', {
@@ -38,8 +33,6 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
     });
     onAddToCart?.(product);
   };
-
-  const getFallbackImage = () => './market-concept-with-vegetables.jpg';
 
   if (loading) {
     return (
@@ -86,15 +79,15 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   }
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="px-40 py-10 bg-gray-50">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommended Products</h2>
           <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-4"></div>
           <p className="text-lg text-gray-600">Personalized recommendations just for you</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-6 mb-12">
           {recommendations
             .map((rec) => {
               const product = products.find((p) => p.product_id === rec.productId);
@@ -108,17 +101,9 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
               >
                 <div className="relative mb-4">
                   <img
-                    src={imageErrors.has(product.product_id) ? getFallbackImage() : product.image}
+                    src={ product.image_url}
                     alt={product.name}
                     className="w-full h-44 object-cover"
-                    onError={() => handleImageError(product.product_id)}
-                    onLoad={() =>
-                      setImageErrors((prev) => {
-                        const newSet = new Set(prev);
-                        newSet.delete(product.product_id);
-                        return newSet;
-                      })
-                    }
                   />
                   <button className="absolute top-2 right-2 bg-white text-[#189AB4] rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="text-sm">♡</span>
