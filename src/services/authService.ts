@@ -1,6 +1,7 @@
 import { url } from '@/utils/utils'
 
 import type { CreateUser, LoginResponse } from '@/types/types'
+import { getAuthToken } from './handleAPICalls'
 
 const handleApiResponse = async (response: Response) => {
   if (!response.ok) {
@@ -44,7 +45,19 @@ export const login = async (email: string, password: string) => {
 }
 
 export const logout = async (userId: number) => {
-  const response = await fetch(`${url}/auth/signout/${userId}`)
+    const token = await getAuthToken();
+  if (!token) {
+    throw new Error('No token available in localStorage')
+  }
+  const response = await fetch(`${url}/auth/signout/${userId}`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  )
   await handleApiResponse(response)
   return response.json()
 }
