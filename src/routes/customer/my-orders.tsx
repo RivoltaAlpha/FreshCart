@@ -149,6 +149,8 @@ function RouteComponent() {
     }
   }
 
+  // order time stamps:
+  // confirmed_at picked_up_at, delivered_at, cancelled_at, finished_at
 
   const OrderDetailModal = ({ order, onClose }: { order: CustomerOrder, onClose: () => void }) => (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -387,82 +389,135 @@ function RouteComponent() {
               </div>
             ) : (
               <div className="space-y-4">
-                {filteredOrders.map((order: CustomerOrder) => (
-                  <div
-                    key={order.order_id}
-                    className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-4">
-                          <h3 className="font-semibold text-lg">Order #{order.order_number}</h3>
-                          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(order.status)}`}>
-                            {getStatusIcon(order.status)}
-                            {order.status}
-                          </span>
+                {filteredOrders.map((order: CustomerOrder) => {
+                  const statusSteps = [
+                    'confirmed',
+                    'preparing',
+                    'ready_for_pickup',
+                    'in_transit',
+                    'delivered',
+                  ];
+                  const currentStep = statusSteps.indexOf(order.status)
+
+                  return (
+                    <div
+                      key={order.order_id}
+                      className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-4">
+                            <h3 className="font-semibold text-lg">Order #{order.order_number}</h3>
+                            <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(order.status)}`}>
+                              {getStatusIcon(order.status)}
+                              {order.status}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => setSelectedOrder(order)}
+                            className="text-[#00A7B3] hover:text-[#00A7B3]/80 flex items-center gap-1 text-sm font-medium transition-colors"
+                          >
+                            <Eye className="h-4 w-4" />
+                            View Details
+                          </button>
                         </div>
-                        <button
-                          onClick={() => setSelectedOrder(order)}
-                          className="text-[#00A7B3] hover:text-[#00A7B3]/80 flex items-center gap-1 text-sm font-medium transition-colors"
-                        >
-                          <Eye className="h-4 w-4" />
-                          View Details
-                        </button>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                          <div className="flex items-center gap-2">
+                            <ShoppingBag className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <p className="text-sm text-gray-600">Store</p>
+                              <p className="font-medium">{order.store.name}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <CreditCard className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <p className="text-sm text-gray-600">Total</p>
+                              <p className="font-medium text-[#00A7B3]">KSh {parseFloat(order.total_amount).toFixed(2)}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <p className="text-sm text-gray-600">Order Date</p>
+                              <p className="font-medium">{formatDate(order.created_at)}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <Package className="h-4 w-4 text-gray-500" />
+                            <div>
+                              <p className="text-sm text-gray-600">Items</p>
+                              <p className="font-medium">{order.items?.length || 0} item(s)</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4" />
+                            <span>{order.delivery_address}</span>
+                          </div>
+                          <div>
+                            {!(["pending", "confirmed", "preparing", "ready_for_pickup"].includes(order.status)) && (
+                              <button
+                                onClick={() => handleViewDetails(order.order_id)}
+                                className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
+                              >
+                                View Delivery details
+                              </button>
+                            )}
+                          </div>
+                        </div>
                       </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                        <div className="flex items-center gap-2">
-                          <ShoppingBag className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <p className="text-sm text-gray-600">Store</p>
-                            <p className="font-medium">{order.store.name}</p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <CreditCard className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <p className="text-sm text-gray-600">Total</p>
-                            <p className="font-medium text-[#00A7B3]">KSh {parseFloat(order.total_amount).toFixed(2)}</p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <p className="text-sm text-gray-600">Order Date</p>
-                            <p className="font-medium">{formatDate(order.created_at)}</p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <Package className="h-4 w-4 text-gray-500" />
-                          <div>
-                            <p className="text-sm text-gray-600">Items</p>
-                            <p className="font-medium">{order.items?.length || 0} item(s)</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4" />
-                          <span>{order.delivery_address}</span>
-                        </div>
-                        <div>
-                          {!(["pending", "confirmed", "preparing"].includes(order.status)) && (
-                            <button
-                              onClick={() => handleViewDetails(order.order_id)}
-                              className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
-                            >
-                              View Delivery details
-                            </button>
-                          )}
-                        </div>
+                      {/* Order Progress Circles */}
+                      <div className="flex items-center justify-center mt-2">
+                        {statusSteps.map((step, idx) => {
+                          const isCompleted = idx < currentStep;
+                          const isCurrent = idx === currentStep;
+                          // Colors: current = #41729F, completed = #274472, upcoming = #5885AF
+                          const circleStyle = isCurrent
+                            ? { backgroundColor: '#41729F', borderColor: '#41729F', color: 'white', boxShadow: '0 0 6px #41729F' }
+                            : isCompleted
+                              ? { backgroundColor: '#274472', borderColor: '#274472', color: 'white' }
+                              : { backgroundColor: '#EAF0F6', borderColor: '#5885AF', color: '#5885AF' };
+                          const labelStyle = isCurrent
+                            ? { color: '#41729F', fontWeight: 600 }
+                            : isCompleted
+                              ? { color: '#274472' }
+                              : { color: '#5885AF' };
+                          // Connector color
+                          const connectorColor = isCompleted ? '#274472' : isCurrent ? '#41729F' : '#5885AF';
+                          return (
+                            <div key={step} className="flex flex-col items-center">
+                              <div className="flex items-center">
+                                <div
+                                  className="w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all"
+                                  style={circleStyle}
+                                  title={step.replace(/_/g, ' ')}
+                                >
+                                  {isCompleted ? '✓' : isCurrent ? idx + 1 : ''}
+                                </div>
+                                {/* Connector line (except after last circle) */}
+                                {idx < statusSteps.length - 1 && (
+                                  <div
+                                    className="h-1 w-8 mx-1"
+                                    style={{ backgroundColor: connectorColor, borderRadius: 2 }}
+                                  />
+                                )}
+                              </div>
+                              <span className="text-[10px] mt-1" style={labelStyle}>{step.replace(/_/g, ' ')}</span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                }
+                )}
               </div>
             )}
           </>

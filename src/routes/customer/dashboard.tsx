@@ -17,7 +17,7 @@ function RouteComponent() {
     const price = typeof item.product.price === 'string' ? parseFloat(item.product.price) : item.product.price;
     return sum + price * item.quantity;
   }, 0);
-  
+
   const user = loggedInUser()
   const { data: orders } = useCustomerOrders(user?.user_id ? parseInt(user.user_id) : 0)
   useEffect(() => {
@@ -61,7 +61,7 @@ function RouteComponent() {
     );
   };
 
-  
+
 
   return (
     <div id="dashboard" className="flex h-screen bg-gray-50">
@@ -130,9 +130,10 @@ function RouteComponent() {
                         {/* Order Progress Circles */}
                         <div className="flex items-center justify-center mt-2">
                           {statusSteps.map((step, idx) => {
-                            const isCompleted = idx < currentStep;
-                            const isCurrent = idx === currentStep;
-                            // Colors: current = #41729F, completed = #274472, upcoming = #5885AF
+                            const isDelivered = order.status === 'delivered';
+                            const isCompleted = idx < currentStep || (isDelivered && idx === statusSteps.length - 1);
+                            const isCurrent = idx === currentStep && !isDelivered;
+                            console.log(order.status, currentStep, statusSteps);
                             const circleStyle = isCurrent
                               ? { backgroundColor: '#41729F', borderColor: '#41729F', color: 'white', boxShadow: '0 0 6px #41729F' }
                               : isCompleted
@@ -218,7 +219,7 @@ function RouteComponent() {
                           <span>KSh {cartTotal.toFixed(2)}</span>
                         </div>
                         <button className="w-full mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
-                        onClick={() => navigate({ to: '/customer/cart' })}>
+                          onClick={() => navigate({ to: '/customer/cart' })}>
                           Proceed to Checkout
                         </button>
                       </div>
@@ -228,7 +229,7 @@ function RouteComponent() {
                       <ShoppingCart className="text-gray-400 mx-auto mb-4" size={48} />
                       <p className="text-gray-600">Your cart is empty</p>
                       <button className="mt-3 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
-                      onClick={() => navigate({ to: '/products' })}>
+                        onClick={() => navigate({ to: '/products' })}>
                         Start Shopping
                       </button>
                     </div>
