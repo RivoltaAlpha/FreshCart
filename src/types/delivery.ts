@@ -26,6 +26,9 @@ export interface Delivery {
   delivery_address: string;
   estimated_delivery_time: string;
   delivery_fee: string;
+  delivered_at: Date
+  route_distance: string;
+  route_duration: string;
   created_at: string;
   updated_at: string;
   order: {

@@ -156,12 +156,12 @@ export const driverMenu: MenuItem[] = [
     icon: Clock,
     path: '/driver/delivery-history',
   },
-  // {
-  //   id: 'earnings',
-  //   label: 'Earnings',
-  //   icon: DollarSign,
-  //   path: '/driver/earnings',
-  // },
+  {
+    id: 'earnings',
+    label: 'Earnings',
+    icon: DollarSign,
+    path: '/driver/earnings',
+  },
   // {
   //   id: 'notifications',
   //   label: 'Notifications',

@@ -12,6 +12,7 @@ export const Route = createFileRoute('/driver/dashboard')({
 function RouteComponent() {
   const user = loggedInUser();
   const { data: alldeliveries } = useDeliveriesForDriver(user?.user_id ? parseInt(user.user_id) : 0);
+  console.log('alldeliveries', alldeliveries);
   const completedDeliveries = alldeliveries?.filter((delivery: Delivery) => delivery.delivery_status === 'delivered').length || 0;
   const activeDeliveries = alldeliveries?.filter(
     (delivery: Delivery) =>
@@ -20,10 +21,15 @@ function RouteComponent() {
       delivery.delivery_status === 'in_transit'
   ).length || 0;
 
+  // total payment from delivery
+  const totalDeliveredPayment = alldeliveries
+    ?.filter((delivery: Delivery) => delivery.delivery_status === 'delivered')
+    .reduce((total: number, delivery: Delivery) => total + parseFloat(delivery.delivery_fee || '0'), 0) || 0;
+
   const stats = [
     { title: 'Active Orders', value: activeDeliveries, color: '#00A7B3', icon: Package },
     { title: 'Completed Deliveries', value: completedDeliveries, color: '#005A61', icon: CheckCircle },
-    { title: 'Total Earnings', value: 'KES 0', color: '#516E89', icon: DollarSign },
+    { title: 'Total Earnings', value: `KES ${totalDeliveredPayment}`, color: '#516E89', icon: DollarSign },
   ];
 
   const deliveries: Delivery[] = alldeliveries || [];
@@ -87,87 +93,87 @@ function RouteComponent() {
             </div>
 
             <div className="p-6 space-y-4">
-                {deliveriesToShow.length > 0 ? (
-                  deliveriesToShow.map((delivery: Delivery) => (
-                    <div key={delivery.delivery_id || delivery.delivery_id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <h3 className="font-semibold text-fresh-primary">
-                            #{delivery.order?.order_number || delivery.delivery_id || delivery.delivery_id}
-                          </h3>
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${delivery.delivery_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              delivery.delivery_status === 'assigned' ? 'bg-blue-100 text-blue-800' :
-                                delivery.delivery_status === 'picked_up' ? 'bg-green-100 text-green-800' :
-                                  delivery.delivery_status === 'delivered' ? 'bg-gray-100 text-fresh-primary' :
-                                    'bg-gray-100 text-fresh-primary'
-                            }`}>
-                            {delivery.delivery_status?.replace('_', ' ').toUpperCase() || 'UNKNOWN'}
-                          </span>
-                        </div>
-                        <p className="text-gray-800">{delivery.user?.profile?.first_name} {delivery.user?.profile?.last_name}</p>
-                        <p className="text-sm text-gray-500">Packaged at {delivery.order?.created_at ? new Date(delivery.order.created_at).toLocaleTimeString() : '-'}</p>
+              {deliveriesToShow.length > 0 ? (
+                deliveriesToShow.map((delivery: Delivery) => (
+                  <div key={delivery.delivery_id || delivery.delivery_id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <h3 className="font-semibold text-fresh-primary">
+                          #{delivery.order?.order_number || delivery.delivery_id || delivery.delivery_id}
+                        </h3>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${delivery.delivery_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          delivery.delivery_status === 'assigned' ? 'bg-blue-100 text-blue-800' :
+                            delivery.delivery_status === 'picked_up' ? 'bg-green-100 text-green-800' :
+                              delivery.delivery_status === 'delivered' ? 'bg-gray-100 text-fresh-primary' :
+                                'bg-gray-100 text-fresh-primary'
+                          }`}>
+                          {delivery.delivery_status?.replace('_', ' ').toUpperCase() || 'UNKNOWN'}
+                        </span>
                       </div>
-                      <div className="text-right">
-                        <p className="font-bold text-gray-900">KSh {delivery.order?.total_amount || delivery.delivery_fee}</p>
-                        <div className="flex space-x-1 mt-2">
-                          <button className="p-1 text-gray-400 hover:text-indigo-600">
-                            <Eye size={16} />
-                          </button>
-                          <button className="p-1 text-gray-400 hover:text-indigo-600">
-                            <Edit size={16} />
-                          </button>
-                        </div>
+                      <p className="text-gray-800">{delivery.user?.profile?.first_name} {delivery.user?.profile?.last_name}</p>
+                      <p className="text-sm text-gray-500">Packaged at {delivery.order?.created_at ? new Date(delivery.order.created_at).toLocaleTimeString() : '-'}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-gray-900">KSh {delivery.order?.total_amount || delivery.delivery_fee}</p>
+                      <div className="flex space-x-1 mt-2">
+                        <button className="p-1 text-gray-400 hover:text-indigo-600">
+                          <Eye size={16} />
+                        </button>
+                        <button className="p-1 text-gray-400 hover:text-indigo-600">
+                          <Edit size={16} />
+                        </button>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    <p>No active deliveries found.</p>
                   </div>
-                )}
-
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Today's Summary</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Orders Completed</span>
-                    <span className="font-medium">12</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Distance Traveled</span>
-                    <span className="font-medium">48.3 km</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Active Hours</span>
-                    <span className="font-medium">6h 30m</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Earnings</span>
-                    <span className="font-medium text-green-600">$245.00</span>
-                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 py-8">
+                  <p>No active deliveries found.</p>
                 </div>
-              </div>
+              )}
 
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                <div className="space-y-3">
-                  <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-                    View Navigation
-                  </button>
-                  <button className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
-                    Report Issue
-                  </button>
-                  <button className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
-                    Take Break
-                  </button>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Today's Summary</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Orders Completed</span>
+                  <span className="font-medium">12</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Distance Traveled</span>
+                  <span className="font-medium">48.3 km</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Active Hours</span>
+                  <span className="font-medium">6h 30m</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Earnings</span>
+                  <span className="font-medium text-green-600">$245.00</span>
                 </div>
               </div>
             </div>
+
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+              <div className="space-y-3">
+                <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                  View Navigation
+                </button>
+                <button className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
+                  Report Issue
+                </button>
+                <button className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                  Take Break
+                </button>
+              </div>
+            </div>
+          </div>
         </main>
       </div>
     </div>

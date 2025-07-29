@@ -16,10 +16,11 @@ function RouteComponent() {
 
   const deliveries: Delivery[] | undefined = alldeliveries?.filter(
     (delivery: Delivery) => delivery.delivery_status === 'assigned' || delivery.delivery_status === 'picked_up' || delivery.delivery_status === 'in_transit'
-  );  
+  );
   const updateDeliveryMutation = useUpdateDeliveryStatus();
   const [mapModalOpen, setMapModalOpen] = useState(false);
   const [modalCoords, setModalCoords] = useState<any[]>([]);
+  const [loadingDeliveryId, setLoadingDeliveryId] = useState<number | null>(null);
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -49,14 +50,14 @@ function RouteComponent() {
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
                             <h3 className="font-semibold text-gray-800">Order #{order?.order_number || delivery.order_id}</h3>
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${delivery.status === 'picked_up' ? 'bg-[#005A61] text-white' :
-                              delivery.status === 'ready_pickup' ? 'bg-[#516E89] text-white' :
-                                delivery.status === 'assigned' ? 'bg-[#0074B7] text-white' :
-                                  delivery.status === 'in_transit' ? 'bg-[#516E89] text-white' :
-                                    delivery.status === 'delivered' ? 'bg-green-600 text-white' :
+                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${delivery.delivery_status === 'picked_up' ? 'bg-[#005A61] text-white' :
+                              delivery.delivery_status === 'ready_pickup' ? 'bg-[#516E89] text-white' :
+                                delivery.delivery_status === 'assigned' ? 'bg-[#0074B7] text-white' :
+                                  delivery.delivery_status === 'in_transit' ? 'bg-[#516E89] text-white' :
+                                    delivery.delivery_status === 'delivered' ? 'bg-green-600 text-white' :
                                       'bg-gray-300 text-gray-800'
                               }`}>
-                              {typeof delivery.status === 'string' ? delivery.status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}
+                              {typeof delivery.delivery_status === 'string' ? delivery.delivery_status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}
                             </span>
                           </div>
                           <p className="text-lg font-medium text-gray-900">{customerProfile?.first_name} {customerProfile?.last_name}</p>
@@ -88,30 +89,39 @@ function RouteComponent() {
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        {delivery.status === 'assigned' && (
+                        {delivery.delivery_status === 'assigned' && (
                           <button
                             className="flex-1 min-w-[120px] bg-[#516E89] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
                             onClick={() => {
-                              updateDeliveryMutation.mutate({
-                                deliveryId: delivery.delivery_id,
-                                status: 'in_transit',
-                              });
+                              setLoadingDeliveryId(delivery.delivery_id);
+                              updateDeliveryMutation.mutate(
+                                {
+                                  deliveryId: delivery.delivery_id,
+                                  status: 'in_transit',
+                                },
+                                {
+                                  onSettled: () => setTimeout(() => setLoadingDeliveryId(null), 2000)
+                                }
+                              );
                             }}
                           >
-                            Pick Up Order
+                            {loadingDeliveryId === delivery.delivery_id ? 'Starting Delivery...' : 'Start Delivery'}
                           </button>
                         )}
-                        {(delivery.status === 'picked_up' || delivery.status === 'in_transit') && (
+                        {(delivery.delivery_status === 'picked_up' || delivery.delivery_status === 'in_transit') && (
                           <button
                             className="flex-1 min-w-[120px] bg-[#0074B7] text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
                             onClick={() => {
+                              setLoadingDeliveryId(delivery.delivery_id);
                               updateDeliveryMutation.mutate({
                                 deliveryId: delivery.delivery_id,
                                 status: 'delivered',
+                              }, {
+                                onSettled: () => setTimeout(() => setLoadingDeliveryId(null), 2000)
                               });
                             }}
                           >
-                            Mark as Delivered
+                            {loadingDeliveryId === delivery.delivery_id ? 'Completing Delivery...' : 'Mark as Delivered'}
                           </button>
                         )}
                         <button
