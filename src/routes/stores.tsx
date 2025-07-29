@@ -1,31 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useStoreProducts, useStores } from '../hooks/useStore';
 import type { Store } from '../types/store';
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Star,
-  Search,
-  Filter,
-  Grid,
-  List,
-  ShoppingBag,
-  Eye,
-  ChevronRight,
-  RefreshCw,
-  Store as StoreIcon,
-  TrendingUp,
-  Package,
-  Users,
-  Heart,
-  Share2
-} from 'lucide-react';
+import { MapPin, Phone, Mail, Star, Search, Filter, Grid, List, ShoppingBag, Eye, ChevronRight, RefreshCw, Store as StoreIcon, TrendingUp, Package, Users, Heart, Share2, Navigation, Globe, AlertCircle} from 'lucide-react';
 import { storeActions } from '@/store/store';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import * as motion from "motion/react-client";
+
+interface UserLocation {
+  county: string;
+  town: string;
+  area?: string;
+  latitude?: number;
+  longitude?: number;
+}
+
+// Location service functions
+const getLocationFromCoordinates = async (latitude: number, longitude: number): Promise<UserLocation | null> => {
+  try {
+    const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+    const data = await response.json();
+
+    return {
+      county: data.principalSubdivision || data.countryName || '',
+      town: data.subcounty || data.locality || '',
+      area: data.locality || '',
+      latitude,
+      longitude
+    };
+  } catch (error) {
+    console.error('Error getting location from coordinates:', error);
+    return null;
+  }
+};
+
+const getCurrentLocation = (): Promise<GeolocationPosition> => {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('Geolocation is not supported by this browser'));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      resolve,
+      reject,
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 // 5 minutes
+      }
+    );
+  });
+};
 
 export const Route = createFileRoute('/stores')({
   component: StoresPage,
@@ -33,65 +60,329 @@ export const Route = createFileRoute('/stores')({
 
 function StoresPage() {
   const navigate = useNavigate();
-
-  // State management
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<'name' | 'rating' | 'county' | 'town'>('rating');
-
-  // Hooks
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [locationLoading, setLocationLoading] = useState<boolean>(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [showNearbyOnly, setShowNearbyOnly] = useState<boolean>(true);
+  const [locationPermissionDenied, setLocationPermissionDenied] = useState<boolean>(false);
   const { stores, loading: storesLoading, error: storesError, refresh } = useStores();
-  // console.log('stores:', stores);
-  const {
-    products: selectedStoreProducts = [],
-    loading: productsLoading
-  } = useStoreProducts({
+  const { products: selectedStoreProducts = [], loading: productsLoading } = useStoreProducts({
     storeId: selectedStore?.store_id || 0,
     limit: 6,
     autoFetch: !!selectedStore
   });
 
-  // Filter and sort stores
+  const getUserLocation = async () => {
+    setLocationLoading(true);
+    setLocationError(null);
+
+    try {
+      const position = await getCurrentLocation();
+      const location = await getLocationFromCoordinates(
+        position.coords.latitude,
+        position.coords.longitude
+      );
+
+      if (location) {
+        setUserLocation(location);
+        localStorage.setItem('userLocation', JSON.stringify(location));
+      }
+    } catch (error) {
+      console.error('Error getting user location:', error);
+
+      if (error instanceof GeolocationPositionError) {
+        if (error.code === error.PERMISSION_DENIED) {
+          setLocationPermissionDenied(true);
+          setLocationError('Location access denied. You can still browse all stores.');
+        } else if (error.code === error.TIMEOUT) {
+          setLocationError('Location request timed out. Please try again.');
+        } else {
+          setLocationError('Unable to get your location. Please try again.');
+        }
+      } else {
+        setLocationError('Unable to determine your location.');
+      }
+
+      // Try to load saved location
+      const savedLocation = localStorage.getItem('userLocation');
+      if (savedLocation) {
+        try {
+          setUserLocation(JSON.parse(savedLocation));
+        } catch (e) {
+          console.error('Error parsing saved location:', e);
+        }
+      }
+    } finally {
+      setLocationLoading(false);
+    }
+  };
+
+  // Get user location on component mount
+  useEffect(() => {
+    getUserLocation();
+  }, []);
+
+  // Manual location refresh
+  const refreshLocation = async () => {
+    setLocationPermissionDenied(false);
+    await getUserLocation();
+  };
+
+
+  // Filter stores based on location and other criteria
   const filteredStores = React.useMemo(() => {
     if (!stores || stores.length === 0) {
       return [];
     }
 
-    let filtered = stores.filter(store =>
-      store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.county.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    let filtered = stores;
+
+    if (showNearbyOnly && userLocation) {
+      filtered = stores.filter(store => {
+        const storeCounty = store.address.county?.toLowerCase?.() || '';
+        const storeTown = store.address.town?.toLowerCase?.() || '';
+        const userCounty = userLocation.county?.toLowerCase?.() || '';
+        const userTown = userLocation.town?.toLowerCase?.() || '';
+
+        // First priority: same county and town
+        if (storeCounty === userCounty && storeTown === userTown) {
+          return true;
+        }
+        // Second priority: same county
+        if (storeCounty === userCounty) {
+          return true;
+        }
+        return false;
+      });
+    }
+
+    // Apply search filtering
+    if (searchQuery) {
+      filtered = filtered.filter(store =>
+        (store.name?.toLowerCase?.() || '').includes(searchQuery) ||
+        (store.address.county?.toLowerCase?.() || '').includes(searchQuery) ||
+        (store.address.town?.toLowerCase?.() || '').includes(searchQuery) ||
+        (store.description?.toLowerCase?.() || '').includes(searchQuery)
+      );
+    }
 
     // Sort stores
     filtered.sort((a, b) => {
+      // If showing nearby stores and user location is available, prioritize by location match
+      if (showNearbyOnly && userLocation) {
+        const aLocationScore = getLocationScore(a, userLocation);
+        const bLocationScore = getLocationScore(b, userLocation);
+
+        if (aLocationScore !== bLocationScore) {
+          return bLocationScore - aLocationScore; // Higher score first
+        }
+      }
+
+      // Then apply selected sorting
       switch (sortBy) {
         case 'name':
-          return a.name.localeCompare(b.name);
+          return (a.name || '').localeCompare(b.name || '');
         case 'rating':
           const ratingA = typeof a.rating === 'string' ? parseFloat(a.rating) : a.rating;
           const ratingB = typeof b.rating === 'string' ? parseFloat(b.rating) : b.rating;
           return ratingB - ratingA;
         case 'county':
-          return a.county.localeCompare(b.county);
+          return (a.county || '').localeCompare(b.county || '');
         case 'town':
-          return a.town.localeCompare(b.town);
+          return (a.town || '').localeCompare(b.town || '');
         default:
           return 0;
       }
     });
 
     return filtered;
-  }, [stores, searchQuery, sortBy]);
+  }, [stores, searchQuery, sortBy, showNearbyOnly, userLocation]);
+
+  // Helper function to score stores based on location match
+  const getLocationScore = (store: Store, userLoc: UserLocation): number => {
+    let score = 0;
+    const storeCounty = store.address.county?.toLowerCase?.() || '';
+    const storeTown = store.address.town?.toLowerCase?.() || '';
+    const userCounty = userLoc.county?.toLowerCase?.() || '';
+    const userTown = userLoc.town?.toLowerCase?.() || '';
+
+    // Same county and town = highest score
+    if (storeCounty === userCounty && storeTown === userTown) {
+      score = 3;
+    }
+    // Same county = medium score
+    else if (storeCounty === userCounty) {
+      score = 2;
+    }
+    // Same town (different county) = low score
+    else if (storeTown === userTown) {
+      score = 1;
+    }
+
+    return score;
+  };
+
+  // Calculate nearby stores count
+  const nearbyStoresCount = React.useMemo(() => {
+    if (!stores || !userLocation) return 0;
+
+    const userCounty = userLocation.county?.toLowerCase?.() || '';
+    const userTown = userLocation.town?.toLowerCase?.() || '';
+
+    return stores.filter(store => {
+      const storeCounty = store.address.county?.toLowerCase?.() || '';
+      const storeTown = store.address.town?.toLowerCase?.() || '';
+      return storeCounty === userCounty || storeTown === userTown;
+    }).length;
+  }, [stores, userLocation]);
+
+
+  // Location toggle component
+  const LocationToggle: React.FC = () => {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-[#E1EAF2]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`p-2 rounded-lg ${userLocation ? 'bg-green-100' : 'bg-gray-100'}`}>
+              {locationLoading ? (
+                <RefreshCw className="w-5 h-5 animate-spin text-[#00A7B3]" />
+              ) : userLocation ? (
+                <Navigation className="w-5 h-5 text-green-600" />
+              ) : (
+                <MapPin className="w-5 h-5 text-gray-500" />
+              )}
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-[#005A61]">
+                  {userLocation ? 'Your Location' : 'Location Services'}
+                </h3>
+                {showNearbyOnly && nearbyStoresCount > 0 && (
+                  <span className="bg-[#00A7B3] text-white text-xs px-2 py-1 rounded-full">
+                    {nearbyStoresCount} nearby
+                  </span>
+                )}
+              </div>
+
+              <p className="text-sm text-[#516E89]">
+                {locationLoading ? (
+                  'Getting your location...'
+                ) : userLocation ? (
+                  `${userLocation.town}, ${userLocation.county}`
+                ) : locationPermissionDenied ? (
+                  'Location access denied'
+                ) : (
+                  'Location not available'
+                )}
+              </p>
+
+              {locationError && (
+                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {locationError}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {!userLocation && !locationLoading && (
+              <button
+                onClick={refreshLocation}
+                className="text-[#00A7B3] hover:text-[#0096a2] text-sm font-me`dium transition-colors"
+              >
+                Try Again
+              </button>
+            )}
+
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[#516E89]">
+                {showNearbyOnly ? 'Nearby' : 'All Stores'}
+              </span>
+              <button
+                onClick={() => setShowNearbyOnly(!showNearbyOnly)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showNearbyOnly ? 'bg-[#00A7B3]' : 'bg-gray-300'
+                  }`}
+                disabled={!userLocation}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showNearbyOnly ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                />
+              </button>
+              <Globe className={`w-4 h-4 ${!showNearbyOnly ? 'text-[#00A7B3]' : 'text-gray-400'}`} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const StatsSection: React.FC = () => {
+    const displayedStoresCount = showNearbyOnly && userLocation ? nearbyStoresCount : (stores?.length || 0);
+
+    return (
+      <div className="bg-gradient-to-r from-[#120061] to-[#00A7B3] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <StoreIcon className="w-8 h-8" />
+              </div>
+              <div className="text-3xl font-bold mb-2">{displayedStoresCount}</div>
+              <div className="text-blue-100">
+                {showNearbyOnly && userLocation ? 'Nearby Stores' : 'Partner Stores'}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <TrendingUp className="w-8 h-8" />
+              </div>
+              <div className="text-3xl font-bold mb-2">4.7</div>
+              <div className="text-blue-100">Average Rating</div>
+            </div>
+            <div className="text-center">
+              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Package className="w-8 h-8" />
+              </div>
+              <div className="text-3xl font-bold mb-2">1000+</div>
+              <div className="text-blue-100">Products Available</div>
+            </div>
+            <div className="text-center">
+              <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Users className="w-8 h-8" />
+              </div>
+              <div className="text-3xl font-bold mb-2">50K+</div>
+              <div className="text-blue-100">Happy Customers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const StoreCard: React.FC<{ store: Store; index?: number }> = ({ store, index = 0 }) => {
     const [isFavorited, setIsFavorited] = useState(false);
 
+    const isNearby = userLocation && (
+      store.address.county === userLocation.county ||
+      store.address.town === userLocation.town
+    );
+
+    const isSameLocation = userLocation &&
+      store.address.county === userLocation.county &&
+      store.address.town === userLocation.town;
+
     return (
       <div
-        className="bg-card rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer group hover:-translate-y-2 animate-in fade-in slide-in-from-bottom-4"
+        className={`bg-card rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer group hover:-translate-y-2 animate-in fade-in slide-in-from-bottom-4 ${isNearby ? 'ring-2 ring-[#00A7B3] ring-opacity-20' : ''
+          }`}
         style={{
           animationDelay: `${index * 100}ms`,
           animationFillMode: 'backwards'
@@ -108,15 +399,17 @@ function StoresPage() {
             }}
           />
 
-          {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Location badge */}
+          {isNearby && (
+            <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold text-white shadow-lg ${isSameLocation
+              ? 'bg-gradient-to-r from-green-500 to-emerald-500'
+              : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+              }`}>
+              {isSameLocation ? 'Your Area' : 'Your County'}
+            </div>
+          )}
 
-          {/* Floating discount badge */}
-          <div className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-bold transform rotate-3 hover:rotate-0 transition-transform duration-300">
-            20% OFF
-          </div>
-
-          {/* Heart favorite button with animation */}
+          {/* Existing badges and buttons... */}
           <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-110">
             <Heart
               className={`w-5 h-5 transition-all duration-300 cursor-pointer ${isFavorited
@@ -130,8 +423,6 @@ function StoresPage() {
             />
           </div>
 
-
-          {/* Store status with enhanced styling */}
           <div className={`absolute bottom-4 left-4 px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300 ${store.is_active
             ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
             : 'bg-red-500 text-white shadow-lg shadow-red-500/30'
@@ -167,7 +458,7 @@ function StoresPage() {
             </div>
             <div className="flex items-center text-fresh-secondary text-sm hover:text-[#00A7B3] transition-colors duration-200">
               <MapPin className="w-4 h-4 mr-2 text-[#00A7B3]" />
-              {store.address.area}
+              {store.address.town}
             </div>
             <div className="flex items-center text-fresh-secondary text-sm hover:text-[#00A7B3] transition-colors duration-200">
               <Phone className="w-4 h-4 mr-2 text-[#00A7B3]" />
@@ -175,24 +466,26 @@ function StoresPage() {
             </div>
           </div>
 
-          {/* Animated action buttons */}
+          {/* Action buttons */}
           <div className="flex gap-2 transform group-hover:scale-105 transition-transform duration-300">
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 navigate({ to: '/shop-store' });
                 storeActions.saveStore(store);
               }}
-              className="flex-1 bg-[#145DA0] hover:from-[#0096a2] hover:to-[#00A7B3] text-white py-2 px-4 rounded-lg transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+              className="flex-1 bg-[#145DA0] hover:bg-[#0096a2] text-white py-2 px-4 rounded-lg transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
             >
               <ShoppingBag className="w-4 h-4 group-hover:animate-bounce" />
               Shop Now
             </button>
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 navigate({ to: '/shop-store' });
                 storeActions.saveStore(store);
               }}
-              className="bg-[#145DA0] hover:from-[#004A50] hover:to-[#003A40] text-white py-2 px-4 rounded-lg transition-all duration-300 text-sm font-medium flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 active:scale-95 hover:rotate-3"
+              className="bg-[#145DA0] hover:bg-[#004A50] text-white py-2 px-4 rounded-lg transition-all duration-300 text-sm font-medium flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 active:scale-95 hover:rotate-3"
             >
               <Eye className="w-4 h-4 group-hover:animate-pulse" />
             </button>
@@ -202,36 +495,72 @@ function StoresPage() {
     );
   };
 
+
   const StoreListItem: React.FC<{ store: Store }> = ({ store }) => {
+    const [isFavorited, setIsFavorited] = useState(false);
+    const isNearby = userLocation && (
+      store.address.county === userLocation.county ||
+      store.address.town === userLocation.town
+    );
+
+    const isSameLocation = userLocation &&
+      store.address.county === userLocation.county &&
+      store.address.town === userLocation.town;
+
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 flex items-center gap-6 hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-        onClick={() => setSelectedStore(store)}>
-        <img
-          src={store.image_url}
-          alt={store.name}
-          className="w-20 h-20 object-cover rounded-lg"
-          onError={(e) => {
-            e.currentTarget.src = 'https://via.placeholder.com/80x80?text=Store';
-          }}
-        />
+      <div
+        className={`bg-white rounded-lg shadow-md p-6 flex items-center gap-6 hover:shadow-lg transition-shadow duration-200 cursor-pointer ${isNearby ? 'ring-2 ring-[#00A7B3] ring-opacity-20' : ''
+          }`}
+        onClick={() => setSelectedStore(store)}
+      >
+        <div className="relative">
+          <img
+            src={store.image_url}
+            alt={store.name}
+            className="w-20 h-20 object-cover rounded-lg"
+            onError={(e) => {
+              e.currentTarget.src = 'https://via.placeholder.com/80x80?text=Store';
+            }}
+          />
+          {isNearby && (
+            <div className={`absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${isSameLocation ? 'bg-green-500' : 'bg-blue-500'
+              }`}>
+              {isSameLocation ? '📍' : '🏠'}
+            </div>
+          )}
+        </div>
 
         <div className="flex-1">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h3 className="text-xl font-bold text-[#005A61]">{store.name}</h3>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-xl font-bold text-[#005A61]">{store.name}</h3>
+                {isNearby && (
+                  <span className={`text-xs px-2 py-1 rounded-full text-white ${isSameLocation ? 'bg-green-500' : 'bg-blue-500'
+                    }`}>
+                    {isSameLocation ? 'Your Area' : 'Your County'}
+                  </span>
+                )}
+              </div>
               <div className="flex items-center mt-1">
                 <Star className="w-4 h-4 text-yellow-400 fill-current" />
                 <span className="text-sm text-[#516E89] ml-1">
                   {store.rating} rating
                 </span>
-                <span className={`ml-4 text-sm px-2 py-1 rounded-full ${store.is_active ? 'bg-green-100 text-teal-500' : 'bg-red-100 text-red-700'
+                <span className={`ml-4 text-sm px-2 py-1 rounded-full ${store.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                   }`}>
                   {store.is_active ? 'Open' : 'Closed'}
                 </span>
               </div>
             </div>
-            <button className="text-gray-400 hover:text-red-500 transition-colors">
-              <Heart className="w-5 h-5" />
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsFavorited(!isFavorited);
+              }}
+              className="text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <Heart className={`w-5 h-5 ${isFavorited ? 'text-red-500 fill-red-500' : ''}`} />
             </button>
           </div>
 
@@ -246,6 +575,10 @@ function StoresPage() {
                 {store.address.county}
               </div>
               <div className="flex items-center text-[#516E89] text-sm">
+                <MapPin className="w-4 h-4 mr-1 text-[#00A7B3]" />
+                {store.address.town}
+              </div>
+              <div className="flex items-center text-[#516E89] text-sm">
                 <Phone className="w-4 h-4 mr-1 text-[#00A7B3]" />
                 {store.contact_info}
               </div>
@@ -255,14 +588,21 @@ function StoresPage() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate({ to: '/products', search: { store_id: store.store_id } });
+                  navigate({ to: '/shop-store' });
+                  storeActions.saveStore(store);
                 }}
                 className="bg-[#03417a] hover:bg-[#0096a2] text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium flex items-center gap-2"
               >
                 <ShoppingBag className="w-4 h-4" />
                 Shop Now
               </button>
-              <button className="bg-[#055e92] hover:bg-[#004A50] text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedStore(store);
+                }}
+                className="bg-[#055e92] hover:bg-[#004A50] text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium"
+              >
                 <Eye className="w-4 h-4" />
               </button>
             </div>
@@ -272,7 +612,17 @@ function StoresPage() {
     );
   };
 
+  // Enhanced StoreModal component
   const StoreModal: React.FC<{ store: Store; onClose: () => void }> = ({ store, onClose }) => {
+    const isNearby = userLocation && (
+      store.address.county === userLocation.county ||
+      store.address.town === userLocation.town
+    );
+
+    const isSameLocation = userLocation &&
+      store.address.county === userLocation.county &&
+      store.address.town === userLocation.town;
+
     return (
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -292,8 +642,20 @@ function StoresPage() {
             >
               ×
             </button>
-            <div className="absolute bottom-4 left-4 bg-black bg-opacounty-70 text-white px-4 py-2 rounded-full">
-              {store.is_active ? 'Currently Open' : 'Currently Closed'}
+
+            {/* Location and status badges */}
+            <div className="absolute bottom-4 left-4 flex gap-2">
+              <div className="bg-black bg-opacity-70 text-white px-4 py-2 rounded-full">
+                {store.is_active ? 'Currently Open' : 'Currently Closed'}
+              </div>
+              {isNearby && (
+                <div className={`px-4 py-2 rounded-full text-white font-semibold ${isSameLocation
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-500'
+                  : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                  }`}>
+                  {isSameLocation ? 'In Your Area' : 'In Your County'}
+                </div>
+              )}
             </div>
           </div>
 
@@ -327,8 +689,8 @@ function StoresPage() {
                   <MapPin className="w-6 h-6 text-[#00A7B3]" />
                 </div>
                 <div>
-                  <p className="font-semibold text-[#005A61]">county</p>
-                  <p className="text-[#516E89]">{store.county}</p>
+                  <p className="font-semibold text-[#005A61]">County</p>
+                  <p className="text-[#516E89]">{store.address.county}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -337,7 +699,7 @@ function StoresPage() {
                 </div>
                 <div>
                   <p className="font-semibold text-[#005A61]">Town</p>
-                  <p className="text-[#516E89]">{store.town}</p>
+                  <p className="text-[#516E89]">{store.address.town}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -345,11 +707,27 @@ function StoresPage() {
                   <Mail className="w-6 h-6 text-[#00A7B3]" />
                 </div>
                 <div>
-                  <p className="font-semibold text-[#005A61]">Email</p>
+                  <p className="font-semibold text-[#005A61]">Contact</p>
                   <p className="text-[#516E89]">{store.contact_info}</p>
                 </div>
               </div>
             </div>
+
+            {/* Delivery Info for nearby stores */}
+            {isNearby && (
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <h4 className="font-semibold text-green-800">Fast Delivery Available</h4>
+                </div>
+                <p className="text-green-700 text-sm">
+                  {isSameLocation
+                    ? "Same-day delivery available in your area! Orders placed before 2 PM are delivered the same day."
+                    : "Quick delivery to your county! Estimated delivery time: 1-2 business days."
+                  }
+                </p>
+              </div>
+            )}
 
             {/* Featured Products */}
             <div className="mb-8">
@@ -416,7 +794,7 @@ function StoresPage() {
                 Start Shopping
               </button>
               <button
-                onClick={() => window.open(`tel:${store.phone}`, '_self')}
+                onClick={() => window.open(`tel:${store.contact_info}`, '_self')}
                 className="bg-[#005A61] hover:bg-[#004A50] text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center gap-2"
               >
                 <Phone className="w-5 h-5" />
@@ -429,10 +807,11 @@ function StoresPage() {
     );
   };
 
+
   return (
     <>
       <Header />
-      <div className="bg-background  min-h-screen">
+      <div className="bg-background min-h-screen">
 
         <div className="shadow-sm border-b border-[#E1EAF2]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -448,44 +827,11 @@ function StoresPage() {
           </div>
         </div>
 
-        {/* Stats Section */}
-        <div className="bg-gradient-to-r from-[#120061] to-[#00A7B3] text-white">
-          <div className="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacity-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <StoreIcon className="w-8 h-8" />
-                </div>
-                <div className="text-3xl font-bold mb-2">{stores?.length || 0}</div>
-                <div className="text-blue-100">Partner Stores</div>
-              </div>
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <TrendingUp className="w-8 h-8" />
-                </div>
-                <div className="text-3xl font-bold mb-2">4.7</div>
-                <div className="text-blue-100">Average Rating</div>
-              </div>
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Package className="w-8 h-8" />
-                </div>
-                <div className="text-3xl font-bold mb-2">1000+</div>
-                <div className="text-blue-100">Products Available</div>
-              </div>
-              <div className="text-center">
-                <div className="bg-gray-900 bg-opacounty-20 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Users className="w-8 h-8" />
-                </div>
-                <div className="text-3xl font-bold mb-2">50K+</div>
-                <div className="text-blue-100">Happy Customers</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <StatsSection />
 
-        {/* Search and Filters */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <LocationToggle />
+
           <div className="bg-searchbar rounded-lg shadow-md p-6 mb-8">
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="flex-1 relative">
@@ -534,7 +880,7 @@ function StoresPage() {
 
             {/* Filter Options */}
             {showFilters && (
-              <div className="mt-6 pt-6 border-t border-[#E1EAF2]">
+              <div className="mt-6 pt-6 ">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-[#005A61] mb-2">
@@ -542,12 +888,13 @@ function StoresPage() {
                     </label>
                     <select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as 'name' | 'rating' | 'county')}
+                      onChange={(e) => setSortBy(e.target.value as 'name' | 'rating' | 'county' | 'town')}
                       className="w-full px-3 py-2 border border-[#E1EAF2] rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                     >
                       <option value="rating">Highest Rated</option>
                       <option value="name">Name (A-Z)</option>
-                      <option value="county">county</option>
+                      <option value="county">County</option>
+                      <option value="town">Town</option>
                     </select>
                   </div>
 
@@ -593,7 +940,7 @@ function StoresPage() {
                 <p className="text-[#516E89] text-lg">Loading stores...</p>
               </div>
             )}
-          </motion.div> 
+          </motion.div>
 
           {/* Error State */}
           {storesError && (
@@ -613,17 +960,31 @@ function StoresPage() {
           {/* Stores Grid/List */}
           {!storesLoading && !storesError && filteredStores.length > 0 && (
             <>
-              <div className="mb-6">
+              <div className="mb-6 flex items-center justify-between">
                 <p className="text-[#516E89]">
                   Showing {filteredStores.length} of {stores?.length || 0} stores
                   {searchQuery && ` for "${searchQuery}"`}
+                  {showNearbyOnly && userLocation && (
+                    <span className="ml-2 text-[#00A7B3] font-medium">
+                      near you
+                    </span>
+                  )}
                 </p>
+
+                {showNearbyOnly && userLocation && nearbyStoresCount < (stores?.length || 0) && (
+                  <button
+                    onClick={() => setShowNearbyOnly(false)}
+                    className="text-[#00A7B3] hover:text-[#0096a2] text-sm font-medium transition-colors"
+                  >
+                    Show all {stores?.length || 0} stores
+                  </button>
+                )}
               </div>
 
               {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredStores.map((store) => (
-                    <StoreCard key={store.store_id} store={store} />
+                  {filteredStores.map((store, index) => (
+                    <StoreCard key={store.store_id} store={store} index={index} />
                   ))}
                 </div>
               ) : (
@@ -640,21 +1001,40 @@ function StoresPage() {
           {!storesLoading && !storesError && filteredStores.length === 0 && (
             <div className="text-center py-16">
               <StoreIcon className="w-20 h-20 text-[#B8D0DC] mx-auto mb-6" />
-              <h3 className="text-2xl font-semibold text-[#005A61] mb-4">No stores found</h3>
+              <h3 className="text-2xl font-semibold text-[#005A61] mb-4">
+                {showNearbyOnly && userLocation ? 'No nearby stores found' : 'No stores found'}
+              </h3>
               <p className="text-[#516E89] text-lg mb-8">
-                {searchQuery
-                  ? `No stores match your search for "${searchQuery}". Try adjusting your search terms.`
-                  : "No stores are currently available in your area."
-                }
+                {showNearbyOnly && userLocation ? (
+                  <>
+                    No stores found in {userLocation.town}, {userLocation.county}.
+                    <br />
+                    Try expanding your search to see all available stores.
+                  </>
+                ) : searchQuery ? (
+                  `No stores match your search for "${searchQuery}". Try adjusting your search terms.`
+                ) : (
+                  "No stores are currently available."
+                )}
               </p>
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-                >
-                  Clear Search
-                </button>
-              )}
+              <div className="flex gap-4 justify-center">
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="bg-[#00A7B3] hover:bg-[#0096a2] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    Clear Search
+                  </button>
+                )}
+                {showNearbyOnly && userLocation && (
+                  <button
+                    onClick={() => setShowNearbyOnly(false)}
+                    className="bg-[#005A61] hover:bg-[#004A50] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    Show All Stores
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -666,9 +1046,8 @@ function StoresPage() {
             onClose={() => setSelectedStore(null)}
           />
         )}
-      </div >
+      </div>
       <Footer />
-
     </>
   );
 }
