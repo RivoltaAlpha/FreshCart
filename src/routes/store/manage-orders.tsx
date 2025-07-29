@@ -28,7 +28,6 @@ function RouteComponent() {
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(null);
   const [newStatus, setNewStatus] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string | 'all'>('all');
-
   const updateMutation = useUpdateOrderStatusMutation(selectedOrder?.order_id ?? 0);
 
   // Filter orders based on status
@@ -329,13 +328,15 @@ function RouteComponent() {
                         {order.status || 'pending'}
                       </span>
                     </div>
-                    <button
-                      onClick={() => openModal(order)}
-                      className="text-[#00A7B3] hover:text-[#00A7B3]/80 flex items-center gap-1 text-sm font-medium transition-colors"
-                    >
-                      <Edit3 className="h-4 w-4" />
-                      Change Status
-                    </button>
+                    {!["delivered"].includes(order.status) && (
+                      <button
+                        onClick={() => openModal(order)}
+                        className="text-[#00A7B3] hover:text-[#00A7B3]/80 flex items-center gap-1 text-sm font-medium transition-colors"
+                      >
+                        <Edit3 className="h-4 w-4" />
+                        Change Status
+                      </button>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -385,12 +386,14 @@ function RouteComponent() {
                       <span>{order.delivery_address}</span>
                     </div>
                     <div>
-                      <button
-                        onClick={() => handleViewDetails(order.order_id)}
-                        className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
-                      >
-                        View Delivery details
-                      </button>
+                      {["in_transit", "delivered"].includes(order.status) && (
+                        <button
+                          onClick={() => handleViewDetails(order.order_id)}
+                          className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
+                        >
+                          View Delivery details
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

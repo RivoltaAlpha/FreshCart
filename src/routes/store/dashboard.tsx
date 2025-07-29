@@ -1,4 +1,5 @@
-import { loggedInUser } from '@/store/auth'
+import OrdersLineChart from '@/components/ordersChart'
+import { useStoreOrders } from '@/hooks/useOrders'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Package, ShoppingCart, TrendingUp, DollarSign, AlertCircle, ClipboardCheckIcon, Settings, Plus, Edit, Eye, } from 'lucide-react'
 
@@ -7,9 +8,8 @@ export const Route = createFileRoute('/store/dashboard')({
 })
 
 function RouteComponent() {
-  const authUser = loggedInUser()
-  const userId = authUser?.user_id ? parseInt(authUser.user_id) : 0;
-  console.log(userId)
+  const store = localStorage.getItem("currentStore") || '';
+  const storeId = store ? JSON.parse(store).store_id : 0;
   const stats = [
     { title: 'Total Products', value: '156', color: '#00A7B3', icon: Package },
     { title: 'Pending Orders', value: '8', color: '#005A61', icon: ShoppingCart },
@@ -51,55 +51,48 @@ function RouteComponent() {
       time: '35 min ago'
     },
   ]
-
-  const lowStockItems = [
-    { name: 'Organic Bananas', stock: 5, threshold: 20, category: 'Fruits' },
-    { name: 'Whole Milk', stock: 8, threshold: 25, category: 'Dairy' },
-    { name: 'Bread Rolls', stock: 3, threshold: 15, category: 'Bakery' },
-    { name: 'Chicken Breast', stock: 2, threshold: 10, category: 'Meat' },
-  ]
+  const ordersData: any = useStoreOrders(storeId)
 
   return (
-    <div className="flex h-screen bg-background rounded-2xl">
+    <div className="flex h-screen rounded-2xl">
       <div className="flex-1 flex flex-col overflow-hidden ">
-        <main className="flex-1 overflow-auto p-6">
-          {/* Quick Actions */}
-          <div className="my-8 bg-card rounded-xl shadow-sm">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-xl font-semibold text-fresh-primary">Quick Actions</h2>
-            </div>
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Link to="/store/create-product" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <Plus className="text-indigo-600" size={24} />
-                <div className="text-left">
-                  <p className="font-medium text-fresh-primary">Add Product</p>
-                  <p className="text-sm text-white">Add new item to store</p>
-                </div>
-              </Link >
-              <Link to="/store/inventories" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <ClipboardCheckIcon className="text-green-600" size={24} />
-                <div className="text-left">
-                  <p className="font-medium text-fresh-primary">Update Inventory</p>
-                  <p className="text-sm text-white">Manage stock levels</p>
-                </div>
-              </Link >
-              <Link to="/store/analytics" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <TrendingUp className="text-blue-600" size={24} />
-                <div className="text-left">
-                  <p className="font-medium text-fresh-primary">View Analytics</p>
-                  <p className="text-sm text-white">Sales performance</p>
-                </div>
-              </Link >
-              <Link to="/store/settings" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <Settings className="text-purple-600" size={24} />
-                <div className="text-left">
-                  <p className="font-medium text-fresh-primary">Store Settings</p>
-                  <p className="text-sm text-white">Configure store</p>
-                </div>
-              </Link >
-            </div>
+        {/* Quick Actions */}
+        <div className="rounded-xl bg-card shadow-sm">
+          <div className="px-6 py-4 border-b">
+            <h2 className="text-xl font-semibold text-fresh-primary">Quick Actions</h2>
           </div>
-
+          <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link to="/store/create-product" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <Plus className="text-indigo-600" size={24} />
+              <div className="text-left">
+                <p className="font-medium text-fresh-primary">Add Product</p>
+                <p className="text-sm ">Add new item to store</p>
+              </div>
+            </Link >
+            <Link to="/store/inventories" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <ClipboardCheckIcon className="text-green-600" size={24} />
+              <div className="text-left">
+                <p className="font-medium text-fresh-primary">Update Inventory</p>
+                <p className="text-sm ">Manage stock levels</p>
+              </div>
+            </Link >
+            <Link to="/store/analytics" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <TrendingUp className="text-blue-600" size={24} />
+              <div className="text-left">
+                <p className="font-medium text-fresh-primary">View Analytics</p>
+                <p className="text-sm ">Sales performance</p>
+              </div>
+            </Link >
+            <Link to="/store/settings" className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <Settings className="text-purple-600" size={24} />
+              <div className="text-left">
+                <p className="font-medium text-fresh-primary">Store Settings</p>
+                <p className="text-sm ">Configure store</p>
+              </div>
+            </Link >
+          </div>
+        </div>
+        <main className="flex-1 overflow-auto p-6">
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {stats.map((stat, index) => (
@@ -115,7 +108,7 @@ function RouteComponent() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-1 gap-8">
             {/* Recent Orders */}
             <div className="bg-card rounded-xl shadow-sm">
               <div className="px-6 py-4 border-b flex items-center justify-between">
@@ -139,7 +132,7 @@ function RouteComponent() {
                           {order.status.toUpperCase()}
                         </span>
                       </div>
-                      <p className="text-white">{order.customer}</p>
+                      <p className="">{order.customer}</p>
                       <p className="text-sm text-gray-500">{order.items} items • {order.time}</p>
                     </div>
                     <div className="text-right">
@@ -158,40 +151,11 @@ function RouteComponent() {
               </div>
             </div>
 
-            {/* Low Stock Alert */}
-            <div className="bg-card rounded-xl shadow-sm">
-              <div className="px-6 py-4 border-b flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-fresh-primary">Low Stock Alert</h2>
-                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
-                  Manage Inventory
-                </button>
-              </div>
-
-              <div className="p-6 space-y-4">
-                {lowStockItems.map((item, index) => (
-                  <div key={index} className="flex items-center bg-card justify-between p-4 border border-red-200 rounded-lg">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-fresh-primary">{item.name}</h3>
-                      <p className="text-sm ">{item.category}</p>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <div className="w-24 bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-red-500 h-2 rounded-full"
-                            style={{ width: `${(item.stock / item.threshold) * 100}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-xs text-gray-500">
-                          {item.stock}/{item.threshold}
-                        </span>
-                      </div>
-                    </div>
-                    <button className="bg-indigo-500 text-white px-3 py-1 rounded-lg hover:bg-indigo-600 transition-colors text-sm">
-                      Restock
-                    </button>
-                  </div>
-                ))}
-              </div>
+            {/* Orders Chart */}
+            <div>
+              <OrdersLineChart orders={ordersData.data} />
             </div>
+
           </div>
 
         </main>

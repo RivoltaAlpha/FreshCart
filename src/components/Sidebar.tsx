@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, HomeIcon, Menu, X } from 'lucide-react';
+import { ChevronLeft, HomeIcon, Menu, X } from 'lucide-react';
 import { customerMenu, storeMenu, driverMenu, adminMenu } from '@/data/menus';
 import { useNavigate, useLocation } from '@tanstack/react-router';
 import { logout } from '@/services/authService';
@@ -61,7 +61,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
       {/* Hamburger button for small screens, only visible when sidebar is closed */}
       {!sidebarOpen && (
         <button
-          className="fixed top-4 left-4 z-50 md:hidden p-2 text-gray-600 bg-white rounded-full shadow-lg hover:text-[#05445E] transition-all duration-200"
+          className="fixed top-4 left-4 z-50 md:hidden p-2 bg-white rounded-full shadow-lg hover:text-[#05445E] transition-all duration-200"
           onClick={() => onPageChange('openSidebar')}
           aria-label="Open sidebar"
         >
@@ -73,7 +73,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
       <div className={`md:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <aside className={`fixed inset-y-0 left-0 z-50 bg-[#003B73] text-white shadow-lg transform ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-16'} transition-all duration-300 ease-in-out`}>
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h1 className={`font-bold text-xl text-fresh-primary transition-opacity duration-200 ${!sidebarOpen && 'hidden'}`}>
+            <h1 className={`font-bold text-xl transition-opacity duration-200 ${!sidebarOpen && 'hidden'}`}>
               FreshCart
             </h1>
             <button
@@ -153,13 +153,12 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
       {/* Desktop Sidebar */}
       <aside className={`hidden md:block inset-y-0 left-0 z-50 bg-[#003B73] text-white shadow-lg transform ${sidebarToggle ? 'translate-x-0 w-64' : '-translate-x-full w-16'} transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h1 className={`font-bold text-xl text-fresh-primary transition-opacity duration-200 ${!sidebarToggle && 'hidden'}`}>
+          <h1 className={`font-bold text-xl transition-opacity duration-200 ${!sidebarToggle && 'hidden'}`}>
             FreshCart
           </h1>
           <button
             className="p-1 hover:bg-gray-100 rounded transition-colors duration-200"
           >
-            {sidebarToggle ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
           </button>
         </div>
 
