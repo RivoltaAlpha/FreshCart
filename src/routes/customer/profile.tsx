@@ -121,11 +121,11 @@ function RouteComponent() {
             <div className="flex items-center gap-4 mb-6">
               <button
                 onClick={() => navigate({ to: '/customer/dashboard' })}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
+                className="text-gray-500 hover transition-colors"
               >
                 <ArrowLeft className="h-6 w-6" />
               </button>
-              <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
+              <h1 className="text-3xl font-bold">My Profile</h1>
             </div>
           </div>
 
@@ -139,7 +139,7 @@ function RouteComponent() {
                 {authUser.first_name} {authUser.last_name}
               </h2>
               <p className="text-gray-600 mb-4">{authUser.email}</p>
-              <div className="inline-flex items-center gap-1 px-3 py-1 bg-[#00A7B3]/10 text-[#00A7B3] rounded-full text-sm font-medium">
+              <div className="inline-flex items-center gap-1 px-3 py-1 bg-[#00A7B3]/10 rounded-full text-sm font-medium text-fresh-secondary">
                 <Shield className="h-4 w-4" />
                 {authUser.role.charAt(0).toUpperCase() + authUser.role.slice(1)}
               </div>
@@ -154,35 +154,35 @@ function RouteComponent() {
 
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                   <UserIcon className="h-4 w-4 text-gray-500" />
                   <div>
                     <span className="text-sm text-gray-600">First Name</span>
-                    <p className="font-medium">{authUser.first_name}</p>
+                    <p className="font-medium text-fresh-secondary">{authUser.first_name}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                   <UserIcon className="h-4 w-4 text-gray-500" />
                   <div>
                     <span className="text-sm text-gray-600">Last Name</span>
-                    <p className="font-medium">{authUser.last_name}</p>
+                    <p className="font-medium text-fresh-secondary">{authUser.last_name}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                 <Mail className="h-4 w-4 text-gray-500" />
                 <div>
                   <span className="text-sm text-gray-600">Email</span>
-                  <p className="font-medium">{authUser.email}</p>
+                  <p className="font-medium text-fresh-secondary">{authUser.email}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                 <Shield className="h-4 w-4 text-gray-500" />
                 <div>
                   <span className="text-sm text-gray-600">Role</span>
-                  <p className="font-medium">{authUser.role.charAt(0).toUpperCase() + authUser.role.slice(1)}</p>
+                  <p className="font-medium text-fresh-secondary">{authUser.role.charAt(0).toUpperCase() + authUser.role.slice(1)}</p>
                 </div>
               </div>
             </div>
@@ -209,24 +209,24 @@ function RouteComponent() {
           <div className="flex items-center gap-4 mb-6">
             <button
               onClick={() => navigate({ to: '/customer/dashboard' })}
-              className="text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-gray-500 hover transition-colors"
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
+            <h1 className="text-3xl font-bold">My Profile</h1>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Summary Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="bg-card rounded-2xl shadow-lg p-6 text-center">
               {/* Profile Picture */}
               <div className="relative mb-6">
                 <div className="w-24 h-24 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto">
                   <UserIcon className="h-12 w-12 text-white" />
                 </div>
-                <button className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 bg-white border-2 border-gray-200 rounded-full p-2 hover:bg-gray-50 transition-colors">
+                <button className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 bg-white border-2 border-gray-200 rounded-full p-2 hover:bg-gray-100 transition-colors">
                   <Camera className="h-4 w-4 text-gray-600" />
                 </button>
               </div>
@@ -235,16 +235,16 @@ function RouteComponent() {
               <h2 className="text-xl font-bold text-gray-900 mb-2">
                 {user?.profile?.first_name || authUser?.first_name} {user?.profile?.last_name || authUser?.last_name}
               </h2>
-              <p className="text-gray-600 mb-4">{user?.email || authUser?.email}</p>
+              <p className=" mb-4">{user?.email || authUser?.email}</p>
 
               {/* Role Badge */}
-              <div className="inline-flex items-center gap-1 px-3 py-1 bg-[#00A7B3]/10 text-[#00A7B3] rounded-full text-sm font-medium mb-4">
+              <div className="inline-flex items-center gap-1 px-3 py-1 bg-[#00A7B3]/10  rounded-full text-sm font-medium text-fresh-secondary mb-4">
                 <Shield className="h-4 w-4" />
                 {user?.role || authUser?.role ? (user?.role || authUser?.role).charAt(0).toUpperCase() + (user?.role || authUser?.role).slice(1) : 'Customer'}
               </div>
 
               {/* Member Since */}
-              <div className="text-sm text-gray-500">
+              <div className="text-sm">
                 <Calendar className="h-4 w-4 inline mr-1" />
                 Member since {user?.created_at ? formatDate(user.created_at) : 'N/A'}
               </div>
@@ -253,9 +253,8 @@ function RouteComponent() {
 
           {/* Profile Details */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-card rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">Profile Information</h3>
                 {!isEditing ? (
                   <button
                     onClick={handleEditToggle}
@@ -284,14 +283,14 @@ function RouteComponent() {
                 )}
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 text-fresh-secondary">
                 {/* Personal Information */}
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-4">Personal Information</h4>
+                  <h4 className="text-lg font-semibold  mb-4">Personal Information</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* First Name */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                      <label className="block text-sm font-medium text-fresh-secondary mb-2">First Name</label>
                       {isEditing ? (
                         <input
                           type="text"
@@ -300,7 +299,7 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                           <UserIcon className="h-4 w-4 text-gray-500" />
                           <span>{user?.profile?.first_name || authUser?.first_name || 'Not provided'}</span>
                         </div>
@@ -309,7 +308,7 @@ function RouteComponent() {
 
                     {/* Last Name */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                      <label className="block text-sm font-medium text-fresh-secondary mb-2">Last Name</label>
                       {isEditing ? (
                         <input
                           type="text"
@@ -318,7 +317,7 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                           <UserIcon className="h-4 w-4 text-gray-500" />
                           <span>{user?.profile?.last_name || authUser?.last_name || 'Not provided'}</span>
                         </div>
@@ -329,11 +328,11 @@ function RouteComponent() {
 
                 {/* Contact Information */}
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-4">Contact Information</h4>
+                  <h4 className="text-lg font-semibold  mb-4">Contact Information</h4>
                   <div className="space-y-4">
                     {/* Email */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                      <label className="block text-sm font-medium text-fresh-secondary mb-2">Email Address</label>
                       {isEditing ? (
                         <input
                           type="email"
@@ -342,7 +341,7 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                           <Mail className="h-4 w-4 text-gray-500" />
                           <span>{user?.email || authUser?.email || 'Not provided'}</span>
                         </div>
@@ -351,7 +350,7 @@ function RouteComponent() {
 
                     {/* Phone */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                      <label className="block text-sm font-medium text-fresh-secondary mb-2">Phone Number</label>
                       {isEditing ? (
                         <input
                           type="tel"
@@ -360,16 +359,16 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                           <Phone className="h-4 w-4 text-gray-500" />
                           <span>{user?.profile?.phone_number || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
                     <div className="flex-col items-center rounded-lg">
-                      <h4 className="font-semibold text-gray-800 mb-4">Address</h4>
+                      <h4 className="font-semibold  mb-4">Address</h4>
                       {defaultAddress && (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                           <span>
                             {defaultAddress.area}, {defaultAddress.town}, {defaultAddress.county}, {defaultAddress.country}
                           </span>
@@ -382,20 +381,20 @@ function RouteComponent() {
 
               {/* Account Information */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-800 mb-4">Account Information</h4>
+                <h4 className="text-lg font-semibold  mb-4">Account Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                     <Shield className="h-4 w-4 text-gray-500" />
                     <div>
                       <span className="text-sm text-gray-600">Account Type</span>
-                      <p className="font-medium">{user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Customer'}</p>
+                      <p className="font-medium text-fresh-secondary">{user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Customer'}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg">
                     <Calendar className="h-4 w-4 text-gray-500" />
                     <div>
                       <span className="text-sm text-gray-600">Member Since</span>
-                      <p className="font-medium">{user?.created_at ? formatDate(user.created_at) : 'N/A'}</p>
+                      <p className="font-medium text-fresh-secondary">{user?.created_at ? formatDate(user.created_at) : 'N/A'}</p>
                     </div>
                   </div>
                 </div>
@@ -409,13 +408,13 @@ function RouteComponent() {
       <div className="mt-8 flex flex-wrap  mx-[20px] gap-4">
         <button
           onClick={() => navigate({ to: '/customer/my-orders' })}
-          className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
+          className="bg-gray-100 hover:bg-gray-200  px-6 py-3 rounded-xl font-semibold transition-colors"
         >
           View Orders
         </button>
         <button
           onClick={() => navigate({ to: '/customer/wishlist' })}
-          className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
+          className="bg-gray-100 hover:bg-gray-200  px-6 py-3 rounded-xl font-semibold transition-colors"
         >
           View Wishlist
         </button>

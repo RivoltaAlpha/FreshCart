@@ -16,10 +16,10 @@ function RouteComponent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading payments...</p>
+          <p className="">Loading payments...</p>
         </div>
       </div>
     )
@@ -27,10 +27,10 @@ function RouteComponent() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">Error loading payments</p>
-          <p className="text-gray-600">{error.message}</p>
+          <p className="">{error.message}</p>
         </div>
       </div>
     )

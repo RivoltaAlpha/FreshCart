@@ -421,7 +421,7 @@ function RouteComponent() {
                   return (
                     <div
                       key={order.order_id}
-                      className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                      className="bg-card border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
                     >
                       <div className="p-6">
                         <div className="flex items-center justify-between mb-4">

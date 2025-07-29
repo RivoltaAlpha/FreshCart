@@ -104,7 +104,7 @@ function RouteComponent() {
         >
 
 
-          <div className="bg-card rounded-2xl mx-2 shadow-2xl p-10 w-full max-w-md transform hover:scale-105 transition-transform duration-300">
+          <div className="bg-searchbar rounded-2xl mx-2 shadow-2xl p-10 w-full max-w-md transform hover:scale-105 transition-transform duration-300">
             <div className="text-center mb-8">
               <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Smartphone className="w-8 h-8 text-white" />

@@ -33,8 +33,7 @@ function App() {
       <Header />
       <div className="home-page h-3/4">
         <section className="bg-gradient-to-br relative from-[#05445E] via-[#189AB4] to-[#75E6DA] text-white py-20 lg:py-32
-        bg-no-repeat bg-cover bg-center"
-          style={{ backgroundImage: 'url(/hero.png)' }}
+          bg-[url('/hero.png')] bg-fixed bg-no-repeat bg-cover bg-center"
           id="hero-section"
           aria-label="Hero Section"
         >
@@ -265,7 +264,7 @@ function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-4">What Our Customers Say</h2>
-              <div className="w-32 h-1 bg-[#000d0f] mx-auto mb-4"></div>
+              <div className="w-32 h-1 bg-[#189AB4] mx-auto mb-4"></div>
               <p className="text-xl max-w-2xl mx-auto ">
                 Hear from our satisfied customers who love the convenience and quality of FreshCart.
               </p>

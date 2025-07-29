@@ -38,7 +38,7 @@ function RouteComponent() {
           }}
         >
           <div className=" lg:max-w-3xl rounded-2xl shadow-2xl md:w-full">
-            <div className="flex justify-center space-x-4 bg-card rounded-lg p-2">
+            <div className="flex justify-center space-x-4 bg-searchbar rounded-lg p-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}

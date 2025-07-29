@@ -60,7 +60,8 @@ code {
   --foreground: #05445E;
   --navbar: #D4F1F4;
   --navbar-foreground: #05445E;
-  --card: #e8f6f461;
+  --card: #fcfcfc61;
+  --minicard: #f3f9fd;
   --card-foreground: #05445E;
   --searchbar: #f6f9f9;
   --searchbar-foreground: #05445E;
@@ -98,6 +99,7 @@ code {
   --navbar: #32325d;
   --navbar-foreground: #fff;
   --card: #0f0f31;
+  --minicard: #02395e;
   --card-foreground: #fff;
   --searchbar: #031135;
   --searchbar-foreground: #fff;
@@ -110,7 +112,7 @@ code {
   --muted: #525f7f;
   --muted-foreground: #fff;
   --accent: #8898aa;
-  --accent-foreground: #00050b;
+  --accent-foreground: #01132a;
 
   /* Brand Colors */
   --fresh-teal-dark: #8898aa;
@@ -124,7 +126,7 @@ code {
   --fresh-primary: #05445E;
   --fresh-primary-foreground: #212529;
   --fresh-secondary: #189AB4;
-  --fresh-secondary-foreground: #212529;
+  --fresh-secondary-foreground: #043c75;
   --fresh-accent: #525f7f;
   --fresh-accent-foreground: #fff;
 }
@@ -140,6 +142,8 @@ code {
   --color-header-foreground: var(--navbar-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-minicard: var(--minicard);
+  --color-minicard-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);

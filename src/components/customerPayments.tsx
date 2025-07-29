@@ -55,7 +55,7 @@ const CustomerPayments: React.FC<CustomerPaymentsProps> = ({ payments = [] }) =>
   // Handle empty payments array
   if (!payments || payments.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-card flex items-center justify-center">
         <div className="text-center">
           <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-semibold text-gray-600 mb-2">No Payments Found</h2>
@@ -107,9 +107,9 @@ const CustomerPayments: React.FC<CustomerPaymentsProps> = ({ payments = [] }) =>
   }, [payments]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-g0ray-5 p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Payments</h1>
+        <h1 className="text-3xl font-bold mb-8">Payments</h1>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

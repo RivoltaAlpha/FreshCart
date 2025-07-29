@@ -90,7 +90,7 @@ function RouteComponent() {
               {/* Recent Orders */}
               <div className="bg-card text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
+                  <h2 className="text-xl font-semibold ">Recent Orders</h2>
                   <button className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                     onClick={() => navigate({ to: '/customer/my-orders' })}
                   >
@@ -108,14 +108,14 @@ function RouteComponent() {
                     ];
                     const currentStep = statusSteps.indexOf(order.status);
                     return (
-                      <div key={order.order_id} className="flex flex-col gap-2 p-4 border border-gray-200 rounded-lg">
+                      <div key={order.order_id} className="flex flex-col gap-2 p-4 border bg-minicard border-gray-200 rounded-lg">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
                             <div className="bg-blue-100 p-2 rounded-lg">
                               <Package className="text-blue-600" size={20} />
                             </div>
                             <div className='space-y-4'>
-                              <h3 className="font-semibold text-gray-800">#{order.order_number}</h3>
+                              <h3 className="font-semibold ">#{order.order_number}</h3>
                               <p className="text-sm">{order.store?.name ?? 'Store'} • {order.items?.length ?? 0} items</p>
                               <p className="text-xs ">{new Date(order.created_at).toLocaleDateString()}</p>
                             </div>
@@ -180,9 +180,9 @@ function RouteComponent() {
             <div className="space-y-6">
 
               {/* Current Cart */}
-              <div className="bg-card text-fresh-secondary rounded-xl shadow-sm">
+              <div className="bg-minicard text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b">
-                  <h2 className="text-lg font-semibold text-gray-800">Current Cart</h2>
+                  <h2 className="text-lg font-semibold ">Current Cart</h2>
                 </div>
                 <div className="p-6">
                   {cartItems.length > 0 ? (
@@ -192,7 +192,7 @@ function RouteComponent() {
                           <div className="flex items-center space-x-3">
                             <img src={item.product.image_url} alt={item.product.name} className="w-12 h-12 rounded-lg object-cover" />
                             <div>
-                              <p className="font-medium text-gray-800">{item.product.name}</p>
+                              <p className="font-medium ">{item.product.name}</p>
                               <p className="text-sm">KSh {item.product.price}</p>
                             </div>
                           </div>
@@ -238,9 +238,9 @@ function RouteComponent() {
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-card text-fresh-secondary rounded-xl shadow-sm">
+              <div className="bg-minicard text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b">
-                  <h2 className="text-lg font-semibold text-gray-800">Quick Actions</h2>
+                  <h2 className="text-lg font-semibold ">Quick Actions</h2>
                 </div>
                 <div className="p-6 space-y-3">
                   <a href="/customer/payments" className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">

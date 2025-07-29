@@ -205,7 +205,7 @@ function RouteComponent() {
   }
 
   const ProductCard = ({ product }: { product: Product }) => (
-    <div className="bg-card rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
+    <div className="bg-card rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
       <div className="relative">
         <div
           className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer"
@@ -217,8 +217,8 @@ function RouteComponent() {
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
           />
         </div>
-        <button className="absolute top-2 right-2 p-2 bg-card rounded-full shadow hover:bg-gray-100">
-          <Heart size={16} className="text-fresh-primary hover:text-red-500 click:bg-red-500/10 transition-colors"
+        <button className="absolute top-2 right-2 p-2 bg-card rounded-full shadow hover:bg-red-600 transition-colors">
+          <Heart size={16} className=" hover:text-red-500 click:bg-red-500/10 transition-colors"
             onClick={() => handleWishlistClick(product)}
           />
         </button>
@@ -235,9 +235,9 @@ function RouteComponent() {
         )}
       </div>
       <div className="p-4 space-y-2 flex flex-col">
-        <div className="text-sm text-fresh-primary flex justify-between items-center">
+        <div className="text-sm flex justify-between items-center">
           <h3
-            className="text-lg font-semibold text-fresh-primary cursor-pointer hover:text-[#189AB4] transition-colors"
+            className="text-lg font-semibold cursor-pointer hover:text-[#189AB4] transition-colors"
             onClick={() => handleProductClick(product)}
           >
             {product.name}
@@ -253,8 +253,8 @@ function RouteComponent() {
           </div>
           <div className="flex items-center gap-1">
             <span className="text-yellow-400">⭐</span>
-            <span className="text-fresh-primary">{product.rating}</span>
-            <span className="text-fresh-primary">({product.review_count})</span>
+            <span className="text-fresh-secondary">{product.rating}</span>
+            <span className="text-fresh-secondary">({product.review_count})</span>
           </div>
         </div>
         <div className="font-bold text-fresh-secondary">
@@ -267,7 +267,7 @@ function RouteComponent() {
         </div>
         <button
           onClick={() => handleAddToCart(product)}
-          className="bg-fresh-primary hover:bg-fresh-secondary/90 text-fresh-primary-foreground px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
+          className="bg-fresh-secondary hover:bg-fresh-secondary/90 px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2"
           disabled={
             !product.stock_quantity || parseInt(String(product.stock_quantity)) === 0
           }
@@ -291,7 +291,7 @@ function RouteComponent() {
         <div className="space-y-6">
           {cartItems.map((item) => (
             <div key={item.product.product_id} className="flex items-center justify-between">
-              <span className='flex items-center justify-between'>{item.product.name} <p className='bg-fresh-primary p-1 rounded-full ml-2 shadow-2xl'>{item.quantity}</p></span>
+              <span className='flex items-center justify-between'>{item.product.name} <p className='bg-fresh-secondary p-1 rounded-full ml-2 shadow-2xl'>{item.quantity}</p></span>
               <span>KSh {typeof item.product.price === 'string' ? parseFloat(item.product.price) || 0 : item.product.price}</span>
             </div>
           ))}
@@ -310,7 +310,7 @@ function RouteComponent() {
         Clear Cart
       </button>
       <div className="mt-4">
-        <Link to="/customer/cart" className="flex justify-center w-full bg-fresh-primary hover:bg-fresh-secondary text-white px-4 py-2 rounded-lg transition-colors">
+        <Link to="/customer/cart" className="flex justify-center w-full bg-fresh-secondary hover:bg-fresh-secondary text-white px-4 py-2 rounded-lg transition-colors">
           Proceed to Checkout
         </Link>
       </div>
@@ -460,17 +460,17 @@ function RouteComponent() {
               className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
             />
             <div className="text-center md:text-left flex-1">
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold ">
                 {currentStore?.name} 🌱
               </h1>
-              <p className="text-fresh-primary">{currentStore?.address?.county}</p>
-              <div className="mt-2 flex flex-col sm:flex-row gap-2 text-sm text-fresh-primary">
+              <p className="text-fresh-secondary">{currentStore?.address?.county}</p>
+              <div className="mt-2 flex flex-col sm:flex-row gap-2 text-sm text-fresh-secondary">
                 <span><LocateFixedIcon className="inline-block w-4 h-4 mr-1" /> {currentStore?.address?.town} town</span>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="relative cursor-pointer" onClick={() => navigate({ to: '/customer/cart' })}>
-                <ShoppingCart className="w-8 h-8 text-fresh-primary" />
+                <ShoppingCart className="w-8 h-8 text-fresh-secondary" />
                 {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {cartCount}
@@ -529,7 +529,7 @@ function RouteComponent() {
               <div className="hidden lg:block w-64 space-y-6">
                 <div className="bg-card rounded-lg p-4 shadow-sm">
                   <div className="relative">
-                    <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-secondary" />
                     <input
                       type="text"
                       placeholder="Search products..."
@@ -610,7 +610,7 @@ function RouteComponent() {
                 <div className="lg:hidden mb-4">
                   <div className="bg-card rounded-lg p-4 shadow-sm">
                     <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
+                      <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-secondary" />
                       <input
                         type="text"
                         placeholder="Search products..."
@@ -624,7 +624,7 @@ function RouteComponent() {
 
                 {!isLoading && (
                   <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                    <span className="text-fresh-primary">
+                    <span className="text-fresh-secondary">
                       Show all products ({filteredProducts.length})
                       {selectedCategories.length > 0 && (
                         <span className="ml-2 text-blue-600">
@@ -644,7 +644,7 @@ function RouteComponent() {
                         <span>Show image only</span>
                       </label>
                       <div className="flex items-center gap-2">
-                        <span className="text-fresh-primary">Sort by:</span>
+                        <span className="text-fresh-secondary">Sort by:</span>
                         <select
                           value={sortBy}
                           onChange={(e) => setSortBy(e.target.value)}
