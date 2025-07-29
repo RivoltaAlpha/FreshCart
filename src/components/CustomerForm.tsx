@@ -92,11 +92,11 @@ function CustomerForm() {
         <>
             <div className="bg-searchbar lg:max-w-3xl m-2 rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto mb-4">
-                        <User className="w-8 h-8 text-white" />
+                    <div className="w-16 h-16 border rounded-full flex items-center justify-center mx-auto mb-4">
+                        <img src="./icon.png" alt="FreshCart Logo" className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-3xl font-bold mb-2">Join FreshCart</h1>
-                    <p className="">Your new Shopping Experience</p>
+                    <p>Your new Vendor Transformation Experience</p>
                 </div>
 
                 <form onSubmit={onRegister} className="space-y-6">
