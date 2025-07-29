@@ -27,7 +27,7 @@ function RegisterPage() {
         "country": "Kenya",
         "image_url": "https://c.wallhere.com/photos/55/d0/barcelona_color_fruit_colore_flavor_100v10f_mercado_senses-819706.jpg",
         "delivery_time_minutes": 30,
-        "rating": 2.0
+        "rating": "2.0"
     });
 
     const navigate = useNavigate();
