@@ -332,7 +332,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="min-h-screen bg-background pb-8">
       {/* Banner */}
       <div className="h-72 w-full relative overflow-hidden">
         <img
