@@ -11,7 +11,7 @@ import {
   Clock,
   DollarSign,
   Database,
-  Bell,
+  // Bell,
   ShoppingBag,
   ClipboardCheck,
 } from 'lucide-react'
@@ -156,18 +156,18 @@ export const driverMenu: MenuItem[] = [
     icon: Clock,
     path: '/driver/delivery-history',
   },
-  {
-    id: 'earnings',
-    label: 'Earnings',
-    icon: DollarSign,
-    path: '/driver/earnings',
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    icon: Bell,
-    path: '/driver/notifications',
-  },
+  // {
+  //   id: 'earnings',
+  //   label: 'Earnings',
+  //   icon: DollarSign,
+  //   path: '/driver/earnings',
+  // },
+  // {
+  //   id: 'notifications',
+  //   label: 'Notifications',
+  //   icon: Bell,
+  //   path: '/driver/notifications',
+  // },
   {
     id: 'profile',
     label: 'Profile',
