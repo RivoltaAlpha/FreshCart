@@ -64,7 +64,7 @@ function RouteComponent() {
 
 
   return (
-    <div id="dashboard" className="flex h-screen bg-gray-50">
+    <div id="dashboard" className="flex h-screen">
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Dashboard Content */}
@@ -88,7 +88,7 @@ function RouteComponent() {
             {/* Main Content Area */}
             <div className="lg:col-span-2 space-y-8">
               {/* Recent Orders */}
-              <div className="bg-white rounded-xl shadow-sm">
+              <div className="bg-card text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b flex items-center justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
                   <button className="text-blue-600 hover:text-blue-800 text-sm font-medium"
@@ -180,7 +180,7 @@ function RouteComponent() {
             <div className="space-y-6">
 
               {/* Current Cart */}
-              <div className="bg-white rounded-xl shadow-sm">
+              <div className="bg-card text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b">
                   <h2 className="text-lg font-semibold text-gray-800">Current Cart</h2>
                 </div>
@@ -238,7 +238,7 @@ function RouteComponent() {
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-white rounded-xl shadow-sm">
+              <div className="bg-card text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b">
                   <h2 className="text-lg font-semibold text-gray-800">Quick Actions</h2>
                 </div>

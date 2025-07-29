@@ -62,11 +62,11 @@ function App() {
                   <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     <button
                       onClick={() => navigate({ to: '/products' })}
-                      className="bg-[#189AB4] hover:bg-[#75E6DA] hover:text-[#05445E] text-white px-10 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-xl"
+                      className="bg-[#189AB4] hover:bg-[#75E6DA] hover:text-white px-10 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-xl"
                     >
                       Shop Now
                     </button>
-                    <button className="border-2 border-[#75E6DA] text-[#75E6DA] hover:bg-[#75E6DA] hover:text-[#05445E] px-10 py-4 rounded-full text-lg font-semibold transition-all">
+                    <button className="border-2 p-4 border-[#75E6DA] text-[#75E6DA] hover:bg-[#75E6DA] hover:px-10 py-4 rounded-full text-lg font-semibold transition-all">
                       Learn More
                     </button>
                   </div>
@@ -88,32 +88,32 @@ function App() {
           </div>
 
           {/* Why Choose FreshCart Cards */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl ">
+          <div className="bg-card backdrop-blur-sm rounded-3xl p-8 shadow-2xl ">
             <h3 className="text-3xl font-bold text-center mb-8">Why Choose FreshCart?</h3>
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="bg-[#75E6DA]/20 rounded-2xl p-6 text-center">
                 <div className="bg-[#189AB4] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Truck className="h-8 w-8 text-white" />
                 </div>
-                <p className="font-semibold text-[#05445E] text-sm">Fast Shipping</p>
+                <p className="font-semibold text-sm">Fast Shipping</p>
               </div>
               <div className="bg-[#75E6DA]/20 rounded-2xl p-6 text-center">
                 <div className="bg-[#189AB4] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Shield className="h-8 w-8 text-white" />
                 </div>
-                <p className="font-semibold text-[#05445E] text-sm">Quality Guarantee</p>
+                <p className="font-semibold text-sm">Quality Guarantee</p>
               </div>
               <div className="bg-[#75E6DA]/20 rounded-2xl p-6 text-center">
                 <div className="bg-[#189AB4] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Shield className="h-8 w-8 text-white" />
                 </div>
-                <p className="font-semibold text-[#05445E] text-sm">100% Secure Payment</p>
+                <p className="font-semibold text-sm">100% Secure Payment</p>
               </div>
               <div className="bg-[#75E6DA]/20 rounded-2xl p-6 text-center">
                 <div className="bg-[#189AB4] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Heart className="h-8 w-8 text-white" />
                 </div>
-                <p className="font-semibold text-[#05445E] text-sm">Customer Support 24/7</p>
+                <p className="font-semibold text-sm">Customer Support 24/7</p>
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@ function App() {
             {topProducts?.map((product, index) => (
               <div
                 key={product.product_id}
-                className="group relative gap-0 bg-white lg:h-full md:h-20 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-[#005A61]/10"
+                className="group relative gap-0 bg-card lg:h-full md:h-20 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-[#005A61]/10"
               >
                 {/* Rank Badge */}
                 <div className="absolute top-3 left-3 bg-gradient-to-r from-[#005A61] to-[#6A89A7] text-white text-xs font-bold px-2 py-1 rounded-full z-10 shadow-md">
@@ -187,8 +187,8 @@ function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
               <div className="lg:col-span-1">
-                <h2 className="text-4xl font-bold text-[#05445E] mb-6">Popular Categories</h2>
-                <p className="text-lg text-gray-600 mb-8">
+                <h2 className="text-4xl font-bold mb-6">Popular Categories</h2>
+                <p className="text-lg  mb-8">
                   Browse through our wide selection of fresh categories
                 </p>
                 <button
@@ -201,34 +201,34 @@ function App() {
 
               <div className="lg:col-span-2">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                  <div className="bg-card rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                     <img src="https://jooinn.com/images/fresh-fruits-14.jpg" alt="Fresh Fruit" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Fresh Fruit</h3>
+                    <h3 className="font-semibold ">Fresh Fruit</h3>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                  <div className="bg-card rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                     <img src="https://jooinn.com/images/vegetable-basket-6.jpg" alt="Fresh Vegetable" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Fresh Vegetable</h3>
+                    <h3 className="font-semibold ">Fresh Vegetable</h3>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                  <div className="bg-card rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                     <img src="https://th.bing.com/th/id/R.c3db916c4d2cc60eab697d635d078447?rik=GbMuNdFBcyiiSw&riu=http%3a%2f%2fs3.wp.wsu.edu%2fuploads%2fsites%2f2055%2f2017%2f07%2fiStock-483027918-1024x683.jpg&ehk=u9JBZ9yWvacUGVPTDQe9pznTtrqn6fXWGd4jo0Ndjpw%3d&risl=&pid=ImgRaw&r=0" alt="Meat & Fish" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Meat & Fish</h3>
+                    <h3 className="font-semibold ">Meat & Fish</h3>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                  <div className="bg-card rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                     <img src="https://bluegrassingredients.com/wp-content/uploads/2021/09/dairy-seasoning-powders.png" alt="Snacks" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Snacks</h3>
+                    <h3 className="font-semibold ">Snacks</h3>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                  <div className="bg-card rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                     <img src="https://www.apprenticeship.ng/wp-content/uploads/2019/05/BREAD2.jpg" alt="Bread & Bakery" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Pastries</h3>
+                    <h3 className="font-semibold ">Pastries</h3>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+                  <div className="bg-card rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                     <img src="https://cleanfoodcrush.com/wp-content/uploads/2017/03/CleanFoodCrush-Leafy-greens.jpg" alt="Leafy Greens" className="w-16 h-16 mx-auto mb-4 rounded-full object-cover group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-[#05445E]">Leafy Greens</h3>
+                    <h3 className="font-semibold ">Leafy Greens</h3>
                   </div>
                 </div>
               </div>
@@ -253,7 +253,7 @@ function App() {
             </p>
             <button
               onClick={() => navigate({ to: '/stores' })}
-              className="bg-[#75E6DA] hover:bg-white text-[#05445E] px-12 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-xl"
+              className="bg-[#75E6DA] hover:bg-card px-12 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-xl"
             >
               Shop Now
             </button>
@@ -264,18 +264,18 @@ function App() {
         <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#05445E] mb-4">--------- What Our Customers Say ---------</h2>
+              <h2 className="text-4xl font-bold mb-4">What Our Customers Say</h2>
               <div className="w-32 h-1 bg-[#000d0f] mx-auto mb-4"></div>
-              <p className="text-xl max-w-2xl mx-auto text-gray-600">
+              <p className="text-xl max-w-2xl mx-auto ">
                 Hear from our satisfied customers who love the convenience and quality of FreshCart.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-gray-100 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border-l-4 border-[#189AB4]">
+              <div className="bg-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border-l-4 border-[#189AB4]">
                 <div className="flex items-center mb-4">
                   <img src="https://ichef.bbci.co.uk/images/ic/1920x1080/p074mmrq.jpg" alt="Customer" className="rounded-full w-16 h-16 object-cover mr-4" />
                   <div>
-                    <h4 className="font-semibold text-[#05445E]">Sarah K.</h4>
+                    <h4 className="font-semibold ">Sarah K.</h4>
                     <div className="flex text-yellow-400">
                       <Star className="h-4 w-4 fill-current" />
                       <Star className="h-4 w-4 fill-current" />
@@ -285,16 +285,16 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic">
+                <p className=" italic">
                   "FreshCart has completely changed the way I shop for groceries. The delivery is super fast and the quality is top-notch!"
                 </p>
               </div>
 
-              <div className="bg-gray-100 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border-l-4 border-[#189AB4]">
+              <div className="bg-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border-l-4 border-[#189AB4]">
                 <div className="flex items-center mb-4">
                   <img src="https://m.media-amazon.com/images/M/MV5BMWY3MjI3ZjQtOWUzOS00Njg4LWFjMWMtYWY1ODVjMjg3MWJjXkEyXkFqcGc@._V1_.jpg" alt="Customer" className="rounded-full w-16 h-16 object-cover mr-4" />
                   <div>
-                    <h4 className="font-semibold text-[#05445E]">Martin S.</h4>
+                    <h4 className="font-semibold ">Martin S.</h4>
                     <div className="flex text-yellow-400">
                       <Star className="h-4 w-4 fill-current" />
                       <Star className="h-4 w-4 fill-current" />
@@ -304,16 +304,16 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic">
+                <p className=" italic">
                   "I love how easy it is to order fresh produce from FreshCart. The app is user-friendly and the service is excellent."
                 </p>
               </div>
 
-              <div className="bg-gray-100 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border-l-4 border-[#189AB4]">
+              <div className="bg-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border-l-4 border-[#189AB4]">
                 <div className="flex items-center mb-4">
                   <img src="https://www.themoviedb.org/t/p/original/nmlXYem6k3aaN15FKDYnROY46nA.jpg" alt="Customer" className="rounded-full w-16 h-16 object-cover mr-4" />
                   <div>
-                    <h4 className="font-semibold text-[#05445E]">Emily R.</h4>
+                    <h4 className="font-semibold ">Emily R.</h4>
                     <div className="flex text-yellow-400">
                       <Star className="h-4 w-4 fill-current" />
                       <Star className="h-4 w-4 fill-current" />
@@ -323,7 +323,7 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic">
+                <p className="italic">
                   "The quality of the groceries is amazing! I can always count on FreshCart for my daily essentials."
                 </p>
               </div>

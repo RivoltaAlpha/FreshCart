@@ -36,7 +36,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   if (loading) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-[#05445E] mb-4">Loading AI Recommendations...</h2>
           <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-8"></div>
@@ -48,7 +48,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   if (error) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommendations</h2>
           <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-8"></div>
@@ -66,7 +66,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
 
   if (!recommendations.length) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-[#05445E] mb-4">🤖 AI Recommendations</h2>
           <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-8"></div>
@@ -79,12 +79,12 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   }
 
   return (
-    <section className="px-40 py-10 bg-gray-50">
+    <section className="px-40 py-10 bg-background">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#05445E] mb-4">AI Recommended Products</h2>
+          <h2 className="text-4xl font-bold text-fresh-error mb-4">AI Recommended Products</h2>
           <div className="w-24 h-1 bg-[#189AB4] mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600">Personalized recommendations just for you</p>
+          <p className="text-lg text-fresh-error">Personalized recommendations just for you</p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-6 mb-12">
@@ -97,7 +97,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
             .map(({ product }) => (
               <div
                 key={product.product_id}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 group"
+                className="bg-card rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 group"
               >
                 <div className="relative mb-4">
                   <img
@@ -114,8 +114,8 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
                 </div>
 
                 <div className="mb-4">
-                  <h3 className="font-semibold text-[#05445E] mb-1">{product.name}</h3>
-                  <p className="text-[#189AB4] font-bold mb-2">KSh {product.price}</p>
+                  <h3 className="font-semibold mb-1">{product.name}</h3>
+                  <p className="font-bold mb-2">KSh {product.price}</p>
                 </div>
 
                 <div className="flex items-center gap-3">

@@ -120,15 +120,15 @@ const RecipeRecommendation: React.FC<RecipeRecommendationProps> = ({
             <div className="text-center mb-8">
                 <div className="flex items-center justify-center mb-4">
                     <ChefHat className="h-8 w-8 text-fresh-primary mr-3" />
-                    <h1 className="text-3xl font-bold text-gray-900">What's for Dinner?</h1>
+                    <h1 className="text-3xl font-bold text-fresh-secondary">What's for Dinner?</h1>
                 </div>
-                <p className="text-xl text-gray-600">
+                <p className="text-xl text-fresh-secondary">
                     AI-powered recipe suggestions with instant ingredient shopping
                 </p>
             </div>
 
             {/* Search and Filters */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div className="bg-searchbar text-fresh-secondary rounded-lg shadow-md p-6 mb-8">
                 <div className="flex flex-col md:flex-row gap-4 mb-4">
                     <div className="flex-1">
                         <input
@@ -136,7 +136,7 @@ const RecipeRecommendation: React.FC<RecipeRecommendationProps> = ({
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search for recipes... (e.g., 'chicken curry', 'vegetarian pasta')"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fresh-primary focus:border-fresh-primary"
+                            className="w-full px-4 py-3 border text-fresh-foreground border-gray-300 rounded-lg focus:ring-2 focus:ring-fresh-primary focus:border-fresh-primary"
                             onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                         />
                     </div>
@@ -184,7 +184,7 @@ const RecipeRecommendation: React.FC<RecipeRecommendationProps> = ({
                     {loading && recipes.length === 0 ? (
                         // Loading skeletons
                         Array.from({ length: 6 }).map((_, index) => (
-                            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                            <div key={index} className="bg-card rounded-lg shadow-md overflow-hidden animate-pulse">
                                 <div className="h-48 bg-gray-300"></div>
                                 <div className="p-4">
                                     <div className="h-4 bg-gray-300 rounded mb-2"></div>
@@ -200,7 +200,7 @@ const RecipeRecommendation: React.FC<RecipeRecommendationProps> = ({
                         recipes.map((recipe) => (
                             <div
                                 key={recipe.id}
-                                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                                className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                                 onClick={() => handleRecipeSelect(recipe)}
                             >
                                 <img
@@ -212,10 +212,10 @@ const RecipeRecommendation: React.FC<RecipeRecommendationProps> = ({
                                     }}
                                 />
                                 <div className="p-4">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{recipe.name}</h3>
-                                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{recipe.description}</p>
+                                    <h3 className="text-lg font-semibold text-fresh-secondary mb-2">{recipe.name}</h3>
+                                    <p className="text-sm text-fresh-secondary mb-3 line-clamp-2">{recipe.description}</p>
 
-                                    <div className="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                                    <div className="flex items-center gap-3 text-sm text-fresh-secondary mb-3">
                                         <div className="flex items-center">
                                             <Clock className="h-4 w-4 mr-1" />
                                             {recipe.cookingTime}m

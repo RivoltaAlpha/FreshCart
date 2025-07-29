@@ -83,19 +83,19 @@ function StoreForm() {
 
   return (
     <>
-        <div className="bg-white m-2 lg:max-w-3xl rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
+        <div className="bg-card m-2 lg:max-w-3xl rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Join FreshCart</h1>
-            <p className="text-gray-600">Your new Vendor Transformation Experience</p>
+            <h1 className="text-3xl font-bold mb-2">Join FreshCart</h1>
+            <p>Your new Vendor Transformation Experience</p>
           </div>
 
           <form onSubmit={onRegister} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                <label className="block text-sm font-medium text-fresh-secondary mb-2">First Name</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
@@ -110,7 +110,7 @@ function StoreForm() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                <label className="block text-sm font-medium text-fresh-secondary mb-2">Last Name</label>
                 <input
                   type="text"
                   name="last_name"
@@ -124,7 +124,7 @@ function StoreForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-fresh-secondary mb-2">Email Address</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
@@ -140,7 +140,7 @@ function StoreForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+              <label className="block text-sm font-medium text-fresh-secondary mb-2">Phone Number</label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
@@ -249,7 +249,7 @@ function StoreForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <label className="block text-sm font-medium text-fresh-secondary mb-2">Password</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input

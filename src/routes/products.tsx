@@ -269,8 +269,8 @@ function RouteComponent() {
               >
                 <div className="mb-8 flex flex-col space-y-12">
                   <div className="text-center animate-fade-in-up">
-                    <h2 className="text-3xl font-bold text-foreground my-2">Browse by Category</h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-fresh-primary to-fresh-secondary mx-auto rounded-full mb-6"></div>
+                    <h2 className="text-3xl font-bold text-foreground mt-8">Browse by Category</h2>
+                    <div className="w-20 mt-2 h-1 bg-gradient-to-r from-fresh-primary to-fresh-secondary mx-auto rounded-full mb-6"></div>
                   </div>
                   <Categories
                     onCategorySelect={handleCategorySelect}
@@ -282,13 +282,8 @@ function RouteComponent() {
                 </div>
               </motion.div>
 
-              {/* Enhanced Search and Filter */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                style={{ overflow: "scroll" }}
-              >
-                <div className="bg-white/80 backdrop-blur-sm border border-gray-200 p-6 rounded-3xl shadow-xl mb-8 hover:shadow-2xl transition-all duration-300">
+
+                <div className="bg-background backdrop-blur-sm p-6 rounded-3xl shadow-2xl mb-8 hover:shadow-2xl transition-all duration-300">
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1 relative group">
                       <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-fresh-primary transition-colors" />
@@ -297,10 +292,10 @@ function RouteComponent() {
                         placeholder="Search products..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-fresh-primary/20 focus:border-fresh-primary bg-white text-foreground transition-all duration-300 hover:shadow-md"
+                        className="w-full pl-12 pr-4 py-4 border-2 border-fresh-error rounded-2xl focus:ring-4 focus:ring-fresh-primary/20 focus:border-fresh-primary bg-searchbar text-foreground transition-all duration-300 hover:shadow-md"
                       />
                     </div>
-                    <div className="flex items-center gap-3 bg-gradient-to-r from-gray-50 to-white rounded-2xl px-4 py-2 border border-gray-200">
+                    <div className="flex items-center gap-3 bg-searchbar rounded-2xl px-4 py-2 border border-fresh-error">
                       <Filter className="text-fresh-primary h-5 w-5" />
                       <select
                         value={selectedCategory}
@@ -314,15 +309,14 @@ function RouteComponent() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
 
               {/* Enhanced Products Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
                 {filteredProducts?.length > 0 ? (
                   filteredProducts.map((product, index) => (
                     <div
                       key={product.product_id}
-                      className="group relative bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 animate-fade-in-up"
+                      className="group relative bg-card rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       {/* Image Container with Enhanced Effects */}
@@ -352,7 +346,7 @@ function RouteComponent() {
                             }}
                             className={`p-2.5 backdrop-blur-sm rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${favorites.has(product.product_id)
                               ? 'bg-red-500 text-white'
-                              : 'bg-white/90 text-gray-600 hover:bg-red-500 hover:text-white'
+                              : 'bg-white/90  text-fresh-secondary hover:bg-red-500 hover:text-white'
                               }`}
                           >
                             <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''}
@@ -383,7 +377,7 @@ function RouteComponent() {
                         <div className="absolute inset-0 bg-gradient-to-t from-fresh-primary/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
                           <button
                             onClick={() => handleProductClick(product)}
-                            className="bg-white text-fresh-primary px-6 py-2.5 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-fresh-primary hover:text-white shadow-lg"
+                            className="bg-card text-fresh-primary px-6 py-2.5 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-searchbar hover:text-white shadow-lg"
                           >
                             Quick View
                           </button>
@@ -394,13 +388,13 @@ function RouteComponent() {
                       <div className="p-6 space-y-4">
                         {/* Category & Rating Row */}
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-fresh-primary bg-fresh-primary/10 px-3 py-1.5 rounded-full font-medium">
+                          <span className="text-xs text-fresh-secondary bg-fresh-primary/10 px-3 py-1.5 rounded-full font-medium">
                             {product.category?.name}
                           </span>
                           <div className="flex items-center gap-1">
                             <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                            <span className="text-sm font-medium text-gray-600">{product.rating}</span>
-                            <span className="text-xs text-gray-400">({product.review_count})</span>
+                            <span className="text-sm font-medium  text-fresh-secondary">{product.rating}</span>
+                            <span className="text-xs  text-fresh-secondary">({product.review_count})</span>
                           </div>
                         </div>
 
@@ -419,10 +413,10 @@ function RouteComponent() {
                         <div className="flex items-center justify-between">
                           <div className="space-y-1">
                             <div className="flex items-baseline gap-2">
-                              <span className="text-2xl font-bold text-fresh-primary">KSh {product.price}</span>
-                              <span className="text-sm text-muted-foreground">/{product.unit}</span>
+                              <span className="text-2xl font-bold text-fresh-secondary">KSh {product.price}</span>
+                              <span className="text-sm  text-fresh-secondary">{product.unit}</span>
                             </div>
-                            <span className="text-xs text-gray-500">{product.stock_quantity} available</span>
+                            <span className="text-xs  text-fresh-secondary">{product.stock_quantity} available</span>
                           </div>
                         </div>
 
@@ -441,7 +435,7 @@ function RouteComponent() {
                 ) : (
                   // Enhanced No Products Message
                   <div className="col-span-full text-center py-16">
-                    <div className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-12 shadow-lg border border-gray-200 max-w-2xl mx-auto">
+                    <div className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-12 shadow-lg border border-fresh-error max-w-2xl mx-auto">
                       <div className="w-24 h-24 bg-gradient-to-r from-fresh-primary to-fresh-secondary rounded-full mx-auto mb-6 flex items-center justify-center">
                         <Search className="h-12 w-12 text-white" />
                       </div>
@@ -504,7 +498,7 @@ function RouteComponent() {
                 <div className="space-y-6">
                   <div className="text-4xl font-bold bg-gradient-to-r from-fresh-primary to-fresh-secondary bg-clip-text text-transparent">
                     KSh {selectedProduct.price}
-                    <span className="text-lg text-gray-500 ml-2">/{selectedProduct.unit}</span>
+                    <span className="text-lg  text-fresh-secondary ml-2">/{selectedProduct.unit}</span>
                   </div>
 
                   {/* Rating */}
@@ -518,11 +512,11 @@ function RouteComponent() {
                       ))}
                       <span className="text-gray-700 ml-2 font-medium">{selectedProduct.rating}</span>
                     </div>
-                    <span className="text-gray-500">({selectedProduct.review_count} reviews)</span>
+                    <span className=" text-fresh-secondary">({selectedProduct.review_count} reviews)</span>
                   </div>
 
                   {/* Stock Status */}
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-200">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-fresh-error">
                     <div className={`w-4 h-4 rounded-full ${selectedProduct.stock_quantity > 10
                       ? 'bg-green-500 animate-pulse'
                       : selectedProduct.stock_quantity > 0
@@ -536,13 +530,13 @@ function RouteComponent() {
                           ? 'Low Stock'
                           : 'Out of Stock'}
                     </span>
-                    <span className="text-gray-500">({selectedProduct.stock_quantity} available)</span>
+                    <span className=" text-fresh-secondary">({selectedProduct.stock_quantity} available)</span>
                   </div>
 
                   {/* Description */}
                   <div className="space-y-3">
                     <h4 className="font-bold text-xl text-gray-800">Description</h4>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className=" text-fresh-secondary leading-relaxed">
                       {selectedProduct.description || 'Fresh, high-quality product.'}
                     </p>
                   </div>
@@ -552,16 +546,16 @@ function RouteComponent() {
                     <h4 className="font-bold text-gray-800 mb-4 text-lg">Product Specifications</h4>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div className="space-y-2">
-                        <p className="text-gray-600">Weight:</p>
+                        <p className=" text-fresh-secondary">Weight:</p>
                         <p className="font-medium text-gray-800">{selectedProduct.weight}</p>
                       </div>
                       <div className="space-y-2">
-                        <p className="text-gray-600">Unit:</p>
+                        <p className=" text-fresh-secondary">Unit:</p>
                         <p className="font-medium text-gray-800">{selectedProduct.unit}</p>
                       </div>
                       {selectedProduct.discount > 0 && (
                         <div className="col-span-2 space-y-2">
-                          <p className="text-gray-600">Discount:</p>
+                          <p className=" text-fresh-secondary">Discount:</p>
                           <p className="text-red-600 font-bold text-lg">{selectedProduct.discount}% OFF</p>
                         </div>
                       )}

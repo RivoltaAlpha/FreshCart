@@ -90,13 +90,13 @@ function CustomerForm() {
 
     return (
         <>
-            <div className="bg-white lg:max-w-3xl m-2 rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
+            <div className="bg-card lg:max-w-3xl m-2 rounded-2xl shadow-2xl p-8 md:w-full transform hover:scale-105 transition-transform duration-300">
                 <div className="text-center mb-8">
                     <div className="w-16 h-16 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto mb-4">
                         <User className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Join FreshCart</h1>
-                    <p className="text-gray-600">Your new Shopping Experience</p>
+                    <h1 className="text-3xl font-bold mb-2">Join FreshCart</h1>
+                    <p className="">Your new Shopping Experience</p>
                 </div>
 
                 <form onSubmit={onRegister} className="space-y-6">
@@ -245,7 +245,7 @@ function CustomerForm() {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:"
                             >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                             </button>
@@ -254,7 +254,7 @@ function CustomerForm() {
 
                     <div className="flex items-center">
                         <input type="checkbox" className="rounded border-gray-300 text-[#00A7B3] focus:ring-[#00A7B3]" required />
-                        <span className="ml-2 text-sm text-gray-600">
+                        <span className="ml-2 text-sm ">
                             I agree to the <a href="#" className="text-[#00A7B3] hover:text-[#008C9E]">Terms of Service</a> and <a href="#" className="text-[#00A7B3] hover:text-[#008C9E]">Privacy Policy</a>
                         </span>
                     </div>
@@ -268,7 +268,7 @@ function CustomerForm() {
                 </form>
 
                 <div className="mt-8 text-center gap-6 items-center">
-                    <p className="text-gray-600">
+                    <p className="">
                         Already have an account?{' '}
                         <button
                             onClick={onSwitchToLogin}

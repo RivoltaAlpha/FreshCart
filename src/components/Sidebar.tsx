@@ -71,7 +71,7 @@ export function Sidebar({ userType, currentPage, onPageChange, sidebarOpen, side
 
       {/* Sidebar for small screens */}
       <div className={`md:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
-        <aside className={`fixed inset-y-0 left-0 z-50 bg-[#013A66] text-white shadow-lg transform ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-16'} transition-all duration-300 ease-in-out`}>
+        <aside className={`fixed inset-y-0 left-0 z-50 bg-[#189AB4] text-white shadow-lg transform ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-16'} transition-all duration-300 ease-in-out`}>
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <h1 className={`font-bold text-xl text-fresh-primary transition-opacity duration-200 ${!sidebarOpen && 'hidden'}`}>
               FreshCart

@@ -94,7 +94,7 @@ export default function Categories({
                 key={category.category_id || 'all'}
                 onClick={() => handleCategoryClick(category.category_id, category.name)}
                 className={`
-          group cursor-pointer bg-card border rounded-2xl overflow-hidden 
+          group cursor-pointer bg-card  rounded-2xl overflow-hidden 
           transition-all duration-300 hover:shadow-lg hover:scale-105
           ${isSelected ? 'ring-2 ring-fresh-primary border-fresh-primary shadow-lg' : 'hover:border-fresh-primary/50'}
           ${className}

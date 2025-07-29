@@ -2,13 +2,13 @@ import { Facebook, Instagram, Mail, MapIcon, Phone, ShoppingCart, Twitter } from
 
 export const Footer = () => {
   return (
-    <footer className="bg-[#017294] text-white border-t border-t-[#dae3eb]">
+    <footer className="bg-accent-foreground text-white border-t border-t-[#071724]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <ShoppingCart className="h-8 w-8 text-[#00A7B3]" />
+              <ShoppingCart className="h-8 w-8" />
               <span className="ml-2 text-2xl font-bold">FreshCart</span>
             </div>
             <p className=" mb-4 max-w-md">

@@ -437,10 +437,10 @@ function StoresPage() {
         <div className="shadow-sm border-b border-[#E1EAF2]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-fresh-primary mb-4">
+              <h1 className="text-4xl font-bold mb-4">
                 Discover Local Stores
               </h1>
-              <p className="text-xl text-fresh-secondary max-w-3xl mx-auto">
+              <p className="text-xl max-w-3xl mx-auto">
                 Browse through our network of trusted local stores and find fresh, quality products
                 delivered straight to your doorstep.
               </p>
@@ -593,7 +593,7 @@ function StoresPage() {
                 <p className="text-[#516E89] text-lg">Loading stores...</p>
               </div>
             )}
-          </motion.div>
+          </motion.div> 
 
           {/* Error State */}
           {storesError && (
