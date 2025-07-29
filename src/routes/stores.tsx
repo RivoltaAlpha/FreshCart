@@ -133,6 +133,30 @@ function StoresPage() {
     await getUserLocation();
   };
 
+    // Helper function to score stores based on location match
+  const getLocationScore = (store: Store, userLoc: UserLocation): number => {
+    let score = 0;
+    const storeCounty = store.address.county?.toLowerCase?.() || '';
+    const storeTown = store.address.town?.toLowerCase?.() || '';
+    const userCounty = userLoc.county?.toLowerCase?.() || '';
+    const userTown = userLoc.town?.toLowerCase?.() || '';
+
+    // Same county and town = highest score
+    if (storeCounty === userCounty && storeTown === userTown) {
+      score = 3;
+    }
+    // Same county = medium score
+    else if (storeCounty === userCounty) {
+      score = 2;
+    }
+    // Same town (different county) = low score
+    else if (storeTown === userTown) {
+      score = 1;
+    }
+
+    return score;
+  };
+
 
   // Filter stores based on location and other criteria
   const filteredStores = React.useMemo(() => {
@@ -203,29 +227,7 @@ function StoresPage() {
     return filtered;
   }, [stores, searchQuery, sortBy, showNearbyOnly, userLocation]);
 
-  // Helper function to score stores based on location match
-  const getLocationScore = (store: Store, userLoc: UserLocation): number => {
-    let score = 0;
-    const storeCounty = store.address.county?.toLowerCase?.() || '';
-    const storeTown = store.address.town?.toLowerCase?.() || '';
-    const userCounty = userLoc.county?.toLowerCase?.() || '';
-    const userTown = userLoc.town?.toLowerCase?.() || '';
 
-    // Same county and town = highest score
-    if (storeCounty === userCounty && storeTown === userTown) {
-      score = 3;
-    }
-    // Same county = medium score
-    else if (storeCounty === userCounty) {
-      score = 2;
-    }
-    // Same town (different county) = low score
-    else if (storeTown === userTown) {
-      score = 1;
-    }
-
-    return score;
-  };
 
   // Calculate nearby stores count
   const nearbyStoresCount = React.useMemo(() => {
@@ -394,9 +396,6 @@ function StoresPage() {
             src={store.image_url}
             alt={store.name}
             className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-            onError={(e) => {
-              e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Store+Image';
-            }}
           />
 
           {/* Location badge */}
