@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import { useCreateOrderMutation, useCustomerOrders } from '@/hooks/useOrders'
 import { authStore, loggedInUser } from '@/store/auth'
-import { DeliveryMethod, type CustomerOrder } from '@/types/types'
+import { DeliveryMethod, type CustomerOrder, type Order } from '@/types/types'
 import { useDeliveryByOrderId } from '@/hooks/useDeliveries'
 import { toast } from 'sonner'
 import { orderActions } from '@/store/order'
@@ -215,7 +215,8 @@ function RouteComponent() {
               <p className="text-sm"><span className="font-medium">Method:</span> {order.delivery_method}</p>
               <p className="text-sm"><span className="font-medium">Address:</span> {order.delivery_address}</p>
             </div>
-          </div>          {/* Order Items */}
+          </div>
+          {/* Order Items */}
           <div className="border border-gray-200 rounded-xl p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <Package className="h-4 w-4" />
@@ -253,6 +254,24 @@ function RouteComponent() {
       </div>
     </div>
   )
+  const proceedToCheckout = async (order: Partial<Order>) => {
+    const orderDetails: any = {
+      user_id: order.user_id,
+      store_id: order.store_id,
+      customer_email: authStore.state.user.email,
+      items: order.items,
+      delivery_method: order.delivery_method,
+      delivery_address: 'Default Address',
+      subtotal: (((Number(order?.total_amount) || 0) - (Number(order?.delivery_fee) || 0) - (Number(order?.tax_amount) || 0)) + (Number(order?.tax_amount) || 0)).toFixed(2),
+      delivery_fee: order.delivery_fee || 0,
+      total_amount: order.total_amount || 0,
+      estimated_delivery_time: order.estimated_delivery_time || 0,
+    };
+
+    navigate({ to: '/customer/checkout-order' });
+    orderActions.setCurrentOrder(orderDetails);
+    setLoading(true);
+  };
 
   const [deliveryOrderId, setDeliveryOrderId] = useState<number | null>(null);
   const { data: deliveryInfo } = useDeliveryByOrderId(deliveryOrderId ?? 0);
@@ -462,14 +481,21 @@ function RouteComponent() {
                             <span>{order.delivery_address}</span>
                           </div>
                           <div>
-                            {!(["pending", "confirmed", "preparing", "ready_for_pickup"].includes(order.status)) && (
+                            {!["pending", "confirmed", "preparing", "ready_for_pickup"].includes(order.status) ? (
                               <button
                                 onClick={() => handleViewDetails(order.order_id)}
                                 className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
                               >
                                 View Delivery details
                               </button>
-                            )}
+                            ) : order.status === "pending" ? (
+                              <button
+                                onClick={() => proceedToCheckout(order as any)}
+                                className="bg-[#00A7B3] hover:bg-[#00A7B3]/80 text-white px-2 py-2 rounded-md font-medium transition-colors"
+                              >
+                                Checkout Order
+                              </button>
+                            ) : null}
                           </div>
                         </div>
                       </div>
