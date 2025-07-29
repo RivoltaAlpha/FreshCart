@@ -36,21 +36,21 @@ function RouteComponent() {
     <>
       <Header />
       <div className="min-h-screen bg-background py-12">
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: 0.6,
-            rotate: { duration: 0.6, ease: "easeOut" }
-          }}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h1 className="text-5xl font-bold text-[#005A61] mb-6">Contact Us</h1>
-              <p className="text-xl text-[#516E89] max-w-2xl mx-auto">
-                We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-              </p>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-bold text-[#005A61] mb-6">Contact Us</h1>
+            <p className="text-xl text-[#516E89] max-w-2xl mx-auto">
+              We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            </p>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.8,
+              rotate: { duration: 0.8, ease: "easeOut" }
+            }}
+          >
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Contact Form */}
@@ -212,8 +212,8 @@ function RouteComponent() {
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
       <Footer />
     </>
