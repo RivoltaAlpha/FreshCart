@@ -29,7 +29,7 @@ function StoreLayout() {
         onClose={handleSidebarClose}
       />
       <div className="flex-1 p-4 flex flex-col overflow-hidden">
-        <header className="bg-navbar shadow-sm border-b px-6 py-4 rounded-2xl">
+        <header className="bg-card shadow-sm border-b px-6 py-4 rounded-2xl">
           <div className="lg:flex-row flex flex-col items-center justify-between">
             <div className=" px-6 py-4 ">
               <h1 className="text-2xl font-bold text-fresh-primary">Welcome back {authUser?.profile.first_name}!</h1>

@@ -27,7 +27,7 @@ function RegisterPage() {
         "country": "Kenya",
         "image_url": "https://c.wallhere.com/photos/55/d0/barcelona_color_fruit_colore_flavor_100v10f_mercado_senses-819706.jpg",
         "delivery_time_minutes": 30,
-        "rating": "2.0"
+        "rating": 2.0
     });
 
     const navigate = useNavigate();
@@ -88,7 +88,7 @@ function RegisterPage() {
             <Header />
             <div className="min-h-screen flex items-center justify-center py-10"
                 style={{
-                    backgroundImage: "url('/store.jpg')",
+                    backgroundImage: "url('https://images.squarespace-cdn.com/content/v1/5e840cdefef4234737e568f0/1585745898091-ZGMAEQSVKL0B2WHNBF80/fresh.jpg')",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                 }}
@@ -98,8 +98,7 @@ function RegisterPage() {
                         <div className="w-16 h-16 bg-[#00A7B3] rounded-full flex items-center justify-center mx-auto mb-4">
                             <User className="w-8 h-8 text-white" />
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-800 mb-2">Join FreshCart Vendors</h1>
-                        <p className="text-gray-600">Your new Shopping Experience</p>
+                        <h1 className="text-3xl font-bold text-gray-800 mb-2">Join Our Stores</h1>
                     </div>
 
                     <form onSubmit={onRegister} className="space-y-6">
@@ -112,7 +111,7 @@ function RegisterPage() {
                                     name="name"
                                     value={formData.name}
                                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                    placeholder="First name"
+                                    placeholder="Name of Store"
                                     required
                                     onChange={handleInputChange}
                                 />

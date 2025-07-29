@@ -24,7 +24,7 @@ function RouteComponent() {
       <Header />
       <div className="min-h-screen flex items-center justify-center py-4"
         style={{
-          backgroundImage: "url('/delivery.png')",
+          backgroundImage: "url('https://images.squarespace-cdn.com/content/v1/5e840cdefef4234737e568f0/1585745898091-ZGMAEQSVKL0B2WHNBF80/fresh.jpg')",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
         }}

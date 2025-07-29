@@ -35,7 +35,7 @@ export interface Store {
   country: string
   contact_info: string
   image_url: string
-  rating: string
+  rating: number
   is_verified: boolean
   total_reviews: number
   store_code: string
