@@ -1069,13 +1069,13 @@ The store page has everything you need for a quick checkout! 🛒`,
             <>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="fixed bottom-6 right-6 bg-gradient-to-r from-[#0074B7] to-[#60A3D9] hover:from-[#005A8F] hover:to-[#4A8BC2] text-white p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 z-50"
+                    className="fixed bottom-6 right-10 bg-gradient-to-r from-[#0074B7] to-[#60A3D9] hover:from-[#005A8F] hover:to-[#4A8BC2] text-white p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 z-50"
                 >
                     <Bot className="h-6 w-6" />
                 </button>
 
                 {isOpen && (
-                    <div className="fixed bottom-20 right-6 lg:w-[650px] w-80 h-[700px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden">
+                    <div className="fixed bottom-20 right-10 lg:w-[650px] w-80 h-[700px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden">
                         <div className="bg-gradient-to-r from-[#0074B7] to-[#60A3D9] text-white p-4 flex justify-between items-center">
                             <div className="flex items-center gap-3">
                                 <div className="bg-white/20 p-2 rounded-full">
@@ -1121,7 +1121,7 @@ The store page has everything you need for a quick checkout! 🛒`,
             {/* Enhanced Chatbot Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-6 right-6 bg-gradient-to-r from-[#0074B7] to-[#60A3D9] hover:from-[#005A8F] hover:to-[#4A8BC2] text-white p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 z-50 group"
+                className="fixed bottom-6 right-16 bg-gradient-to-r from-[#0074B7] to-[#60A3D9] hover:from-[#005A8F] hover:to-[#4A8BC2] text-white p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 z-50 group"
                 title="FreshCart Shopping Assistant"
             >
                 <Bot className="h-6 w-6 group-hover:animate-pulse" />
@@ -1130,7 +1130,7 @@ The store page has everything you need for a quick checkout! 🛒`,
             {/* Enhanced Chatbot Window */}
             {isOpen && (
                 <div
-                    className={`fixed bottom-20 right-6 lg:w-[650px] w-80 h-[700px] 
+                    className={`fixed bottom-20 right-16 lg:w-[650px] w-80 h-[700px] 
                                ${isDarkMode ? 'bg-gray-900' : 'bg-white'} 
                                border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} 
                                rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden

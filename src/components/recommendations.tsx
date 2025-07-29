@@ -79,7 +79,7 @@ const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
   }
 
   return (
-    <section className="px-40 py-10 bg-background">
+    <section className="lg:px-40 py-10 bg-background">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-fresh-error mb-4">AI Recommended Products</h2>

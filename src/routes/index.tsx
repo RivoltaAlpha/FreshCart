@@ -120,7 +120,7 @@ function App() {
 
 
         {/* Top Products Section */}
-        <section className=" py-12 px-60 mb-8">
+        <section className=" py-12 lg:px-60 px-4 mb-8">
           <div className="text-center mb-10">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div className="bg-[#005A61] p-3 rounded-full shadow-lg">
