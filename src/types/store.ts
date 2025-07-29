@@ -35,7 +35,8 @@ export interface Store {
   country: string
   contact_info: string
   image_url: string
-  rating: number
+  rating: string
+  is_verified: boolean
   total_reviews: number
   store_code: string
   delivery_fee: number
@@ -210,7 +211,7 @@ export interface ProductRating {
   review_count: string
 }
 
- export interface TopProduct {
+export interface TopProduct {
   product_id: number
   product_name: string
   totalquantity: string
