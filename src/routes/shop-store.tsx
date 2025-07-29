@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect, useMemo } from 'react'
-import { Search, Heart, ChevronDown, ShoppingCart, LocateFixedIcon, Eye } from 'lucide-react'
+import { Search, Heart, ChevronDown, ShoppingCart, LocateFixedIcon, Eye, Star, Phone, Mail, MapPin, Shield, CheckCircle, Loader2 } from 'lucide-react'
 import { useStoreProducts } from '@/hooks/useProducts'
 import { useStores } from '@/hooks/useStore'
 import type { Product } from '@/types/types'
@@ -35,7 +35,6 @@ function RouteComponent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const navigate = useNavigate()
-
   const { stores } = useStores()
   const {
     data: products,
@@ -65,15 +64,15 @@ function RouteComponent() {
   }, [store_id, refetch])
 
   const filterOptions = [
-    { id: 'vegetables', name: 'Vegetables'},
-    { id: 'fruits', name: 'Fruits'},
-    { id: 'grains', name: 'Grains'},
-    { id: 'dairy', name: 'Dairy'},
-    { id: 'herbs', name: 'Herbs'},
-    { id: 'meat', name: 'Meat'},
-    { id: 'bakery', name: 'Bakery'},
-    { id: 'legumes', name: 'Legumes'},
-    { id: 'spices & seasonings', name: 'Spices & Seasonings'},
+    { id: 'vegetables', name: 'Vegetables' },
+    { id: 'fruits', name: 'Fruits' },
+    { id: 'grains', name: 'Grains' },
+    { id: 'dairy', name: 'Dairy' },
+    { id: 'herbs', name: 'Herbs' },
+    { id: 'meat', name: 'Meat' },
+    { id: 'bakery', name: 'Bakery' },
+    { id: 'legumes', name: 'Legumes' },
+    { id: 'spices & seasonings', name: 'Spices & Seasonings' },
   ]
 
   const currentStore = stores?.find((store) => store.store_id === store_id)
@@ -176,8 +175,6 @@ function RouteComponent() {
 
   const handleWishlistClick = (product: Product) => {
     toast.success(`${product.name} added to wishlist!`)
-    // change heart icon color to red
-    
   }
 
   const handleViewDetails = () => {
@@ -207,7 +204,6 @@ function RouteComponent() {
     }
   }
 
-
   const ProductCard = ({ product }: { product: Product }) => (
     <div className="bg-card rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
       <div className="relative">
@@ -224,7 +220,7 @@ function RouteComponent() {
         <button className="absolute top-2 right-2 p-2 bg-card rounded-full shadow hover:bg-gray-100">
           <Heart size={16} className="text-fresh-primary hover:text-red-500 click:bg-red-500/10 transition-colors"
             onClick={() => handleWishlistClick(product)}
-           />
+          />
         </button>
         <button
           onClick={() => handleProductClick(product)}
@@ -249,8 +245,11 @@ function RouteComponent() {
           <p>{product.category?.name}</p>
         </div>
         <div className="flex items-center justify-between gap-1 text-sm">
-          <div className="text-sm text-fresh-primary">
-            {currentStore?.name || 'Store'}
+          <div className="flex items-center gap-1">
+            <span className="text-gray-500">Stock:</span>
+            <span className={`font-semibold ${product.stock_quantity && parseInt(String(product.stock_quantity)) > 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {product.stock_quantity || 'Out of Stock'}
+            </span>
           </div>
           <div className="flex items-center gap-1">
             <span className="text-yellow-400">⭐</span>
@@ -318,6 +317,120 @@ function RouteComponent() {
     </div>
   )
 
+  // Loading Component
+  const LoadingSpinner = () => (
+    <div className="flex flex-col items-center justify-center py-12 space-y-4">
+      <Loader2 className="w-8 h-8 animate-spin text-[#189AB4]" />
+      <p className="text-[#05445E] font-medium">Loading products...</p>
+      <p className="text-gray-500 text-sm">Please wait while we fetch the latest products</p>
+    </div>
+  )
+
+  // About Store Content
+  const AboutStoreContent = () => {
+    if (!currentStore) {
+      return (
+        <div className="bg-card rounded-lg p-8 text-center">
+          <p className="text-gray-500">Please select a store to view details.</p>
+        </div>
+      )
+    }
+
+    return (
+      <div className="space-y-6">
+        {/* Store Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Contact Information */}
+          <div className="bg-card rounded-lg p-20 shadow-sm">
+            <h3 className="text-xl font-semibold text-[#05445E] mb-4 flex items-center gap-2">
+              <Phone className="w-5 h-5" />
+              Contact Information
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-[#189AB4]" />
+                <span className="text-gray-700">{currentStore.contact_info}</span>
+              </div>
+              {currentStore.owner?.profile?.phone_number && (
+                <div className="flex items-center gap-3">
+                  <Phone className="w-4 h-4 text-[#189AB4]" />
+                  <span className="text-gray-700">{currentStore.owner.profile.phone_number}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Location */}
+          <div className="bg-card rounded-lg p-6 shadow-sm">
+            <h3 className="text-xl font-semibold text-[#05445E] mb-4 flex items-center gap-2">
+              <MapPin className="w-5 h-5" />
+              Location
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <LocateFixedIcon className="w-4 h-4 text-[#189AB4]" />
+                <span className="text-gray-700">{currentStore.address?.area}, {currentStore.address?.town}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <MapPin className="w-4 h-4 text-[#189AB4]" />
+                <span className="text-gray-700">{currentStore.address?.county}, {currentStore.address?.country}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Store Owner */}
+          <div className="bg-card rounded-lg p-6 shadow-sm">
+            <h3 className="text-xl font-semibold text-[#05445E] mb-4">Store Owner</h3>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[#189AB4] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                {currentStore.owner?.profile?.first_name?.[0]}{currentStore.owner?.profile?.last_name?.[0]}
+              </div>
+              <div>
+                <p className="font-semibold text-[#05445E]">
+                  {currentStore.owner?.profile?.first_name} {currentStore.owner?.profile?.last_name}
+                </p>
+                <p className="text-gray-600 text-sm">{currentStore.owner?.email}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Store Details */}
+          <div className="bg-card rounded-lg p-6 shadow-sm">
+            <h3 className="text-xl font-semibold text-[#05445E] mb-4">Store Details</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Store Code:</span>
+                <span className="font-semibold text-[#05445E]">{currentStore.store_code}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Delivery Fee:</span>
+                <span className="font-semibold text-[#05445E]">KSh {currentStore.delivery_fee}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Status:</span>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-green-600 font-semibold">Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Store Policies */}
+        <div className="bg-card rounded-lg p-6 shadow-sm">
+          <h3 className="text-xl font-semibold text-[#05445E] mb-4">Store Policies</h3>
+          <div className="space-y-3 text-gray-700">
+            <p>• We ensure all products are fresh and of the highest quality</p>
+            <p>• Delivery is available within {currentStore.address?.county} with a standard fee of KSh {currentStore.delivery_fee}</p>
+            <p>• We accept returns within 24 hours for perishable goods if they don't meet quality standards</p>
+            <p>• Customer satisfaction is our top priority</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       <Header />
@@ -325,7 +438,7 @@ function RouteComponent() {
         {/* Banner */}
         <div className="h-64 w-full relative overflow-hidden">
           <img
-            src="./market-concept-with-vegetables.jpg"
+            src={currentStore?.image_url || "./market-concept-with-vegetables.jpg"}
             alt="Store Banner"
             className="w-full h-full object-cover"
           />
@@ -334,7 +447,6 @@ function RouteComponent() {
               <h1 className="text-5xl font-bold text-white">
                 {currentStore?.name} 🌱
               </h1>
-              {/* <p className="text-fresh-primary">{currentStore?.county} County</p> */}
             </div>
           </div>
         </div>
@@ -343,7 +455,7 @@ function RouteComponent() {
         <div className="bg-card shadow-lg">
           <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
             <img
-              src="/market-concept-with-vegetables.jpg"
+              src={currentStore?.image_url || "/market-concept-with-vegetables.jpg"}
               alt="Store Logo"
               className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
             />
@@ -351,28 +463,41 @@ function RouteComponent() {
               <h1 className="text-2xl font-bold text-gray-900">
                 {currentStore?.name} 🌱
               </h1>
-              <p className="text-fresh-primary">{currentStore?.county} County</p>
+              <p className="text-fresh-primary">{currentStore?.address?.county}</p>
               <div className="mt-2 flex flex-col sm:flex-row gap-2 text-sm text-fresh-primary">
-                <span><LocateFixedIcon className="inline-block w-4 h-4 mr-1" /> {currentStore?.town}</span>
-                <span>Owned by {currentStore?.owner?.profile?.first_name} {currentStore?.owner?.profile?.last_name}</span>
+                <span><LocateFixedIcon className="inline-block w-4 h-4 mr-1" /> {currentStore?.address?.town} town</span>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="relative">
-                <ShoppingCart className="w-8 h-8 text-fresh-primary"
-                  onClick={() => navigate({ to: '/customer/cart' })} />
+              <div className="relative cursor-pointer" onClick={() => navigate({ to: '/customer/cart' })}>
+                <ShoppingCart className="w-8 h-8 text-fresh-primary" />
                 {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
               </div>
-              <img
-                src="/market-concept-with-vegetables.jpg"
-                alt="Owner Avatar"
-                className="w-20 h-20 rounded-full object-cover"
-              />
+              <div className="w-20 h-20 bg-[#189AB4] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                {currentStore?.owner?.profile?.first_name?.[0]}{currentStore?.owner?.profile?.last_name?.[0]}
+              </div>
             </div>
+          </div>
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="flex items-center gap-1">
+              <p className="text-[#189AB4] text-lg">{currentStore?.description}</p>
+            </div>
+            <div className="flex items-center gap-1 text-green-600">
+              <Star className="w-5 h-5 text-yellow-400 fill-current" />
+              <span className="font-semibold text-[#05445E]">{parseFloat(currentStore?.rating || '0').toFixed(1)}</span>
+              <span className="text-gray-500">({currentStore?.total_reviews || 0} reviews)</span>
+              <span className="text-sm font-medium flex items-center gap-1">
+                {currentStore?.is_verified && (
+                  <Shield className="w-4 h-4" />
+                )}
+                Verified Store
+              </span>
+            </div>
+
           </div>
         </div>
 
@@ -398,90 +523,10 @@ function RouteComponent() {
 
         {/* Main Content */}
         <div className="max-w-8xl mx-20 px-4 py-6">
-          <div className="flex flex-col lg:flex-row gap-6 bg-search justify-center">
-            {/* Sidebar */}
-            <div className="hidden lg:block w-64 space-y-6">
-              <div className="bg-card rounded-lg p-4 shadow-sm">
-                <div className="relative">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
-                  <input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="text-blue-500 mt-2 hover:underline"
-                >
-                  Clear all
-                </button>
-              </div>
-
-              <div className="bg-card rounded-lg p-4 shadow-sm">
-                <h3 className="font-medium mb-2">Select Store</h3>
-                <select
-                  value={store_id ?? ''}
-                  onChange={(e) => handleStoreChange(Number(e.target.value))}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select a store...</option>
-                  {stores?.map((store) => (
-                    <option key={store.store_id} value={store.store_id}>
-                      {store.name} - {store.county}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="bg-card rounded-lg p-4 shadow-sm">
-                <button
-                  onClick={() => setDietaryOpen(!dietaryOpen)}
-                  className="flex items-center justify-between w-full text-left font-medium"
-                >
-                  Product Categories
-                  <ChevronDown
-                    size={16}
-                    className={`transform transition-transform ${dietaryOpen ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                {dietaryOpen && (
-                  <div className="mt-4 space-y-2">
-                    {filterOptions.map((option) => (
-                      <label
-                        key={option.id}
-                        className="flex items-center gap-2 cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedCategories.includes(option.id)}
-                          onChange={() => handleCategoryFilter(option.id)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span>
-                          {option.name}
-                        </span>
-                      </label>
-                    ))}
-                    {selectedCategories.length > 0 && (
-                      <button
-                        onClick={() => setSelectedCategories([])}
-                        className="text-blue-500 text-sm hover:underline mt-2"
-                      >
-                        Clear filters
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Products Grid */}
-            <div className="flex-1 max-w-7xl">
-              {/* Mobile Search */}
-              <div className="lg:hidden mb-4">
+          {activeTab === 'Products' ? (
+            <div className="flex flex-col lg:flex-row gap-6 bg-search justify-center">
+              {/* Sidebar */}
+              <div className="hidden lg:block w-64 space-y-6">
                 <div className="bg-card rounded-lg p-4 shadow-sm">
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
@@ -493,79 +538,165 @@ function RouteComponent() {
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="text-blue-500 mt-2 hover:underline"
+                  >
+                    Clear all
+                  </button>
                 </div>
-              </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                <span className="text-fresh-primary">
-                  Show all products ({filteredProducts.length})
-                  {selectedCategories.length > 0 && (
-                    <span className="ml-2 text-blue-600">
-                      • {selectedCategories.length} filter
-                      {selectedCategories.length > 1 ? 's' : ''} applied
-                    </span>
-                  )}
-                </span>
-                <div className="flex items-center gap-4 flex-wrap">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={showImageOnly}
-                      onChange={(e) => setShowImageOnly(e.target.checked)}
-                      className="rounded border-gray-300"
+                <div className="bg-card rounded-lg p-4 shadow-sm">
+                  <h3 className="font-medium mb-2">Select Store</h3>
+                  <select
+                    value={store_id ?? ''}
+                    onChange={(e) => handleStoreChange(Number(e.target.value))}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Select a store...</option>
+                    {stores?.map((store) => (
+                      <option key={store.store_id} value={store.store_id}>
+                        {store.name} - {store.county}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="bg-card rounded-lg p-4 shadow-sm">
+                  <button
+                    onClick={() => setDietaryOpen(!dietaryOpen)}
+                    className="flex items-center justify-between w-full text-left font-medium"
+                  >
+                    Product Categories
+                    <ChevronDown
+                      size={16}
+                      className={`transform transition-transform ${dietaryOpen ? 'rotate-180' : ''}`}
                     />
-                    <span>Show image only</span>
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <span className="text-fresh-primary">Sort by:</span>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="border border-gray-300 rounded px-3 py-1"
-                    >
-                      <option value="name">Name A-Z</option>
-                      <option value="price">Price Low to High</option>
-                      <option value="rating">Highest Rated</option>
-                      <option value="category">Category</option>
-                    </select>
-                  </div>
+                  </button>
+                  {dietaryOpen && (
+                    <div className="mt-4 space-y-2">
+                      {filterOptions.map((option) => (
+                        <label
+                          key={option.id}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedCategories.includes(option.id)}
+                            onChange={() => handleCategoryFilter(option.id)}
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span>
+                            {option.name}
+                          </span>
+                        </label>
+                      ))}
+                      {selectedCategories.length > 0 && (
+                        <button
+                          onClick={() => setSelectedCategories([])}
+                          className="text-blue-500 text-sm hover:underline mt-2"
+                        >
+                          Clear filters
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {isLoading ? (
-                  <div className="col-span-full text-center py-8">
-                    Loading products...
+              {/* Products Grid */}
+              <div className="flex-1 max-w-7xl">
+                {/* Mobile Search */}
+                <div className="lg:hidden mb-4">
+                  <div className="bg-card rounded-lg p-4 shadow-sm">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-3 h-4 w-4 text-fresh-primary" />
+                      <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
                   </div>
-                ) : error ? (
-                  <div className="col-span-full text-center py-8 text-red-500">
-                    Error loading products: {error?.message || 'Unknown error occurred'}
-                  </div>
-                ) : filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
-                    <ProductCard key={product.product_id} product={product} />
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-8 text-gray-500">
-                    No products found
-                  </div>
-                )}
-              </div>
-            </div>
+                </div>
 
-            {/* Cart Summary */}
-            <div className="hidden lg:block w-64">
-              <div className="sticky top-6">
-                {cartCount > 0 ? (
-                  cartCard
-                ) : (
-                  <div className="bg-card rounded-lg shadow-sm p-4 text-center">
-                    <p className="text-gray-500">Your cart is empty</p>
+                {!isLoading && (
+                  <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                    <span className="text-fresh-primary">
+                      Show all products ({filteredProducts.length})
+                      {selectedCategories.length > 0 && (
+                        <span className="ml-2 text-blue-600">
+                          • {selectedCategories.length} filter
+                          {selectedCategories.length > 1 ? 's' : ''} applied
+                        </span>
+                      )}
+                    </span>
+                    <div className="flex items-center gap-4 flex-wrap">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={showImageOnly}
+                          onChange={(e) => setShowImageOnly(e.target.checked)}
+                          className="rounded border-gray-300"
+                        />
+                        <span>Show image only</span>
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <span className="text-fresh-primary">Sort by:</span>
+                        <select
+                          value={sortBy}
+                          onChange={(e) => setSortBy(e.target.value)}
+                          className="border border-gray-300 rounded px-3 py-1"
+                        >
+                          <option value="name">Name A-Z</option>
+                          <option value="price">Price Low to High</option>
+                          <option value="rating">Highest Rated</option>
+                          <option value="category">Category</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 )}
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {isLoading ? (
+                    <div className="col-span-full">
+                      <LoadingSpinner />
+                    </div>
+                  ) : error ? (
+                    <div className="col-span-full text-center py-8 text-red-500">
+                      Error loading products: {error?.message || 'Unknown error occurred'}
+                    </div>
+                  ) : filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                      <ProductCard key={product.product_id} product={product} />
+                    ))
+                  ) : (
+                    <div className="col-span-full">
+                      <LoadingSpinner />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Cart Summary */}
+              <div className="hidden lg:block w-64">
+                <div className="sticky top-6">
+                  {cartCount > 0 ? (
+                    cartCard
+                  ) : (
+                    <div className="bg-card rounded-lg shadow-sm p-4 text-center">
+                      <p className="text-gray-500">Your cart is empty</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <AboutStoreContent />
+          )}
         </div>
       </div>
 
@@ -618,10 +749,10 @@ function RouteComponent() {
                   {/* Stock Status */}
                   <div className="flex items-center gap-2">
                     <div className={`w-3 h-3 rounded-full ${selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 10
-                        ? 'bg-green-500'
-                        : selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 0
-                          ? 'bg-yellow-500'
-                          : 'bg-red-500'
+                      ? 'bg-green-500'
+                      : selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 0
+                        ? 'bg-yellow-500'
+                        : 'bg-red-500'
                       }`} />
                     <span className="text-[#05445E]">
                       {selectedProduct.stock_quantity && parseInt(String(selectedProduct.stock_quantity)) > 10
@@ -645,7 +776,7 @@ function RouteComponent() {
                   <div className="bg-gray-50 rounded-lg p-4">
                     <h4 className="font-semibold text-[#05445E] mb-2">Store Information</h4>
                     <p className="text-sm text-gray-600">
-                      Available at {currentStore?.name || 'Store'} in {currentStore?.county}
+                      Available at {currentStore?.name || 'Store'} in {currentStore?.address?.county}
                     </p>
                   </div>
                 </div>
@@ -677,4 +808,3 @@ function RouteComponent() {
     </>
   )
 }
-
