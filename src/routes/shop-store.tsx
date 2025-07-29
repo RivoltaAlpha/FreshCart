@@ -488,7 +488,7 @@ function RouteComponent() {
             </div>
             <div className="flex items-center gap-1 text-green-600">
               <Star className="w-5 h-5 text-yellow-400 fill-current" />
-              <span className="font-semibold text-[#05445E]">{parseFloat(currentStore?.rating || '0').toFixed(1)}</span>
+              <span className="font-semibold text-[#05445E]">{parseFloat((currentStore?.rating ?? '0').toString()).toFixed(1)}</span>
               <span className="text-gray-500">({currentStore?.total_reviews || 0} reviews)</span>
               <span className="text-sm font-medium flex items-center gap-1">
                 {currentStore?.is_verified && (
