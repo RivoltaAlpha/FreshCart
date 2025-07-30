@@ -273,18 +273,18 @@ function RouteComponent() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Manage Orders</h1>
+          <h1 className="text-3xl font-bold text-fresh-secondary mb-4">Manage Orders</h1>
 
           {/* Filter */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Filter by status:</span>
+              <span className="text-sm font-medium text-fresh-secondary">Filter by status:</span>
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as string | 'all')}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+              className="border bg-card border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
             >
               <option value="all">All Orders</option>
               <option value="pending">Pending</option>
@@ -301,7 +301,7 @@ function RouteComponent() {
         {/* Orders List */}
         {filteredOrders.length === 0 ? (
           <div className="text-center py-12">
-            <Package className="h-24 w-24 text-gray-300 mx-auto mb-4" />
+            <Package className="h-24 w-24 text- mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               {statusFilter === 'all' ? 'No Orders Yet' : `No ${statusFilter} Orders`}
             </h2>
@@ -317,7 +317,7 @@ function RouteComponent() {
             {filteredOrders.map((order: CustomerOrder) => (
               <div
                 key={order.order_id}
-                className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                className="bg-searchbar border-b border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">

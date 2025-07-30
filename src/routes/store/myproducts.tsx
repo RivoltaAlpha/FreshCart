@@ -137,7 +137,7 @@ function MyProductsPage() {
             <h3 className="text-lg font-semibold text-[#005A61] line-clamp-2">
               {product.name}
             </h3>
-            <span className="text-sm text-[#6A89A7] bg-[#F9FBFC] px-2 py-1 rounded">
+            <span className="text-sm text-[#6A89A7] bg-searchbar px-2 py-1 rounded">
               {product.category.name}
             </span>
           </div>
@@ -288,7 +288,7 @@ function MyProductsPage() {
 
   if (storesLoading) {
     return (
-      <div className="min-h-screen bg-[#F9FBFC] flex items-center justify-center">
+      <div className="min-h-screen bg-searchbar flex items-center justify-center">
         <div className="text-center">
           <RefreshCw className="w-8 h-8 animate-spin text-[#00A7B3] mx-auto mb-4" />
           <p className="text-[#516E89]">Loading stores...</p>
@@ -298,9 +298,9 @@ function MyProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FBFC]">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-[#E1EAF2]">
+      <div className="bg-searchbar shadow-sm border-b border-[#E1EAF2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -445,7 +445,7 @@ function MyProductsPage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2 px-4 py-2 border border-[#E1EAF2] rounded-lg hover:bg-[#F9FBFC] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-[#E1EAF2] rounded-lg hover:bg-searchbar transition-colors"
               >
                 <Filter className="w-4 h-4" />
                 Filters

@@ -98,7 +98,7 @@ export default function Header({ cartItems = 0 }: HeaderProps) {
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center hover:opacity-80 transition-opacity">
               <ShoppingCart className="h-8 w-8 " />
-              <span className="ml-2 text-2xl font-bold ">FreshCart</span>
+              <span className="ml-2 text-2xl font-bold text-fresh-secondary">FreshCart</span>
             </Link>
           </div>
 

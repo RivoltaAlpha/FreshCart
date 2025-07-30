@@ -135,11 +135,11 @@ function RouteComponent() {
 
     return (
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="bg-searchbar rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <h2 className="text-xl font-bold text-gray-900">Inventory Products</h2>
+                <h2 className="text-xl font-bold text-fresh-secondary">Inventory Products</h2>
                 <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${stockStatus.color}`}>
                   {stockStatus.icon}
                   {stockStatus.status}
@@ -147,7 +147,7 @@ function RouteComponent() {
               </div>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 hover:text-text transition-colors"
               >
                 <XCircle className="h-6 w-6" />
               </button>
@@ -156,33 +156,33 @@ function RouteComponent() {
 
           <div className="p-6 space-y-6">
             {/* Inventory Info */}
-            <div className="bg-gray-50 rounded-xl p-4">
+            <div className="bg-card rounded-xl p-4 text-text">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex items-center gap-2">
                   <Package className="h-4 w-4 text-gray-500" />
                   <div>
-                    <p className="text-sm text-gray-600">Inventory Name</p>
+                    <p className="text-sm text-text">Inventory Name</p>
                     <p className="font-semibold">{inventory.name}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4 text-gray-500" />
                   <div>
-                    <p className="text-sm text-gray-600">Stock Quantity</p>
+                    <p className="text-sm text-text">Stock Quantity</p>
                     <p className="font-semibold">{inventory.stock_qty}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-gray-500" />
                   <div>
-                    <p className="text-sm text-gray-600">Reorder Level</p>
+                    <p className="text-sm text-text">Reorder Level</p>
                     <p className="font-semibold">{inventory.reorder_level}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-gray-500" />
                   <div>
-                    <p className="text-sm text-gray-600">Last Restocked</p>
+                    <p className="text-sm text-text">Last Restocked</p>
                     <p className="font-semibold">{formatDate(inventory.last_restocked)}</p>
                   </div>
                 </div>
@@ -191,7 +191,7 @@ function RouteComponent() {
 
             {/* Action Buttons */}
             <div className="flex justify-between items-center">
-              <div className="flex gap-2 text-sm text-gray-600">
+              <div className="flex gap-2 text-sm text-text">
                 <span>Max Stock: {inventory.max_stock_level}</span>
                 <span>•</span>
                 <span>Cost Price: KSh {typeof inventory.cost_price === 'string' ? parseFloat(inventory.cost_price).toFixed(2) : inventory.cost_price.toFixed(2)}</span>
@@ -226,15 +226,15 @@ function RouteComponent() {
                         />
                         <div>
                           <p className="font-medium">{product.name || 'Unknown Product'}</p>
-                          <p className="text-sm text-gray-600">{product.description || 'No description'}</p>
+                          <p className="text-sm text-text">{product.description || 'No description'}</p>
                           <p className="text-sm text-gray-500">Stock: {product.stock_quantity || 0} {product.unit || 'units'}</p>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="font-medium text-[#00A7B3]">KSh {product.price ? parseFloat(product.price.toString()).toFixed(2) : '0.00'}</p>
-                        <p className="text-sm text-gray-600">Rating: {product.rating || 0}/5</p>
+                        <p className="text-sm text-text">Rating: {product.rating || 0}/5</p>
                         {product.discount && product.discount > 0 && (
-                          <p className="text-sm text-orange-600">{product.discount}% off</p>
+                          <p className="text-sm text-ortext">{product.discount}% off</p>
                         )}
                       </div>
                     </div>
@@ -274,7 +274,7 @@ function RouteComponent() {
         <div className="text-center">
           <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Inventories</h1>
-          <p className="text-gray-600 mb-6">There was an error loading the inventories. Please try again.</p>
+          <p className="text-text mb-6">There was an error loading the inventories. Please try again.</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
@@ -292,7 +292,7 @@ function RouteComponent() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-900">Store Inventories</h1>
+            <h1 className="text-3xl font-bold text-fresh-secondary">Store Inventories</h1>
             <button
               onClick={() => navigate({ to: '/store/create-inventory' })}
               className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
@@ -306,7 +306,7 @@ function RouteComponent() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Filter by stock:</span>
+              <span className="text-sm font-medium text-fresh-secondary">Filter by stock:</span>
             </div>
             <select
               value={statusFilter}
@@ -328,7 +328,7 @@ function RouteComponent() {
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               {statusFilter === 'all' ? 'No Inventories Yet' : `No ${statusFilter.replace('_', ' ')} Inventories`}
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-text mb-6">
               {statusFilter === 'all'
                 ? "No inventories have been created yet."
                 : `No inventories matching the ${statusFilter.replace('_', ' ')} filter.`
@@ -348,7 +348,7 @@ function RouteComponent() {
               return (
                 <div
                   key={inventory.inventory_id}
-                  className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                  className="bg-searchbar border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-4">
@@ -381,7 +381,7 @@ function RouteComponent() {
                       <div className="flex items-center gap-2">
                         <ShoppingBag className="h-4 w-4 text-gray-500" />
                         <div>
-                          <p className="text-sm text-gray-600">Products</p>
+                          <p className="text-sm text-text">Products</p>
                           <p className="font-medium">{inventory.products?.length || 0} items</p>
                         </div>
                       </div>
@@ -389,7 +389,7 @@ function RouteComponent() {
                       <div className="flex items-center gap-2">
                         <TrendingUp className="h-4 w-4 text-gray-500" />
                         <div>
-                          <p className="text-sm text-gray-600">Stock Quantity</p>
+                          <p className="text-sm text-text">Stock Quantity</p>
                           <p className="font-medium">{inventory.stock_qty}</p>
                         </div>
                       </div>
@@ -397,7 +397,7 @@ function RouteComponent() {
                       <div className="flex items-center gap-2">
                         <DollarSign className="h-4 w-4 text-gray-500" />
                         <div>
-                          <p className="text-sm text-gray-600">Cost Price</p>
+                          <p className="text-sm text-text">Cost Price</p>
                           <p className="font-medium text-[#00A7B3]">KSh {typeof inventory.cost_price === 'string' ? parseFloat(inventory.cost_price).toFixed(2) : inventory.cost_price.toFixed(2)}</p>
                         </div>
                       </div>
@@ -405,13 +405,13 @@ function RouteComponent() {
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-gray-500" />
                         <div>
-                          <p className="text-sm text-gray-600">Last Restocked</p>
+                          <p className="text-sm text-text">Last Restocked</p>
                           <p className="font-medium">{formatDate(inventory.last_restocked)}</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm text-gray-600">
+                    <div className="flex items-center justify-between text-sm text-text">
                       <span>Reorder Level: {inventory.reorder_level}</span>
                       <span>Max Stock: {inventory.max_stock_level}</span>
                     </div>

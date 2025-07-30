@@ -75,7 +75,7 @@ function RouteComponent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <Loader className="animate-spin h-8 w-8 text-[#189AB4] mx-auto mb-4" />
           <p className="text-[#05445E] text-lg">Loading inventory data...</p>
@@ -86,7 +86,7 @@ function RouteComponent() {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-600 text-xl mb-4">❌ Failed to load inventories</div>
           <button
@@ -101,13 +101,13 @@ function RouteComponent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#05445E] mb-4">Stock Management</h1>
+          <h1 className="text-4xl font-bold text-fresh-secondary mb-4">Stock Management</h1>
           <div className="w-24 h-1 bg-[#189AB4] mb-4"></div>
-          <p className="text-lg text-gray-600">Manage your inventory stock levels</p>
+          <p className="text-lg text-text">Manage your inventory stock levels</p>
         </div>
 
         {/* Messages */}
@@ -132,14 +132,14 @@ function RouteComponent() {
               const isOutOfStock = inv.stock_qty === 0
 
               return (
-                <div key={inv.inventory_id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6">
+                <div key={inv.inventory_id} className="bg-searchbar rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6">
                   {/* Card Header */}
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-[#05445E] mb-1">
+                      <h3 className="text-lg font-semibold text-text mb-1">
                         Inventory #{inv.inventory_id}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-text">
                         {inv.products && inv.products.length > 0
                           ? inv.products.map(p => p.name).join(', ')
                           : 'No Products'
@@ -166,7 +166,7 @@ function RouteComponent() {
                   {/* Stock Information */}
                   <div className="space-y-3 mb-6">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-600">Current Stock:</span>
+                      <span className="text-sm font-medium text-fresh-secondary">Current Stock:</span>
                       {editId === inv.inventory_id ? (
                         <input
                           type="number"
@@ -184,21 +184,21 @@ function RouteComponent() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-600">Reorder Level:</span>
-                      <span className="text-sm text-gray-800">{inv.reorder_level || 'Not set'}</span>
+                      <span className="text-sm font-medium text-fresh-secondary">Reorder Level:</span>
+                      <span className="text-sm text-fresh-primary">{inv.reorder_level || 'Not set'}</span>
                     </div>
 
                     {inv.cost_price && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-gray-600">Cost Price:</span>
-                        <span className="text-sm text-gray-800">KSh {inv.cost_price}</span>
+                        <span className="text-sm font-medium text-fresh-secondary">Cost Price:</span>
+                        <span className="text-sm text-fresh-primary">KSh {inv.cost_price}</span>
                       </div>
                     )}
 
                     {inv.last_restocked && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-gray-600">Last Restocked:</span>
-                        <span className="text-sm text-gray-800">{new Date(inv.last_restocked).toLocaleDateString()}</span>
+                        <span className="text-sm font-medium text-fresh-secondary">Last Restocked:</span>
+                        <span className="text-sm text-fresh-primary">{new Date(inv.last_restocked).toLocaleDateString()}</span>
                       </div>
                     )}
                   </div>
@@ -252,7 +252,7 @@ function RouteComponent() {
         {/* Summary Cards */}
         {inventory && inventory.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
@@ -260,13 +260,13 @@ function RouteComponent() {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Products</p>
+                  <p className="text-sm font-medium">Total Products</p>
                   <p className="text-2xl font-bold text-[#05445E]">{inventory.length}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -274,7 +274,7 @@ function RouteComponent() {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Low Stock Items</p>
+                  <p className="text-sm font-medium">Low Stock Items</p>
                   <p className="text-2xl font-bold text-yellow-600">
                     {inventory.filter(inv => inv.stock_qty <= (inv.reorder_level || 10) && inv.stock_qty > 0).length}
                   </p>
@@ -282,7 +282,7 @@ function RouteComponent() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
@@ -290,7 +290,7 @@ function RouteComponent() {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Out of Stock</p>
+                  <p className="text-sm font-medium">Out of Stock</p>
                   <p className="text-2xl font-bold text-red-600">
                     {inventory.filter(inv => inv.stock_qty === 0).length}
                   </p>

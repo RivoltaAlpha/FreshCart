@@ -78,7 +78,6 @@ const checkStoreAuth = () => {
         ? parsedStore.is_verified
         : parsedStore.is_verified === 'true'
     }
-    console.log({ isStore, isAuthenticated, isVerified })
     return { isStore, isAuthenticated, isVerified }
 
   } catch {

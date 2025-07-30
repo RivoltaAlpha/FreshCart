@@ -142,17 +142,17 @@ function RouteComponent() {
           <div className="flex items-center gap-4 mb-6">
             <button
               onClick={() => navigate({ to: '/customer/dashboard' })}
-              className="text-gray-500 hover:text-gray-700 transition-colors"
+              className=" hover:text-fresh-primary transition-colors"
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h1 className="text-3xl font-bold text-gray-900">Store Profile</h1>
+            <h1 className="text-3xl font-bold text-text">Store Profile</h1>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="bg-searchbar rounded-2xl shadow-lg p-6 text-center">
               <div className="relative mb-6">
                 <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto">
                   <StoreIcon className="h-12 w-12 text-white" />
@@ -162,18 +162,18 @@ function RouteComponent() {
                   alt="Store Profile"
                   className="absolute inset-0 object-cover rounded-full w-full h-full"
                 />
-                <button className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 bg-white border-2 border-gray-200 rounded-full p-2 hover:bg-gray-50 transition-colors">
+                <button className="absolute bottom-0 right-1/2 transform translate-x-1/2 translate-y-1/2 bg-white border-2 border-gray-200 rounded-full p-2 hover:bg-gray-200 transition-colors">
                   <Camera className="h-4 w-4 text-gray-600" />
                 </button>
               </div>
 
               {/* Basic Info */}
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
+              <h2 className="text-xl font-bold mb-2">
                 {store.name}
               </h2>
-              <p className="text-gray-600 mb-4">{store?.contact_info}</p>
+              <p className="mb-4">{store?.contact_info}</p>
               {/* Member Since */}
-              <div className="text-sm text-gray-500">
+           <div className="text-sm">
                 <Calendar className="h-4 w-4 inline mr-1" />
                 Member since{' '}
                 {store?.created_at ? formatDate(store.created_at) : 'N/A'}
@@ -183,9 +183,9 @@ function RouteComponent() {
 
           {/* Profile Details */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-searchbar rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">
+                <h3 className="text-xl font-bold text-text">
                   Profile Information
                 </h3>
                 {!isEditing ? (
@@ -218,13 +218,13 @@ function RouteComponent() {
 
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-4">
+                  <h4 className="text-lg font-semibold text-text mb-4">
                     Store Information
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Name */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-fresh-primary mb-2">
                         Name
                       </label>
                       {isEditing ? (
@@ -240,14 +240,14 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                          <StoreIcon className="h-4 w-4 text-gray-500" />
+                        <div className="flex items-center text-gray-500 gap-2 p-3 bg-gray-200 rounded-lg">
+                          <StoreIcon className="h-4 w-4 " />
                           <span>{store.name || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-fresh-primary mb-2">
                         Code
                       </label>
                       {isEditing ? (
@@ -263,8 +263,8 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                          <StoreIcon className="h-4 w-4 text-gray-500" />
+                        <div className="flex items-center text-gray-500 gap-2 p-3 bg-gray-200 rounded-lg">
+                          <StoreIcon className="h-4 w-4 " />
                           <span>{store.store_code || 'Not provided'}</span>
                         </div>
                       )}
@@ -273,7 +273,7 @@ function RouteComponent() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Name */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-fresh-primary mb-2">
                         Area
                       </label>
                       {isEditing ? (
@@ -289,14 +289,14 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                          <LocateIcon className="h-4 w-4 text-gray-500" />
+                        <div className="flex items-center  text-gray-500 gap-2 p-3 bg-gray-200 rounded-lg">
+                          <LocateIcon className="h-4 w-4 " />
                           <span>{store.address.area || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-fresh-primary mb-2">
                         Town
                       </label>
                       {isEditing ? (
@@ -312,15 +312,15 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                          <LocateFixedIcon className="h-4 w-4 text-gray-500" />
+                        <div className="flex items-center gap-2 text-gray-500 p-3 bg-gray-200 rounded-lg">
+                          <LocateFixedIcon className="h-4 w-4 " />
                           <span>{store.address.town || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-fresh-primary mb-2">
                       Delivery Fee
                     </label>
                     {isEditing ? (
@@ -336,8 +336,8 @@ function RouteComponent() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                       />
                     ) : (
-                      <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                        <StoreIcon className="h-4 w-4 text-gray-500" />
+                      <div className="flex items-center text-gray-500 gap-2 p-3 bg-gray-200 rounded-lg">
+                        <StoreIcon className="h-4 w-4 " />
                         <span>{store.delivery_fee || 'Not provided'}</span>
                       </div>
                     )}
@@ -346,13 +346,13 @@ function RouteComponent() {
 
                 {/* Contact Information */}
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-4">
+                  <h4 className="text-lg font-semibold text-text mb-4">
                     Contact Information
                   </h4>
                   <div className="space-y-4">
                     {/* Email */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-fresh-primary mb-2">
                         Email Address
                       </label>
                       {isEditing ? (
@@ -368,8 +368,8 @@ function RouteComponent() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                          <Mail className="h-4 w-4 text-gray-500" />
+                        <div className="flex items-center  text-gray-500   text-gray-500enter gap-2 p-3 bg-gray-200 rounded-lg">
+                          <Mail className="h-4 w-4 " />
                           <span>{store?.contact_info || 'Not provided'}</span>
                         </div>
                       )}
@@ -379,12 +379,12 @@ function RouteComponent() {
 
                 {/* Account Information */}
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800 mb-4">
+                  <h4 className="text-lg font-semibold text-text mb-4">
                     Account Information
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Shield className="h-4 w-4 text-gray-500" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-500 ">
+                    <div className="flex items-center gap-2 p-3 bg-gray-200 rounded-lg">
+                      <Shield className="h-4 w-4 " />
                       <div>
                         <span className="text-sm text-gray-600">
                           Account Type
@@ -392,8 +392,8 @@ function RouteComponent() {
                         <p className="font-medium">Store</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                      <Calendar className="h-4 w-4 text-gray-500" />
+                    <div className="flex items-cente text-gray-500r gap-2 p-3 bg-gray-200 rounded-lg">
+                      <Calendar className="h-4 w-4 " />
                       <div>
                         <span className="text-sm text-gray-600">
                           Member Since
@@ -416,13 +416,13 @@ function RouteComponent() {
         <div className="mt-8 flex flex-wrap gap-4">
           <button
             onClick={() => navigate({ to: '/store/manage-orders' })}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-500 px-6 py-3 rounded-xl font-semibold transition-colors"
           >
             Manage Orders
           </button>
           <button
             onClick={() => navigate({ to: '/store/inventories' })}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold transition-colors"
+            className="bg-gray-100 hover:bg-gray-200  text-gray-500  px-6 py-3 rounded-xl font-semibold transition-colors"
           >
             View Inventory
           </button>

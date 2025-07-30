@@ -87,7 +87,7 @@ function RouteComponent() {
             <h2 className="text-xl font-bold text-gray-900">Product Details</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-text transition-colors"
             >
               <XCircle className="h-6 w-6" />
             </button>
@@ -110,7 +110,7 @@ function RouteComponent() {
             <div className="md:w-2/3 space-y-4">
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">{product.name}</h3>
-                <p className="text-gray-600 mt-2">{product.description}</p>
+                <p className="text-text mt-2">{product.description}</p>
               </div>
 
               <div className="flex items-center gap-4">
@@ -137,12 +137,12 @@ function RouteComponent() {
               </h4>
               <div className="bg-gray-50 rounded-lg p-4 space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Price</span>
+                  <span className="text-text">Price</span>
                   <span className="font-medium text-[#00A7B3]">KSh {product.price}</span>
                 </div>
                 {product.discount > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Discount</span>
+                    <span className="text-text">Discount</span>
                     <span className="font-medium text-orange-600">{product.discount}%</span>
                   </div>
                 )}
@@ -156,11 +156,11 @@ function RouteComponent() {
               </h4>
               <div className="bg-gray-50 rounded-lg p-4 space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Stock Quantity</span>
+                  <span className="text-text">Stock Quantity</span>
                   <span className="font-medium">{product.stock_quantity}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Status</span>
+                  <span className="text-text">Status</span>
                   <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getStockStatus(product.stock_quantity).color}`}>
                     {getStockIcon(product.stock_quantity)}
                     {getStockStatus(product.stock_quantity).text}
@@ -168,7 +168,7 @@ function RouteComponent() {
                 </div>
                 {product.weight && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Weight</span>
+                    <span className="text-text">Weight</span>
                     <span className="font-medium">{product.weight} {product.unit || 'units'}</span>
                   </div>
                 )}
@@ -214,7 +214,7 @@ function RouteComponent() {
         <div className="text-center">
           <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Products</h1>
-          <p className="text-gray-600 mb-6">There was an error loading the products. Please try again.</p>
+          <p className="text-text mb-6">There was an error loading the products. Please try again.</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
@@ -232,7 +232,7 @@ function RouteComponent() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-900">Products</h1>
+            <h1 className="text-3xl font-bold text-fresh-secondary">Products</h1>
             <button
               onClick={() => navigate({ to: '/store/create-product' })}
               className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2"
@@ -262,7 +262,7 @@ function RouteComponent() {
               <select
                 value={stockFilter}
                 onChange={(e) => setStockFilter(e.target.value as string | 'all')}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
+                className="border bg-searchbar border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#00A7B3] focus:border-transparent"
               >
                 <option value="all">All Products</option>
                 <option value="in-stock">In Stock</option>
@@ -280,7 +280,7 @@ function RouteComponent() {
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               {searchQuery || stockFilter !== 'all' ? 'No Products Found' : 'No Products Yet'}
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-text mb-6">
               {searchQuery || stockFilter !== 'all'
                 ? "Try adjusting your search or filter criteria."
                 : "Add your first product to get started."
@@ -301,7 +301,7 @@ function RouteComponent() {
             {filteredProducts.map((product: ProductInStore) => (
               <div
                 key={product.product_id}
-                className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                className="bg-searchbar border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="p-6">
                   <div className="flex items-start gap-4 mb-4">
@@ -325,20 +325,20 @@ function RouteComponent() {
                     {/* Product Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold text-lg text-gray-900 truncate">{product.name}</h3>
+                        <h3 className="font-semibold text-lg text-fresh-secondary truncate">{product.name}</h3>
                         <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${getStockStatus(product.stock_quantity).color}`}>
                           {getStockIcon(product.stock_quantity)}
                           {getStockStatus(product.stock_quantity).text}
                         </span>
                       </div>
 
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+                      <p className="text-text text-sm mb-3 line-clamp-2">{product.description}</p>
 
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="flex items-center gap-2">
                           <DollarSign className="h-4 w-4 text-gray-500" />
                           <div>
-                            <p className="text-sm text-gray-600">Price</p>
+                            <p className="text-sm text-text">Price</p>
                             <p className="font-bold text-[#00A7B3]">KSh {product.price}</p>
                           </div>
                         </div>
@@ -346,7 +346,7 @@ function RouteComponent() {
                         <div className="flex items-center gap-2">
                           <Package className="h-4 w-4 text-gray-500" />
                           <div>
-                            <p className="text-sm text-gray-600">Stock</p>
+                            <p className="text-sm text-text">Stock</p>
                             <p className="font-medium">{product.stock_quantity} units</p>
                           </div>
                         </div>
@@ -354,7 +354,7 @@ function RouteComponent() {
                         <div className="flex items-center gap-2">
                           <Star className="h-4 w-4 text-gray-500" />
                           <div>
-                            <p className="text-sm text-gray-600">Rating</p>
+                            <p className="text-sm text-text">Rating</p>
                             <p className="font-medium">{product.rating || 0} ({product.review_count || 0})</p>
                           </div>
                         </div>
@@ -363,7 +363,7 @@ function RouteComponent() {
                           <div className="flex items-center gap-2">
                             <Scale className="h-4 w-4 text-gray-500" />
                             <div>
-                              <p className="text-sm text-gray-600">Weight</p>
+                              <p className="text-sm text-text">Weight</p>
                               <p className="font-medium">{product.weight} {product.unit || 'units'}</p>
                             </div>
                           </div>
