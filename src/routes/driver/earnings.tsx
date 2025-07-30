@@ -147,7 +147,7 @@ function RouteComponent() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h1 className=" flex justify-center text-3xl font-bold text-gray-800 mb-8">Your Earnings Analytics</h1>
+        <h1 className=" flex justify-center items-center lg:text-3xl text-2xl font-bold text-gray-800 mb-8">Your Earnings Analytics</h1>
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-md p-6">

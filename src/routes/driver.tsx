@@ -15,7 +15,7 @@ function DriverLayout() {
   };
 
   return (
-    <div className="flex bg-[#f4f8fa] min-h-screen">
+    <div className="flex bg-background min-h-screen">
       <Sidebar
         userType="driver"
         currentPage={currentPage}
@@ -24,7 +24,7 @@ function DriverLayout() {
         sidebarToggle={true} 
         onClose={handleSidebarClose}
       />
-      <div className="flex-1 p-4">
+      <div className="flex-1">
         <Outlet />
       </div>
     </div>

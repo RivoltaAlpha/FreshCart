@@ -57,11 +57,9 @@ function RouteComponent() {
     <div className="flex h-screen bg-gray-50">
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white shadow-sm border-b px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-800">Delivery History</h1>
-          </div>
+          <h1 className="flex justify-center items-center text-2xl font-bold text-gray-800">Delivery History</h1>
         </header>
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto lg:p-6">
           <div className="bg-white rounded-xl shadow-sm">
             <div className="p-6 space-y-4">
               {(deliveries && deliveries.length > 0) ? (
