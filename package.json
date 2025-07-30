@@ -37,6 +37,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.0.1",
+    "framer-motion": "^12.23.11",
     "jwt-decode": "^4.0.0",
     "kenya-locations": "^0.1.8",
     "leaflet": "^1.9.4",
