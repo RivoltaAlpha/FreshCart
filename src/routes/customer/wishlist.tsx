@@ -4,7 +4,6 @@ import {
   Heart,
   Trash2,
   ArrowLeft,
-  Star,
   Package,
   Plus
 } from 'lucide-react'
@@ -25,7 +24,7 @@ interface WishlistItem {
   discount?: number
   unit?: string
   weight?: number
-  category?: string
+  category?: string | { name: string; id: number }
   description?: string
 }
 
@@ -105,7 +104,7 @@ function RouteComponent() {
         updated_at: new Date().toISOString(),
         category: {
           category_id: 0,
-          name: item.category || 'General',
+          name: item.category ? (typeof item.category === 'string' ? item.category : item.category.name) : '',
           description: '',
           image_url: '',
           created_at: new Date().toISOString()
@@ -130,7 +129,7 @@ function RouteComponent() {
 
   const formatPrice = (price: string | number) => {
     const numPrice = typeof price === 'string' ? parseFloat(price) : price
-    return numPrice.toFixed(2)
+    return numPrice
   }
 
   const getDiscountedPrice = (price: string | number, discount: number = 0) => {
@@ -160,13 +159,13 @@ function RouteComponent() {
             </button>
             <div className="flex items-center gap-3">
               <Heart className="h-8 w-8 text-red-500" />
-              <h1 className="text-3xl font-bold text-gray-900">My Wishlist</h1>
+              <h1 className="text-3xl font-bold text-text">My Wishlist</h1>
             </div>
           </div>
 
           {wishlistItems.length > 0 && (
             <div className="flex items-center justify-between">
-              <p className="text-gray-600">
+              <p className="text-fresh-primary">
                 {wishlistItems.length} item{wishlistItems.length !== 1 ? 's' : ''} in your wishlist
               </p>
               <button
@@ -183,8 +182,8 @@ function RouteComponent() {
         {wishlistItems.length === 0 ? (
           <div className="text-center py-16">
             <Heart className="h-24 w-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Your Wishlist is Empty</h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+            <h2 className="text-2xl font-semibold text-text mb-4">Your Wishlist is Empty</h2>
+            <p className="text-fresh-primary mb-8 max-w-md mx-auto">
               Save items you love for later. Browse our products and add them to your wishlist!
             </p>
             <button
@@ -200,7 +199,7 @@ function RouteComponent() {
             {wishlistItems.map((item, index) => (
               <div
                 key={`wishlist-${item.product_id}-${index}`}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                className="bg-searchbar rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
               >
                 {/* Product Image */}
                 <div className="relative overflow-hidden">
@@ -209,11 +208,6 @@ function RouteComponent() {
                     alt={item.name}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  {item.discount && item.discount > 0 && (
-                    <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-semibold">
-                      -{item.discount}%
-                    </div>
-                  )}
                   <button
                     onClick={() => removeFromWishlist(item.product_id)}
                     className="absolute top-3 right-3 bg-white/90 hover:bg-white text-red-500 p-2 rounded-full shadow-md transition-colors"
@@ -225,26 +219,22 @@ function RouteComponent() {
 
                 {/* Product Info */}
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                  <h3 className="font-semibold text-fresh-secondary mb-2 line-clamp-2">
                     {item.name}
                   </h3>
-
-                  {item.category && (
-                    <p className="text-sm text-gray-500 mb-2">{item.category}</p>
+                  {item.description && (
+                    <p className="text-sm text-text mb-2">{item.description}</p>
                   )}
-
-                  {/* Rating */}
-                  {item.rating && (
-                    <div className="flex items-center gap-1 mb-2">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm text-gray-600">
-                        {typeof item.rating === 'string' ? parseFloat(item.rating).toFixed(1) : item.rating.toFixed(1)}
-                      </span>
-                    </div>
+                  {item.category && (
+                    <p className="text-sm mb-2">
+                      {typeof item.category === 'string'
+                        ? item.category
+                        : item.category?.name}
+                    </p>
                   )}
 
                   {/* Price */}
-                  <div className="flex items-center gap-2 mb-4">
+                  <div className="my-4 flex items-center gap-2">
                     {item.discount && item.discount > 0 ? (
                       <>
                         <span className="text-lg font-bold text-[#00A7B3]">
@@ -259,12 +249,12 @@ function RouteComponent() {
                         KSh {formatPrice(item.price)}
                       </span>
                     )}
-                  </div>
 
-                  {/* Unit info */}
-                  {item.unit && (
-                    <p className="text-sm text-gray-500 mb-3">{item.unit}</p>
-                  )}
+                    {/* Unit info */}
+                    {item.unit && (
+                      <p className=" text-fresh-secondary mb-3">{item.unit}</p>
+                    )}
+                  </div>
 
                   {/* Add to Cart Button */}
                   <button

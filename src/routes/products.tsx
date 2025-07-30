@@ -3,7 +3,7 @@ import { Star, Search, Filter, ShoppingCart, Eye, Heart, TrendingUp } from 'luci
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useProducts } from '@/hooks/useProducts';
 import Categories from '@/components/categories';
-import type { BackendProduct } from '@/types/types';
+import type { BackendProduct, Product } from '@/types/types';
 import { sampleProducts } from '@/data/sample-products';
 import Header from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -64,10 +64,9 @@ function RouteComponent() {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // Handle category filtering - support both ID and name based filtering
+    // Handle category filtering 
     let matchesCategory = selectedCategory === 'All';
     if (!matchesCategory) {
-      // If we have a selectedCategoryId, filter by ID, otherwise by name
       if (selectedCategoryId !== null) {
         matchesCategory = product.category?.category_id === selectedCategoryId;
       } else {
@@ -84,6 +83,22 @@ function RouteComponent() {
     setSelectedCategory(categoryName === 'All Categories' ? 'All' : categoryName);
   };
 
+  // add to wishlist on localStorage
+  const addToWishlist = (product: Product) => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    wishlist.push(product);
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    toast.success(`${product.name} added to favourites!`);
+  };
+
+  //fetch favorites from localStorage
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('favourites');
+    if (savedFavorites) {
+      setFavorites(new Set(JSON.parse(savedFavorites)));
+    }
+  }, []);
+
   // Toggle favorite
   const toggleFavorite = (productId: number) => {
     setFavorites(prev => {
@@ -93,6 +108,7 @@ function RouteComponent() {
       } else {
         newFavorites.add(productId);
       }
+      localStorage.setItem('favourites', JSON.stringify(Array.from(newFavorites)));
       return newFavorites;
     });
   };
@@ -283,32 +299,32 @@ function RouteComponent() {
               </motion.div>
 
 
-                <div className="bg-background backdrop-blur-sm p-6 rounded-3xl shadow-2xl mb-8 hover:shadow-2xl transition-all duration-300">
-                  <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex-1 relative group">
-                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-fresh-primary transition-colors" />
-                      <input
-                        type="text"
-                        placeholder="Search products..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-12 pr-4 py-4 border-2 border-fresh-error rounded-2xl focus:ring-4 focus:ring-fresh-primary/20 focus:border-fresh-primary bg-searchbar text-foreground transition-all duration-300 hover:shadow-md"
-                      />
-                    </div>
-                    <div className="flex items-center gap-3 bg-searchbar rounded-2xl px-4 py-2 border border-fresh-error">
-                      <Filter className="text-fresh-primary h-5 w-5" />
-                      <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="px-4 py-2 border-none bg-transparent focus:ring-2 focus:ring-fresh-primary rounded-xl text-foreground cursor-pointer"
-                      >
-                        {categories.map(category => (
-                          <option key={category} value={category}>{category}</option>
-                        ))}
-                      </select>
-                    </div>
+              <div className="bg-background backdrop-blur-sm p-6 rounded-3xl shadow-2xl mb-8 hover:shadow-2xl transition-all duration-300">
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1 relative group">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-fresh-primary transition-colors" />
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-12 pr-4 py-4 border-2 border-fresh-error rounded-2xl focus:ring-4 focus:ring-fresh-primary/20 focus:border-fresh-primary bg-searchbar text-foreground transition-all duration-300 hover:shadow-md"
+                    />
+                  </div>
+                  <div className="flex items-center gap-3 bg-searchbar rounded-2xl px-4 py-2 border border-fresh-error">
+                    <Filter className="text-fresh-primary h-5 w-5" />
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="px-4 py-2 border-none bg-transparent focus:ring-2 focus:ring-fresh-primary rounded-xl text-foreground cursor-pointer"
+                    >
+                      {categories.map(category => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
+              </div>
 
               {/* Enhanced Products Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
@@ -339,19 +355,6 @@ function RouteComponent() {
                           >
                             <Eye size={18} />
                           </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleFavorite(product.product_id);
-                            }}
-                            className={`p-2.5 backdrop-blur-sm rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${favorites.has(product.product_id)
-                              ? 'bg-red-500 text-white'
-                              : 'bg-white/90  text-fresh-secondary hover:bg-red-500 hover:text-white'
-                              }`}
-                          >
-                            <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''}
-                            />
-                          </button>
                         </div>
 
                         {/* Discount Badge */}
@@ -377,7 +380,7 @@ function RouteComponent() {
                         <div className="absolute inset-0 bg-gradient-to-t from-fresh-primary/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
                           <button
                             onClick={() => handleProductClick(product)}
-                            className="bg-card text-fresh-primary px-6 py-2.5 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-searchbar hover:text-white shadow-lg"
+                            className="bg-card text-fresh-primary px-6 py-2.5 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-searchbar hover:text-text shadow-lg"
                           >
                             Quick View
                           </button>
@@ -421,14 +424,30 @@ function RouteComponent() {
                         </div>
 
                         {/* Action Button */}
-                        <button
-                          onClick={() => handleShopProduct(product)}
-                          disabled={product.stock_quantity === 0}
-                          className="w-full bg-gradient-to-r from-fresh-primary to-fresh-secondary hover:from-fresh-secondary hover:to-fresh-primary text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 shadow-lg hover:shadow-xl"
-                        >
-                          <ShoppingCart size={18} />
-                          {product.stock_quantity === 0 ? 'Out of Stock' : 'Shop Now'}
-                        </button>
+                        <div className="mt-4 flex items-center justify-between gap-4">
+                          <button
+                            onClick={() => handleShopProduct(product)}
+                            disabled={product.stock_quantity === 0}
+                            className="w-full bg-gradient-to-r from-fresh-primary to-fresh-secondary hover:from-fresh-secondary hover:to-fresh-primary text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 shadow-lg hover:shadow-xl"
+                          >
+                            <ShoppingCart size={18} />
+                            {product.stock_quantity === 0 ? 'Out of Stock' : 'Shop Now'}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(product.product_id);
+                              addToWishlist(product);
+                            }}
+                            className={`p-2.5 backdrop-blur-sm rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${favorites.has(product.product_id)
+                              ? 'bg-red-500 text-white'
+                              : 'bg-white/90  text-fresh-secondary hover:bg-red-500 hover:text-white'
+                              }`}
+                          >
+                            <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''}
+                            />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))

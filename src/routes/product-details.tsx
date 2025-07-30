@@ -45,7 +45,7 @@ function RouteComponent() {
   const search = useSearch({ from: '/product-details' })
   const [quantity, setQuantity] = useState(1)
   const [selectedTab, setSelectedTab] = useState('description')
-  // const store_id = storesStore.state.store_id
+  const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
   // Fetch category products for related products
   const {
@@ -87,16 +87,16 @@ function RouteComponent() {
     navigate({ to: '/products' })
   }
 
-    // navigation to store with product
-    const handleShopProduct = async (product: any) => {
-      try {
-        const store = await getStoreHavingProduct(product.product_id)  
-        storeActions.saveStore(store);
-        navigate({ to: '/shop-store' });
-      } catch (err) {
-        toast.error('Could not find store for this product.');
-      }
-    };
+  // navigation to store with product
+  const handleShopProduct = async (product: any) => {
+    try {
+      const store = await getStoreHavingProduct(product.product_id)
+      storeActions.saveStore(store);
+      navigate({ to: '/shop-store' });
+    } catch (err) {
+      toast.error('Could not find store for this product.');
+    }
+  };
 
   // Get related products from the same category
   const relatedProducts = useMemo(() => {
@@ -126,6 +126,28 @@ function RouteComponent() {
       },
     })
   }
+
+  // add to wishlist on localStorage
+  const addToWishlist = (product: Product) => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    wishlist.push(product);
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    toast.success(`${product.name} added to wishlist!`);
+  };
+
+  // Toggle favorite
+  const toggleFavorite = (productId: number) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(productId)) {
+        newFavorites.delete(productId);
+      } else {
+        newFavorites.add(productId);
+      }
+      localStorage.setItem('favourites', JSON.stringify(Array.from(newFavorites)));
+      return newFavorites;
+    });
+  };
 
   const handleAddRelatedToCart = (relatedProduct: Product, e: React.MouseEvent) => {
     e.stopPropagation() // Prevent navigation when clicking add to cart
@@ -276,7 +298,7 @@ function RouteComponent() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4">
+                <div className="mt-4 flex items-center justify-between gap-4">
                   <button
                     onClick={handleAddToCart}
                     disabled={product.stock_quantity === 0}
@@ -285,8 +307,19 @@ function RouteComponent() {
                     <ShoppingCart className="w-5 h-5" />
                     Add to Cart
                   </button>
-                  <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-                    <Heart className="w-5 h-5 text-[#05445E]" />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(product.product_id);
+                      addToWishlist(product);
+                    }}
+                    className={`p-2.5 backdrop-blur-sm rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${favorites.has(product.product_id)
+                      ? 'bg-red-500 text-white'
+                      : 'bg-white/90  text-fresh-secondary hover:bg-red-500 hover:text-white'
+                      }`}
+                  >
+                    <Heart size={18} className={favorites.has(product.product_id) ? 'fill-current' : ''}
+                    />
                   </button>
                 </div>
               </div>
