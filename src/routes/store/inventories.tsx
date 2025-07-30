@@ -351,8 +351,8 @@ function RouteComponent() {
                   className="bg-searchbar border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center justify-between mb-4">
+                      <div className="flex items-center my-2 justify-center gap-4">
                         <h3 className="font-semibold text-lg">Inventory #{inventory.inventory_id}</h3>
                         <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${stockStatus.color}`}>
                           {stockStatus.icon}

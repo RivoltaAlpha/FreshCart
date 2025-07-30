@@ -2,7 +2,7 @@ import OrdersLineChart from '@/components/ordersChart'
 import { useStoreOrders } from '@/hooks/useOrders'
 import { useStoreProducts } from '@/hooks/useProducts'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Package, ShoppingCart, TrendingUp, DollarSign, AlertCircle, ClipboardCheckIcon, Settings, Plus} from 'lucide-react'
+import { Package, ShoppingCart, TrendingUp, DollarSign, AlertCircle, ClipboardCheckIcon, Settings, Plus } from 'lucide-react'
 
 export const Route = createFileRoute('/store/dashboard')({
   component: RouteComponent,
@@ -23,10 +23,10 @@ function RouteComponent() {
 
   return (
     <div className="flex h-screen rounded-2xl">
-      <div className="flex-1 flex flex-col overflow-hidden ">
+      <div className="flex-1 flex flex-col  ">
         {/* Quick Actions */}
-        <div className="rounded-xl bg-card shadow-sm">
-          <div className="px-6 py-4 border-b">
+        <div className="rounded-xl my-2 bg-card shadow-sm">
+          <div className="px-4 py-4 border-b">
             <h2 className="text-xl font-semibold text-fresh-primary">Quick Actions</h2>
           </div>
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -60,12 +60,12 @@ function RouteComponent() {
             </Link >
           </div>
         </div>
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 lg:p-6">
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {stats.map((stat, index) => (
               <div key={index} className={`bg-[${stat.color}] rounded-xl p-6 text-white`}>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
                   <div>
                     <p className="text-white/80 text-sm">{stat.title}</p>
                     <p className="text-3xl font-bold">{stat.value}</p>
@@ -76,7 +76,11 @@ function RouteComponent() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-1 gap-8">
+          <div>
+            <OrdersLineChart orders={ordersData.data} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
             {/* Recent Orders */}
             <div className="bg-background rounded-xl shadow-sm">
               <div className="px-6 py-4 border-b flex items-center justify-between">
@@ -93,9 +97,9 @@ function RouteComponent() {
                       <div className="flex items-center space-x-2 mb-1">
                         <h3 className="font-semibold text-fresh-primary">#{order.order_number}</h3>
                         <span className={`px-2 py-1 text-xs text-text font-medium rounded-full ${order.status === 'pending' ? 'bg-blue-200 text-yellow-800' :
-                            order.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
-                              order.status === 'ready' ? 'bg-green-100 text-green-800' :
-                                'bg-blue-900 text-white'
+                          order.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
+                            order.status === 'ready' ? 'bg-green-100 text-green-800' :
+                              'bg-blue-900 text-white'
                           }`}>
                           {order.status.toUpperCase()}
                         </span>
@@ -116,12 +120,6 @@ function RouteComponent() {
                 ))}
               </div>
             </div>
-
-            {/* Orders Chart */}
-            <div>
-              <OrdersLineChart orders={ordersData.data} />
-            </div>
-
           </div>
 
         </main>

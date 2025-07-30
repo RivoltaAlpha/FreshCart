@@ -321,7 +321,7 @@ function RouteComponent() {
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-4">
                       <h3 className="font-semibold text-lg">Order #{order.order_number || order.order_id}</h3>
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(order.status || 'pending')}`}>
                         {getStatusIcon(order.status || 'pending')}

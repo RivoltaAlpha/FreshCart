@@ -303,8 +303,8 @@ function RouteComponent() {
                 key={product.product_id}
                 className="bg-searchbar border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="p-6">
-                  <div className="flex items-start gap-4 mb-4">
+                <div className="lg:p-6 p-2">
+                  <div className="flex lg:flex-row flex-col items-start gap-4 mb-4">
                     {/* Product Image */}
                     <div className="relative w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                       <img

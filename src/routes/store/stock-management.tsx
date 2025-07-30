@@ -123,6 +123,56 @@ function RouteComponent() {
             {errorMsg}
           </div>
         )}
+        {/* Summary Cards */}
+        {inventory && inventory.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-green-600 text-lg">📦</span>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium">Total Products</p>
+                  <p className="text-2xl font-bold text-[#05445E]">{inventory.length}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <span className="text-yellow-600 text-lg">⚠️</span>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium">Low Stock Items</p>
+                  <p className="text-2xl font-bold text-yellow-600">
+                    {inventory.filter(inv => inv.stock_qty <= (inv.reorder_level || 10) && inv.stock_qty > 0).length}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                    <span className="text-red-600 text-lg">🚫</span>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium">Out of Stock</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {inventory.filter(inv => inv.stock_qty === 0).length}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stock Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -139,7 +189,7 @@ function RouteComponent() {
                       <h3 className="text-lg font-semibold text-text mb-1">
                         Inventory #{inv.inventory_id}
                       </h3>
-                      <p className="text-sm text-text">
+                      <p className="text-sm mt-6 text-text">
                         {inv.products && inv.products.length > 0
                           ? inv.products.map(p => p.name).join(', ')
                           : 'No Products'
@@ -248,57 +298,6 @@ function RouteComponent() {
             </div>
           )}
         </div>
-
-        {/* Summary Cards */}
-        {inventory && inventory.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-green-600 text-lg">📦</span>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium">Total Products</p>
-                  <p className="text-2xl font-bold text-[#05445E]">{inventory.length}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <span className="text-yellow-600 text-lg">⚠️</span>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium">Low Stock Items</p>
-                  <p className="text-2xl font-bold text-yellow-600">
-                    {inventory.filter(inv => inv.stock_qty <= (inv.reorder_level || 10) && inv.stock_qty > 0).length}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-searchbar text-text rounded-xl shadow-md p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                    <span className="text-red-600 text-lg">🚫</span>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium">Out of Stock</p>
-                  <p className="text-2xl font-bold text-red-600">
-                    {inventory.filter(inv => inv.stock_qty === 0).length}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )

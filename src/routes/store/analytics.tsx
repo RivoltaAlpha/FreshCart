@@ -13,14 +13,9 @@ function RouteComponent() {
   const ordersData = useStoreOrders(storeId);
   return (
     <>
-      {/* Orders Chart */}
-      <div className="p-6">
+      <div>
         <OrdersLineChart orders={ordersData.data} />
       </div>
-      {/* Revenue Chart */}
-      {/* <div className="p-6">
-        <RevenueChart revenue={revenueData} />
-      </div> */}
     </>
   );
 }
