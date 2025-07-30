@@ -68,7 +68,7 @@ function RouteComponent() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Dashboard Content */}
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto">
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-4 gap-6 mb-8">
             {quickStats.map((stat, index) => (
@@ -87,7 +87,6 @@ function RouteComponent() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 ">
             {/* Main Content Area */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Recent Orders */}
               <div className="bg-searchbar text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b flex items-center justify-between">
                   <h2 className="text-xl text-text font-semibold ">Recent Orders</h2>
@@ -108,7 +107,7 @@ function RouteComponent() {
                     ];
                     const currentStep = statusSteps.indexOf(order.status);
                     return (
-                      <div key={order.order_id} className="flex flex-col text-text gap-2 p-4  bg-searchbar border-gray-200 rounded-lg">
+                      <div key={order.order_id} className="flex flex-col text-text gap-2 p-4 bg-searchbar border-gray-200 rounded-lg">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
                             <div className="bg-blue-100 p-2 rounded-lg">
@@ -128,7 +127,7 @@ function RouteComponent() {
                           </div>
                         </div>
                         {/* Order Progress Circles */}
-                        <div className="flex items-center justify-center mt-2 border-b pb-2">
+                        <div className="flex flex-wrap items-center justify-center mt-2 border-b pb-2">
                           {statusSteps.map((step, idx) => {
                             const isDelivered = order.status === 'delivered';
                             const isCompleted = idx < currentStep || (isDelivered && idx === statusSteps.length - 1);

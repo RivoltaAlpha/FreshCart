@@ -340,7 +340,7 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen bg-background py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
@@ -423,7 +423,7 @@ function RouteComponent() {
                       key={order.order_id}
                       className="bg-searchbar border border-searchbar rounded-xl shadow-sm hover:shadow-md transition-shadow"
                     >
-                      <div className="p-6">
+                      <div className="p-4">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-4">
                             <h3 className="font-semibold text-fresh-primary text-lg">Order #{order.order_number}</h3>
