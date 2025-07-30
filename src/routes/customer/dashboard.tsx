@@ -64,7 +64,7 @@ function RouteComponent() {
 
 
   return (
-    <div id="dashboard" className="flex h-screen">
+    <div id="dashboard" className="flex h-screen text-text">
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Dashboard Content */}
@@ -84,13 +84,13 @@ function RouteComponent() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 ">
             {/* Main Content Area */}
             <div className="lg:col-span-2 space-y-8">
               {/* Recent Orders */}
-              <div className="bg-card text-fresh-secondary rounded-xl shadow-sm">
+              <div className="bg-searchbar text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b flex items-center justify-between">
-                  <h2 className="text-xl font-semibold ">Recent Orders</h2>
+                  <h2 className="text-xl text-text font-semibold ">Recent Orders</h2>
                   <button className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                     onClick={() => navigate({ to: '/customer/my-orders' })}
                   >
@@ -108,7 +108,7 @@ function RouteComponent() {
                     ];
                     const currentStep = statusSteps.indexOf(order.status);
                     return (
-                      <div key={order.order_id} className="flex flex-col gap-2 p-4 border bg-minicard border-gray-200 rounded-lg">
+                      <div key={order.order_id} className="flex flex-col text-text gap-2 p-4  bg-searchbar border-gray-200 rounded-lg">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
                             <div className="bg-blue-100 p-2 rounded-lg">
@@ -121,14 +121,14 @@ function RouteComponent() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-gray-900">{order.total_amount}</p>
+                            <p className="font-bold ">{order.total_amount}</p>
                             <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                               {order.status.toUpperCase()}
                             </span>
                           </div>
                         </div>
                         {/* Order Progress Circles */}
-                        <div className="flex items-center justify-center mt-2">
+                        <div className="flex items-center justify-center mt-2 border-b pb-2">
                           {statusSteps.map((step, idx) => {
                             const isDelivered = order.status === 'delivered';
                             const isCompleted = idx < currentStep || (isDelivered && idx === statusSteps.length - 1);
@@ -137,13 +137,13 @@ function RouteComponent() {
                             const circleStyle = isCurrent
                               ? { backgroundColor: '#41729F', borderColor: '#41729F', color: 'white', boxShadow: '0 0 6px #41729F' }
                               : isCompleted
-                                ? { backgroundColor: '#274472', borderColor: '#274472', color: 'white' }
+                                ? { backgroundColor: '#274472', borderColor: '', color: 'white' }
                                 : { backgroundColor: '#EAF0F6', borderColor: '#5885AF', color: '#5885AF' };
                             const labelStyle = isCurrent
-                              ? { color: '#41729F', fontWeight: 600 }
+                              ? { color: 'text', fontWeight: 600 }
                               : isCompleted
-                                ? { color: '#274472' }
-                                : { color: '#5885AF' };
+                                ? { color: 'text' }
+                                : { color: 'text' };
                             // Connector color
                             const connectorColor = isCompleted ? '#274472' : isCurrent ? '#41729F' : '#5885AF';
                             return (
@@ -180,7 +180,7 @@ function RouteComponent() {
             <div className="space-y-6">
 
               {/* Current Cart */}
-              <div className="bg-minicard text-fresh-secondary rounded-xl shadow-sm">
+              <div className="bg-searchbar text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b">
                   <h2 className="text-lg font-semibold ">Current Cart</h2>
                 </div>
@@ -238,7 +238,7 @@ function RouteComponent() {
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-minicard text-fresh-secondary rounded-xl shadow-sm">
+              <div className="bg-searchbar text-fresh-secondary rounded-xl shadow-sm">
                 <div className="px-6 py-4 border-b">
                   <h2 className="text-lg font-semibold ">Quick Actions</h2>
                 </div>

@@ -287,7 +287,7 @@ function RouteComponent() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen text-text bg-background py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <ShoppingCart className="h-24 w-24 text-fresh-secondary mx-auto mb-6" />
@@ -459,7 +459,7 @@ function RouteComponent() {
                               <span className="text-2xl font-bold text-fresh-primary">
                                 KSh {Number(item.product.price).toFixed(2)}
                               </span>
-                              <span className="text-sm text-fresh-secondary ml-1">{item.product.unit}</span>
+                              <span className="text-sm text-fresh-primary ml-1">{item.product.unit}</span>
                             </div>
                           </div>
                         </div>
@@ -469,7 +469,7 @@ function RouteComponent() {
                           <div className="flex items-center gap-3">
                             <button
                               onClick={() => updateQuantity(item.product.product_id, item.quantity - 1)}
-                              className="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+                              className="w-8 h-8 bg-gray-200 text-fresh-secondary hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
                             >
                               <Minus className="h-4 w-4" />
                             </button>
@@ -496,7 +496,7 @@ function RouteComponent() {
                       {/* Item Total */}
                       <div className="mt-4 pt-4 border-t border-gray-200">
                         <div className="flex justify-between items-center">
-                          <span className="text-fresh-secondary">Subtotal:</span>
+                          <span className="text-fresh-primary">Subtotal:</span>
                           <span className="text-xl font-bold text-fresh-primary">
                             KSh {(Number(item.product.price) * item.quantity).toFixed(2)}
                           </span>

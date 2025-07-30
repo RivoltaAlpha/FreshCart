@@ -290,7 +290,7 @@ function RouteComponent() {
         </div>
 
         {/* Recent Purchases Section */}
-        <div className="bg-card rounded-xl shadow-sm p-6 mb-8">
+        <div className="bg-searchbar rounded-xl shadow-sm p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">
             Your Recent Purchases
           </h2>
@@ -309,7 +309,7 @@ function RouteComponent() {
 
         {/* Loading State */}
         {loading && (
-          <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+          <div className="bg-searchbar rounded-xl shadow-sm p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00A7B3] mx-auto mb-4"></div>
             <p className="">Generating AI recommendations...</p>
             <p className="text-sm text-gray-500 mt-2">Please wait, this may take a moment due to rate limiting.</p>
@@ -351,7 +351,7 @@ function RouteComponent() {
         {aiRecommendations && !loading && (
           <div className="space-y-8">
             {/* Recipe Recommendations */}
-            <div className="bg-card rounded-xl shadow-sm p-6">
+            <div className="bg-searchbar rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold">
                   Recipe Recommendations
@@ -426,7 +426,7 @@ function RouteComponent() {
             </div>
 
             {/* Product Recommendations */}
-            <div className="bg-card rounded-xl shadow-sm p-6">
+            <div className="bg-searchbar rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-6">
                 Product Recommendations
               </h2>

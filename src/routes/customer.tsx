@@ -29,11 +29,11 @@ function CustomerLayout() {
         onClose={handleSidebarClose}
       />
       <div className="flex-1 p-4 flex flex-col overflow-hidden">
-        <header className="bg-background shadow-2xl border px-6 py-4 rounded-2xl">
+        <header className="bg-searchbar border-b shadow-2xl px-6 py-4 rounded-2xl">
           <div className="lg:flex-row flex flex-col items-center justify-between">
-            <div className="flex-col items-center space-x-4">
-              <h1 className="text-2xl font-bold text-fresh-primary">Welcome back, {authUser?.profile.first_name}!</h1>
-              <p className="text-fresh-secondary">Discover fresh groceries and great deals</p>
+            <div className="flex-col items-center text-text space-x-4">
+              <h1 className="text-2xl font-bold ">Welcome back, {authUser?.profile.first_name}!</h1>
+              <p className="mb-4">Discover fresh groceries and great deals</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative">

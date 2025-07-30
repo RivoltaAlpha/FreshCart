@@ -19,7 +19,7 @@ function StoreLayout() {
   };
 
   return (
-    <div className="flex bg-[#f4f8fa] min-h-screen">
+    <div className="flex bg-background min-h-screen">
       <Sidebar
         userType="store"
         currentPage={currentPage}

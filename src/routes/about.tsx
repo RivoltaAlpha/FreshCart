@@ -141,8 +141,8 @@ function RouteComponent() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-card rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
-                <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">JI</span>
+                <div className="rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <img src="https://m.media-amazon.com/images/M/MV5BMWY3MjI3ZjQtOWUzOS00Njg4LWFjMWMtYWY1ODVjMjg3MWJjXkEyXkFqcGc@._V1_.jpg" alt="Customer" className="rounded-full w-24 h-24  object-cover mr-4" />
                 </div>
                 <h3 className="text-xl font-bold  mb-2">John Ihugo</h3>
                 <p className="text-fresh-secondary font-semibold mb-3">CEO & Founder</p>
@@ -152,8 +152,8 @@ function RouteComponent() {
               </div>
 
               <div className="bg-card rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
-                <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">VO</span>
+                <div className="rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <img src="https://ichef.bbci.co.uk/images/ic/1920x1080/p074mmrq.jpg" alt="Customer" className="rounded-full w-24 h-24  object-cover mr-4" />
                 </div>
                 <h3 className="text-xl font-bold  mb-2">Valarie Okumu</h3>
                 <p className="text-fresh-secondary font-semibold mb-3">Head of Operations</p>
@@ -163,8 +163,8 @@ function RouteComponent() {
               </div>
 
               <div className="bg-card rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
-                <div className="w-24 h-24 bg-gradient-to-br from-[#005A61] to-[#00A7B3] rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">TN</span>
+                <div className="rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <img src="https://www.themoviedb.org/t/p/original/nmlXYem6k3aaN15FKDYnROY46nA.jpg" alt="Customer" className="rounded-full w-24 h-24  object-cover mr-4" />
                 </div>
                 <h3 className="text-xl font-bold  mb-2">Mwaniki Tifany</h3>
                 <p className="text-fresh-secondary font-semibold mb-3">Tech Lead</p>
@@ -176,7 +176,7 @@ function RouteComponent() {
           </div>
 
           {/* Mission Section */}
-          <div className="bg-card rounded-3xl p-8 md:p-12 text-white text-center">
+          <div className="bg-card rounded-3xl p-8 md:p-12 text-text text-center">
             <h2 className="text-4xl font-bold mb-6">Our Mission</h2>
             <p className="text-xl leading-relaxed max-w-4xl mx-auto">
               To create a sustainable ecosystem where fresh, nutritious food is accessible to all,

@@ -154,13 +154,13 @@ function RouteComponent() {
 
   const OrderDetailModal = ({ order, onClose }: { order: CustomerOrder, onClose: () => void }) => (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-searchbar text-text rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-900">Order Details</h2>
+            <h2 className="text-xl font-bold text-fresh-secondary">Order Details</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-text transition-colors"
             >
               <XCircle className="h-6 w-6" />
             </button>
@@ -169,25 +169,25 @@ function RouteComponent() {
 
         <div className="p-6 space-y-6">
           {/* Order Header */}
-          <div className="bg-gray-50 rounded-xl p-4">
+          <div className="bg-searchbar rounded-xl p-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-600">Order Number</p>
+                <p className="text-sm text-text">Order Number</p>
                 <p className="font-semibold">{order.order_number}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Status</p>
+                <p className="text-sm text-text">Status</p>
                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(order.status)}`}>
                   {getStatusIcon(order.status)}
                   {order.status}
                 </span>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Total Amount</p>
+                <p className="text-sm text-text">Total Amount</p>
                 <p className="font-semibold text-[#00A7B3]">KSh {parseFloat(order.total_amount).toFixed(2)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Order Date</p>
+                <p className="text-sm text-text">Order Date</p>
                 <p className="font-semibold">{formatDate(order.created_at)}</p>
               </div>
             </div>
@@ -201,7 +201,7 @@ function RouteComponent() {
             </h3>
             <div className="space-y-1">
               <p className="font-medium">{order.store.name}</p>
-              <p className="text-sm text-gray-600">{order.store.contact_info}</p>
+              <p className="text-sm text-text">{order.store.contact_info}</p>
             </div>
           </div>
 
@@ -227,11 +227,11 @@ function RouteComponent() {
                 <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
                   <div>
                     <p className="font-medium">{item.product?.name || `Product #${item.product_id}`}</p>
-                    <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                    <p className="text-sm text-text">Quantity: {item.quantity}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-medium">KSh {parseFloat(item.total_price).toFixed(2)}</p>
-                    <p className="text-sm text-gray-600">@ KSh {parseFloat(item.unit_price).toFixed(2)} each</p>
+                    <p className="text-sm text-text">@ KSh {parseFloat(item.unit_price).toFixed(2)} each</p>
                   </div>
                 </div>
               )) || (
@@ -296,7 +296,7 @@ function RouteComponent() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Please Login</h1>
-          <p className="text-gray-600 mb-6">You need to be logged in to view your orders.</p>
+          <p className="text-text mb-6">You need to be logged in to view your orders.</p>
           <button
             onClick={() => navigate({ to: '/login' })}
             className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
@@ -326,7 +326,7 @@ function RouteComponent() {
         <div className="text-center">
           <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Orders</h1>
-          <p className="text-gray-600 mb-6">There was an error loading your orders. Please try again.</p>
+          <p className="text-text mb-6">There was an error loading your orders. Please try again.</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-[#00A7B3] hover:bg-[#00A7B3]/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
@@ -350,14 +350,14 @@ function RouteComponent() {
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h1 className="text-3xl font-bold text-gray-900">My Orders</h1>
+            <h1 className="text-3xl font-bold text-text">My Orders</h1>
           </div>
 
           {/* Filter */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Filter by status:</span>
+              <span className="text-sm font-medium text-text">Filter by status:</span>
             </div>
             <select
               value={statusFilter}
@@ -391,7 +391,7 @@ function RouteComponent() {
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   {statusFilter === 'all' ? 'No Orders Yet' : `No ${statusFilter} Orders`}
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-text mb-6">
                   {statusFilter === 'all'
                     ? "You haven't placed any orders yet. Start shopping to see your orders here!"
                     : `You don't have any ${statusFilter.toLowerCase()} orders.`
@@ -421,12 +421,12 @@ function RouteComponent() {
                   return (
                     <div
                       key={order.order_id}
-                      className="bg-card border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                      className="bg-searchbar border border-searchbar rounded-xl shadow-sm hover:shadow-md transition-shadow"
                     >
                       <div className="p-6">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-4">
-                            <h3 className="font-semibold text-lg">Order #{order.order_number}</h3>
+                            <h3 className="font-semibold text-fresh-primary text-lg">Order #{order.order_number}</h3>
                             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(order.status)}`}>
                               {getStatusIcon(order.status)}
                               {order.status}
@@ -445,37 +445,37 @@ function RouteComponent() {
                           <div className="flex items-center gap-2">
                             <ShoppingBag className="h-4 w-4 text-gray-500" />
                             <div>
-                              <p className="text-sm text-gray-600">Store</p>
-                              <p className="font-medium">{order.store.name}</p>
+                              <p className="text-sm text-text">Store</p>
+                              <p className="font-medium text-fresh-secondary">{order.store.name}</p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2">
                             <CreditCard className="h-4 w-4 text-gray-500" />
                             <div>
-                              <p className="text-sm text-gray-600">Total</p>
-                              <p className="font-medium text-[#00A7B3]">KSh {parseFloat(order.total_amount).toFixed(2)}</p>
+                              <p className="text-sm text-text">Total</p>
+                              <p className="font-medium text-fresh-secondary">KSh {parseFloat(order.total_amount).toFixed(2)}</p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-gray-500" />
                             <div>
-                              <p className="text-sm text-gray-600">Order Date</p>
-                              <p className="font-medium">{formatDate(order.created_at)}</p>
+                              <p className="text-sm text-text">Order Date</p>
+                              <p className="font-medium text-fresh-secondary">{formatDate(order.created_at)}</p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2">
                             <Package className="h-4 w-4 text-gray-500" />
                             <div>
-                              <p className="text-sm text-gray-600">Items</p>
-                              <p className="font-medium">{order.items?.length || 0} item(s)</p>
+                              <p className="text-sm text-text">Items</p>
+                              <p className="font-medium text-fresh-secondary">{order.items?.length || 0} item(s)</p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
+                        <div className="flex items-center justify-between gap-2 text-sm text-text">
                           <div className="flex items-center gap-2">
                             <MapPin className="h-4 w-4" />
                             <span>{order.delivery_address}</span>
@@ -511,10 +511,10 @@ function RouteComponent() {
                               ? { backgroundColor: '#274472', borderColor: '#274472', color: 'white' }
                               : { backgroundColor: '#EAF0F6', borderColor: '#5885AF', color: '#5885AF' };
                           const labelStyle = isCurrent
-                            ? { color: '#41729F', fontWeight: 600 }
+                            ? { color: 'text', fontWeight: 600 }
                             : isCompleted
-                              ? { color: '#274472' }
-                              : { color: '#5885AF' };
+                              ? { color: 'text' }
+                              : { color: 'text' };
                           // Connector color
                           const connectorColor = isCompleted ? '#274472' : isCurrent ? '#41729F' : '#5885AF';
                           return (

@@ -61,6 +61,7 @@ code {
   --navbar: #D4F1F4;
   --navbar-foreground: #05445E;
   --card: #f6f9fc;
+  --text: #000000;
   --minicard: #f3f9fd;
   --card-foreground: #05445E;
   --searchbar: #f6f9f9;
@@ -85,7 +86,7 @@ code {
   --fresh-error: #05445E;
   --fresh-info: #D4F1F4;
 
-  --fresh-primary: #05445E;
+  --fresh-primary: #008aa6;
   --fresh-primary-foreground: #D4F1F4;
   --fresh-secondary: #189AB4;
   --fresh-secondary-foreground: #05445E;
@@ -99,6 +100,7 @@ code {
   --navbar: #32325d;
   --navbar-foreground: #fff;
   --card: #0f0f31;
+  --text: #ffffff;
   --minicard: #02395e;
   --card-foreground: #fff;
   --searchbar: #031135;
@@ -123,7 +125,7 @@ code {
   --fresh-error: #525f7f;
   --fresh-info: #32325d;
 
-  --fresh-primary: #05445E;
+  --fresh-primary: #ffffff;
   --fresh-primary-foreground: #212529;
   --fresh-secondary: #189AB4;
   --fresh-secondary-foreground: #043c75;
@@ -142,6 +144,8 @@ code {
   --color-header-foreground: var(--navbar-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-text: var(--text);
+  --color-text-foreground: var(--text-foreground);
   --color-minicard: var(--minicard);
   --color-minicard-foreground: var(--card-foreground);
   --color-popover: var(--popover);
